@@ -1,6 +1,8 @@
 # shExLite
 
-ShExLite is a reduced version of ShEx that simplifies the languaje and allows to work with tabular based Shape Expressions.
+ShExLite is a reduced version of ShEx that simplifies the languaje and allows to work with tabular based Shape Expressions. 
+More information:
+* [Mini spec](https://dcmi.github.io/dcap/shex_lite/micro-spec.html) 
 
 ## Built With
 
