@@ -1,4 +1,4 @@
-package parser;
+package es.weso.shexl.parser;
 
 /**
  * The Class LexerHelper.
