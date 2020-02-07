@@ -114,19 +114,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_shex_lite_doc; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterShex_lite_doc(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitShex_lite_doc(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitShex_lite_doc(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Shex_lite_docContext shex_lite_doc() throws RecognitionException {
@@ -186,19 +173,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_prefix_def; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterPrefix_def(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitPrefix_def(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitPrefix_def(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Prefix_defContext prefix_def() throws RecognitionException {
@@ -246,19 +220,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_shape_def; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterShape_def(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitShape_def(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitShape_def(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Shape_defContext shape_def() throws RecognitionException {
@@ -304,19 +265,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_shape_body; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterShape_body(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitShape_body(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitShape_body(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Shape_bodyContext shape_body() throws RecognitionException {
@@ -388,19 +336,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constraint_def; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterConstraint_def(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitConstraint_def(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitConstraint_def(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Constraint_defContext constraint_def() throws RecognitionException {
@@ -437,19 +372,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constraint_field; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterConstraint_field(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitConstraint_field(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitConstraint_field(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Constraint_fieldContext constraint_field() throws RecognitionException {
@@ -491,19 +413,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constraint_type; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterConstraint_type(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitConstraint_type(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitConstraint_type(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Constraint_typeContext constraint_type() throws RecognitionException {
@@ -557,19 +466,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_property_def; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterProperty_def(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitProperty_def(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitProperty_def(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Property_defContext property_def() throws RecognitionException {
@@ -599,19 +495,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_shape_inv; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterShape_inv(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitShape_inv(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitShape_inv(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Shape_invContext shape_inv() throws RecognitionException {
@@ -641,19 +524,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_prefix_inv; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterPrefix_inv(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitPrefix_inv(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitPrefix_inv(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Prefix_invContext prefix_inv() throws RecognitionException {
@@ -691,19 +561,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_primitive_type; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterPrimitive_type(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitPrimitive_type(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitPrimitive_type(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Primitive_typeContext primitive_type() throws RecognitionException {
