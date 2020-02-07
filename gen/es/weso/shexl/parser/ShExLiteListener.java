@@ -1,4 +1,4 @@
-// Generated from C:/Users/Usuario/Desktop/github/weso/shex-lite/src/main/java/es.weso.shexl/parser\ShExLite.g4 by ANTLR 4.8
+// Generated from C:/Users/Usuario/Desktop/github/weso/shex-lite/src/main/java/es.weso.shexl/parser\ShExL.g4 by ANTLR 4.8
 package es.weso.shexl.parser;
 
   import es.weso.shexl.*;
