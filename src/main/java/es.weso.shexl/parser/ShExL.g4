@@ -28,31 +28,31 @@ constraint_field
  : prefix_inv ':' property_def
  ;
 
-constraint_type
- : prefix_inv ':' primitive_type
+constraint_type returns [Constraint ast]
+ : prefix_inv ':' primitive_type {$ast = new TypeConstraint($start.getLine(), $start.getPosInLine(), new PrefixInv($start.getLine(), $start.getPosInLine(), $prefix_inv.ast.getPrefixName(), $primitive_type.ast));}
  | '@' ':' shape_inv
  ;
 
-property_def
- : ID
+property_def  returns [String ast]
+ : ID {$ast = $ID.text;}
  ;
 
 // ------------------
 // INVOCATIONS
 // ------------------
 
-shape_inv
- : ID
+shape_inv  returns [Invocation ast]
+ : ID {$ast = new ShapeInv($ID.line, $ID.pos+1, $ID.text);}
  ;
 
-prefix_inv
- : ID?
+prefix_inv returns [Invocation ast]
+ : ID? {$ast = new PrefixInv($ID.line, $ID.pos+1, $ID.text, "");}
  ;
 
-primitive_type
- : 'integer'
- | 'string'
- | 'double'
+primitive_type returns [String ast]
+ : 'integer' {$ast = "INTEGER";}
+ | 'string' {$ast = "STRING";}
+ | 'double' {$ast = "DOUBLE";}
  ;
 
 // ------------------

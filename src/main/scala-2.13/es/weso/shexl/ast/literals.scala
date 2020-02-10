@@ -1,4 +1,4 @@
-package es.weso.shexl
+package es.weso.shexl.ast
 
 class Literal[T](line: Int, column: Int, var value: T) extends ASTNode(line, column) {
   def getValue: T = value

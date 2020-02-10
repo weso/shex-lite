@@ -1,4 +1,4 @@
-package es.weso.shexl
+package es.weso.shexl.ast
 
 sealed trait Node {
   def getLine: Integer
