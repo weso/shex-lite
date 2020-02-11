@@ -2,6 +2,7 @@ package es.weso.shexl.ast
 
 import java.util
 
+import es.weso.shexl.codegeneration.{JavaCodeGenVisitor, JavaCodeGenerator}
 import es.weso.shexl.error.ErrorHandler
 import es.weso.shexl.parser.generated.{ShExLLexer, ShExLParser}
 import es.weso.shexl.visitor.{DefinitionsVisitor, InvocationsVisitor}
@@ -40,6 +41,9 @@ object ASTBasicTest {
     invVisit.visit(ast, null)
 
     ErrorHandler.showErrors()
+
+    val generator = new JavaCodeGenerator(args(0), args(1))
+    new JavaCodeGenVisitor(generator).visit(ast, null)
 
   }
 
