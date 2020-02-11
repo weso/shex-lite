@@ -1,5 +1,10 @@
-// Generated from /Users/willy/github/shExLite/src/main/java/es.weso.shexl/parser/ShExL.g4 by ANTLR 4.8
-package parser;
+// Generated from C:/Users/Usuario/Desktop/github/weso/shex-lite/src/main/java/es/weso/shexl/parser\ShExL.g4 by ANTLR 4.8
+package es.weso.shexl.parser.generated;
+
+import es.weso.shexl.ast.*;
+import java.util.*;
+import java.lang.String;
+
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

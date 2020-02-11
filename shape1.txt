@@ -1,0 +1,7 @@
+PREFIX : <http://example.org/>
+PREFIX schema: <http://schema.org/>
+
+:Persona {
+ schema:name  xsd:string   ;
+ schema:knows @:Persona
+}
