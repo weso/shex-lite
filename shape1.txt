@@ -1,5 +1,13 @@
 PREFIX : <http://example.org/>
 PREFIX schema: <http://schema.org/>
+PREFIX xsd: <http://xsdScheema.org/>
+PREFIX : <http://esquemaRepetido.com/>
+PREFIX xsd: <http://xsdScheema.org/>
+
+:Persona {
+ schema:name  xsds:string   ;
+ schema:knows @:Personas
+}
 
 :Persona {
  schema:name  xsd:string   ;

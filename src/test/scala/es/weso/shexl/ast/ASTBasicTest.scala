@@ -2,7 +2,9 @@ package es.weso.shexl.ast
 
 import java.util
 
+import es.weso.shexl.error.ErrorHandler
 import es.weso.shexl.parser.generated.{ShExLLexer, ShExLParser}
+import es.weso.shexl.visitor.{DefinitionsVisitor, InvocationsVisitor}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
 object ASTBasicTest {
@@ -30,6 +32,14 @@ object ASTBasicTest {
     val ast = parser.shex_lite_doc().ast
 
     println(ast)
+
+    val defVisit = new DefinitionsVisitor
+    defVisit.visit(ast, null)
+
+    val invVisit = new InvocationsVisitor
+    invVisit.visit(ast, null)
+
+    ErrorHandler.showErrors()
 
   }
 

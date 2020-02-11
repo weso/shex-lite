@@ -18,7 +18,10 @@ object ErrorHandler {
 
   def showErrors(): Unit = {
     for(error <- errors) {
-      println( "ERROR [$line, $column] -> $message", error.line, error.column, error.message)
+      val line = error.line
+      val column = error.column
+      val message = error.message
+      println( s"ERROR [$line, $column] -> $message")
     }
   }
 }

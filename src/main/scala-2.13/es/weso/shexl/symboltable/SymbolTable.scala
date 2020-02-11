@@ -1,12 +1,12 @@
 package es.weso.shexl.symboltable
 
-import java.util.{Objects}
+import java.util.Objects
 
-import es.weso.shexl.ast.{PrefixDef, ShapeDef}
+import es.weso.shexl.ast.{PrefixDef, ShapeDef, ShapeInv}
 
 import scala.collection.mutable.HashMap
 
-case class SymbolTable() {
+object SymbolTable {
 
   final val prefixes = HashMap[String, PrefixDef]()
   final val shapes = HashMap[String, ShapeDef]()
@@ -35,19 +35,19 @@ case class SymbolTable() {
 
   /**
    *
-   * @param prefixDef
+   * @param prefixName
    * @return
    */
-  def get(prefixDef: PrefixDef): Option[PrefixDef] = {
-    this.prefixes.get(prefixDef.name)
+  def getPrefix(prefixName: String): Option[PrefixDef] = {
+    this.prefixes.get(prefixName)
   }
 
   /**
    *
-   * @param shapeDef
+   * @param shapeName
    * @return
    */
-  def get(shapeDef: ShapeDef): Option[ShapeDef] = {
-    this.shapes.get(shapeDef.name)
+  def getShape(shapeName: String): Option[ShapeDef] = {
+    this.shapes.get(shapeName)
   }
 }
