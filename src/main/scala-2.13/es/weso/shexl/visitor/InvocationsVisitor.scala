@@ -11,9 +11,9 @@ case class InvocationsVisitor() extends AbstractVisitor {
     if( definition.isEmpty ) {
       val shapeName = shapeInv.shapeName
       ErrorHandler.addError(Error(shapeInv.line, shapeInv.column, s"Shape [$shapeName] not defined."))
+    } else {
+      shapeInv.definition = definition.get
     }
-
-    shapeInv.definition = definition.get
   }
 
   override def visit(prefixInv: PrefixInv, param: Any): Unit = {
@@ -21,9 +21,9 @@ case class InvocationsVisitor() extends AbstractVisitor {
     if( definition.isEmpty ) {
       val prefixName = prefixInv.prefixName
       ErrorHandler.addError(Error(prefixInv.line, prefixInv.column, s"Prefix [$prefixName] not defined."))
+    } else {
+      prefixInv.definition = definition.get
     }
-
-    prefixInv.definition = definition.get
   }
 
 }
