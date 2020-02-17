@@ -23,48 +23,20 @@
  *
  */
 
-package es.weso.shexl.error
+package es.weso.shexlite.ast
 
-import es.weso.shexl.ast.Error
+import es.weso.shexlite.visitor.ShExLVisitor
 
-import scala.collection.mutable.ListBuffer
+case class Constraint(line: Int, column: Int, field: FieldConstraint, cType: TypeConstraint) extends ASTNode(line, column)  {
+  override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
+}
 
-/**
- * Error handler system. This system helps to hold the errors found at compile time.
- */
-object ErrorHandler {
 
-  // List of errors.
-  final val errors = new ListBuffer[Error]()
+case class FieldConstraint(line: Int, column: Int, prefixInv: PrefixInv) extends ASTNode(line, column)  {
+  override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
+}
 
-  /**
-   * Returns whether the error handler has errors or not.
-   *
-   * @return true if has errors, false otherwise.
-   */
-  def hasErrors: Boolean = {
-    !this.errors.isEmpty
-  }
 
-  /**
-   * Adds errors to the error system.
-   *
-   * @param error to add to the system.
-   * @return
-   */
-  def addError(error: Error) = {
-    this.errors += error
-  }
-
-  /**
-   * Shows the errors through the terminal.
-   */
-  def showErrors(): Unit = {
-    for(error <- errors) {
-      val line = error.line
-      val column = error.column
-      val message = error.message
-      println( s"ERROR [$line, $column] -> $message")
-    }
-  }
+case class TypeConstraint(line: Int, column: Int, invocation: Invocation) extends ASTNode(line, column)  {
+  override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }

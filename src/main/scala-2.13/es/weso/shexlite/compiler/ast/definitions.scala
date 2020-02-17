@@ -23,20 +23,17 @@
  *
  */
 
-package es.weso.shexl.ast
+package es.weso.shexlite.ast
 
-import es.weso.shexl.visitor.ShExLVisitor
+import es.weso.shexlite.visitor.ShExLVisitor
 
-case class Constraint(line: Int, column: Int, field: FieldConstraint, cType: TypeConstraint) extends ASTNode(line, column)  {
+abstract class Definition(line: Int, column: Int, name: String) extends ASTNode(line, column)
+
+case class PrefixDef(line: Int, column: Int, name: String, uri: URL) extends Definition(line, column, name)  {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }
 
 
-case class FieldConstraint(line: Int, column: Int, prefixInv: PrefixInv) extends ASTNode(line, column)  {
-  override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
-}
-
-
-case class TypeConstraint(line: Int, column: Int, invocation: Invocation) extends ASTNode(line, column)  {
+case class ShapeDef(line: Int, column: Int, name: String, constraints: java.util.List[Constraint]) extends Definition(line, column, name)  {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }

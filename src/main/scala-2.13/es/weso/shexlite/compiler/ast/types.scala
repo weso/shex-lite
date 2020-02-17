@@ -23,16 +23,20 @@
  *
  */
 
-package es.weso.shexl.ast
+package es.weso.shexlite.ast
 
-import es.weso.shexl.visitor.ShExLVisitor
+import es.weso.shexlite.visitor.ShExLVisitor
 
-abstract class Invocation(line: Int, column: Int, var definition: Definition = null) extends ASTNode(line, column)
-
-case class PrefixInv(line: Int, column: Int, prefixName: String, propertyName: String) extends Invocation(line, column)  {
+class Type(line: Int, column: Int) extends ASTNode(line, column)  {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }
 
-case class ShapeInv(line: Int, column: Int, shapeName: String) extends Invocation(line, column)  {
+object Int extends Type(-1, -1)
+object String extends Type(-1, -1)
+object Long extends Type(-1, -1)
+object Double extends Type(-1, -1)
+
+
+case class Error(line: Int, column: Int, message: String) extends Type(line, column)  {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }

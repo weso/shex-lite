@@ -22,21 +22,60 @@
  * SOFTWARE.
  *
  */
+package es.weso.shexlite.symboltable
 
-package es.weso.shexl.ast
+import java.util.Objects
 
-import es.weso.shexl.visitor.ShExLVisitor
+import es.weso.shexlite.ast.{PrefixDef, ShapeDef, ShapeInv}
 
-class Type(line: Int, column: Int) extends ASTNode(line, column)  {
-  override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
-}
+import scala.collection.mutable.HashMap
 
-object Int extends Type(-1, -1)
-object String extends Type(-1, -1)
-object Long extends Type(-1, -1)
-object Double extends Type(-1, -1)
+/**
+ * Table to store different symbols of the parsed expressions, that is shapes definitions and prefixes.
+ */
+object SymbolTable {
 
+  final val prefixes = HashMap[String, PrefixDef]()
+  final val shapes = HashMap[String, ShapeDef]()
 
-case class Error(line: Int, column: Int, message: String) extends Type(line, column)  {
-  override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
+  /**
+   * Inserts a prefix in the table.
+   *
+   * @param prefixDef is the prefix definition to insert in the table.
+   * @return
+   */
+  def insert(prefixDef: PrefixDef) = {
+    if(Objects.nonNull(prefixDef)) {
+      this.prefixes += (prefixDef.name -> prefixDef)
+    }
+  }
+
+  /**
+   *
+   * @param shapeDef
+   * @return
+   */
+  def insert(shapeDef: ShapeDef)  = {
+    if(Objects.nonNull(shapeDef)) {
+      this.shapes += (shapeDef.name -> shapeDef)
+    }
+  }
+
+  /**
+   *
+   * @param prefixName
+   * @return
+   */
+  def getPrefix(prefixName: String): Option[PrefixDef] = {
+    this.prefixes.get(prefixName)
+  }
+
+  /**
+   *
+   * @param shapeName
+   * @return
+   */
+  def getShape(shapeName: String): Option[ShapeDef] = {
+    this.shapes.get(shapeName)
+  }
 }
