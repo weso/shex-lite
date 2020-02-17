@@ -1,11 +1,12 @@
-package es.weso.shexl.ast
+package es.weso.shexlite.ast
 
 import java.util
 
 import es.weso.shexl.codegeneration.{JavaCodeGenVisitor, JavaCodeGenerator}
-import es.weso.shexl.error.ErrorHandler
-import es.weso.shexl.parser.generated.{ShExLLexer, ShExLParser}
-import es.weso.shexl.visitor.{DefinitionsVisitor, InvocationsVisitor}
+import es.weso.shexlite.error.ErrorHandler
+import es.weso.shexl.parser.generated.ShExLParser
+import es.weso.shexlite.parser.generated.{ShExLLexer, ShExLParser}
+import es.weso.shexlite.visitor.{DefinitionsVisitor, InvocationsVisitor}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
 object ASTBasicTest {

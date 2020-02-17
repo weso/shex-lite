@@ -23,11 +23,11 @@
  *
  */
 
-package es.weso.shexl.visitor
+package es.weso.shexlite.visitor
 
-import es.weso.shexl.ast.{PrefixDef, PrefixInv, ShapeDef, ShapeInv, Error}
-import es.weso.shexl.error.ErrorHandler
-import es.weso.shexl.symboltable.SymbolTable
+import es.weso.shexlite.ast.{PrefixDef, PrefixInv, ShapeDef, ShapeInv, Error}
+import es.weso.shexlite.error.ErrorHandler
+import es.weso.shexlite.symboltable.SymbolTable
 
 import scala.collection.JavaConverters
 

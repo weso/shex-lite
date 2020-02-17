@@ -23,9 +23,11 @@
  *
  */
 
-package es.weso.shexl.ast
-import es.weso.shexl.visitor.ShExLVisitor
+package es.weso.shexlite
 
-case class ShExL(line: Int, column: Int, definitions: java.util.List[Definition]) extends ASTNode(line, column) {
-  override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
+case class URL(protocol: Protocol, domain: String, location: String) {
+
+  override def toString: String = {
+    s"$protocol$domain/$location"
+  }
 }

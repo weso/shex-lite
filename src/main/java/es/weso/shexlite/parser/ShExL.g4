@@ -1,7 +1,7 @@
 grammar ShExL;
 
 @header {
-import es.weso.shexl.ast.*;
+import es.weso.shexlite.ast.*;
 import java.util.*;
 import java.lang.String;
 }

@@ -23,8 +23,8 @@
  *
  */
 
-package es.weso.shexl.visitor
-import es.weso.shexl.ast.{Constraint, Definition, FieldConstraint, Invocation, PrefixDef, PrefixInv, ShExL, ShapeDef, ShapeInv, Type, TypeConstraint, URL}
+package es.weso.shexlite.visitor
+import es.weso.shexlite.ast.{Constraint, Definition, FieldConstraint, Invocation, PrefixDef, PrefixInv, ShExL, ShapeDef, ShapeInv, Type, TypeConstraint, URL}
 
 import scala.collection.JavaConverters
 

@@ -23,29 +23,32 @@
  *
  */
 
-package es.weso.shexl.visitor
+package es.weso.shexlite.visitor
 
-import es.weso.shexl.ast.{Constraint, Definition, FieldConstraint, Invocation, PrefixDef, PrefixInv, ShExL, ShapeDef, ShapeInv, Type, TypeConstraint, URL}
+import es.weso.shexlite.ast.{Error, PrefixInv, ShapeInv}
+import es.weso.shexlite.error.ErrorHandler
+import es.weso.shexlite.symboltable.SymbolTable
 
-trait ShExLVisitor {
+case class InvocationsVisitor() extends AbstractVisitor {
 
-  def visit(node: ShExL, param: Any)
+  override def visit(shapeInv: ShapeInv, param: Any): Unit = {
+    val definition = SymbolTable.getShape(shapeInv.shapeName)
+    if( definition.isEmpty ) {
+      val shapeName = shapeInv.shapeName
+      ErrorHandler.addError(Error(shapeInv.line, shapeInv.column, s"Shape [$shapeName] not defined."))
+    } else {
+      shapeInv.definition = definition.get
+    }
+  }
 
-  def visit(node: PrefixDef, param: Any)
+  override def visit(prefixInv: PrefixInv, param: Any): Unit = {
+    val definition = SymbolTable.getPrefix(prefixInv.prefixName)
+    if( definition.isEmpty ) {
+      val prefixName = prefixInv.prefixName
+      ErrorHandler.addError(Error(prefixInv.line, prefixInv.column, s"Prefix [$prefixName] not defined."))
+    } else {
+      prefixInv.definition = definition.get
+    }
+  }
 
-  def visit(node: ShapeDef, param: Any)
-
-  def visit(node: Constraint, param: Any)
-
-  def visit(node: FieldConstraint, param: Any)
-
-  def visit(node: TypeConstraint, param: Any)
-
-  def visit(node: PrefixInv, param: Any)
-
-  def visit(node: ShapeInv, param: Any)
-
-  def visit(node: URL, param: Any)
-
-  def visit(node: Type, param: Any)
 }
