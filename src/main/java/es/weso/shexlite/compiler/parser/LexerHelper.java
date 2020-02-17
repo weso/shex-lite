@@ -23,7 +23,7 @@
  *
  */
 
-package es.weso.shexlite.parser;
+package es.weso.shexlite.compiler.parser;
 
 /**
  * The Class LexerHelper.

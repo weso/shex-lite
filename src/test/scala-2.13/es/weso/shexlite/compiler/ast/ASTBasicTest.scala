@@ -2,10 +2,8 @@ package es.weso.shexlite.compiler.ast
 
 import java.util
 
-import es.weso.shexl.codegeneration.{JavaCodeGenVisitor, JavaCodeGenerator}
 import es.weso.shexlite.compiler.error.ErrorHandler
-import es.weso.shexl.parser.generated.ShExLParser
-import es.weso.shexlite.parser.generated.{ShExLLexer, ShExLParser}
+import es.weso.shexlite.compiler.parser.generated.{ShExLLexer, ShExLParser}
 import es.weso.shexlite.compiler.visitor.{DefinitionsVisitor, InvocationsVisitor}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
@@ -42,10 +40,6 @@ object ASTBasicTest {
     invVisit.visit(ast, null)
 
     ErrorHandler.showErrors()
-
-    val generator = new JavaCodeGenerator(args(0), args(1))
-    new JavaCodeGenVisitor(generator).visit(ast, null)
-
   }
 
 }
