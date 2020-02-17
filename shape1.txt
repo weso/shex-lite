@@ -1,9 +1,0 @@
-PREFIX : <http://example.org/>
-PREFIX schema: <http://schema.org/>
-PREFIX xsd: <http://xsdScheema.org/>
-
-:Persona {
- schema:name    xsd:string;
- schema:age     xsd:integer;
- schema:id      xsd:double
-}
