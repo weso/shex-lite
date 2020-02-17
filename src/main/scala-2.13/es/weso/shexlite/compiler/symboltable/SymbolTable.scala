@@ -22,11 +22,11 @@
  * SOFTWARE.
  *
  */
-package es.weso.shexlite.symboltable
+package es.weso.shexlite.compiler.symboltable
 
 import java.util.Objects
 
-import es.weso.shexlite.ast.{PrefixDef, ShapeDef, ShapeInv}
+import es.weso.shexlite.compiler.ast.{PrefixDefNode, ShapeDefNode, ShapeInvNode}
 
 import scala.collection.mutable.HashMap
 
@@ -35,8 +35,8 @@ import scala.collection.mutable.HashMap
  */
 object SymbolTable {
 
-  final val prefixes = HashMap[String, PrefixDef]()
-  final val shapes = HashMap[String, ShapeDef]()
+  final val prefixes = HashMap[String, PrefixDefNode]()
+  final val shapes = HashMap[String, ShapeDefNode]()
 
   /**
    * Inserts a prefix in the table.
@@ -44,7 +44,7 @@ object SymbolTable {
    * @param prefixDef is the prefix definition to insert in the table.
    * @return
    */
-  def insert(prefixDef: PrefixDef) = {
+  def insert(prefixDef: PrefixDefNode) = {
     if(Objects.nonNull(prefixDef)) {
       this.prefixes += (prefixDef.name -> prefixDef)
     }
@@ -55,7 +55,7 @@ object SymbolTable {
    * @param shapeDef
    * @return
    */
-  def insert(shapeDef: ShapeDef)  = {
+  def insert(shapeDef: ShapeDefNode)  = {
     if(Objects.nonNull(shapeDef)) {
       this.shapes += (shapeDef.name -> shapeDef)
     }
@@ -66,7 +66,7 @@ object SymbolTable {
    * @param prefixName
    * @return
    */
-  def getPrefix(prefixName: String): Option[PrefixDef] = {
+  def getPrefix(prefixName: String): Option[PrefixDefNode] = {
     this.prefixes.get(prefixName)
   }
 
@@ -75,7 +75,7 @@ object SymbolTable {
    * @param shapeName
    * @return
    */
-  def getShape(shapeName: String): Option[ShapeDef] = {
+  def getShape(shapeName: String): Option[ShapeDefNode] = {
     this.shapes.get(shapeName)
   }
 }

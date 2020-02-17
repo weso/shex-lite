@@ -25,6 +25,4 @@
 
 package es.weso.shexlite
 
-case class Prefix(prefixName: String, prefixURL: URL) {
-
-}
+case class Prefix(prefixName: String, prefixURL: URL)

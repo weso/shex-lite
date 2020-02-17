@@ -27,7 +27,7 @@ package es.weso.shexlite
 
 import java.util.Objects
 
-case class Protocol(value: String = "") {
+sealed case class Protocol(value: String = "") {
 
   override def toString: String = {
     if(value.equals(""))
@@ -46,6 +46,8 @@ case class Protocol(value: String = "") {
   }
 }
 
-final object NoProtocol extends Protocol
-final object HttpProtocol extends Protocol("http")
-final object HttpsProtocol extends Protocol("https")
+object Protocol {
+  final val NoProtocol = Protocol()
+  final val HttpProtocol = Protocol("http")
+  final val HttpsProtocol = Protocol("https")
+}

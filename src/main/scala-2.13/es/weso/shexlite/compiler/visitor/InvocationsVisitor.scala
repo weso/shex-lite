@@ -23,29 +23,29 @@
  *
  */
 
-package es.weso.shexlite.visitor
+package es.weso.shexlite.compiler.visitor
 
-import es.weso.shexlite.ast.{Error, PrefixInv, ShapeInv}
-import es.weso.shexlite.error.ErrorHandler
-import es.weso.shexlite.symboltable.SymbolTable
+import es.weso.shexlite.compiler.ast.{ErrorNode, PrefixInvNode, ShapeInvNode}
+import es.weso.shexlite.compiler.error.ErrorHandler
+import es.weso.shexlite.compiler.symboltable.SymbolTable
 
 case class InvocationsVisitor() extends AbstractVisitor {
 
-  override def visit(shapeInv: ShapeInv, param: Any): Unit = {
+  override def visit(shapeInv: ShapeInvNode, param: Any): Unit = {
     val definition = SymbolTable.getShape(shapeInv.shapeName)
     if( definition.isEmpty ) {
       val shapeName = shapeInv.shapeName
-      ErrorHandler.addError(Error(shapeInv.line, shapeInv.column, s"Shape [$shapeName] not defined."))
+      ErrorHandler.addError(ErrorNode(shapeInv.line, shapeInv.column, s"Shape [$shapeName] not defined."))
     } else {
       shapeInv.definition = definition.get
     }
   }
 
-  override def visit(prefixInv: PrefixInv, param: Any): Unit = {
+  override def visit(prefixInv: PrefixInvNode, param: Any): Unit = {
     val definition = SymbolTable.getPrefix(prefixInv.prefixName)
     if( definition.isEmpty ) {
       val prefixName = prefixInv.prefixName
-      ErrorHandler.addError(Error(prefixInv.line, prefixInv.column, s"Prefix [$prefixName] not defined."))
+      ErrorHandler.addError(ErrorNode(prefixInv.line, prefixInv.column, s"Prefix [$prefixName] not defined."))
     } else {
       prefixInv.definition = definition.get
     }

@@ -25,6 +25,9 @@
 
 package es.weso.shexlite
 
-class Cardinality(min: Int, max: Int)
-final object DefaultOne extends Cardinality(1,1)
-final object ZeroOrMore extends Cardinality(0, Int.MaxValue)
+sealed case class Cardinality(min: Int, max: Int)
+
+object Cardinality {
+  final val DefaultOne = Cardinality(1,1)
+  final val ZeroOrMore = Cardinality(0, Int.MaxValue)
+}

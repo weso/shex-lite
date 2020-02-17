@@ -25,25 +25,25 @@
 
 package es.weso.shexlite
 
-import es.weso.shexlite.ast._
-import es.weso.shexlite.error.ErrorHandler
+import es.weso.shexlite.compiler.ast._
+import es.weso.shexlite.compiler.error.ErrorHandler
 import es.weso.shexlite.parser.generated.{ShExLLexer, ShExLParser}
-import es.weso.shexlite.visitor._
+import es.weso.shexlite.compiler.visitor._
 import org.antlr.v4.runtime.{CharStream, CharStreams, CommonTokenStream}
 
-object ShExLiteFile {
+object ShapeExpressionsFile {
 
-  def fromString(shapesDefinition: String): Either[List[Error], ShExL] = {
-    val input = CharStreams.fromString(shapesDefinition)
+  def fromString(definitions: String): Either[List[ErrorNode], ShapeExpressionsFileNode] = {
+    val input = CharStreams.fromString(definitions)
     parse(input)
   }
 
-  def fromFile(filePath: String): Either[List[Error], ShExL] = {
+  def fromFile(filePath: String): Either[List[ErrorNode], ShapeExpressionsFileNode] = {
     val input = CharStreams.fromFileName(filePath)
     parse(input)
   }
 
-  private[this] def parse(input: CharStream):  Either[List[Error], ShExL] = {
+  private[this] def parse(input: CharStream):  Either[List[ErrorNode], ShapeExpressionsFileNode] = {
     val lexer = new ShExLLexer( input )
 
     val tokens = new CommonTokenStream( lexer )

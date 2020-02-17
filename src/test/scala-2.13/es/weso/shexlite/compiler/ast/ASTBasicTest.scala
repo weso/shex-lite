@@ -1,26 +1,26 @@
-package es.weso.shexlite.ast
+package es.weso.shexlite.compiler.ast
 
 import java.util
 
 import es.weso.shexl.codegeneration.{JavaCodeGenVisitor, JavaCodeGenerator}
-import es.weso.shexlite.error.ErrorHandler
+import es.weso.shexlite.compiler.error.ErrorHandler
 import es.weso.shexl.parser.generated.ShExLParser
 import es.weso.shexlite.parser.generated.{ShExLLexer, ShExLParser}
-import es.weso.shexlite.visitor.{DefinitionsVisitor, InvocationsVisitor}
+import es.weso.shexlite.compiler.visitor.{DefinitionsVisitor, InvocationsVisitor}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
 object ASTBasicTest {
 
   def main(args: Array[String]): Unit = {
 
-    ShExL(0,0,
+    ShapeExpressionsFileNode(0,0,
       util.Arrays.asList(
-        PrefixDef(0,0,"xsd", URL(0,0,"http://scheema.org/xsd/>")),
-        PrefixDef(0,0,"foaf", URL(0,0,"http://scheema.org/foaf/>")),
-        ShapeDef(0,0,"Person",
+        PrefixDefNode(0,0,"xsd", URLNode(0,0,"http://scheema.org/xsd/>")),
+        PrefixDefNode(0,0,"foaf", URLNode(0,0,"http://scheema.org/foaf/>")),
+        ShapeDefNode(0,0,"Person",
           util.Arrays.asList(
-            Constraint(0,0,FieldConstraint(0,0,PrefixInv(0,0,"foaf", "name")), TypeConstraint(0,0,PrefixInv(0,0,"xsd", "string"))),
-            Constraint(0,0,FieldConstraint(0,0,PrefixInv(0,0,"xsd", "knows")), TypeConstraint(0,0,ShapeInv(0,0,"Person")))
+            TripleConstraintNode(0,0,FieldConstraintNode(0,0,PrefixInvNode(0,0,"foaf", "name")), TypeConstraintNode(0,0,PrefixInvNode(0,0,"xsd", "string"))),
+            TripleConstraintNode(0,0,FieldConstraintNode(0,0,PrefixInvNode(0,0,"xsd", "knows")), TypeConstraintNode(0,0,ShapeInvNode(0,0,"Person")))
           )
         )
       )

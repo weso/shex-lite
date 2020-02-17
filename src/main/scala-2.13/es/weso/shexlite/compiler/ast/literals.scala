@@ -23,15 +23,15 @@
  *
  */
 
-package es.weso.shexlite.ast
+package es.weso.shexlite.compiler.ast
 
-import es.weso.shexlite.visitor.ShExLVisitor
+import es.weso.shexlite.compiler.visitor.ShExLVisitor
 
-abstract class Literal[T](line: Int, column: Int, var value: T) extends ASTNode(line, column) {
+abstract class LiteralNode[T](line: Int, column: Int, var value: T) extends ASTNode(line, column) {
   def getValue: T = value
   def setValue(value: T) = this.value = value
 }
 
-case class URL(line:Int, column:Int, var url: String) extends Literal[String](line, column, url)  {
+case class URLNode(line:Int, column:Int, var url: String) extends LiteralNode[String](line, column, url)  {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }

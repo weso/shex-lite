@@ -23,20 +23,20 @@
  *
  */
 
-package es.weso.shexlite.ast
+package es.weso.shexlite.compiler.ast
 
-import es.weso.shexlite.visitor.ShExLVisitor
+import es.weso.shexlite.compiler.visitor.ShExLVisitor
 
-case class Constraint(line: Int, column: Int, field: FieldConstraint, cType: TypeConstraint) extends ASTNode(line, column)  {
+case class TripleConstraintNode(line: Int, column: Int, field: FieldConstraintNode, cType: TypeConstraintNode) extends ASTNode(line, column)  {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }
 
 
-case class FieldConstraint(line: Int, column: Int, prefixInv: PrefixInv) extends ASTNode(line, column)  {
+case class FieldConstraintNode(line: Int, column: Int, prefixInv: PrefixInvNode) extends ASTNode(line, column)  {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }
 
 
-case class TypeConstraint(line: Int, column: Int, invocation: Invocation) extends ASTNode(line, column)  {
+case class TypeConstraintNode(line: Int, column: Int, invocation: InvocationNode) extends ASTNode(line, column)  {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }

@@ -26,7 +26,7 @@
 package es.weso.shexlite
 
 //
-trait ReferenceType
+sealed trait ReferenceType
 
 // XSD Defined types.
 object IntType extends ReferenceType

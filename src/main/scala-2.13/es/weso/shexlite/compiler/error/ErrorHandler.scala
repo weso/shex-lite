@@ -23,9 +23,8 @@
  *
  */
 
-package es.weso.shexlite.error
-
-import es.weso.shexlite.ast.Error
+package es.weso.shexlite.compiler.error
+import es.weso.shexlite.compiler.ast.ErrorNode
 
 import scala.collection.mutable.ListBuffer
 
@@ -35,7 +34,7 @@ import scala.collection.mutable.ListBuffer
 object ErrorHandler {
 
   // List of errors.
-  final val errors = new ListBuffer[Error]()
+  final val errors = new ListBuffer[ErrorNode]()
 
   /**
    * Returns whether the error handler has errors or not.
@@ -52,7 +51,7 @@ object ErrorHandler {
    * @param error to add to the system.
    * @return
    */
-  def addError(error: Error) = {
+  def addError(error: ErrorNode) = {
     this.errors += error
   }
 

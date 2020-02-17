@@ -23,21 +23,21 @@
  *
  */
 
-package es.weso.shexlite.visitor
+package es.weso.shexlite.compiler.visitor
 
-import es.weso.shexlite.ast.{PrefixDef, PrefixInv, ShapeDef, ShapeInv, Error}
-import es.weso.shexlite.error.ErrorHandler
-import es.weso.shexlite.symboltable.SymbolTable
+import es.weso.shexlite.compiler.ast.{PrefixDefNode, PrefixInvNode, ShapeDefNode, ShapeInvNode, ErrorNode}
+import es.weso.shexlite.compiler.error.ErrorHandler
+import es.weso.shexlite.compiler.symboltable.SymbolTable
 
 import scala.collection.JavaConverters
 
 case class DefinitionsVisitor() extends AbstractVisitor {
 
 
-  override def visit(shapeDef: ShapeDef, param: Any) = {
+  override def visit(shapeDef: ShapeDefNode, param: Any) = {
     if(SymbolTable.getShape(shapeDef.name).isDefined) {
       val shapeName = shapeDef.name
-      ErrorHandler.addError(Error(shapeDef.line, shapeDef.column, s"Shape id [$shapeName] is duplicated."))
+      ErrorHandler.addError(ErrorNode(shapeDef.line, shapeDef.column, s"Shape id [$shapeName] is duplicated."))
     } else {
       SymbolTable insert shapeDef
     }
@@ -47,20 +47,20 @@ case class DefinitionsVisitor() extends AbstractVisitor {
     }
   }
 
-  override def visit(prefixDef: PrefixDef, param: Any) = {
+  override def visit(prefixDef: PrefixDefNode, param: Any) = {
     prefixDef.name match {
       case null => {
         if(SymbolTable.getPrefix(" ").isDefined) {
-          ErrorHandler.addError(Error(prefixDef.line, prefixDef.column, "Cannot be to default prefixes"))
+          ErrorHandler.addError(ErrorNode(prefixDef.line, prefixDef.column, "Cannot be to default prefixes"))
         } else {
-          SymbolTable insert PrefixDef(prefixDef.line, prefixDef.column, " ", prefixDef.uri)
+          SymbolTable insert PrefixDefNode(prefixDef.line, prefixDef.column, " ", prefixDef.uri)
         }
       }
 
       case _ => {
         if(SymbolTable.getPrefix(prefixDef.name).isDefined) {
           val prefixName = prefixDef.name
-          ErrorHandler.addError(Error(prefixDef.line, prefixDef.column, s"Prefix id [$prefixName] is duplicated."))
+          ErrorHandler.addError(ErrorNode(prefixDef.line, prefixDef.column, s"Prefix id [$prefixName] is duplicated."))
         } else {
           SymbolTable insert prefixDef
         }

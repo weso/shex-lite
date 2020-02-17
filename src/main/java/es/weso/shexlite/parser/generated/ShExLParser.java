@@ -1,32 +1,7 @@
-/*
- * MIT License
- *
- * Copyright (c) 2020 WESO Research Group, University of Oviedo.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- */
+// Generated from C:/Users/Willy/Documents/github/weso/shex-lite/src/main/java/es/weso/shexlite/parser\ShExL.g4 by ANTLR 4.8
+package es.weso.shexlite.parser.generated;
 
-// Generated from C:/Users/Usuario/Desktop/github/weso/shex-lite/src/main/java/es/weso/shexl/parser\ShExL.g4 by ANTLR 4.8
-package es.weso.shexl.parser.generated;
-
-import es.weso.shexl.ast.*;
+import es.weso.shexlite.compiler.ast.*;
 import java.util.*;
 import java.lang.String;
 
@@ -127,7 +102,7 @@ public class ShExLParser extends Parser {
 	}
 
 	public static class Shex_lite_docContext extends ParserRuleContext {
-		public ShExL ast;
+		public ShapeExpressionsFileNode ast;
 		public Prefix_defContext prefix_def;
 		public Shape_defContext shape_def;
 		public TerminalNode EOF() { return getToken(ShExLParser.EOF, 0); }
@@ -147,19 +122,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_shex_lite_doc; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterShex_lite_doc(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitShex_lite_doc(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitShex_lite_doc(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Shex_lite_docContext shex_lite_doc() throws RecognitionException {
@@ -169,7 +131,7 @@ public class ShExLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			List<Definition> defs = new ArrayList<Definition>();
+			List<DefinitionNode> defs = new ArrayList<DefinitionNode>();
 			setState(26); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -200,7 +162,7 @@ public class ShExLParser extends Parser {
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==T__1 );
-			((Shex_lite_docContext)_localctx).ast =  new ShExL(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), defs);
+			((Shex_lite_docContext)_localctx).ast =  new ShapeExpressionsFileNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), defs);
 			setState(38);
 			match(EOF);
 			}
@@ -217,7 +179,7 @@ public class ShExLParser extends Parser {
 	}
 
 	public static class Prefix_defContext extends ParserRuleContext {
-		public PrefixDef ast;
+		public PrefixDefNode ast;
 		public Token ID;
 		public Token IRI;
 		public TerminalNode IRI() { return getToken(ShExLParser.IRI, 0); }
@@ -226,19 +188,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_prefix_def; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterPrefix_def(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitPrefix_def(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitPrefix_def(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Prefix_defContext prefix_def() throws RecognitionException {
@@ -264,7 +213,7 @@ public class ShExLParser extends Parser {
 			match(T__1);
 			setState(45);
 			((Prefix_defContext)_localctx).IRI = match(IRI);
-			((Prefix_defContext)_localctx).ast =  new PrefixDef(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), (((Prefix_defContext)_localctx).ID!=null?((Prefix_defContext)_localctx).ID.getText():null), new URL(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), (((Prefix_defContext)_localctx).IRI!=null?((Prefix_defContext)_localctx).IRI.getText():null)));
+			((Prefix_defContext)_localctx).ast =  new PrefixDefNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), (((Prefix_defContext)_localctx).ID!=null?((Prefix_defContext)_localctx).ID.getText():null), new URLNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), (((Prefix_defContext)_localctx).IRI!=null?((Prefix_defContext)_localctx).IRI.getText():null)));
 			}
 		}
 		catch (RecognitionException re) {
@@ -279,7 +228,7 @@ public class ShExLParser extends Parser {
 	}
 
 	public static class Shape_defContext extends ParserRuleContext {
-		public ShapeDef ast;
+		public ShapeDefNode ast;
 		public Token ID;
 		public Shape_bodyContext shape_body;
 		public TerminalNode ID() { return getToken(ShExLParser.ID, 0); }
@@ -290,19 +239,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_shape_def; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterShape_def(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitShape_def(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitShape_def(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Shape_defContext shape_def() throws RecognitionException {
@@ -321,7 +257,7 @@ public class ShExLParser extends Parser {
 			((Shape_defContext)_localctx).shape_body = shape_body();
 			setState(52);
 			match(T__3);
-			((Shape_defContext)_localctx).ast =  new ShapeDef(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), (((Shape_defContext)_localctx).ID!=null?((Shape_defContext)_localctx).ID.getText():null), ((Shape_defContext)_localctx).shape_body.ast);
+			((Shape_defContext)_localctx).ast =  new ShapeDefNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), (((Shape_defContext)_localctx).ID!=null?((Shape_defContext)_localctx).ID.getText():null), ((Shape_defContext)_localctx).shape_body.ast);
 			}
 		}
 		catch (RecognitionException re) {
@@ -336,7 +272,7 @@ public class ShExLParser extends Parser {
 	}
 
 	public static class Shape_bodyContext extends ParserRuleContext {
-		public List<Constraint> ast = new ArrayList<Constraint>();
+		public List<TripleConstraintNode> ast = new ArrayList<TripleConstraintNode>();
 		public Constraint_defContext c1;
 		public Constraint_defContext c2;
 		public Constraint_defContext c3;
@@ -350,19 +286,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_shape_body; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterShape_body(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitShape_body(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitShape_body(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Shape_bodyContext shape_body() throws RecognitionException {
@@ -427,7 +350,7 @@ public class ShExLParser extends Parser {
 	}
 
 	public static class Constraint_defContext extends ParserRuleContext {
-		public Constraint ast;
+		public TripleConstraintNode ast;
 		public Constraint_fieldContext constraint_field;
 		public Constraint_typeContext constraint_type;
 		public Constraint_fieldContext constraint_field() {
@@ -440,19 +363,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constraint_def; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterConstraint_def(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitConstraint_def(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitConstraint_def(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Constraint_defContext constraint_def() throws RecognitionException {
@@ -465,7 +375,7 @@ public class ShExLParser extends Parser {
 			((Constraint_defContext)_localctx).constraint_field = constraint_field();
 			setState(72);
 			((Constraint_defContext)_localctx).constraint_type = constraint_type();
-			((Constraint_defContext)_localctx).ast =  new Constraint(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), ((Constraint_defContext)_localctx).constraint_field.ast, ((Constraint_defContext)_localctx).constraint_type.ast);
+			((Constraint_defContext)_localctx).ast =  new TripleConstraintNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), ((Constraint_defContext)_localctx).constraint_field.ast, ((Constraint_defContext)_localctx).constraint_type.ast);
 			}
 		}
 		catch (RecognitionException re) {
@@ -480,7 +390,7 @@ public class ShExLParser extends Parser {
 	}
 
 	public static class Constraint_fieldContext extends ParserRuleContext {
-		public FieldConstraint ast;
+		public FieldConstraintNode ast;
 		public Prefix_invContext prefix_inv;
 		public Property_defContext property_def;
 		public Prefix_invContext prefix_inv() {
@@ -493,19 +403,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constraint_field; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterConstraint_field(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitConstraint_field(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitConstraint_field(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Constraint_fieldContext constraint_field() throws RecognitionException {
@@ -520,7 +417,7 @@ public class ShExLParser extends Parser {
 			match(T__1);
 			setState(77);
 			((Constraint_fieldContext)_localctx).property_def = property_def();
-			((Constraint_fieldContext)_localctx).ast =  new FieldConstraint(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), new PrefixInv(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), ((Constraint_fieldContext)_localctx).prefix_inv.ast.prefixName(), ((Constraint_fieldContext)_localctx).property_def.ast));
+			((Constraint_fieldContext)_localctx).ast =  new FieldConstraintNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), new PrefixInvNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), ((Constraint_fieldContext)_localctx).prefix_inv.ast.prefixName(), ((Constraint_fieldContext)_localctx).property_def.ast));
 			}
 		}
 		catch (RecognitionException re) {
@@ -535,7 +432,7 @@ public class ShExLParser extends Parser {
 	}
 
 	public static class Constraint_typeContext extends ParserRuleContext {
-		public TypeConstraint ast;
+		public TypeConstraintNode ast;
 		public Prefix_invContext prefix_inv;
 		public Primitive_typeContext primitive_type;
 		public Shape_invContext shape_inv;
@@ -552,19 +449,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constraint_type; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterConstraint_type(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitConstraint_type(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitConstraint_type(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Constraint_typeContext constraint_type() throws RecognitionException {
@@ -584,7 +468,7 @@ public class ShExLParser extends Parser {
 				match(T__1);
 				setState(82);
 				((Constraint_typeContext)_localctx).primitive_type = primitive_type();
-				((Constraint_typeContext)_localctx).ast =  new TypeConstraint(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), new PrefixInv(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), ((Constraint_typeContext)_localctx).prefix_inv.ast.prefixName(), ((Constraint_typeContext)_localctx).primitive_type.ast));
+				((Constraint_typeContext)_localctx).ast =  new TypeConstraintNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), new PrefixInvNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), ((Constraint_typeContext)_localctx).prefix_inv.ast.prefixName(), ((Constraint_typeContext)_localctx).primitive_type.ast));
 				}
 				break;
 			case T__5:
@@ -596,7 +480,7 @@ public class ShExLParser extends Parser {
 				match(T__1);
 				setState(87);
 				((Constraint_typeContext)_localctx).shape_inv = shape_inv();
-				((Constraint_typeContext)_localctx).ast =  new TypeConstraint(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), new ShapeInv(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), ((Constraint_typeContext)_localctx).shape_inv.ast.shapeName()));
+				((Constraint_typeContext)_localctx).ast =  new TypeConstraintNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), new ShapeInvNode(_localctx.start.getLine(), _localctx.start.getCharPositionInLine(), ((Constraint_typeContext)_localctx).shape_inv.ast.shapeName()));
 				}
 				break;
 			default:
@@ -622,19 +506,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_property_def; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterProperty_def(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitProperty_def(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitProperty_def(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Property_defContext property_def() throws RecognitionException {
@@ -660,26 +531,13 @@ public class ShExLParser extends Parser {
 	}
 
 	public static class Shape_invContext extends ParserRuleContext {
-		public ShapeInv ast;
+		public ShapeInvNode ast;
 		public Token ID;
 		public TerminalNode ID() { return getToken(ShExLParser.ID, 0); }
 		public Shape_invContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_shape_inv; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterShape_inv(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitShape_inv(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitShape_inv(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Shape_invContext shape_inv() throws RecognitionException {
@@ -690,7 +548,7 @@ public class ShExLParser extends Parser {
 			{
 			setState(95);
 			((Shape_invContext)_localctx).ID = match(ID);
-			((Shape_invContext)_localctx).ast =  new ShapeInv((((Shape_invContext)_localctx).ID!=null?((Shape_invContext)_localctx).ID.getLine():0), (((Shape_invContext)_localctx).ID!=null?((Shape_invContext)_localctx).ID.getCharPositionInLine():0)+1, (((Shape_invContext)_localctx).ID!=null?((Shape_invContext)_localctx).ID.getText():null));
+			((Shape_invContext)_localctx).ast =  new ShapeInvNode((((Shape_invContext)_localctx).ID!=null?((Shape_invContext)_localctx).ID.getLine():0), (((Shape_invContext)_localctx).ID!=null?((Shape_invContext)_localctx).ID.getCharPositionInLine():0)+1, (((Shape_invContext)_localctx).ID!=null?((Shape_invContext)_localctx).ID.getText():null));
 			}
 		}
 		catch (RecognitionException re) {
@@ -705,26 +563,13 @@ public class ShExLParser extends Parser {
 	}
 
 	public static class Prefix_invContext extends ParserRuleContext {
-		public PrefixInv ast;
+		public PrefixInvNode ast;
 		public Token ID;
 		public TerminalNode ID() { return getToken(ShExLParser.ID, 0); }
 		public Prefix_invContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_prefix_inv; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterPrefix_inv(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitPrefix_inv(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitPrefix_inv(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Prefix_invContext prefix_inv() throws RecognitionException {
@@ -744,7 +589,7 @@ public class ShExLParser extends Parser {
 				}
 			}
 
-			((Prefix_invContext)_localctx).ast =  new PrefixInv((((Prefix_invContext)_localctx).ID!=null?((Prefix_invContext)_localctx).ID.getLine():0), (((Prefix_invContext)_localctx).ID!=null?((Prefix_invContext)_localctx).ID.getCharPositionInLine():0)+1, (((Prefix_invContext)_localctx).ID!=null?((Prefix_invContext)_localctx).ID.getText():null), "");
+			((Prefix_invContext)_localctx).ast =  new PrefixInvNode((((Prefix_invContext)_localctx).ID!=null?((Prefix_invContext)_localctx).ID.getLine():0), (((Prefix_invContext)_localctx).ID!=null?((Prefix_invContext)_localctx).ID.getCharPositionInLine():0)+1, (((Prefix_invContext)_localctx).ID!=null?((Prefix_invContext)_localctx).ID.getText():null), "");
 			}
 		}
 		catch (RecognitionException re) {
@@ -764,19 +609,6 @@ public class ShExLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_primitive_type; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).enterPrimitive_type(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ShExLListener ) ((ShExLListener)listener).exitPrimitive_type(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ShExLVisitor ) return ((ShExLVisitor<? extends T>)visitor).visitPrimitive_type(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Primitive_typeContext primitive_type() throws RecognitionException {

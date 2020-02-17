@@ -23,20 +23,20 @@
  *
  */
 
-package es.weso.shexlite.ast
+package es.weso.shexlite.compiler.ast
 
-import es.weso.shexlite.visitor.ShExLVisitor
+import es.weso.shexlite.compiler.visitor.ShExLVisitor
 
-class Type(line: Int, column: Int) extends ASTNode(line, column)  {
+class TypeNode(line: Int, column: Int) extends ASTNode(line, column)  {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }
 
-object Int extends Type(-1, -1)
-object String extends Type(-1, -1)
-object Long extends Type(-1, -1)
-object Double extends Type(-1, -1)
+object IntNode extends TypeNode(-1, -1)
+object StringNode extends TypeNode(-1, -1)
+object LongNode extends TypeNode(-1, -1)
+object DoubleNode extends TypeNode(-1, -1)
 
 
-case class Error(line: Int, column: Int, message: String) extends Type(line, column)  {
+case class ErrorNode(line: Int, column: Int, message: String) extends TypeNode(line, column)  {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }

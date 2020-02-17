@@ -23,9 +23,9 @@
  *
  */
 
-package es.weso.shexlite.ast
+package es.weso.shexlite.compiler.ast
 
-import es.weso.shexlite.visitor.ShExLVisitor
+import es.weso.shexlite.compiler.visitor.ShExLVisitor
 
 sealed trait Node {
   def getLine: Integer

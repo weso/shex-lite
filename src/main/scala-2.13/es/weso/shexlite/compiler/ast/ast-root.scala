@@ -23,8 +23,8 @@
  *
  */
 
-package es.weso.shexlite.ast
-import es.weso.shexlite.visitor.ShExLVisitor
+package es.weso.shexlite.compiler.ast
+import es.weso.shexlite.compiler.visitor.ShExLVisitor
 
 /**
  * Defines a shape expressions lite grammar file, that includes the prefixes and shapes definitions.
@@ -33,6 +33,6 @@ import es.weso.shexlite.visitor.ShExLVisitor
  * @param column where the file starts.
  * @param definitions that the file includes.
  */
-case class ShExL(line: Int, column: Int, definitions: java.util.List[Definition]) extends ASTNode(line, column) {
+case class ShapeExpressionsFileNode(line: Int, column: Int, definitions: java.util.List[DefinitionNode]) extends ASTNode(line, column) {
   override def accept(v: ShExLVisitor, param: Any): Unit = v.visit(this, param)
 }

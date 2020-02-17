@@ -1,42 +1,42 @@
 grammar ShExL;
 
 @header {
-import es.weso.shexlite.ast.*;
+import es.weso.shexlite.compiler.ast.*;
 import java.util.*;
 import java.lang.String;
 }
 
-shex_lite_doc returns [ShExL ast]
- : {List<Definition> defs = new ArrayList<Definition>();} (prefix_def {defs.add($prefix_def.ast);})+ (shape_def{defs.add($shape_def.ast);})+ {$ast = new ShExL($start.getLine(), $start.getCharPositionInLine(), defs);} EOF
+shex_lite_doc returns [ShapeExpressionsFileNode ast]
+ : {List<DefinitionNode> defs = new ArrayList<DefinitionNode>();} (prefix_def {defs.add($prefix_def.ast);})+ (shape_def{defs.add($shape_def.ast);})+ {$ast = new ShapeExpressionsFileNode($start.getLine(), $start.getCharPositionInLine(), defs);} EOF
  ;
 
 // ------------------
 // DEFINITIONS
 // ------------------
 
-prefix_def returns [PrefixDef ast]
- : 'PREFIX' ID? ':' IRI {$ast = new PrefixDef($start.getLine(), $start.getCharPositionInLine(), $ID.text, new URL($start.getLine(), $start.getCharPositionInLine(), $IRI.text));}
+prefix_def returns [PrefixDefNode ast]
+ : 'PREFIX' ID? ':' IRI {$ast = new PrefixDefNode($start.getLine(), $start.getCharPositionInLine(), $ID.text, new URLNode($start.getLine(), $start.getCharPositionInLine(), $IRI.text));}
  ;
 
-shape_def returns [ShapeDef ast]
- : ':' ID '{' shape_body '}' {$ast = new ShapeDef($start.getLine(), $start.getCharPositionInLine(), $ID.text, $shape_body.ast);}
+shape_def returns [ShapeDefNode ast]
+ : ':' ID '{' shape_body '}' {$ast = new ShapeDefNode($start.getLine(), $start.getCharPositionInLine(), $ID.text, $shape_body.ast);}
  ;
 
-shape_body returns [List<Constraint> ast = new ArrayList<Constraint>()]
+shape_body returns [List<TripleConstraintNode> ast = new ArrayList<TripleConstraintNode>()]
  : ( c1=constraint_def {$ast.add($c1.ast);} | ( c2=constraint_def ';' {$ast.add($c2.ast);} )+ c3=constraint_def {$ast.add($c3.ast);} )
  ;
 
-constraint_def returns [Constraint ast]
- : constraint_field constraint_type {$ast = new Constraint($start.getLine(), $start.getCharPositionInLine(), $constraint_field.ast, $constraint_type.ast);}
+constraint_def returns [TripleConstraintNode ast]
+ : constraint_field constraint_type {$ast = new TripleConstraintNode($start.getLine(), $start.getCharPositionInLine(), $constraint_field.ast, $constraint_type.ast);}
  ;
 
-constraint_field returns [FieldConstraint ast]
- : prefix_inv ':' property_def {$ast = new FieldConstraint($start.getLine(), $start.getCharPositionInLine(), new PrefixInv($start.getLine(), $start.getCharPositionInLine(), $prefix_inv.ast.prefixName(), $property_def.ast));}
+constraint_field returns [FieldConstraintNode ast]
+ : prefix_inv ':' property_def {$ast = new FieldConstraintNode($start.getLine(), $start.getCharPositionInLine(), new PrefixInvNode($start.getLine(), $start.getCharPositionInLine(), $prefix_inv.ast.prefixName(), $property_def.ast));}
  ;
 
-constraint_type returns [TypeConstraint ast]
- : prefix_inv ':' primitive_type {$ast = new TypeConstraint($start.getLine(), $start.getCharPositionInLine(), new PrefixInv($start.getLine(), $start.getCharPositionInLine(), $prefix_inv.ast.prefixName(), $primitive_type.ast));}
- | '@' ':' shape_inv {$ast = new TypeConstraint($start.getLine(), $start.getCharPositionInLine(), new ShapeInv($start.getLine(), $start.getCharPositionInLine(), $shape_inv.ast.shapeName()));}
+constraint_type returns [TypeConstraintNode ast]
+ : prefix_inv ':' primitive_type {$ast = new TypeConstraintNode($start.getLine(), $start.getCharPositionInLine(), new PrefixInvNode($start.getLine(), $start.getCharPositionInLine(), $prefix_inv.ast.prefixName(), $primitive_type.ast));}
+ | '@' ':' shape_inv {$ast = new TypeConstraintNode($start.getLine(), $start.getCharPositionInLine(), new ShapeInvNode($start.getLine(), $start.getCharPositionInLine(), $shape_inv.ast.shapeName()));}
  ;
 
 property_def  returns [String ast]
@@ -47,12 +47,12 @@ property_def  returns [String ast]
 // INVOCATIONS
 // ------------------
 
-shape_inv  returns [ShapeInv ast]
- : ID {$ast = new ShapeInv($ID.line, $ID.pos+1, $ID.text);}
+shape_inv  returns [ShapeInvNode ast]
+ : ID {$ast = new ShapeInvNode($ID.line, $ID.pos+1, $ID.text);}
  ;
 
-prefix_inv returns [PrefixInv ast]
- : ID? {$ast = new PrefixInv($ID.line, $ID.pos+1, $ID.text, "");}
+prefix_inv returns [PrefixInvNode ast]
+ : ID? {$ast = new PrefixInvNode($ID.line, $ID.pos+1, $ID.text, "");}
  ;
 
 primitive_type returns [String ast]
