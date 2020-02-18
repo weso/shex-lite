@@ -28,7 +28,6 @@ package es.weso.shexlite
 import es.weso.shexlite.compiler.ast._
 import es.weso.shexlite.compiler.error.ErrorHandler
 import es.weso.shexlite.compiler.parser.generated.{ShExLLexer, ShExLParser}
-import es.weso.shexlite.parser.generated.ShExLParser
 import es.weso.shexlite.compiler.visitor._
 import org.antlr.v4.runtime.{CharStream, CharStreams, CommonTokenStream}
 

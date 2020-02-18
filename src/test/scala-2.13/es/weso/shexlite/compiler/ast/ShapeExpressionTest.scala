@@ -25,19 +25,19 @@
 
 package es.weso.shexlite.compiler.ast
 
-import es.weso.shexlite.{Cardinality, NodeConstraint, Prefix, Property, Protocol, ShapeExpression, ShapeReferenceType, TripleConstraint, URL}
+import es.weso.shexlite.{Cardinality, NodeConstraint, Prefix, Property, Protocol, ShapeExpression, ShapeReferenceType, StringType, TripleConstraint, URL}
 import org.scalatest._
 
 class ShapeExpressionTest extends FlatSpec {
 
   "A shape expression" should "be able to exist" in {
     val prefixFOAF = Prefix("", URL(Protocol.HttpProtocol, "", ""))
-    val shapeExpression =
+    val shapeExpression: ShapeExpression =
       ShapeExpression("Pepe",
         List(
           TripleConstraint(
             Property(prefixFOAF, "name"),
-            NodeConstraint(prefixFOAF, ShapeReferenceType(shapeExpression)),
+            NodeConstraint(prefixFOAF, StringType),
             Cardinality.DefaultOne)
         )
       )
