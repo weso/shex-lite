@@ -1,4 +1,4 @@
-# shExLite [![Build Status](https://travis-ci.org/weso/shex-lite.svg?branch=master)](https://travis-ci.org/weso/shex-lite)
+# shex-lite [![Build Status](https://travis-ci.org/weso/shex-lite.svg?branch=master)](https://travis-ci.org/weso/shex-lite)
 
 ShExLite is a reduced version of ShEx that simplifies the languaje and allows to work with tabular based Shape Expressions. 
 More information:
