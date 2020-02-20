@@ -1,0 +1,15 @@
+name: Mirror @ Murcia Organization
+
+  on: [push, delete]
+
+  jobs:
+   mirror:
+     runs-on: ubuntu-18.04
+     steps:
+     - name: mirror
+       uses: wearerequired/git-mirror-action@master
+       env:
+         SSH_PRIVATE_KEY: ${{ secrets.IZERTIS_GITHUB_SSH_KEY }}
+       with:
+         source-repo: 'git@github.com:weso/shex-lite.git'
+         destination-repo: 'git@github.com:HerculesCRUE/ib-shex-lite.git'
