@@ -1,4 +1,4 @@
-sudo: false
+sudo: true
 
 language: scala
 
@@ -15,7 +15,7 @@ python:
 install:
   - pushd /tmp
   - git clone https://github.com/tabatkins/bikeshed.git --depth 1
-  - pip install --editable bikeshed
+  - sudo pip install --editable bikeshed
   - bikeshed update
   - popd
 
