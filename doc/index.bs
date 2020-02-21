@@ -1,0 +1,23 @@
+<pre class='metadata'>
+Title: ShEx Lite documentation
+Shortname: ShExL Docs
+ED: https://weso.github.io/shex-lite/
+Level: 1
+Status: LD
+Group: Semantics Web Oviedo
+URL: https://github.com/weso/
+Markup Shorthands: markdown yes
+Max ToC Depth: 2
+Editor: Guillermo Facundo Colunga, University of Oviedo https://github.com/thewilly
+Editor: Jose Emilio Labra Gayo, University of Oviedo http://labra.weso.es
+Abstract:
+  Here you will find all the documentation and design decisions about Shape Expression Lite.
+</pre>
+
+## Status of This Document ## {#status}
+**This document is an incomplete draft.**
+
+You are invited to [contribute](https://github.com/weso/shex-lite/issues)
+any feedback, comments, or questions you might have.
+
+<pre class=include>path: introduction.bs</pre>
