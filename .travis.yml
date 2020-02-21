@@ -1,34 +1,33 @@
 sudo: true
 
-language: scala
 
-scala:
-   - 2.13.1
-   
-jdk:
-  - oraclejdk12
-  - openjdk12
-  
-python:
-  - "2.7"
-  
-install:
-  - pushd /tmp
-  - git clone https://github.com/tabatkins/bikeshed.git --depth 1
-  - sudo pip install --editable bikeshed
-  - bikeshed update
-  - popd
+matrix:
+  - language: scala
+    scala: 2.13.1
+    jdk:
+      - oraclejdk12
+      - openjdk12
+      
+  - language: pyhon
+    python: 2.7
+     
+    install:
+      - pushd /tmp
+      - git clone https://github.com/tabatkins/bikeshed.git --depth 1
+      - sudo pip install --editable bikeshed
+      - bikeshed update
+      - popd
+      
+    script:
+      - ./scripts/build-doc
+       
+    before_deploy:
+      - rm .gitignore
 
-script:
-  - ./scripts/build-doc
-
-before_deploy:
-  - rm .gitignore
-
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  keep_history: true
-  on:
-    branch: master
+     deploy:
+       provider: pages
+       skip_cleanup: true
+       github_token: $GITHUB_TOKEN
+       keep_history: true
+       on:
+         branch: master
