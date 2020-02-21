@@ -20,7 +20,7 @@ install:
   - popd
 
 script:
-  - ./scripts/build
+  - ./scripts/build-doc.sh
 
 before_deploy:
   - rm .gitignore
