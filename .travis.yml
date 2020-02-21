@@ -6,3 +6,27 @@ scala:
 jdk:
   - oraclejdk12
   - openjdk12
+  
+python:
+  - "2.7"
+  
+install:
+  - pushd /tmp
+  - git clone https://github.com/tabatkins/bikeshed.git --depth 1
+  - pip install --editable bikeshed
+  - bikeshed update
+  - popd
+
+script:
+  - ./scripts/build
+
+before_deploy:
+  - rm .gitignore
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: true
+  on:
+    branch: master
