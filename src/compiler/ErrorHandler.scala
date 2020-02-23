@@ -23,11 +23,30 @@
  *
  */
 
-package es.weso.shexlite
+package compiler
 
-case class URL(protocol: Protocol, domain: String, location: String) {
+import es.weso.shexlite.compiler.ast.ErrorNode
 
-  override def toString: String = {
-    s"$protocol$domain/$location"
-  }
+/**
+ * Error handler system. This system helps to hold the errors found at compile time.
+ */
+private[compiler] trait ErrorHandler {
+  /**
+   * Returns whether the error handler has errors or not.
+   *
+   * @return true if has errors, false otherwise.
+   */
+  def hasErrors: Boolean
+
+  /**
+   * Adds errors to the error system.
+   *
+   * @param error to add to the system.
+   */
+  def addError(error: ErrorNode): Unit
+
+  /**
+   * Shows the errors through the terminal.
+   */
+  def showErrors(): Unit
 }

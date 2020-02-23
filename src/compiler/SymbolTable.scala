@@ -24,58 +24,46 @@
  */
 package es.weso.shexlite.compiler.symboltable
 
-import java.util.Objects
-
-import es.weso.shexlite.compiler.ast.{PrefixDefNode, ShapeDefNode, ShapeInvNode}
-
-import scala.collection.mutable.HashMap
+import es.weso.shexlite.compiler.ast.{PrefixDefNode, ShapeDefNode}
 
 /**
  * Table to store different symbols of the parsed expressions, that is shapes definitions and prefixes.
+ *
+ * Behaviour:
+ * - Prefixes: When a prefix name is repeated its record its updated.
+ * - Shapes: Shapes names must be unique, so definitions cannot be override.
+ * - Base: Base prefix can be updated.
+ * - Start: Start prefix can can be updated.
  */
-object SymbolTable {
-
-  final val prefixes = HashMap[String, PrefixDefNode]()
-  final val shapes = HashMap[String, ShapeDefNode]()
+private[compiler] trait SymbolTable {
 
   /**
-   * Inserts a prefix in the table.
+   * Inserts a prefix in the prefixes table, if it exists it will update its record.
    *
-   * @param prefixDef is the prefix definition to insert in the table.
-   * @return
+   * @param prefixDef is the prefix definition to be inserted.
    */
-  def insert(prefixDef: PrefixDefNode) = {
-    if(Objects.nonNull(prefixDef)) {
-      this.prefixes += (prefixDef.name -> prefixDef)
-    }
-  }
+  def insert(prefixDef: PrefixDefNode): Unit
 
   /**
+   * Inserts a shape in the shapes table, shapes definitions must be unique.
    *
-   * @param shapeDef
-   * @return
+   * @param shapeDef is the shape definition to be inserted.
    */
-  def insert(shapeDef: ShapeDefNode)  = {
-    if(Objects.nonNull(shapeDef)) {
-      this.shapes += (shapeDef.name -> shapeDef)
-    }
-  }
+  def insert(shapeDef: ShapeDefNode): Unit
 
   /**
+   * Gets the prefix definition indexed at the given prefix name.
    *
-   * @param prefixName
-   * @return
+   * @param prefixName is the prefix name to look for in the table.
+   * @return is a option object that might contain the prefix definition.
    */
-  def getPrefix(prefixName: String): Option[PrefixDefNode] = {
-    this.prefixes.get(prefixName)
-  }
+  def getPrefix(prefixName: String): Option[PrefixDefNode]
 
   /**
+   * Gets the shape definition indexed at the given shape name.
    *
-   * @param shapeName
-   * @return
+   * @param shapeName is the prefix name to look for in the table.
+   * @return is a option object that might contain the prefix definition.
    */
-  def getShape(shapeName: String): Option[ShapeDefNode] = {
-    this.shapes.get(shapeName)
-  }
+  def getShape(shapeName: String): Option[ShapeDefNode]
 }
