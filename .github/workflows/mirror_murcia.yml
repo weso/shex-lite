@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: repo-sync
-      uses: wei/git-sync@v1
+      run: sh .github/workflows/git_sync.sh 
       env:
         SOURCE_REPO: "git@github.com:weso/shex-lite.git"
         SOURCE_BRANCH: "master"
