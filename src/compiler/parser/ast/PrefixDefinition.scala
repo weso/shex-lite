@@ -1,0 +1,3 @@
+package compiler.parser.ast
+
+case class PrefixDefinition()
