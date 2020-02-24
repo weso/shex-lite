@@ -20,6 +20,14 @@ deploy:
   cleanup: false
   github_token: $GITHUB_TOKEN
   keep_history: true
+  local_dir: ./doc
+  commiter_from_gh: true
+  name: weso-bot
+  email: thewilly.work@gmail.com
   on:
     branch:
       shex-lite-2.0-dev
+
+branches:
+  except:
+    - gh-pages

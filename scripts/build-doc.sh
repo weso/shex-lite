@@ -4,5 +4,3 @@ set -e
 for index in */index.bs; do
   bikeshed spec $index;
 done
-
-cp doc/*.html .
