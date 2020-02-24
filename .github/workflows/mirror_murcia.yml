@@ -15,6 +15,7 @@ jobs:
     - uses: actions/checkout@v2-beta
       with:
         repository: weso/repo-synchronizer-action
+        ref: refs/tags/v1
         token: ${{ secrets. WESOBOT_ACCESS_TOKEN}}
     - name: repo-sync
       uses: ./
