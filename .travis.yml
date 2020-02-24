@@ -3,7 +3,7 @@ python:
   - "2.7"
 
 install:
-  - pushd
+  - pushd /tmp
   - git clone https://github.com/tabatkins/bikeshed.git
   - pip install --editable $PWD/bikeshed
   - bikeshed update
