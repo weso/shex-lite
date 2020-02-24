@@ -13,12 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: repo-sync
-      run: sh .github/workflows/git_sync.sh 
+      run: ./scripts/git_sync.sh
       env:
         SOURCE_REPO: "git@github.com:weso/shex-lite.git"
         SOURCE_BRANCH: "master"
         DESTINATION_REPO: "git@github.com:HerculesCRUE/ib-shex-lite.git"
         DESTINATION_BRANCH: "master"
         SSH_PRIVATE_KEY: ${{ secrets.IZERTIS_GITHUB_SSH_KEY }}
-      with:
-        args: $SOURCE_REPO $SOURCE_BRANCH $DESTINATION_REPO $DESTINATION_BRANCH
