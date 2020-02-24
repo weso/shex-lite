@@ -3,9 +3,11 @@ python:
   - "2.7"
 
 install:
+  - pushd
   - git clone https://github.com/tabatkins/bikeshed.git
   - pip install --editable $PWD/bikeshed
   - bikeshed update
+  - popd
 
 script:
   - ./scripts/build-doc.sh
@@ -18,3 +20,6 @@ deploy:
   cleanup: false
   github_token: $GITHUB_TOKEN
   keep_history: true
+  on:
+    branch:
+      shex-lite-2.0-dev
