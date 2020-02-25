@@ -1,4 +1,4 @@
-grammar shex_lite_20;
+grammar shexl;
 
 file
  : definitions+ EOF
@@ -57,6 +57,7 @@ cardinality
  | '{'  '}'
  | '{' ',' '}'
  | '{' ',''}'
+ | // default cardinality
  ;
 
 prefix_ref

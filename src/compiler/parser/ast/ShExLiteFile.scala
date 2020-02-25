@@ -1,3 +1,8 @@
-package compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
-case class ShExLiteFile()
+/**
+ *
+ * @param definitions
+ */
+private[compiler] case class ShExLiteFile(line: Int, column: Int, definitions: List[Definition]) extends ASTNode(line, column)
+
