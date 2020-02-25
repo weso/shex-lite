@@ -19,7 +19,7 @@ deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  keep_history: false
+  keep_history: true
   local_dir: ./doc
   committer_from_gh: true
   name: weso-bot
