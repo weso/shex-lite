@@ -1,3 +1,3 @@
-package compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
-case class PrefixReference()
+private[compiler] case class PrefixReference(line: Int, column: Int) extends Reference(line, column)

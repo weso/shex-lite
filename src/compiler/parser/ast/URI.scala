@@ -1,5 +1,3 @@
-package compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
-class URI {
-
-}
+case class URI(line: Int, column: Int, value: String) extends Literal[String](line, column, value)

@@ -1,5 +1,3 @@
-package compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
-class Reference {
-
-}
+private[compiler] class Reference(line: Int, column: Int, definition: Definition = null) extends ASTNode(line, column)

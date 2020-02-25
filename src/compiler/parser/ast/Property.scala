@@ -1,3 +1,3 @@
-package compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
-case class Property()
+private[compiler] case class Property(line: Int, column: Int, prefixReference: PrefixReference, propertyName: String) extends ASTNode(line, column)

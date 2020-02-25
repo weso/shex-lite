@@ -1,5 +1,3 @@
-package compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
-object CardinalityZeroOrMore {
-
-}
+private[compiler] case class CardinalityZeroOrMore(line: Int, column: Int) extends Cardinality(line, column)

@@ -1,3 +1,4 @@
-package compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
-case class Cardina()
+private[compiler] class Cardinality(line: Int, column: Int) extends ASTNode(line, column)
+

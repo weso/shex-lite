@@ -1,5 +1,3 @@
-package compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
-class Literal {
-
-}
+private[compiler] class Literal[T](line: Int, column: Int, value: T) extends ASTNode(line, column)

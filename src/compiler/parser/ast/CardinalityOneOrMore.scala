@@ -1,3 +1,3 @@
-package compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
-case class CardinalityOneOrMore()
+private[compiler] case class CardinalityOneOrMore(line: Int, column: Int) extends Cardinality(line, column)

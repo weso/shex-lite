@@ -1,3 +1,3 @@
-package compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
-case class ShapeDefinition()
+private[compiler] case class ShapeDefinition(line: Int, column: Int, shapeLbl: String, tripleExpr: TripleExpression) extends Definition(line, column)
