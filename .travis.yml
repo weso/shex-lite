@@ -17,11 +17,11 @@ before_deploy:
 
 deploy:
   provider: pages
-  cleanup: false
+  skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  keep_history: true
+  keep_history: false
   local_dir: ./doc
-  commiter_from_gh: true
+  committer_from_gh: true
   name: weso-bot
   email: thewilly.work@gmail.com
   on:
