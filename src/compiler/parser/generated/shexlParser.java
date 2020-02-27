@@ -18,7 +18,8 @@ public class shexlParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, ID=15, IRI=16, SKIP_=17;
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, ID=15, IRI=16, INT_LITERAL=17, 
+		SKIP_=18;
 	public static final int
 		RULE_file = 0, RULE_definitions = 1, RULE_base_def = 2, RULE_start_def = 3, 
 		RULE_prefix_def = 4, RULE_shape_def = 5, RULE_shape_lbl = 6, RULE_triple_expr = 7, 
@@ -43,7 +44,7 @@ public class shexlParser extends Parser {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, "ID", "IRI", "SKIP_"
+			null, null, null, "ID", "IRI", "INT_LITERAL", "SKIP_"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -755,6 +756,10 @@ public class shexlParser extends Parser {
 	}
 
 	public static class CardinalityContext extends ParserRuleContext {
+		public List<TerminalNode> INT_LITERAL() { return getTokens(shexlParser.INT_LITERAL); }
+		public TerminalNode INT_LITERAL(int i) {
+			return getToken(shexlParser.INT_LITERAL, i);
+		}
 		public CardinalityContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -778,7 +783,7 @@ public class shexlParser extends Parser {
 		CardinalityContext _localctx = new CardinalityContext(_ctx, getState());
 		enterRule(_localctx, 22, RULE_cardinality);
 		try {
-			setState(101);
+			setState(106);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
 			case 1:
@@ -808,29 +813,42 @@ public class shexlParser extends Parser {
 				setState(93);
 				match(T__5);
 				setState(94);
+				match(INT_LITERAL);
+				setState(95);
 				match(T__6);
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(95);
-				match(T__5);
 				setState(96);
-				match(T__12);
+				match(T__5);
 				setState(97);
+				match(INT_LITERAL);
+				setState(98);
+				match(T__12);
+				setState(99);
+				match(INT_LITERAL);
+				setState(100);
 				match(T__6);
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(98);
+				setState(101);
 				match(T__5);
-				setState(99);
+				setState(102);
+				match(INT_LITERAL);
+				setState(103);
 				match(T__12);
-				setState(100);
+				setState(104);
 				match(T__6);
+				}
+				break;
+			case 7:
+				enterOuterAlt(_localctx, 7);
+				{
 				}
 				break;
 			}
@@ -877,19 +895,19 @@ public class shexlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(104);
+			setState(109);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==ID) {
 				{
-				setState(103);
+				setState(108);
 				match(ID);
 				}
 			}
 
-			setState(106);
+			setState(111);
 			match(T__4);
-			setState(107);
+			setState(112);
 			match(ID);
 			}
 		}
@@ -931,11 +949,11 @@ public class shexlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(109);
+			setState(114);
 			match(T__13);
-			setState(110);
+			setState(115);
 			match(T__4);
-			setState(111);
+			setState(116);
 			match(ID);
 			}
 		}
@@ -951,34 +969,35 @@ public class shexlParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\23t\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\24y\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
 		"\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\3\2\6\2 \n\2\r\2\16\2!\3\2\3\2\3\3"+
 		"\3\3\3\3\3\3\5\3*\n\3\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\6\3\6\5\6\65\n\6\3"+
 		"\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\t\3\t\3\t\3\t\6\tF\n\t\r"+
 		"\t\16\tG\3\t\3\t\5\tL\n\t\3\n\3\n\3\n\3\n\3\13\5\13S\n\13\3\13\3\13\3"+
-		"\13\3\f\3\f\3\f\5\f[\n\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\5"+
-		"\rh\n\r\3\16\5\16k\n\16\3\16\3\16\3\16\3\17\3\17\3\17\3\17\3\17\2\2\20"+
-		"\2\4\6\b\n\f\16\20\22\24\26\30\32\34\2\2\2u\2\37\3\2\2\2\4)\3\2\2\2\6"+
-		"+\3\2\2\2\b.\3\2\2\2\n\62\3\2\2\2\f9\3\2\2\2\16>\3\2\2\2\20K\3\2\2\2\22"+
-		"M\3\2\2\2\24R\3\2\2\2\26Z\3\2\2\2\30g\3\2\2\2\32j\3\2\2\2\34o\3\2\2\2"+
-		"\36 \5\4\3\2\37\36\3\2\2\2 !\3\2\2\2!\37\3\2\2\2!\"\3\2\2\2\"#\3\2\2\2"+
-		"#$\7\2\2\3$\3\3\2\2\2%*\5\6\4\2&*\5\b\5\2\'*\5\n\6\2(*\5\f\7\2)%\3\2\2"+
-		"\2)&\3\2\2\2)\'\3\2\2\2)(\3\2\2\2*\5\3\2\2\2+,\7\3\2\2,-\7\22\2\2-\7\3"+
-		"\2\2\2./\7\4\2\2/\60\7\5\2\2\60\61\5\34\17\2\61\t\3\2\2\2\62\64\7\6\2"+
-		"\2\63\65\7\21\2\2\64\63\3\2\2\2\64\65\3\2\2\2\65\66\3\2\2\2\66\67\7\7"+
-		"\2\2\678\7\22\2\28\13\3\2\2\29:\5\16\b\2:;\7\b\2\2;<\5\20\t\2<=\7\t\2"+
-		"\2=\r\3\2\2\2>?\7\7\2\2?@\7\21\2\2@\17\3\2\2\2AL\5\22\n\2BC\5\22\n\2C"+
-		"D\7\n\2\2DF\3\2\2\2EB\3\2\2\2FG\3\2\2\2GE\3\2\2\2GH\3\2\2\2HI\3\2\2\2"+
-		"IJ\5\22\n\2JL\3\2\2\2KA\3\2\2\2KE\3\2\2\2L\21\3\2\2\2MN\5\24\13\2NO\5"+
-		"\26\f\2OP\5\30\r\2P\23\3\2\2\2QS\7\21\2\2RQ\3\2\2\2RS\3\2\2\2ST\3\2\2"+
-		"\2TU\7\7\2\2UV\7\21\2\2V\25\3\2\2\2W[\5\32\16\2X[\5\34\17\2Y[\7\13\2\2"+
-		"ZW\3\2\2\2ZX\3\2\2\2ZY\3\2\2\2[\27\3\2\2\2\\h\7\f\2\2]h\7\r\2\2^h\7\16"+
-		"\2\2_`\7\b\2\2`h\7\t\2\2ab\7\b\2\2bc\7\17\2\2ch\7\t\2\2de\7\b\2\2ef\7"+
-		"\17\2\2fh\7\t\2\2g\\\3\2\2\2g]\3\2\2\2g^\3\2\2\2g_\3\2\2\2ga\3\2\2\2g"+
-		"d\3\2\2\2h\31\3\2\2\2ik\7\21\2\2ji\3\2\2\2jk\3\2\2\2kl\3\2\2\2lm\7\7\2"+
-		"\2mn\7\21\2\2n\33\3\2\2\2op\7\20\2\2pq\7\7\2\2qr\7\21\2\2r\35\3\2\2\2"+
-		"\13!)\64GKRZgj";
+		"\13\3\f\3\f\3\f\5\f[\n\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3"+
+		"\r\3\r\3\r\3\r\3\r\5\rm\n\r\3\16\5\16p\n\16\3\16\3\16\3\16\3\17\3\17\3"+
+		"\17\3\17\3\17\2\2\20\2\4\6\b\n\f\16\20\22\24\26\30\32\34\2\2\2{\2\37\3"+
+		"\2\2\2\4)\3\2\2\2\6+\3\2\2\2\b.\3\2\2\2\n\62\3\2\2\2\f9\3\2\2\2\16>\3"+
+		"\2\2\2\20K\3\2\2\2\22M\3\2\2\2\24R\3\2\2\2\26Z\3\2\2\2\30l\3\2\2\2\32"+
+		"o\3\2\2\2\34t\3\2\2\2\36 \5\4\3\2\37\36\3\2\2\2 !\3\2\2\2!\37\3\2\2\2"+
+		"!\"\3\2\2\2\"#\3\2\2\2#$\7\2\2\3$\3\3\2\2\2%*\5\6\4\2&*\5\b\5\2\'*\5\n"+
+		"\6\2(*\5\f\7\2)%\3\2\2\2)&\3\2\2\2)\'\3\2\2\2)(\3\2\2\2*\5\3\2\2\2+,\7"+
+		"\3\2\2,-\7\22\2\2-\7\3\2\2\2./\7\4\2\2/\60\7\5\2\2\60\61\5\34\17\2\61"+
+		"\t\3\2\2\2\62\64\7\6\2\2\63\65\7\21\2\2\64\63\3\2\2\2\64\65\3\2\2\2\65"+
+		"\66\3\2\2\2\66\67\7\7\2\2\678\7\22\2\28\13\3\2\2\29:\5\16\b\2:;\7\b\2"+
+		"\2;<\5\20\t\2<=\7\t\2\2=\r\3\2\2\2>?\7\7\2\2?@\7\21\2\2@\17\3\2\2\2AL"+
+		"\5\22\n\2BC\5\22\n\2CD\7\n\2\2DF\3\2\2\2EB\3\2\2\2FG\3\2\2\2GE\3\2\2\2"+
+		"GH\3\2\2\2HI\3\2\2\2IJ\5\22\n\2JL\3\2\2\2KA\3\2\2\2KE\3\2\2\2L\21\3\2"+
+		"\2\2MN\5\24\13\2NO\5\26\f\2OP\5\30\r\2P\23\3\2\2\2QS\7\21\2\2RQ\3\2\2"+
+		"\2RS\3\2\2\2ST\3\2\2\2TU\7\7\2\2UV\7\21\2\2V\25\3\2\2\2W[\5\32\16\2X["+
+		"\5\34\17\2Y[\7\13\2\2ZW\3\2\2\2ZX\3\2\2\2ZY\3\2\2\2[\27\3\2\2\2\\m\7\f"+
+		"\2\2]m\7\r\2\2^m\7\16\2\2_`\7\b\2\2`a\7\23\2\2am\7\t\2\2bc\7\b\2\2cd\7"+
+		"\23\2\2de\7\17\2\2ef\7\23\2\2fm\7\t\2\2gh\7\b\2\2hi\7\23\2\2ij\7\17\2"+
+		"\2jm\7\t\2\2km\3\2\2\2l\\\3\2\2\2l]\3\2\2\2l^\3\2\2\2l_\3\2\2\2lb\3\2"+
+		"\2\2lg\3\2\2\2lk\3\2\2\2m\31\3\2\2\2np\7\21\2\2on\3\2\2\2op\3\2\2\2pq"+
+		"\3\2\2\2qr\7\7\2\2rs\7\21\2\2s\33\3\2\2\2tu\7\20\2\2uv\7\7\2\2vw\7\21"+
+		"\2\2w\35\3\2\2\2\13!)\64GKRZlo";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

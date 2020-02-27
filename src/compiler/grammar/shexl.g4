@@ -54,9 +54,9 @@ cardinality
  : '*'
  | '+'
  | '?'
- | '{'  '}'
- | '{' ',' '}'
- | '{' ',''}'
+ | '{' INT_LITERAL '}'
+ | '{' INT_LITERAL ',' INT_LITERAL '}'
+ | '{' INT_LITERAL ',''}'
  | // default cardinality
  ;
 
@@ -76,6 +76,10 @@ IRI
  : '<' (~[\u0000-\u0020=<>"{}|^`\\] | UCHAR)* '>'
  ;
 
+INT_LITERAL
+ : DIGIT+
+ ;
+
 SKIP_
  : ( WHITE_SPACE | COMMENT ) -> skip
  ;
@@ -85,7 +89,7 @@ fragment WHITE_SPACE
  ;
 
 fragment COMMENT
- : ('#' ~[\r\n]* | '/*' (~[*] | '*' ('\\/' | ~[/]))* '*/') -> skip
+ : ('#' ~[\r\n]* | '/*' (~[*] | '*' ('\\/' | ~[/]))* '*/')
  ;
 
 fragment DIGIT

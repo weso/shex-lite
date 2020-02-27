@@ -23,9 +23,7 @@
  *
  */
 
-package compiler
-
-import es.weso.shexlite.compiler.ast.ErrorNode
+package es.weso.shexl.compiler
 
 /**
  * Error handler system. This system helps to hold the errors found at compile time.

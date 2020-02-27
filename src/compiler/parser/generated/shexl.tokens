@@ -14,7 +14,8 @@ T__12=13
 T__13=14
 ID=15
 IRI=16
-SKIP_=17
+INT_LITERAL=17
+SKIP_=18
 'base'=1
 'start'=2
 '='=3
