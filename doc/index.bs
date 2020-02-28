@@ -21,3 +21,4 @@ You are invited to [contribute](https://github.com/weso/shex-lite/issues)
 any feedback, comments, or questions you might have.
 
 <pre class=include>path: introduction.bs</pre>
+<pre class=include>path: specification.bs</pre>
