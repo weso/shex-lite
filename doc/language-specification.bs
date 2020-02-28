@@ -5,35 +5,35 @@ Shape Expressions (ShEx) is a schema language for describing RDF graphs structur
 
 ## The Shape Expressions Language Lite ## {#shex-lite-lang}
 
-### Compact Syntax ### {#shex-lite-lang}
+### Compact Syntax ###
 
-### Validation ### {#shex-lite-lang}
+### Validation ###
 
-### Structure of a Shape Expression ### {#shex-lite-lang}
+### Structure of a Shape Expression ###
 
-### Start Shape Expression ### {#shex-lite-lang}
-
-
-## A Shape Expressions Litle File ## {#shex-lite-lang}
-
-### Structure ### {#shex-lite-lang}
+### Start Shape Expression ###
 
 
-## Directive ## {#shex-lite-lang}
+## A Shape Expressions Litle File ##
 
-### Prefixe ### {#shex-lite-lang}
-
-### Base ### {#shex-lite-lang}
-
-### Start ### {#shex-lite-lang}
+### Structure ###
 
 
-## Shape ## {#shex-lite-lang}
+## Directive ##
 
-### Structure ### {#shex-lite-lang}
+### Prefixe ###
 
-### Triple Expression ### {#shex-lite-lang}
-#### Triple Constraint #### {#shex-lite-lang}
-##### Property ##### {#shex-lite-lang}
-##### Node Constraint ##### {#shex-lite-lang}
-##### Cardinality ##### {#shex-lite-lang}
+### Base ###
+
+### Start ###
+
+
+## Shape ##
+
+### Structure ###
+
+### Triple Expression ###
+#### Triple Constraint ####
+##### Property #####
+##### Node Constraint #####
+##### Cardinality #####
