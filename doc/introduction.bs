@@ -5,5 +5,3 @@ ShEx-Lite is a subset of the specification of Shape Expressions. Shape Expressio
 The Shape Expressions (ShEx) language describes RDF nodes and graph structures. A node constraint describes an RDF node (IRI, blank node or literal) and a shape describes the triples involving nodes in an RDF graph. These descriptions identify predicates and their associated cardinalities and datatypes. ShEx shapes can be used to communicate data structures associated with some process or interface, generate or validate data, or drive user interfaces.
 
 This document defines the ShEx language. See the Shape Expressions Primer for a non-normative description of ShEx. 
-
-Issue: Complete this doc.
