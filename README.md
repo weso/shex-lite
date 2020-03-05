@@ -14,9 +14,9 @@ More information:
 
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
-## Versioning
+## Roadmap and Releases
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/weso/shex-lite/tags). 
+Please in order to see and contribute to the roadmap visit https://github.com/weso/shex-lite-evolution.
 
 ## Authors
 
