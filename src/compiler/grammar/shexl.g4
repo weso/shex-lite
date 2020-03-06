@@ -142,7 +142,8 @@ prefix_invocation
 
 // Describe the allow values of a node. It can be:
 //  - anything.
-//  - a datatype.
+//  - a datatype. Notice that a datatype actually is a prefix
+//      invocation.
 //  - a node kind.
 //  - a value set.
 //  - or a shape reference.
