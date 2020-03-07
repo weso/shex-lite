@@ -225,7 +225,7 @@ REAL_LITERAL
  ;
 
 STRING_LITERAL
- : '"'.'"'
+ : '"'.*'"'
  ;
 
 SKIP_
