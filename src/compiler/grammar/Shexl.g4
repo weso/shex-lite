@@ -82,7 +82,7 @@ prefix_declaration
 // be validated against. It is defined as the conjunction
 // of a shape name and an expression.
 shape_declaration
- : shape_name expression
+ : shape_name CLOSED_KW? expression
  ;
 
 // The import statement imports another shex-lite schema
@@ -142,6 +142,7 @@ triple_constraint
 // the declared prefix. And the same with Datatypes.
 prefix_invocation
  : prefix=LABEL? ':' property=LABEL
+ | A_KW     // keywork `a` alias for rdf:type
  ;
 
 // Describe the allow values of a node. It can be:
@@ -189,8 +190,11 @@ cardinality
  | '{' INT_LITERAL ',''}'
  ;
 
+// **********************************
 // TOKENS
+// **********************************
 
+// Keyworkds of the language.
 PREFIX_KW       :   'PREFIX'        ;
 BASE_KW         :   'BASE'          ;
 IMPORT_KW       :   'IMPORT'        ;
@@ -202,10 +206,12 @@ IRI_KW          :   'IRI'           ;
 LITERAL_KW      :   'LITERAL'       ;
 BNODE_KW        :   'BNODE'         ;
 NON_LITERAL_KW  :   'NONLITERAL'    ;
+CLOSED_KW       :   'CLOSED'        ;
+A_KW            :   'a'             ;
 
 
 LABEL
- : [a-zA-Z_][a-zA-Z0-9_]*
+ : [a-zA-Z_][a-zA-Z0-9_-·]*
  ;
 
 IRI
