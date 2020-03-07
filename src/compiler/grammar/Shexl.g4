@@ -36,16 +36,16 @@ schema
 // The statements are the second level of the grammar.
 // Each statement can be:
 //  - a declaration.
-//  - an import statement. import is not a definition but yes an statement as
-//     it does not declare anything.
-// *This rule is intended to be exntended in the future with more statements.*
+//  - an import statement. import is not a definition but an statement as it does not
+//    declare anything.
+// *This rule is intended to be extended in the future with more statements.*
 statement
  : declaration_statement
  | import_statement
  ;
 
-// The third level are the declararions, up to this level
-// everything in an scheema is a declaration, directives
+// The third level are the declarations, up to this level
+// everything in a shema is a declaration, directives
 // like base, start, prefix or shapes declarations.
 declaration_statement
  : base_declaration
@@ -114,7 +114,7 @@ expression
  : triple_expression
  ;
 
-// A triple expression is the shema that is associated to the
+// A triple expression is the schema that is associated to the
 // shape name label. And it is this expression the one that it
 // is used to validate against.
 triple_expression
@@ -138,7 +138,7 @@ triple_constraint
 
 // A prefix invocation is the invocation to something declared
 // in the prefix. For example when we declare a property name
-// in a triple constraint we invoque the property associated to
+// in a triple constraint we invoke the property associated to
 // the declared prefix. And the same with Datatypes.
 prefix_invocation
  : prefix=LABEL? ':' property=LABEL
@@ -171,8 +171,8 @@ value_set_type
  ;
 
 // As seen previously a triple constraint is formed by a property, a
-// node constraint and a cardinality. The cardinality might be take
-// different values depending on wat does it means:
+// node constraint and a cardinality. The cardinality might take different
+// values depending on what does it mean:
 //  - `*` -> any number of repetitions, 0 or more. If no cardinality
 //           is set this one is de default one. [0,n)
 //  - `+` -> any number of repetitions but at least 1. [1,n)
