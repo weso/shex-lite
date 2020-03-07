@@ -235,7 +235,7 @@ SKIP_
 // FRAGMENTS
 
 fragment WHITE_SPACE
- : [ \t\r\n\fEOF]+
+ : [ \t\r\n\f]+
  ;
 
 fragment COMMENT
