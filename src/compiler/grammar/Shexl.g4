@@ -22,7 +22,9 @@
  * SOFTWARE.
 */
 
-grammar shexl;
+// Shapes Expression Litle grammar is an implementation of a defined subset of shape
+// expressions on its compact syntax version.
+grammar Shexl;
 
 // The top level element of the grammar is the shema, that is
 // what we want to represent with this grammar.
@@ -38,14 +40,14 @@ schema
 //     it does not declare anything.
 // *This rule is intended to be exntended in the future with more statements.*
 statement
- : declaration
+ : declaration_statement
  | import_statement
  ;
 
 // The third level are the declararions, up to this level
 // everything in an scheema is a declaration, directives
 // like base, start, prefix or shapes declarations.
-declaration
+declaration_statement
  : base_declaration
  | start_declaration
  | prefix_declaration
@@ -56,7 +58,7 @@ declaration
 // base IRI. It if defined as the keywork `base` and the
 // IRI.
 base_declaration
- : 'base' IRI
+ : BASE_KW IRI
  ;
 
 // The start declaration defines the shape that will be
@@ -64,7 +66,7 @@ base_declaration
 // defined by the `start` keyword, then an `=` symbol and
 // the shape invocation.
 start_declaration
- : 'start' '=' shape_invocation
+ : START_KW '=' shape_invocation
  ;
 
 // A prefix declaration is the association of an IRI to
@@ -72,7 +74,7 @@ start_declaration
 // label that is optional (can be the null prefix), the
 // `:` symbol, and the IRI.
 prefix_declaration
- : 'prefix' LABEL? ':' IRI
+ : PREFIX_KW LABEL? ':' IRI
  ;
 
 // The shape declaration is the core of the validation
@@ -88,14 +90,14 @@ shape_declaration
 // keyword `import` and the corresponding IRI pointing
 // to the .shexl file.
 import_statement
- : 'import' IRI
+ : IMPORT_KW IRI
  ;
 
 // The shape name is the corresponding label associated
 // to a shape_declaration. It can be a node or an IRI.
 shape_name
- : ':' LABEL        // Node.
- | '<' LABEL '>'    // IRI.
+ : prefix_invocation    // Node.
+ | IRI        // IRI.
  ;
 
 // A shape invocation is the toold used to make reference
@@ -116,8 +118,9 @@ expression
 // shape name label. And it is this expression the one that it
 // is used to validate against.
 triple_expression
- : ex1=triple_expression op=(AND|OR) triple_expression
- | NOT triple_expression
+ : ex1=triple_expression AND_KW? ex2=triple_expression
+ | ex1=triple_expression OR_KW ex2=triple_expression
+ | NOT_KW triple_expression
  | node_constraint
  | '{' triple_constraint '}'                            // A single triple constraint.
  | '{' (triple_constraint ';')+ triple_constraint '}'   // Multiple triple constraints. (eachOfs)
@@ -127,9 +130,10 @@ triple_expression
 // eachOf of ShEx. In our case as we don't have the eachOneOf
 // we don't need to expand this rule. Therefore the triple
 // constraint is defined as a property, a node constraint and
-// the cardinality.
+// the cardinality. If no cardilaity is pressent the default one
+// will be the [0,n).
 triple_constraint
- : prefix_invocation node_constraint cardinality
+ : prefix_invocation node_constraint cardinality?
  ;
 
 // A prefix invocation is the invocation to something declared
@@ -137,7 +141,7 @@ triple_constraint
 // in a triple constraint we invoque the property associated to
 // the declared prefix. And the same with Datatypes.
 prefix_invocation
- : LABEL? ':' LABEL
+ : prefix=LABEL? ':' property=LABEL
  ;
 
 // Describe the allow values of a node. It can be:
@@ -148,13 +152,34 @@ prefix_invocation
 //  - a value set.
 //  - or a shape reference.
 node_constraint
- : '.'                  // Anything
- | prefix_invocation    // Datatype
- | node_type            // Node type: Iri, BNode...
- | '[' /*(prefix_invocation* | shape_name* | )*/ ']'            // [:Male :Female]
- | '@'shape_name     // @<shape_iri> @:shape_node
+ : '.'                  // Anything.
+ | prefix_invocation    // Datatype.
+ | LITERAL_KW           // Node kind.
+ | IRI_KW
+ | BNODE_KW
+ | NON_LITERAL_KW
+ | '[' value_set_type* ']'  // Value set.
+ | shape_invocation     // Shape reference.
  ;
 
+// Represents the possible values that a value set might contain.
+value_set_type
+ : prefix_invocation    // Prefix invocation.
+ | shape_invocation     // Shape invocation.
+ | STRING_LITERAL       // String literal.
+ | REAL_LITERAL         // Real literal.
+ ;
+
+// As seen previously a triple constraint is formed by a property, a
+// node constraint and a cardinality. The cardinality might be take
+// different values depending on wat does it means:
+//  - `*` -> any number of repetitions, 0 or more. If no cardinality
+//           is set this one is de default one. [0,n)
+//  - `+` -> any number of repetitions but at least 1. [1,n)
+//  - `?` -> none or one appearance. Also known as optional. [0,1]
+//  - `{N}` -> exactly N repetitions [N,N].
+//  - `{N,M}` -> a minimum of N and a maximum of M repetitions. [N,M]
+//  - `{N, }` -> any number of repetitions but a minimum of N. [N,m)
 cardinality
  : '*'
  | '+'
@@ -162,23 +187,22 @@ cardinality
  | '{' INT_LITERAL '}'
  | '{' INT_LITERAL ',' INT_LITERAL '}'
  | '{' INT_LITERAL ',''}'
- | // default cardinality
  ;
 
-node_type
- : literal
- | IRI
- | blank_node
- | non_literal
- ;
+// TOKENS
 
-prefix_ref
- : ID? ':' ID
- ;
+PREFIX_KW       :   'PREFIX'        ;
+BASE_KW         :   'BASE'          ;
+IMPORT_KW       :   'IMPORT'        ;
+START_KW        :   'START'         ;
+AND_KW          :   'AND'           ;
+OR_KW           :   'OR'            ;
+NOT_KW          :   'NOT'           ;
+IRI_KW          :   'IRI'           ;
+LITERAL_KW      :   'LITERAL'       ;
+BNODE_KW        :   'BNODE'         ;
+NON_LITERAL_KW  :   'NONLITERAL'    ;
 
-shape_ref
- : '@' ':' ID
- ;
 
 LABEL
  : [a-zA-Z_][a-zA-Z0-9_]*
@@ -189,12 +213,26 @@ IRI
  ;
 
 INT_LITERAL
- : DIGIT+
+ : '0'
+ | [1-9]DIGIT*
+ ;
+
+REAL_LITERAL
+ : INT_LITERAL? FRACTION
+ | INT_LITERAL '.'
+ | INT_LITERAL EXPONENT
+ | INT_LITERAL '.' DIGIT* EXPONENT
+ ;
+
+STRING_LITERAL
+ : '"'.'"'
  ;
 
 SKIP_
  : ( WHITE_SPACE | COMMENT ) -> skip
  ;
+
+// FRAGMENTS
 
 fragment WHITE_SPACE
  : [ \t\r\n\fEOF]+
@@ -210,6 +248,14 @@ fragment DIGIT
 
 fragment NON_ZERO_DIGIT
  : [1-9]
+ ;
+
+fragment EXPONENT
+ : [eE] [+-]? DIGIT+
+ ;
+
+fragment FRACTION
+ : '.' DIGIT+
  ;
 
 fragment UCHAR
