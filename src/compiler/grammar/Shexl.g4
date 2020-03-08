@@ -118,7 +118,7 @@ expression
 // shape name label. And it is this expression the one that it
 // is used to validate against.
 triple_expression
- : ex1=triple_expression AND_KW? ex2=triple_expression
+ : ex1=triple_expression AND_KW ex2=triple_expression
  | ex1=triple_expression OR_KW ex2=triple_expression
  | NOT_KW triple_expression
  | node_constraint
