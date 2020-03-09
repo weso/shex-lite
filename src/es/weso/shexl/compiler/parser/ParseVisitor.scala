@@ -1,10 +1,12 @@
 package es.weso.shexl.compiler.parser
 
-import es.weso.compiler.parser.generated.{ShexlBaseVisitor, ShexlParser}
+import es.weso.shexl.compiler.parser.generated.{ShexlBaseVisitor, ShexlParser}
+import es.weso.shexl.compiler.parser.generated.ShexlBaseVisitor
+import es.weso.shexl.compiler.parser.generated.ShexlParser.SchemaContext
 
 class ParseVisitor extends  ShexlBaseVisitor[Any] {
 
-  override def visitSchema(ctx: ShexlParser.SchemaContext): T = visitChildren(ctx)
+  override def visitSchema(ctx: SchemaContext): T = visitChildren(ctx)
 
   override def visitStatement(ctx: ShexlParser.StatementContext): T = visitChildren(ctx)
 

@@ -1,6 +1,6 @@
 package es.weso.shexl.compiler.parser.ast
 
-case class ExpressionTripleAnd(filename: String, line: Int, column: Int, left: Expression, right: Expression) extends ExpressionTriple {
+case class ExpressionTripleOr(filename: String, line: Int, column: Int, left: Expression, right: Expression) extends ExpressionTriple {
 
   /**
    * Gets the name of the file where the node was originated.

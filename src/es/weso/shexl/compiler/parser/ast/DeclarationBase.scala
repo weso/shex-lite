@@ -1,6 +1,4 @@
-package es.weso.compiler.parser.ast
-
-import es.weso.shexl.compiler.parser.ast.StatementDeclaration
+package es.weso.shexl.compiler.parser.ast
 
 /**
  * A base declaration is the definition of the prefix that will be used at any relative URI.

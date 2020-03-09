@@ -1,4 +1,4 @@
-package es.weso.compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
 /**
  *

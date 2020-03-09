@@ -1,5 +1,3 @@
 package es.weso.shexl.compiler.parser.ast
 
-class ExpressionTriple {
-
-}
+private[compiler] trait ExpressionTriple extends Expression

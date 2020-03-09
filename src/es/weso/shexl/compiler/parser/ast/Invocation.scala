@@ -1,6 +1,4 @@
-package es.weso.compiler.parser.ast
-
-import es.weso.shexl.compiler.parser.ast.{ASTNode, StatementDeclaration}
+package es.weso.shexl.compiler.parser.ast
 
 /**
  *

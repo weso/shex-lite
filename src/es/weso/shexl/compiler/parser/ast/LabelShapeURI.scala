@@ -1,4 +1,4 @@
-package es.weso.compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
 private[compiler] case class LabelShapeURI(filename: String, line: Int, column: Int, name:String, var base: DeclarationBase = null) extends LabelShape {
 

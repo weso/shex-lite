@@ -1,6 +1,4 @@
-package es.weso.compiler.parser.ast
-
-import es.weso.shexl.compiler.parser.ast.StatementDeclaration
+package es.weso.shexl.compiler.parser.ast
 
 /**
  * A start declaration is the fact of defining a start directive where a shape is associated to the start directive.
@@ -10,7 +8,7 @@ import es.weso.shexl.compiler.parser.ast.StatementDeclaration
  * @param column is the column in the file where the prefix definition is located.
  * @param shape is the reference to the shape that will be used as a start.
  */
-private[compiler] case class DeclarationStart(filename: String, line: Int, column: Int, shape: ReferenceShape) extends StatementDeclaration {
+private[compiler] case class DeclarationStart(filename: String, line: Int, column: Int, shape: InvocationShape) extends StatementDeclaration {
 
   /**
    * Gets the name of the file where the node was originated.

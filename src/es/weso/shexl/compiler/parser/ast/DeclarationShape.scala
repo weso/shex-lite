@@ -1,6 +1,4 @@
-package es.weso.compiler.parser.ast
-
-import es.weso.shexl.compiler.parser.ast.{Expression, StatementDeclaration}
+package es.weso.shexl.compiler.parser.ast
 
 /**
  * A shape declaration is the fact of associating an expression with a shape label.

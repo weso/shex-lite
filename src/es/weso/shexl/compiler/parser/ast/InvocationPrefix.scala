@@ -1,4 +1,4 @@
-package es.weso.compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
 case class InvocationPrefix(filename: String, line: Int, column: Int, prefix: String, property: String, var declaration: DeclarationPrefix = null) extends Invocation[DeclarationPrefix] {
 

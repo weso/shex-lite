@@ -1,6 +1,4 @@
-package es.weso.compiler.parser.ast
-
-import es.weso.shexl.compiler.parser.ast.StatementDeclaration
+package es.weso.shexl.compiler.parser.ast
 
 /**
  * A prefix declaration is the fact of defining a prefix in the scheme scope. A prefix definition is nothing more than

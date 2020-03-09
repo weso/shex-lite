@@ -1,6 +1,6 @@
 package es.weso.shexl.compiler.parser.ast
 
-private[compiler] case class ExpresionTripleNot(filename: String, line: Int, column: Int, expression: Expression) extends ExpressionTriple {
+private[compiler] case class ExpressionTripleNot(filename: String, line: Int, column: Int, expression: Expression) extends ExpressionTriple {
 
   /**
    * Gets the name of the file where the node was originated.

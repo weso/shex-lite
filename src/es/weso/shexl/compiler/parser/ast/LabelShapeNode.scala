@@ -1,4 +1,4 @@
-package es.weso.compiler.parser.ast
+package es.weso.shexl.compiler.parser.ast
 
 private[compiler] case class LabelShapeNode(filename: String, line: Int, column: Int, prefixInvocation: InvocationPrefix) extends LabelShape {
 

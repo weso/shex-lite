@@ -1,6 +1,4 @@
-package es.weso.compiler.parser.ast
-
-import es.weso.shexl.compiler.parser.ast.StatementDeclaration
+package es.weso.shexl.compiler.parser.ast
 
 case class DeclarationImport(filename: String, line: Int, column: Int, dependency: ValueURI) extends StatementDeclaration {
 
