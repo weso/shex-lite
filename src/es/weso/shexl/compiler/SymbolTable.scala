@@ -22,7 +22,7 @@
  * SOFTWARE.
  *
  */
-package es.weso.shexlite.compiler.symboltable
+package es.weso.shexl.compiler
 
 import es.weso.shexlite.compiler.ast.{PrefixDefNode, ShapeDefNode}
 
