@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 private[compiler] case class ExpressionTripleNot(filename: String, line: Int, column: Int, expression: Expression) extends ExpressionTriple {
 

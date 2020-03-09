@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 /**
  * An URI is an Uniform Resource Identifier that atomically identifies

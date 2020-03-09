@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 private[compiler] case class ValueSetString(filename: String, line: Int, column: Int, value: String) extends ValueSetValidType {
 

@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 case class ExpressionTripleOr(filename: String, line: Int, column: Int, left: Expression, right: Expression) extends ExpressionTriple {
 

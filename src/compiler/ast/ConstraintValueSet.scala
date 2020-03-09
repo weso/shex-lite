@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 private[compiler] case class ConstraintValueSet(filename: String, line: Int, column: Int, set: List[ValueSetValidType]) extends ConstraintNode {
   /**

@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 /**
  * In shex-lite the top level is an schema, a single file represents

@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 /**
  * AST node represents a node in the Abstract Syntax Tree (AST). The nodes are generated

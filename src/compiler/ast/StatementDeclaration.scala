@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 /**
  * A declaration in ShEx Lite is the fact of defining something. For example

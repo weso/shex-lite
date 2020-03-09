@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 /**
  * A prefix declaration is the fact of defining a prefix in the scheme scope. A prefix definition is nothing more than

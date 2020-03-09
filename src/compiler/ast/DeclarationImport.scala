@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 case class DeclarationImport(filename: String, line: Int, column: Int, dependency: ValueURI) extends StatementDeclaration {
 

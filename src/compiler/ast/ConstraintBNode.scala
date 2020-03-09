@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 private[compiler] case class ConstraintBNode(filename: String, line: Int, column: Int) extends ConstraintNode {
   /**

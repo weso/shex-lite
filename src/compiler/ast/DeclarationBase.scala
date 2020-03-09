@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 /**
  * A base declaration is the definition of the prefix that will be used at any relative URI.

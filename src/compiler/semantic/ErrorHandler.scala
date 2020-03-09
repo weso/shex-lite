@@ -25,6 +25,8 @@
 
 package semantic
 
+import ast.ConstraintAnyType
+
 /**
  * Error handler system. This system helps to hold the errors found at compile time.
  */
@@ -41,7 +43,7 @@ private[compiler] trait ErrorHandler {
    *
    * @param error to add to the system.
    */
-  def addError(error: Constraint): Unit
+  def addError(error: ConstraintAnyType): Unit
 
   /**
    * Shows the errors through the terminal.

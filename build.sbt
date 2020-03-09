@@ -4,7 +4,7 @@ version := "0.1"
 
 scalaVersion := "2.13.1"
 
-Compile / scalaSource := baseDirectory.value / "src/compiler"
+Compile / scalaSource := baseDirectory.value / "src"
 Compile / unmanagedSourceDirectories += baseDirectory.value / "src/library"
 
 Test / scalaSource := baseDirectory.value / "test"

@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 /**
  * In ShEx lite the second level is composed by statements. As it is a declarative DSL

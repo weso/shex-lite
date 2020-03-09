@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 /**
  * A start declaration is the fact of defining a start directive where a shape is associated to the start directive.

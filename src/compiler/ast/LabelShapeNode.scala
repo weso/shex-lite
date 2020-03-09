@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 private[compiler] case class LabelShapeNode(filename: String, line: Int, column: Int, prefixInvocation: InvocationPrefix) extends LabelShape {
 

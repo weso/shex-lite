@@ -1,4 +1,4 @@
-package ast
+package compiler.ast
 
 /**
  * A shape declaration is the fact of associating an expression with a shape label.
