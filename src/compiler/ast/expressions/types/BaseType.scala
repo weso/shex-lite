@@ -1,7 +1,7 @@
 package compiler.ast.expressions.types
 import compiler.ast.ASTWalker
 
-private[compiler] object BastType extends AbstractType {
+private[compiler] object BaseType extends AbstractType {
 
   /**
    * Helper method for the ast walkers.
