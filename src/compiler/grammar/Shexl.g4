@@ -133,7 +133,7 @@ triple_expression
 // the cardinality. If no cardilaity is pressent the default one
 // will be the [0,n).
 triple_constraint
- : prefix_invocation node_constraint cardinality?
+ : (prefix_invocation | A_KW) node_constraint cardinality?
  ;
 
 // A prefix invocation is the invocation to something declared
@@ -142,7 +142,6 @@ triple_constraint
 // the declared prefix. And the same with Datatypes.
 prefix_invocation
  : prefix=LABEL? ':' property=LABEL
- | A_KW     // keywork `a` alias for rdf:type
  ;
 
 // Describe the allow values of a node. It can be:
