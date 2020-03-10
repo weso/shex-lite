@@ -155,7 +155,7 @@ public class ShexlParser extends Parser {
 				setState(37); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__1) | (1L << PREFIX_KW) | (1L << BASE_KW) | (1L << IMPORT_KW) | (1L << START_KW) | (1L << A_KW) | (1L << LABEL) | (1L << IRI))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__1) | (1L << PREFIX_KW) | (1L << BASE_KW) | (1L << IMPORT_KW) | (1L << START_KW) | (1L << LABEL) | (1L << IRI))) != 0) );
 			setState(39);
 			match(EOF);
 			}
@@ -208,7 +208,6 @@ public class ShexlParser extends Parser {
 			case PREFIX_KW:
 			case BASE_KW:
 			case START_KW:
-			case A_KW:
 			case LABEL:
 			case IRI:
 				enterOuterAlt(_localctx, 1);
@@ -300,7 +299,6 @@ public class ShexlParser extends Parser {
 				}
 				break;
 			case T__1:
-			case A_KW:
 			case LABEL:
 			case IRI:
 				enterOuterAlt(_localctx, 4);
@@ -615,7 +613,6 @@ public class ShexlParser extends Parser {
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__1:
-			case A_KW:
 			case LABEL:
 				enterOuterAlt(_localctx, 1);
 				{
@@ -911,12 +908,13 @@ public class ShexlParser extends Parser {
 	}
 
 	public static class Triple_constraintContext extends ParserRuleContext {
-		public Prefix_invocationContext prefix_invocation() {
-			return getRuleContext(Prefix_invocationContext.class,0);
-		}
 		public Node_constraintContext node_constraint() {
 			return getRuleContext(Node_constraintContext.class,0);
 		}
+		public Prefix_invocationContext prefix_invocation() {
+			return getRuleContext(Prefix_invocationContext.class,0);
+		}
+		public TerminalNode A_KW() { return getToken(ShexlParser.A_KW, 0); }
 		public CardinalityContext cardinality() {
 			return getRuleContext(CardinalityContext.class,0);
 		}
@@ -946,16 +944,33 @@ public class ShexlParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(115);
-			prefix_invocation();
-			setState(116);
+			setState(117);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case T__1:
+			case LABEL:
+				{
+				setState(115);
+				prefix_invocation();
+				}
+				break;
+			case A_KW:
+				{
+				setState(116);
+				match(A_KW);
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			setState(119);
 			node_constraint();
-			setState(118);
+			setState(121);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__9) | (1L << T__10) | (1L << T__11))) != 0)) {
 				{
-				setState(117);
+				setState(120);
 				cardinality();
 				}
 			}
@@ -980,7 +995,6 @@ public class ShexlParser extends Parser {
 		public TerminalNode LABEL(int i) {
 			return getToken(ShexlParser.LABEL, i);
 		}
-		public TerminalNode A_KW() { return getToken(ShexlParser.A_KW, 0); }
 		public Prefix_invocationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1005,38 +1019,22 @@ public class ShexlParser extends Parser {
 		enterRule(_localctx, 26, RULE_prefix_invocation);
 		int _la;
 		try {
-			setState(126);
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(124);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case T__1:
-			case LABEL:
-				enterOuterAlt(_localctx, 1);
+			_la = _input.LA(1);
+			if (_la==LABEL) {
 				{
-				setState(121);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if (_la==LABEL) {
-					{
-					setState(120);
-					((Prefix_invocationContext)_localctx).prefix = match(LABEL);
-					}
-				}
-
 				setState(123);
-				match(T__1);
-				setState(124);
-				((Prefix_invocationContext)_localctx).property = match(LABEL);
+				((Prefix_invocationContext)_localctx).prefix = match(LABEL);
 				}
-				break;
-			case A_KW:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(125);
-				match(A_KW);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+			}
+
+			setState(126);
+			match(T__1);
+			setState(127);
+			((Prefix_invocationContext)_localctx).property = match(LABEL);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1091,80 +1089,79 @@ public class ShexlParser extends Parser {
 		enterRule(_localctx, 28, RULE_node_constraint);
 		int _la;
 		try {
-			setState(143);
+			setState(144);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__6:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(128);
+				setState(129);
 				match(T__6);
 				}
 				break;
 			case T__1:
-			case A_KW:
 			case LABEL:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(129);
+				setState(130);
 				prefix_invocation();
 				}
 				break;
 			case LITERAL_KW:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(130);
+				setState(131);
 				match(LITERAL_KW);
 				}
 				break;
 			case IRI_KW:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(131);
+				setState(132);
 				match(IRI_KW);
 				}
 				break;
 			case BNODE_KW:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(132);
+				setState(133);
 				match(BNODE_KW);
 				}
 				break;
 			case NON_LITERAL_KW:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(133);
+				setState(134);
 				match(NON_LITERAL_KW);
 				}
 				break;
 			case T__7:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(134);
+				setState(135);
 				match(T__7);
-				setState(138);
+				setState(139);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__1) | (1L << T__2) | (1L << A_KW) | (1L << LABEL) | (1L << REAL_LITERAL) | (1L << STRING_LITERAL))) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__1) | (1L << T__2) | (1L << LABEL) | (1L << REAL_LITERAL) | (1L << STRING_LITERAL))) != 0)) {
 					{
 					{
-					setState(135);
+					setState(136);
 					value_set_type();
 					}
 					}
-					setState(140);
+					setState(141);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(141);
+				setState(142);
 				match(T__8);
 				}
 				break;
 			case T__2:
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(142);
+				setState(143);
 				shape_invocation();
 				}
 				break;
@@ -1215,36 +1212,35 @@ public class ShexlParser extends Parser {
 		Value_set_typeContext _localctx = new Value_set_typeContext(_ctx, getState());
 		enterRule(_localctx, 30, RULE_value_set_type);
 		try {
-			setState(149);
+			setState(150);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__1:
-			case A_KW:
 			case LABEL:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(145);
+				setState(146);
 				prefix_invocation();
 				}
 				break;
 			case T__2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(146);
+				setState(147);
 				shape_invocation();
 				}
 				break;
 			case STRING_LITERAL:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(147);
+				setState(148);
 				match(STRING_LITERAL);
 				}
 				break;
 			case REAL_LITERAL:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(148);
+				setState(149);
 				match(REAL_LITERAL);
 				}
 				break;
@@ -1291,66 +1287,66 @@ public class ShexlParser extends Parser {
 		CardinalityContext _localctx = new CardinalityContext(_ctx, getState());
 		enterRule(_localctx, 32, RULE_cardinality);
 		try {
-			setState(166);
+			setState(167);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(151);
+				setState(152);
 				match(T__9);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(152);
+				setState(153);
 				match(T__10);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(153);
+				setState(154);
 				match(T__11);
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(154);
-				match(T__3);
 				setState(155);
-				match(INT_LITERAL);
+				match(T__3);
 				setState(156);
+				match(INT_LITERAL);
+				setState(157);
 				match(T__4);
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(157);
-				match(T__3);
 				setState(158);
-				match(INT_LITERAL);
+				match(T__3);
 				setState(159);
-				match(T__12);
-				setState(160);
 				match(INT_LITERAL);
+				setState(160);
+				match(T__12);
 				setState(161);
+				match(INT_LITERAL);
+				setState(162);
 				match(T__4);
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(162);
-				match(T__3);
 				setState(163);
-				match(INT_LITERAL);
+				match(T__3);
 				setState(164);
-				match(T__12);
+				match(INT_LITERAL);
 				setState(165);
+				match(T__12);
+				setState(166);
 				match(T__4);
 				}
 				break;
@@ -1385,7 +1381,7 @@ public class ShexlParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\"\u00ab\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\"\u00ac\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\3\2\6\2&\n\2\r\2\16\2\'\3\2\3\2\3\3\3\3\5\3.\n\3\3\4\3\4\3\4\3\4\5\4"+
@@ -1393,50 +1389,49 @@ public class ShexlParser extends Parser {
 		"\b\5\bF\n\b\3\b\3\b\3\t\3\t\3\t\3\n\3\n\5\nO\n\n\3\13\3\13\3\13\3\f\3"+
 		"\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\6\rb\n\r\r\r\16\rc"+
 		"\3\r\3\r\3\r\5\ri\n\r\3\r\3\r\3\r\3\r\3\r\3\r\7\rq\n\r\f\r\16\rt\13\r"+
-		"\3\16\3\16\3\16\5\16y\n\16\3\17\5\17|\n\17\3\17\3\17\3\17\5\17\u0081\n"+
-		"\17\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\7\20\u008b\n\20\f\20\16\20"+
-		"\u008e\13\20\3\20\3\20\5\20\u0092\n\20\3\21\3\21\3\21\3\21\5\21\u0098"+
+		"\3\16\3\16\5\16x\n\16\3\16\3\16\5\16|\n\16\3\17\5\17\177\n\17\3\17\3\17"+
+		"\3\17\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\7\20\u008c\n\20\f\20\16"+
+		"\20\u008f\13\20\3\20\3\20\5\20\u0093\n\20\3\21\3\21\3\21\3\21\5\21\u0099"+
 		"\n\21\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22\3\22"+
-		"\3\22\3\22\5\22\u00a9\n\22\3\22\2\3\30\23\2\4\6\b\n\f\16\20\22\24\26\30"+
-		"\32\34\36 \"\2\2\2\u00ba\2%\3\2\2\2\4-\3\2\2\2\6\63\3\2\2\2\b\65\3\2\2"+
+		"\3\22\3\22\5\22\u00aa\n\22\3\22\2\3\30\23\2\4\6\b\n\f\16\20\22\24\26\30"+
+		"\32\34\36 \"\2\2\2\u00bb\2%\3\2\2\2\4-\3\2\2\2\6\63\3\2\2\2\b\65\3\2\2"+
 		"\2\n8\3\2\2\2\f<\3\2\2\2\16C\3\2\2\2\20I\3\2\2\2\22N\3\2\2\2\24P\3\2\2"+
-		"\2\26S\3\2\2\2\30h\3\2\2\2\32u\3\2\2\2\34\u0080\3\2\2\2\36\u0091\3\2\2"+
-		"\2 \u0097\3\2\2\2\"\u00a8\3\2\2\2$&\5\4\3\2%$\3\2\2\2&\'\3\2\2\2\'%\3"+
-		"\2\2\2\'(\3\2\2\2()\3\2\2\2)*\7\2\2\3*\3\3\2\2\2+.\5\6\4\2,.\5\20\t\2"+
-		"-+\3\2\2\2-,\3\2\2\2.\5\3\2\2\2/\64\5\b\5\2\60\64\5\n\6\2\61\64\5\f\7"+
-		"\2\62\64\5\16\b\2\63/\3\2\2\2\63\60\3\2\2\2\63\61\3\2\2\2\63\62\3\2\2"+
-		"\2\64\7\3\2\2\2\65\66\7\21\2\2\66\67\7\36\2\2\67\t\3\2\2\289\7\23\2\2"+
-		"9:\7\3\2\2:;\5\24\13\2;\13\3\2\2\2<>\7\20\2\2=?\7\35\2\2>=\3\2\2\2>?\3"+
-		"\2\2\2?@\3\2\2\2@A\7\4\2\2AB\7\36\2\2B\r\3\2\2\2CE\5\22\n\2DF\7\33\2\2"+
-		"ED\3\2\2\2EF\3\2\2\2FG\3\2\2\2GH\5\26\f\2H\17\3\2\2\2IJ\7\22\2\2JK\7\36"+
-		"\2\2K\21\3\2\2\2LO\5\34\17\2MO\7\36\2\2NL\3\2\2\2NM\3\2\2\2O\23\3\2\2"+
-		"\2PQ\7\5\2\2QR\5\22\n\2R\25\3\2\2\2ST\5\30\r\2T\27\3\2\2\2UV\b\r\1\2V"+
-		"W\7\26\2\2Wi\5\30\r\6Xi\5\36\20\2YZ\7\6\2\2Z[\5\32\16\2[\\\7\7\2\2\\i"+
-		"\3\2\2\2]a\7\6\2\2^_\5\32\16\2_`\7\b\2\2`b\3\2\2\2a^\3\2\2\2bc\3\2\2\2"+
-		"ca\3\2\2\2cd\3\2\2\2de\3\2\2\2ef\5\32\16\2fg\7\7\2\2gi\3\2\2\2hU\3\2\2"+
-		"\2hX\3\2\2\2hY\3\2\2\2h]\3\2\2\2ir\3\2\2\2jk\f\b\2\2kl\7\24\2\2lq\5\30"+
-		"\r\tmn\f\7\2\2no\7\25\2\2oq\5\30\r\bpj\3\2\2\2pm\3\2\2\2qt\3\2\2\2rp\3"+
-		"\2\2\2rs\3\2\2\2s\31\3\2\2\2tr\3\2\2\2uv\5\34\17\2vx\5\36\20\2wy\5\"\22"+
-		"\2xw\3\2\2\2xy\3\2\2\2y\33\3\2\2\2z|\7\35\2\2{z\3\2\2\2{|\3\2\2\2|}\3"+
-		"\2\2\2}~\7\4\2\2~\u0081\7\35\2\2\177\u0081\7\34\2\2\u0080{\3\2\2\2\u0080"+
-		"\177\3\2\2\2\u0081\35\3\2\2\2\u0082\u0092\7\t\2\2\u0083\u0092\5\34\17"+
-		"\2\u0084\u0092\7\30\2\2\u0085\u0092\7\27\2\2\u0086\u0092\7\31\2\2\u0087"+
-		"\u0092\7\32\2\2\u0088\u008c\7\n\2\2\u0089\u008b\5 \21\2\u008a\u0089\3"+
-		"\2\2\2\u008b\u008e\3\2\2\2\u008c\u008a\3\2\2\2\u008c\u008d\3\2\2\2\u008d"+
-		"\u008f\3\2\2\2\u008e\u008c\3\2\2\2\u008f\u0092\7\13\2\2\u0090\u0092\5"+
-		"\24\13\2\u0091\u0082\3\2\2\2\u0091\u0083\3\2\2\2\u0091\u0084\3\2\2\2\u0091"+
-		"\u0085\3\2\2\2\u0091\u0086\3\2\2\2\u0091\u0087\3\2\2\2\u0091\u0088\3\2"+
-		"\2\2\u0091\u0090\3\2\2\2\u0092\37\3\2\2\2\u0093\u0098\5\34\17\2\u0094"+
-		"\u0098\5\24\13\2\u0095\u0098\7!\2\2\u0096\u0098\7 \2\2\u0097\u0093\3\2"+
-		"\2\2\u0097\u0094\3\2\2\2\u0097\u0095\3\2\2\2\u0097\u0096\3\2\2\2\u0098"+
-		"!\3\2\2\2\u0099\u00a9\7\f\2\2\u009a\u00a9\7\r\2\2\u009b\u00a9\7\16\2\2"+
-		"\u009c\u009d\7\6\2\2\u009d\u009e\7\37\2\2\u009e\u00a9\7\7\2\2\u009f\u00a0"+
-		"\7\6\2\2\u00a0\u00a1\7\37\2\2\u00a1\u00a2\7\17\2\2\u00a2\u00a3\7\37\2"+
-		"\2\u00a3\u00a9\7\7\2\2\u00a4\u00a5\7\6\2\2\u00a5\u00a6\7\37\2\2\u00a6"+
-		"\u00a7\7\17\2\2\u00a7\u00a9\7\7\2\2\u00a8\u0099\3\2\2\2\u00a8\u009a\3"+
-		"\2\2\2\u00a8\u009b\3\2\2\2\u00a8\u009c\3\2\2\2\u00a8\u009f\3\2\2\2\u00a8"+
-		"\u00a4\3\2\2\2\u00a9#\3\2\2\2\23\'-\63>ENchprx{\u0080\u008c\u0091\u0097"+
-		"\u00a8";
+		"\2\26S\3\2\2\2\30h\3\2\2\2\32w\3\2\2\2\34~\3\2\2\2\36\u0092\3\2\2\2 \u0098"+
+		"\3\2\2\2\"\u00a9\3\2\2\2$&\5\4\3\2%$\3\2\2\2&\'\3\2\2\2\'%\3\2\2\2\'("+
+		"\3\2\2\2()\3\2\2\2)*\7\2\2\3*\3\3\2\2\2+.\5\6\4\2,.\5\20\t\2-+\3\2\2\2"+
+		"-,\3\2\2\2.\5\3\2\2\2/\64\5\b\5\2\60\64\5\n\6\2\61\64\5\f\7\2\62\64\5"+
+		"\16\b\2\63/\3\2\2\2\63\60\3\2\2\2\63\61\3\2\2\2\63\62\3\2\2\2\64\7\3\2"+
+		"\2\2\65\66\7\21\2\2\66\67\7\36\2\2\67\t\3\2\2\289\7\23\2\29:\7\3\2\2:"+
+		";\5\24\13\2;\13\3\2\2\2<>\7\20\2\2=?\7\35\2\2>=\3\2\2\2>?\3\2\2\2?@\3"+
+		"\2\2\2@A\7\4\2\2AB\7\36\2\2B\r\3\2\2\2CE\5\22\n\2DF\7\33\2\2ED\3\2\2\2"+
+		"EF\3\2\2\2FG\3\2\2\2GH\5\26\f\2H\17\3\2\2\2IJ\7\22\2\2JK\7\36\2\2K\21"+
+		"\3\2\2\2LO\5\34\17\2MO\7\36\2\2NL\3\2\2\2NM\3\2\2\2O\23\3\2\2\2PQ\7\5"+
+		"\2\2QR\5\22\n\2R\25\3\2\2\2ST\5\30\r\2T\27\3\2\2\2UV\b\r\1\2VW\7\26\2"+
+		"\2Wi\5\30\r\6Xi\5\36\20\2YZ\7\6\2\2Z[\5\32\16\2[\\\7\7\2\2\\i\3\2\2\2"+
+		"]a\7\6\2\2^_\5\32\16\2_`\7\b\2\2`b\3\2\2\2a^\3\2\2\2bc\3\2\2\2ca\3\2\2"+
+		"\2cd\3\2\2\2de\3\2\2\2ef\5\32\16\2fg\7\7\2\2gi\3\2\2\2hU\3\2\2\2hX\3\2"+
+		"\2\2hY\3\2\2\2h]\3\2\2\2ir\3\2\2\2jk\f\b\2\2kl\7\24\2\2lq\5\30\r\tmn\f"+
+		"\7\2\2no\7\25\2\2oq\5\30\r\bpj\3\2\2\2pm\3\2\2\2qt\3\2\2\2rp\3\2\2\2r"+
+		"s\3\2\2\2s\31\3\2\2\2tr\3\2\2\2ux\5\34\17\2vx\7\34\2\2wu\3\2\2\2wv\3\2"+
+		"\2\2xy\3\2\2\2y{\5\36\20\2z|\5\"\22\2{z\3\2\2\2{|\3\2\2\2|\33\3\2\2\2"+
+		"}\177\7\35\2\2~}\3\2\2\2~\177\3\2\2\2\177\u0080\3\2\2\2\u0080\u0081\7"+
+		"\4\2\2\u0081\u0082\7\35\2\2\u0082\35\3\2\2\2\u0083\u0093\7\t\2\2\u0084"+
+		"\u0093\5\34\17\2\u0085\u0093\7\30\2\2\u0086\u0093\7\27\2\2\u0087\u0093"+
+		"\7\31\2\2\u0088\u0093\7\32\2\2\u0089\u008d\7\n\2\2\u008a\u008c\5 \21\2"+
+		"\u008b\u008a\3\2\2\2\u008c\u008f\3\2\2\2\u008d\u008b\3\2\2\2\u008d\u008e"+
+		"\3\2\2\2\u008e\u0090\3\2\2\2\u008f\u008d\3\2\2\2\u0090\u0093\7\13\2\2"+
+		"\u0091\u0093\5\24\13\2\u0092\u0083\3\2\2\2\u0092\u0084\3\2\2\2\u0092\u0085"+
+		"\3\2\2\2\u0092\u0086\3\2\2\2\u0092\u0087\3\2\2\2\u0092\u0088\3\2\2\2\u0092"+
+		"\u0089\3\2\2\2\u0092\u0091\3\2\2\2\u0093\37\3\2\2\2\u0094\u0099\5\34\17"+
+		"\2\u0095\u0099\5\24\13\2\u0096\u0099\7!\2\2\u0097\u0099\7 \2\2\u0098\u0094"+
+		"\3\2\2\2\u0098\u0095\3\2\2\2\u0098\u0096\3\2\2\2\u0098\u0097\3\2\2\2\u0099"+
+		"!\3\2\2\2\u009a\u00aa\7\f\2\2\u009b\u00aa\7\r\2\2\u009c\u00aa\7\16\2\2"+
+		"\u009d\u009e\7\6\2\2\u009e\u009f\7\37\2\2\u009f\u00aa\7\7\2\2\u00a0\u00a1"+
+		"\7\6\2\2\u00a1\u00a2\7\37\2\2\u00a2\u00a3\7\17\2\2\u00a3\u00a4\7\37\2"+
+		"\2\u00a4\u00aa\7\7\2\2\u00a5\u00a6\7\6\2\2\u00a6\u00a7\7\37\2\2\u00a7"+
+		"\u00a8\7\17\2\2\u00a8\u00aa\7\7\2\2\u00a9\u009a\3\2\2\2\u00a9\u009b\3"+
+		"\2\2\2\u00a9\u009c\3\2\2\2\u00a9\u009d\3\2\2\2\u00a9\u00a0\3\2\2\2\u00a9"+
+		"\u00a5\3\2\2\2\u00aa#\3\2\2\2\23\'-\63>ENchprw{~\u008d\u0092\u0098\u00a9";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

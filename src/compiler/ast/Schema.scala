@@ -1,10 +1,19 @@
 package compiler.ast
 
-/**
- * In shex-lite the top level is an schema, a single file represents
- * an schema, two or more files linked through import declarations are join
- * to build a unique schema. And an schema is composed of statements.
- *
- * @param statements is the list of statements that compose a schema.
- */
-private[compiler] class Schema(statements: List[Statement])
+import compiler.ast.statements.Statement
+
+private[compiler] class Schema(filename: String, line: Int, column: Int, val statements: List[Statement])
+  extends ASTNode(filename, line, column) {
+
+  /**
+   * Helper method for the ast walkers.
+   *
+   * @param walker to walk over the AST node.
+   * @tparam TP is the type of the parameter.
+   * @tparam TR is the type of the return object.
+   * @return an object o
+   */
+  override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = {
+    walker.walk(this, param)
+  }
+}

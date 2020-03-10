@@ -7,26 +7,15 @@ package compiler.ast
  * the same but with more information. Each node always contains the file, line and column
  * where it was generated. So in case of an error we can trace back to the source code.
  */
-private[compiler] trait ASTNode {
+private[compiler] abstract class ASTNode(val filename:String, val line: Int, val column: Int) {
 
   /**
-   * Gets the name of the file where the node was originated.
+   * Helper method for the ast walkers.
    *
-   * @return the name of the file where the node was originated.
+   * @param walker to walk over the AST node.
+   * @tparam TP is the type of the parameter.
+   * @tparam TR is the type of the return object.
+   * @return an object o
    */
-  def getFileName: String
-
-  /**
-   * Gets the number of the line where the node was originated.
-   *
-   * @return the number of the line where the node was originated.
-   */
-  def getLine: Int
-
-  /**
-   * Gets the number of the column where the node was originated.
-   *
-   * @return the number of the column where the node was originated.
-   */
-  def getColumn: Int
+  def walk[TP, TR] (walker: ASTWalker[TP,TR], param: TP): TR
 }
