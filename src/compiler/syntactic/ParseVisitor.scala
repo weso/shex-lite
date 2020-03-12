@@ -1,39 +1,65 @@
-package syntactic
+package compiler.syntactic
 
-class ParseVisitor extends  ShexlBaseVisitor[Any] {
+import compiler.syntactic.generated._
+import compiler.ast.{ASTNode, ASTWalker, BaseDeclaration, Cardinality, Constraint, DeclarationStmt, IRILiteral, ImportStatement, NodeConstraint, PrefixDeclaration, Schema, ShapeDeclaration, ShapeInvocation, StartDeclaration, Statement, TripleExpressionConstraint, ValueSetConstraint}
+import org.antlr.v4.runtime.tree.{AbstractParseTreeVisitor, ErrorNode, ParseTree, RuleNode, TerminalNode}
 
-  override def visitSchema(ctx: SchemaContext): T = visitChildren(ctx)
+import collection.JavaConverters._
 
-  override def visitStatement(ctx: ShexlParser.StatementContext): T = visitChildren(ctx)
+class ParseVisitor extends ShexlVisitor[ASTNode] {
 
-  override def visitDeclaration_statement(ctx: ShexlParser.Declaration_statementContext): T = visitChildren(ctx)
+  override def visitSchema(ctx: ShexlParser.SchemaContext): Schema = {
 
-  override def visitBase_declaration(ctx: ShexlParser.Base_declarationContext): T = visitChildren(ctx)
+    val statements = ctx.statement().asScala.map(st => st.accept(this)).toList.asInstanceOf[List[Statement]]
 
-  override def visitStart_declaration(ctx: ShexlParser.Start_declarationContext): T = visitChildren(ctx)
+    new Schema("", ctx.start.getLine, ctx.start.getCharPositionInLine, statements)
+  }
 
-  override def visitPrefix_declaration(ctx: ShexlParser.Prefix_declarationContext): T = visitChildren(ctx)
+  override def visitStatement(ctx: ShexlParser.StatementContext): Statement = {
+    ctx.definition_statement().accept(this)
+    ctx.import_statement().accept(this)
+    null
+  }
 
-  override def visitShape_declaration(ctx: ShexlParser.Shape_declarationContext): T = visitChildren(ctx)
+  //override def visitDefinition_statement(ctx: ShexlParser.Definition_statementContext): DeclarationStmt = ???
 
-  override def visitImport_statement(ctx: ShexlParser.Import_statementContext): T = visitChildren(ctx)
+  //override def visitBase_definition(ctx: ShexlParser.Base_definitionContext): BaseDeclaration = ???
 
-  override def visitShape_name(ctx: ShexlParser.Shape_nameContext): T = visitChildren(ctx)
+  //override def visitStart_definition(ctx: ShexlParser.Start_definitionContext): StartDeclaration = ???
 
-  override def visitShape_invocation(ctx: ShexlParser.Shape_invocationContext): T = visitChildren(ctx)
+  //override def visitPrefix_definition(ctx: ShexlParser.Prefix_definitionContext): PrefixDeclaration = ???
 
-  override def visitExpression(ctx: ShexlParser.ExpressionContext): T = visitChildren(ctx)
+  //override def visitShape_definition(ctx: ShexlParser.Shape_definitionContext): ShapeDeclaration = ???
 
-  override def visitTriple_expression(ctx: ShexlParser.Triple_expressionContext): T = visitChildren(ctx)
+  override def visitImport_statement(ctx: ShexlParser.Import_statementContext): ImportStatement = {
+    val iri = new IRILiteral("a", ctx.IRI().getSymbol.getLine, ctx.IRI.getSymbol.getCharPositionInLine, ctx.IRI.getText )
+    new ImportStatement("a", ctx.start.getLine, ctx.start.getCharPositionInLine,iri)
+  }
 
-  override def visitTriple_constraint(ctx: ShexlParser.Triple_constraintContext): T = visitChildren(ctx)
+  /*override def visitShape_name(ctx: ShexlParser.Shape_nameContext): ASTNode = ???
 
-  override def visitPrefix_invocation(ctx: ShexlParser.Prefix_invocationContext): T = visitChildren(ctx)
+  override def visitShape_invocation(ctx: ShexlParser.Shape_invocationContext): ShapeInvocation = ???
 
-  override def visitNode_constraint(ctx: ShexlParser.Node_constraintContext): T = visitChildren(ctx)
+  override def visitConstraint(ctx: ShexlParser.ConstraintContext): Constraint = ???
 
-  override def visitValue_set_type(ctx: ShexlParser.Value_set_typeContext): T = visitChildren(ctx)
+  override def visitTriple_constraint(ctx: ShexlParser.Triple_constraintContext): TripleExpressionConstraint = ???
 
-  override def visitCardinality(ctx: ShexlParser.CardinalityContext): T = visitChildren(ctx)
+  override def visitNode_constraint(ctx: ShexlParser.Node_constraintContext): NodeConstraint = ???
 
+  override def visitValue_set_type(ctx: ShexlParser.Value_set_typeContext): ValueSetConstraint = ???*/
+
+  override def visitCardinality(ctx: ShexlParser.CardinalityContext): Cardinality = {
+    val min = 0
+    val max = 0
+
+    ctx.getRuleIndex match {
+      case 0 => new Cardinality("", ctx.start.getLine, ctx.start.getCharPositionInLine, 0, (2 ^ 32) ^ Integer.MAX_VALUE-1)
+      case 1 => new Cardinality("", ctx.start.getLine, ctx.start.getCharPositionInLine, 1, (2 ^ 32) ^ Integer.MAX_VALUE-1)
+      case 2 => new Cardinality("", ctx.start.getLine, ctx.start.getCharPositionInLine, 0, 1)
+      case 3 => new Cardinality("", ctx.start.getLine, ctx.start.getCharPositionInLine, min, (2 ^ 32) ^ Integer.MAX_VALUE-1)
+      case 4 => new Cardinality("", ctx.start.getLine, ctx.start.getCharPositionInLine, min, max)
+    }
+
+
+  }
 }

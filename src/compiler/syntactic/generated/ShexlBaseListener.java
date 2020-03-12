@@ -1,5 +1,5 @@
 // Generated from C:/Users/Willy/Documents/github/thewilly/shex-lite/src/compiler/grammar\Shexl.g4 by ANTLR 4.8
-package syntactic.generated;
+package compiler.syntactic.generated;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -40,61 +40,61 @@ public class ShexlBaseListener implements ShexlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaration_statement(ShexlParser.Declaration_statementContext ctx) { }
+	@Override public void enterDefinition_statement(ShexlParser.Definition_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaration_statement(ShexlParser.Declaration_statementContext ctx) { }
+	@Override public void exitDefinition_statement(ShexlParser.Definition_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBase_declaration(ShexlParser.Base_declarationContext ctx) { }
+	@Override public void enterBase_definition(ShexlParser.Base_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBase_declaration(ShexlParser.Base_declarationContext ctx) { }
+	@Override public void exitBase_definition(ShexlParser.Base_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStart_declaration(ShexlParser.Start_declarationContext ctx) { }
+	@Override public void enterStart_definition(ShexlParser.Start_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStart_declaration(ShexlParser.Start_declarationContext ctx) { }
+	@Override public void exitStart_definition(ShexlParser.Start_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrefix_declaration(ShexlParser.Prefix_declarationContext ctx) { }
+	@Override public void enterPrefix_definition(ShexlParser.Prefix_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrefix_declaration(ShexlParser.Prefix_declarationContext ctx) { }
+	@Override public void exitPrefix_definition(ShexlParser.Prefix_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterShape_declaration(ShexlParser.Shape_declarationContext ctx) { }
+	@Override public void enterShape_definition(ShexlParser.Shape_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitShape_declaration(ShexlParser.Shape_declarationContext ctx) { }
+	@Override public void exitShape_definition(ShexlParser.Shape_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -136,25 +136,13 @@ public class ShexlBaseListener implements ShexlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpression(ShexlParser.ExpressionContext ctx) { }
+	@Override public void enterConstraint(ShexlParser.ConstraintContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpression(ShexlParser.ExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTriple_expression(ShexlParser.Triple_expressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTriple_expression(ShexlParser.Triple_expressionContext ctx) { }
+	@Override public void exitConstraint(ShexlParser.ConstraintContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -167,18 +155,6 @@ public class ShexlBaseListener implements ShexlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTriple_constraint(ShexlParser.Triple_constraintContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPrefix_invocation(ShexlParser.Prefix_invocationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPrefix_invocation(ShexlParser.Prefix_invocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

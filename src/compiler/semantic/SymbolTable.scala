@@ -22,7 +22,9 @@
  * SOFTWARE.
  *
  */
-package semantic-analysis
+package compiler.semantic
+
+import compiler.ast.{PrefixDeclaration, ShapeDeclaration}
 
 /**
  * Table to store different symbols of the parsed expressions, that is shapes definitions and prefixes.
@@ -40,14 +42,14 @@ private[compiler] trait SymbolTable {
    *
    * @param prefixDef is the prefix definition to be inserted.
    */
-  def insert(prefixDef: PrefixDefNode): Unit
+  def insert(prefixDef: PrefixDeclaration): Unit
 
   /**
    * Inserts a shape in the shapes table, shapes definitions must be unique.
    *
    * @param shapeDef is the shape definition to be inserted.
    */
-  def insert(shapeDef: ShapeDefNode): Unit
+  def insert(shapeDef: ShapeDeclaration): Unit
 
   /**
    * Gets the prefix definition indexed at the given prefix name.
@@ -55,7 +57,7 @@ private[compiler] trait SymbolTable {
    * @param prefixName is the prefix name to look for in the table.
    * @return is a option object that might contain the prefix definition.
    */
-  def getPrefix(prefixName: String): Option[PrefixDefNode]
+  def getPrefix(prefixName: String): Option[PrefixDeclaration]
 
   /**
    * Gets the shape definition indexed at the given shape name.
@@ -63,5 +65,5 @@ private[compiler] trait SymbolTable {
    * @param shapeName is the prefix name to look for in the table.
    * @return is a option object that might contain the prefix definition.
    */
-  def getShape(shapeName: String): Option[ShapeDefNode]
+  def getShape(shapeName: String): Option[ShapeDeclaration]
 }

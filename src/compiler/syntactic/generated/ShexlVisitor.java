@@ -1,5 +1,5 @@
 // Generated from C:/Users/Willy/Documents/github/thewilly/shex-lite/src/compiler/grammar\Shexl.g4 by ANTLR 4.8
-package syntactic.generated;
+package compiler.syntactic.generated;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -23,35 +23,35 @@ public interface ShexlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatement(ShexlParser.StatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ShexlParser#declaration_statement}.
+	 * Visit a parse tree produced by {@link ShexlParser#definition_statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaration_statement(ShexlParser.Declaration_statementContext ctx);
+	T visitDefinition_statement(ShexlParser.Definition_statementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ShexlParser#base_declaration}.
+	 * Visit a parse tree produced by {@link ShexlParser#base_definition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBase_declaration(ShexlParser.Base_declarationContext ctx);
+	T visitBase_definition(ShexlParser.Base_definitionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ShexlParser#start_declaration}.
+	 * Visit a parse tree produced by {@link ShexlParser#start_definition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStart_declaration(ShexlParser.Start_declarationContext ctx);
+	T visitStart_definition(ShexlParser.Start_definitionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ShexlParser#prefix_declaration}.
+	 * Visit a parse tree produced by {@link ShexlParser#prefix_definition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrefix_declaration(ShexlParser.Prefix_declarationContext ctx);
+	T visitPrefix_definition(ShexlParser.Prefix_definitionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ShexlParser#shape_declaration}.
+	 * Visit a parse tree produced by {@link ShexlParser#shape_definition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitShape_declaration(ShexlParser.Shape_declarationContext ctx);
+	T visitShape_definition(ShexlParser.Shape_definitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ShexlParser#import_statement}.
 	 * @param ctx the parse tree
@@ -71,29 +71,17 @@ public interface ShexlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitShape_invocation(ShexlParser.Shape_invocationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ShexlParser#expression}.
+	 * Visit a parse tree produced by {@link ShexlParser#constraint}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpression(ShexlParser.ExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ShexlParser#triple_expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTriple_expression(ShexlParser.Triple_expressionContext ctx);
+	T visitConstraint(ShexlParser.ConstraintContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ShexlParser#triple_constraint}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitTriple_constraint(ShexlParser.Triple_constraintContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ShexlParser#prefix_invocation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPrefix_invocation(ShexlParser.Prefix_invocationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ShexlParser#node_constraint}.
 	 * @param ctx the parse tree
