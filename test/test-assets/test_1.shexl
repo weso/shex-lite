@@ -8,10 +8,11 @@ START = @:User
 <Person> {
     :name       xsd:string      ;
     :surname    xsd:string      ;
-    :withUser   @:User
+    :withUser   @:User          ;
+    :aLiteral   Literal
 }
 
 :User {
     :uid        xsd:integer     ;
-    :knows      @<Person>
+    :knows      @<Person>*
 }

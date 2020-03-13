@@ -21,10 +21,10 @@ private[compiler] abstract class Statement(filename: String, line: Int, column: 
  * @param column   where the statement is located.
  * @param iri      is the identifier of the resource that contains the file to import.
  */
-private[compiler] class ImportStatement(filename: String, line: Int, column: Int, iri: IRILiteral)
+private[compiler] class ImportStatement(filename: String, line: Int, column: Int, val iri: IRILiteral)
   extends Statement(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
-
+  override def toString: String = s"import -> $filename:$line:$column $iri"
 }
 
 // ******************************************
@@ -55,9 +55,10 @@ private[compiler] class DeclarationStmt(filename: String, line: Int, column: Int
  * @param name     of the prefix.
  * @param iri      is the resource to assign to the given name.
  */
-private[compiler] class PrefixDeclaration(filename: String, line: Int, column: Int, name: String, iri: IRILiteral)
+private[compiler] class PrefixDeclaration(filename: String, line: Int, column: Int, val name: String, val iri: IRILiteral)
   extends DeclarationStmt(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+  override def toString: String = s"prefix -> $filename:$line:$column $name:$iri"
 }
 
 /**
@@ -73,6 +74,7 @@ private[compiler] class PrefixDeclaration(filename: String, line: Int, column: I
 private[compiler] class BaseDeclaration(filename: String, line: Int, column: Int, iri: IRILiteral)
   extends DeclarationStmt(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+  override def toString: String = s"base -> $filename:$line:$column $iri"
 }
 
 /**
@@ -89,6 +91,7 @@ private[compiler] class BaseDeclaration(filename: String, line: Int, column: Int
 private[compiler] class StartDeclaration(filename: String, line: Int, column: Int, val ref: ShapeInvocation)
   extends DeclarationStmt(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+  override def toString: String = s"start -> $filename:$line:$column $ref"
 }
 
 /**
@@ -106,4 +109,5 @@ private[compiler] class StartDeclaration(filename: String, line: Int, column: In
 private[compiler] class ShapeDeclaration(filename: String, line: Int, column: Int, name: PrefixInvocation, val constraint: Constraint)
   extends DeclarationStmt(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+  override def toString: String = s"shape -> $filename:$line:$column $constraint"
 }

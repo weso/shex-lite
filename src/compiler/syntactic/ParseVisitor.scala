@@ -1,65 +1,132 @@
 package compiler.syntactic
 
-import compiler.syntactic.generated._
-import compiler.ast.{ASTNode, ASTWalker, BaseDeclaration, Cardinality, Constraint, DeclarationStmt, IRILiteral, ImportStatement, NodeConstraint, PrefixDeclaration, Schema, ShapeDeclaration, ShapeInvocation, StartDeclaration, Statement, TripleExpressionConstraint, ValueSetConstraint}
-import org.antlr.v4.runtime.tree.{AbstractParseTreeVisitor, ErrorNode, ParseTree, RuleNode, TerminalNode}
+import compiler.syntactic.generated.{ShexlBaseVisitor, ShexlLexer, ShexlParser}
+import compiler.ast._
+import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
-class ParseVisitor extends ShexlVisitor[ASTNode] {
+class ParseVisitor(filename: String) extends ShexlBaseVisitor[ASTNode] {
+
+  final val FILENAME = this.filename
+
+  def parse(): Schema = {
+    val input = CharStreams.fromFileName(FILENAME)
+    val lexer = new ShexlLexer( input )
+    val tokens = new CommonTokenStream( lexer )
+    val parser = new ShexlParser( tokens )
+
+    parser.schema().accept(this).asInstanceOf[Schema]
+  }
 
   override def visitSchema(ctx: ShexlParser.SchemaContext): Schema = {
 
-    val statements = ctx.statement().asScala.map(st => st.accept(this)).toList.asInstanceOf[List[Statement]]
+    val statements = ctx.statement().asScala.toList.map(st => st.accept(this)).asInstanceOf[List[Statement]]
 
-    new Schema("", ctx.start.getLine, ctx.start.getCharPositionInLine, statements)
+    new Schema(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, statements)
   }
 
-  override def visitStatement(ctx: ShexlParser.StatementContext): Statement = {
-    ctx.definition_statement().accept(this)
-    ctx.import_statement().accept(this)
-    null
-  }
 
-  //override def visitDefinition_statement(ctx: ShexlParser.Definition_statementContext): DeclarationStmt = ???
-
-  //override def visitBase_definition(ctx: ShexlParser.Base_definitionContext): BaseDeclaration = ???
-
-  //override def visitStart_definition(ctx: ShexlParser.Start_definitionContext): StartDeclaration = ???
-
-  //override def visitPrefix_definition(ctx: ShexlParser.Prefix_definitionContext): PrefixDeclaration = ???
-
-  //override def visitShape_definition(ctx: ShexlParser.Shape_definitionContext): ShapeDeclaration = ???
 
   override def visitImport_statement(ctx: ShexlParser.Import_statementContext): ImportStatement = {
-    val iri = new IRILiteral("a", ctx.IRI().getSymbol.getLine, ctx.IRI.getSymbol.getCharPositionInLine, ctx.IRI.getText )
-    new ImportStatement("a", ctx.start.getLine, ctx.start.getCharPositionInLine,iri)
+    val iri = new IRILiteral(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, ctx.IRI().getText)
+    new ImportStatement(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, iri)
   }
 
-  /*override def visitShape_name(ctx: ShexlParser.Shape_nameContext): ASTNode = ???
+  override def visitStart_definition(ctx: ShexlParser.Start_definitionContext): StartDeclaration = {
+    val shapeRef = visitShape_invocation(ctx.shape_invocation())
+    new StartDeclaration(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, shapeRef)
+  }
 
-  override def visitShape_invocation(ctx: ShexlParser.Shape_invocationContext): ShapeInvocation = ???
+  override def visitBase_definition(ctx: ShexlParser.Base_definitionContext): BaseDeclaration = {
+    val iri = new IRILiteral(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, ctx.IRI.getText)
+    new BaseDeclaration(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, iri)
+  }
 
-  override def visitConstraint(ctx: ShexlParser.ConstraintContext): Constraint = ???
+  override def visitPrefix_definition(ctx: ShexlParser.Prefix_definitionContext): PrefixDeclaration = {
+    val shapeLabel = if (ctx.LABEL == null) "" else ctx.LABEL.getText
+    val iri = new IRILiteral(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, ctx.IRI.getText)
+    new PrefixDeclaration(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, shapeLabel, iri)
+  }
 
-  override def visitTriple_constraint(ctx: ShexlParser.Triple_constraintContext): TripleExpressionConstraint = ???
+  override def visitShape_definition(ctx: ShexlParser.Shape_definitionContext): ShapeDeclaration = {
+    val shapeName = visitShape_name(ctx.shape_name()).content
+    val prefixInvocation = new PrefixInvocation(FILENAME, ctx.shape_name().start.getLine, ctx.shape_name().start.getCharPositionInLine, shapeName)
+    val constraint = ctx.constraint().accept(this).asInstanceOf[Constraint]
+    new ShapeDeclaration(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, prefixInvocation, constraint)
+  }
 
-  override def visitNode_constraint(ctx: ShexlParser.Node_constraintContext): NodeConstraint = ???
+  override def visitShape_invocation(ctx: ShexlParser.Shape_invocationContext): ShapeInvocation = {
+    visitShape_name(ctx.shape_name())
+  }
 
-  override def visitValue_set_type(ctx: ShexlParser.Value_set_typeContext): ValueSetConstraint = ???*/
+  override def visitShape_name(ctx: ShexlParser.Shape_nameContext): ShapeInvocation = {
+    if(ctx.ID() != null) {
+      new ShapeInvocation(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, ctx.ID().getText)
+    } else {
+      new ShapeInvocation(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, ctx.IRI().getText)
+    }
+  }
+
+  override def visitConstraint(ctx: ShexlParser.ConstraintContext): Constraint = {
+    if(ctx.node_constraint() != null) {
+      ctx.node_constraint().accept(this).asInstanceOf[NodeConstraint]
+    } else if(ctx.constraint() != null) {
+      ctx.constraint().accept(this).asInstanceOf[Constraint]
+    } else /*if(ctx.triple_constraint() != null)*/  {
+      val constraints = ctx.triple_constraint().asScala.toList.map(cons => cons.accept(this)).asInstanceOf[List[TripleConstraint]]
+      new TripleExpressionConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, constraints)
+    }
+  }
+
+  override def visitTriple_constraint(ctx: ShexlParser.Triple_constraintContext): ASTNode = {
+    val property = new PrefixInvocation(FILENAME, ctx.ID.getSymbol.getLine, ctx.ID.getSymbol.getCharPositionInLine, ctx.ID.getText)
+    val constraint = ctx.node_constraint().accept(this).asInstanceOf[NodeConstraint]
+    var cardinality = new Cardinality(FILENAME, ctx.node_constraint().start.getLine, ctx.node_constraint().start.getCharPositionInLine, 1, 1)
+    if(ctx.cardinality() != null) {
+      cardinality = ctx.cardinality().accept(this).asInstanceOf[Cardinality]
+    }
+    new TripleConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, property, constraint, cardinality)
+  }
+
+  override def visitNode_constraint(ctx: ShexlParser.Node_constraintContext): NodeConstraint = {
+
+    if(ctx.ID() != null) {
+      new PrefixInvocation(FILENAME, ctx.ID().getSymbol.getLine, ctx.ID.getSymbol.getCharPositionInLine, ctx.ID().getText)
+    } else if(ctx.shape_invocation() != null) {
+      //new ShapeInvocation(FILENAME, ctx.ID().getSymbol.getLine, ctx.ID.getSymbol.getCharPositionInLine, ctx.shape_invocation().getText)
+      ctx.shape_invocation().accept(this).asInstanceOf[ShapeInvocation]
+    } else if(!ctx.value_set_type().isEmpty) {
+      val values = ctx.value_set_type().asScala.toList.map(v => v.accept(this)).asInstanceOf[List[ValidValueSetConstraint]]
+      new ValueSetConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, values)
+    } else {
+      ctx.getText match {
+        case "." => new AnyTypeNodeConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine)
+        case "LITERAL" => new LiteralNodeConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine)
+        case "IRI" => new IRINodeConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine)
+        case "BNODE" => new BNodeNodeConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine)
+        case "NONLITERAL" => new NonLiteralNodeConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine)
+      }
+    }
+  }
 
   override def visitCardinality(ctx: ShexlParser.CardinalityContext): Cardinality = {
-    val min = 0
-    val max = 0
-
-    ctx.getRuleIndex match {
-      case 0 => new Cardinality("", ctx.start.getLine, ctx.start.getCharPositionInLine, 0, (2 ^ 32) ^ Integer.MAX_VALUE-1)
-      case 1 => new Cardinality("", ctx.start.getLine, ctx.start.getCharPositionInLine, 1, (2 ^ 32) ^ Integer.MAX_VALUE-1)
-      case 2 => new Cardinality("", ctx.start.getLine, ctx.start.getCharPositionInLine, 0, 1)
-      case 3 => new Cardinality("", ctx.start.getLine, ctx.start.getCharPositionInLine, min, (2 ^ 32) ^ Integer.MAX_VALUE-1)
-      case 4 => new Cardinality("", ctx.start.getLine, ctx.start.getCharPositionInLine, min, max)
+    if(ctx.min == null) {
+      ctx.getText match {
+        case "*" => new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, 0, Int.MaxValue)
+        case "+" => new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, 1, Int.MaxValue)
+        case "?" => new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, 0, 1)
+      }
+    } else {
+      if(ctx.max != null) {
+        new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, Integer.parseInt(ctx.min.getText), Integer.parseInt(ctx.max.getText))
+      } else {
+        if(ctx.getText.contains(",")) {
+          new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, Integer.parseInt(ctx.min.getText), Int.MaxValue)
+        } else {
+          new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, Integer.parseInt(ctx.min.getText), Integer.parseInt(ctx.min.getText))
+        }
+      }
     }
-
-
   }
 }

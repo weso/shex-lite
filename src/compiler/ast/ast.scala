@@ -18,6 +18,13 @@ private[compiler] abstract class ASTNode(val filename: String, val line: Int, va
    * @return an object o
    */
   def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR
+
+  /**
+   * Default to string method for all the ast nodes.
+   *
+   * @return an string containing the information.
+   */
+  override def toString: String = s"$filename:$line:$column"
 }
 
 /**
@@ -41,6 +48,13 @@ private[compiler] class Schema(filename: String, line: Int, column: Int, val sta
    */
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = {
     walker.walk(this, param)
+  }
+
+  override def toString: String = {
+    val sb = new StringBuilder()
+    sb.append(s"schema -> $filename:$line:$column\n")
+    statements.foreach(s=> sb.append(s + "\n"))
+    sb.toString()
   }
 }
 
@@ -67,4 +81,46 @@ private[compiler] class Warning(node: ASTNode, code: Int, message: String) exten
 private[compiler] class Error(node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
   override def toString: String = s"error[$code] at $filename:$line:$column --> $message"
+}
+
+/**
+ * AST default walker fot he abstract syntax tree.
+ *
+ * @tparam TP is the type of the parameter.
+ * @tparam TR is the type of the return object.
+ */
+private[compiler] trait ASTWalker[TP, TR] {
+
+  // Schema
+  def walk(schema: ASTNode, param: TP): TR
+
+  // Statements
+  def walk(statement: Statement, param: TP): TR
+  def walk(statement: ImportStatement, param: TP): TR
+  def walk(statement: DeclarationStmt, param: TP): TR
+
+  // Declarations
+  def walk(declaration: PrefixDeclaration, param: TP): TR
+  def walk(declaration: BaseDeclaration, param: TP): TR
+  def walk(declaration: StartDeclaration, param: TP): TR
+  def walk(declaration: ShapeDeclaration, param: TP): TR
+
+  // Constraints
+  def walk(constraint: Constraint, param: TP): TR
+  def walk(constraint: TripleConstraint, param: TP): TR
+  def walk(constraint: Cardinality, param: TP): TR
+  def walk(constraint: NodeConstraint, param: TP): TR
+  def walk(constraint: LiteralNodeConstraint, param: TP): TR
+  def walk(constraint: IRINodeConstraint, param: TP): TR
+  def walk(constraint: AnyTypeNodeConstraint, param: TP): TR
+  def walk(constraint: BNodeNodeConstraint, param: TP): TR
+  def walk(constraint: NonLiteralNodeConstraint, param: TP): TR
+  def walk(constraint: Invocation, param: TP): TR
+  def walk(constraint: PrefixInvocation, param: TP): TR
+  def walk(constraint: ShapeInvocation, param: TP): TR
+  def walk[TL](constraint: Literal[TL], param: TP): TR
+  def walk(constraint: IRILiteral, param: TP): TR
+  def walk(constraint: StringLiteral, param: TP): TR
+  def walk(constraint: RealLiteral, param: TP): TR
+  def walk(constraint: ValueSetConstraint, param: TP): TR
 }

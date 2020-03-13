@@ -177,13 +177,13 @@ triple_constraint
  */
 node_constraint
  : '.'                  // Anything.
+ | shape_invocation     // Shape reference.
  | ID                   // Datatype.
  | LITERAL_KW           // Node kind.
  | IRI_KW
  | BNODE_KW
  | NON_LITERAL_KW
  | '[' value_set_type* ']'  // Value set.
- | shape_invocation     // Shape reference.
  ;
 
 /**

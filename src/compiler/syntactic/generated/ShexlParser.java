@@ -849,6 +849,9 @@ public class ShexlParser extends Parser {
 	}
 
 	public static class Node_constraintContext extends ParserRuleContext {
+		public Shape_invocationContext shape_invocation() {
+			return getRuleContext(Shape_invocationContext.class,0);
+		}
 		public TerminalNode ID() { return getToken(ShexlParser.ID, 0); }
 		public TerminalNode LITERAL_KW() { return getToken(ShexlParser.LITERAL_KW, 0); }
 		public TerminalNode IRI_KW() { return getToken(ShexlParser.IRI_KW, 0); }
@@ -859,9 +862,6 @@ public class ShexlParser extends Parser {
 		}
 		public Value_set_typeContext value_set_type(int i) {
 			return getRuleContext(Value_set_typeContext.class,i);
-		}
-		public Shape_invocationContext shape_invocation() {
-			return getRuleContext(Shape_invocationContext.class,0);
 		}
 		public Node_constraintContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -897,69 +897,69 @@ public class ShexlParser extends Parser {
 				match(T__6);
 				}
 				break;
-			case ID:
+			case T__2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(98);
+				shape_invocation();
+				}
+				break;
+			case ID:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(99);
 				match(ID);
 				}
 				break;
 			case LITERAL_KW:
-				enterOuterAlt(_localctx, 3);
+				enterOuterAlt(_localctx, 4);
 				{
-				setState(99);
+				setState(100);
 				match(LITERAL_KW);
 				}
 				break;
 			case IRI_KW:
-				enterOuterAlt(_localctx, 4);
+				enterOuterAlt(_localctx, 5);
 				{
-				setState(100);
+				setState(101);
 				match(IRI_KW);
 				}
 				break;
 			case BNODE_KW:
-				enterOuterAlt(_localctx, 5);
+				enterOuterAlt(_localctx, 6);
 				{
-				setState(101);
+				setState(102);
 				match(BNODE_KW);
 				}
 				break;
 			case NON_LITERAL_KW:
-				enterOuterAlt(_localctx, 6);
+				enterOuterAlt(_localctx, 7);
 				{
-				setState(102);
+				setState(103);
 				match(NON_LITERAL_KW);
 				}
 				break;
 			case T__7:
-				enterOuterAlt(_localctx, 7);
+				enterOuterAlt(_localctx, 8);
 				{
-				setState(103);
+				setState(104);
 				match(T__7);
-				setState(107);
+				setState(108);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << ID) | (1L << REAL_LITERAL) | (1L << STRING_LITERAL))) != 0)) {
 					{
 					{
-					setState(104);
+					setState(105);
 					value_set_type();
 					}
 					}
-					setState(109);
+					setState(110);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(110);
-				match(T__8);
-				}
-				break;
-			case T__2:
-				enterOuterAlt(_localctx, 8);
-				{
 				setState(111);
-				shape_invocation();
+				match(T__8);
 				}
 				break;
 			default:
@@ -1167,7 +1167,7 @@ public class ShexlParser extends Parser {
 		"\6\3\6\3\6\3\6\3\7\3\7\5\7;\n\7\3\7\3\7\3\7\3\b\3\b\3\b\3\t\3\t\3\t\3"+
 		"\n\3\n\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\6\f"+
 		"V\n\f\r\f\16\fW\3\f\3\f\3\f\5\f]\n\f\3\r\3\r\3\r\5\rb\n\r\3\16\3\16\3"+
-		"\16\3\16\3\16\3\16\3\16\3\16\7\16l\n\16\f\16\16\16o\13\16\3\16\3\16\5"+
+		"\16\3\16\3\16\3\16\3\16\3\16\3\16\7\16m\n\16\f\16\16\16p\13\16\3\16\5"+
 		"\16s\n\16\3\17\3\17\3\17\3\17\5\17y\n\17\3\20\3\20\3\20\3\20\3\20\3\20"+
 		"\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\5\20\u008a\n\20\3\20\2\2"+
 		"\21\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36\2\4\3\2\36\37\4\2\34\34\36"+
@@ -1186,17 +1186,17 @@ public class ShexlParser extends Parser {
 		"\r\2ST\7\b\2\2TV\3\2\2\2UR\3\2\2\2VW\3\2\2\2WU\3\2\2\2WX\3\2\2\2XY\3\2"+
 		"\2\2YZ\5\30\r\2Z[\7\7\2\2[]\3\2\2\2\\J\3\2\2\2\\L\3\2\2\2\\M\3\2\2\2\\"+
 		"Q\3\2\2\2]\27\3\2\2\2^_\t\3\2\2_a\5\32\16\2`b\5\36\20\2a`\3\2\2\2ab\3"+
-		"\2\2\2b\31\3\2\2\2cs\7\t\2\2ds\7\36\2\2es\7\30\2\2fs\7\27\2\2gs\7\31\2"+
-		"\2hs\7\32\2\2im\7\n\2\2jl\5\34\17\2kj\3\2\2\2lo\3\2\2\2mk\3\2\2\2mn\3"+
-		"\2\2\2np\3\2\2\2om\3\2\2\2ps\7\13\2\2qs\5\24\13\2rc\3\2\2\2rd\3\2\2\2"+
-		"re\3\2\2\2rf\3\2\2\2rg\3\2\2\2rh\3\2\2\2ri\3\2\2\2rq\3\2\2\2s\33\3\2\2"+
+		"\2\2\2b\31\3\2\2\2cs\7\t\2\2ds\5\24\13\2es\7\36\2\2fs\7\30\2\2gs\7\27"+
+		"\2\2hs\7\31\2\2is\7\32\2\2jn\7\n\2\2km\5\34\17\2lk\3\2\2\2mp\3\2\2\2n"+
+		"l\3\2\2\2no\3\2\2\2oq\3\2\2\2pn\3\2\2\2qs\7\13\2\2rc\3\2\2\2rd\3\2\2\2"+
+		"re\3\2\2\2rf\3\2\2\2rg\3\2\2\2rh\3\2\2\2ri\3\2\2\2rj\3\2\2\2s\33\3\2\2"+
 		"\2ty\7\36\2\2uy\5\24\13\2vy\7\"\2\2wy\7!\2\2xt\3\2\2\2xu\3\2\2\2xv\3\2"+
 		"\2\2xw\3\2\2\2y\35\3\2\2\2z\u008a\7\f\2\2{\u008a\7\r\2\2|\u008a\7\16\2"+
 		"\2}~\7\6\2\2~\177\7 \2\2\177\u008a\7\7\2\2\u0080\u0081\7\6\2\2\u0081\u0082"+
 		"\7 \2\2\u0082\u0083\7\17\2\2\u0083\u0084\7 \2\2\u0084\u008a\7\7\2\2\u0085"+
 		"\u0086\7\6\2\2\u0086\u0087\7 \2\2\u0087\u0088\7\17\2\2\u0088\u008a\7\7"+
 		"\2\2\u0089z\3\2\2\2\u0089{\3\2\2\2\u0089|\3\2\2\2\u0089}\3\2\2\2\u0089"+
-		"\u0080\3\2\2\2\u0089\u0085\3\2\2\2\u008a\37\3\2\2\2\r#)/:W\\amrx\u0089";
+		"\u0080\3\2\2\2\u0089\u0085\3\2\2\2\u008a\37\3\2\2\2\r#)/:W\\anrx\u0089";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
