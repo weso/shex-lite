@@ -1,5 +1,5 @@
 // Generated from C:/Users/Willy/Documents/github/thewilly/shex-lite/src/compiler/grammar\Shexl.g4 by ANTLR 4.8
-package syntactic.generated;
+package compiler.syntactic.generated;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -28,55 +28,55 @@ public interface ShexlListener extends ParseTreeListener {
 	 */
 	void exitStatement(ShexlParser.StatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ShexlParser#declaration_statement}.
+	 * Enter a parse tree produced by {@link ShexlParser#definition_statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaration_statement(ShexlParser.Declaration_statementContext ctx);
+	void enterDefinition_statement(ShexlParser.Definition_statementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ShexlParser#declaration_statement}.
+	 * Exit a parse tree produced by {@link ShexlParser#definition_statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaration_statement(ShexlParser.Declaration_statementContext ctx);
+	void exitDefinition_statement(ShexlParser.Definition_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ShexlParser#base_declaration}.
+	 * Enter a parse tree produced by {@link ShexlParser#base_definition}.
 	 * @param ctx the parse tree
 	 */
-	void enterBase_declaration(ShexlParser.Base_declarationContext ctx);
+	void enterBase_definition(ShexlParser.Base_definitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ShexlParser#base_declaration}.
+	 * Exit a parse tree produced by {@link ShexlParser#base_definition}.
 	 * @param ctx the parse tree
 	 */
-	void exitBase_declaration(ShexlParser.Base_declarationContext ctx);
+	void exitBase_definition(ShexlParser.Base_definitionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ShexlParser#start_declaration}.
+	 * Enter a parse tree produced by {@link ShexlParser#start_definition}.
 	 * @param ctx the parse tree
 	 */
-	void enterStart_declaration(ShexlParser.Start_declarationContext ctx);
+	void enterStart_definition(ShexlParser.Start_definitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ShexlParser#start_declaration}.
+	 * Exit a parse tree produced by {@link ShexlParser#start_definition}.
 	 * @param ctx the parse tree
 	 */
-	void exitStart_declaration(ShexlParser.Start_declarationContext ctx);
+	void exitStart_definition(ShexlParser.Start_definitionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ShexlParser#prefix_declaration}.
+	 * Enter a parse tree produced by {@link ShexlParser#prefix_definition}.
 	 * @param ctx the parse tree
 	 */
-	void enterPrefix_declaration(ShexlParser.Prefix_declarationContext ctx);
+	void enterPrefix_definition(ShexlParser.Prefix_definitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ShexlParser#prefix_declaration}.
+	 * Exit a parse tree produced by {@link ShexlParser#prefix_definition}.
 	 * @param ctx the parse tree
 	 */
-	void exitPrefix_declaration(ShexlParser.Prefix_declarationContext ctx);
+	void exitPrefix_definition(ShexlParser.Prefix_definitionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ShexlParser#shape_declaration}.
+	 * Enter a parse tree produced by {@link ShexlParser#shape_definition}.
 	 * @param ctx the parse tree
 	 */
-	void enterShape_declaration(ShexlParser.Shape_declarationContext ctx);
+	void enterShape_definition(ShexlParser.Shape_definitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ShexlParser#shape_declaration}.
+	 * Exit a parse tree produced by {@link ShexlParser#shape_definition}.
 	 * @param ctx the parse tree
 	 */
-	void exitShape_declaration(ShexlParser.Shape_declarationContext ctx);
+	void exitShape_definition(ShexlParser.Shape_definitionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ShexlParser#import_statement}.
 	 * @param ctx the parse tree
@@ -108,25 +108,15 @@ public interface ShexlListener extends ParseTreeListener {
 	 */
 	void exitShape_invocation(ShexlParser.Shape_invocationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ShexlParser#expression}.
+	 * Enter a parse tree produced by {@link ShexlParser#constraint}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpression(ShexlParser.ExpressionContext ctx);
+	void enterConstraint(ShexlParser.ConstraintContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ShexlParser#expression}.
+	 * Exit a parse tree produced by {@link ShexlParser#constraint}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpression(ShexlParser.ExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ShexlParser#triple_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterTriple_expression(ShexlParser.Triple_expressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ShexlParser#triple_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitTriple_expression(ShexlParser.Triple_expressionContext ctx);
+	void exitConstraint(ShexlParser.ConstraintContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ShexlParser#triple_constraint}.
 	 * @param ctx the parse tree
@@ -137,16 +127,6 @@ public interface ShexlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTriple_constraint(ShexlParser.Triple_constraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ShexlParser#prefix_invocation}.
-	 * @param ctx the parse tree
-	 */
-	void enterPrefix_invocation(ShexlParser.Prefix_invocationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ShexlParser#prefix_invocation}.
-	 * @param ctx the parse tree
-	 */
-	void exitPrefix_invocation(ShexlParser.Prefix_invocationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ShexlParser#node_constraint}.
 	 * @param ctx the parse tree

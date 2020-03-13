@@ -22,178 +22,206 @@
  * SOFTWARE.
 */
 
-// Shapes Expression Litle grammar is an implementation of a defined subset of shape
-// expressions on its compact syntax version.
+/**
+ * Shapes Expression Litle grammar is an implementation of a defined subset of shape
+ * expressions on its compact syntax version.
+ */
 grammar Shexl;
 
-// The top level element of the grammar is the shema, that is
-// what we want to represent with this grammar.
-// A schema is defined as a non-empty set of statements.
+/**
+ * The top level element of the grammar is the shema, that is
+ * what we want to represent with this grammar.
+ * A schema is defined as a non-empty set of statements.
+ */
 schema
  : statement+ EOF
  ;
 
-// The statements are the second level of the grammar.
-// Each statement can be:
-//  - a declaration.
-//  - an import statement. import is not a definition but an statement as it does not
-//    declare anything.
-// *This rule is intended to be extended in the future with more statements.*
+/**
+ * The statements are the second level of the grammar.
+ * Each statement can be:
+ *  - a definition.
+ *  - an import statement. import is not a definition but an statement as it does not
+ *    declare anything.
+ * *This rule is intended to be extended in the future with more statements.*
+ */
 statement
- : declaration_statement
+ : definition_statement
  | import_statement
  ;
 
-// The third level are the declarations, up to this level
-// everything in a shema is a declaration, directives
-// like base, start, prefix or shapes declarations.
-declaration_statement
- : base_declaration
- | start_declaration
- | prefix_declaration
- | shape_declaration
+/**
+ * The third level are the definitions, up to this level
+ * everything in a shema is a definition, directives
+ * like base, start, prefix or shapes definitions.
+ */
+definition_statement
+ : base_definition
+ | start_definition
+ | prefix_definition
+ | shape_definition
  ;
 
-// A base declaration is the directive that defines the
-// base IRI. It if defined as the keywork `base` and the
-// IRI.
-base_declaration
+/**
+ * A base definition is the directive that defines the
+ * base IRI. It if defined as the keywork `base` and the
+ * IRI.
+ */
+base_definition
  : BASE_KW IRI
  ;
 
-// The start declaration defines the shape that will be
-// used as the default one during the validation. It is
-// defined by the `start` keyword, then an `=` symbol and
-// the shape invocation.
-start_declaration
+/**
+ * The start definition defines the shape that will be
+ * used as the default one during the validation. It is
+ * defined by the `start` keyword, then an `=` symbol and
+ * the shape invocation.
+ */
+start_definition
  : START_KW '=' shape_invocation
  ;
 
-// A prefix declaration is the association of an IRI to
-// a label. It is defined by the `prefix` keyword, the
-// label that is optional (can be the null prefix), the
-// `:` symbol, and the IRI.
-prefix_declaration
+/**
+ * A prefix definition is the association of an IRI to
+ * a label. It is defined by the `prefix` keyword, the
+ * label that is optional (can be the null prefix), the
+ * `:` symbol, and the IRI.
+ */
+prefix_definition
  : PREFIX_KW LABEL? ':' IRI
  ;
 
-// The shape declaration is the core of the validation
-// as it is use to build the schema that the nodes will
-// be validated against. It is defined as the conjunction
-// of a shape name and an expression.
-shape_declaration
- : shape_name CLOSED_KW? expression
+/**
+ * The shape definition is the core of the validation
+ * as it is use to build the schema that the nodes will
+ * be validated against. It is defined as the conjunction
+ * of a shape name and an expression.
+ */
+shape_definition
+ : shape_name constraint
  ;
 
-// The import statement imports another shex-lite schema
-// defined in a separated file. It is defined as the
-// keyword `import` and the corresponding IRI pointing
-// to the .shexl file.
+/**
+ * The import statement imports another shex-lite schema
+ * defined in a separated file. It is defined as the
+ * keyword `import` and the corresponding IRI pointing
+ * to the .shexl file.
+ */
 import_statement
  : IMPORT_KW IRI
  ;
 
-// The shape name is the corresponding label associated
-// to a shape_declaration. It can be a node or an IRI.
+/**
+ * The shape name is the corresponding label associated
+ * to a shape_definition. It can be a node or an IRI.
+ */
 shape_name
- : prefix_invocation    // Node.
+ : ID    // Node.
  | IRI        // IRI.
  ;
 
-// A shape invocation is the toold used to make reference
-// to the expression defined for that shape name. It is
-// defined as a `@` symbol and the shape_name, it doesn't
-// matter if it is an IRI or a Node.
+/**
+ * A shape invocation is the toold used to make reference
+ * to the expression defined for that shape name. It is
+ * defined as a `@` symbol and the shape_name, it doesn't
+ * matter if it is an IRI or a Node.
+ */
 shape_invocation
  : '@' shape_name
  ;
 
-// An expresion up to this point is only a triple_expression
-// but this rule prepares the syntax for future extension.
-expression
- : triple_expression
- ;
-
-// A triple expression is the schema that is associated to the
-// shape name label. And it is this expression the one that it
-// is used to validate against.
-triple_expression
- : ex1=triple_expression AND_KW ex2=triple_expression
- | ex1=triple_expression OR_KW ex2=triple_expression
- | NOT_KW triple_expression
+/**
+ * An expresion up to this point is only a triple_expression
+ * but this rule prepares the syntax for future extension.
+ */
+constraint
+ //: ex1=constraint AND_KW ex2=constraint
+ //| ex1=constraint OR_KW ex2=constraint
+ //| NOT_KW constraint
+ : CLOSED_KW constraint
  | node_constraint
  | '{' triple_constraint '}'                            // A single triple constraint.
  | '{' (triple_constraint ';')+ triple_constraint '}'   // Multiple triple constraints. (eachOfs)
  ;
 
-// A triple constraint is the abstraction of the well known
-// eachOf of ShEx. In our case as we don't have the eachOneOf
-// we don't need to expand this rule. Therefore the triple
-// constraint is defined as a property, a node constraint and
-// the cardinality. If no cardilaity is pressent the default one
-// will be the [0,n).
+/**
+ * A triple constraint is the abstraction of the well known
+ * eachOf of ShEx. In our case as we don't have the eachOneOf
+ * we don't need to expand this rule. Therefore the triple
+ * constraint is defined as a property, a node constraint and
+ * the cardinality. If no cardilaity is pressent the default one
+ * will be the [0,n).
+ */
 triple_constraint
- : (prefix_invocation | A_KW) node_constraint cardinality?
+ : (ID | A_KW) node_constraint cardinality?
  ;
 
-// A prefix invocation is the invocation to something declared
-// in the prefix. For example when we declare a property name
-// in a triple constraint we invoke the property associated to
-// the declared prefix. And the same with Datatypes.
-prefix_invocation
- : prefix=LABEL? ':' property=LABEL
- ;
+/**
+ * A prefix invocation is the invocation to something declared
+ * in the prefix. For example when we declare a property name
+ * in a triple constraint we invoke the property associated to
+ * the declared prefix. And the same with Datatypes.
+ */
+//prefix_invocation
+// : ID
+// ;
 
-// Describe the allow values of a node. It can be:
-//  - anything.
-//  - a datatype. Notice that a datatype actually is a prefix
-//      invocation.
-//  - a node kind.
-//  - a value set.
-//  - or a shape reference.
+/**
+ * Describe the allow values of a node. It can be:
+ *  - anything.
+ *  - a datatype. Notice that a datatype actually is a prefix
+ *      invocation.
+ *  - a node kind.
+ *  - a value set.
+ *  - or a shape reference.
+ */
 node_constraint
  : '.'                  // Anything.
- | prefix_invocation    // Datatype.
+ | shape_invocation     // Shape reference.
+ | ID                   // Datatype.
  | LITERAL_KW           // Node kind.
  | IRI_KW
  | BNODE_KW
  | NON_LITERAL_KW
  | '[' value_set_type* ']'  // Value set.
- | shape_invocation     // Shape reference.
  ;
 
-// Represents the possible values that a value set might contain.
+/**
+ * Represents the possible values that a value set might contain.
+ */
 value_set_type
- : prefix_invocation    // Prefix invocation.
+ : ID                   // Prefix invocation.
  | shape_invocation     // Shape invocation.
  | STRING_LITERAL       // String literal.
  | REAL_LITERAL         // Real literal.
  ;
 
-// As seen previously a triple constraint is formed by a property, a
-// node constraint and a cardinality. The cardinality might take different
-// values depending on what does it mean:
-//  - `*` -> any number of repetitions, 0 or more. If no cardinality
-//           is set this one is de default one. [0,n)
-//  - `+` -> any number of repetitions but at least 1. [1,n)
-//  - `?` -> none or one appearance. Also known as optional. [0,1]
-//  - `{N}` -> exactly N repetitions [N,N].
-//  - `{N,M}` -> a minimum of N and a maximum of M repetitions. [N,M]
-//  - `{N, }` -> any number of repetitions but a minimum of N. [N,m)
+/**
+ * As seen previously a triple constraint is formed by a property, a
+ * node constraint and a cardinality. The cardinality might take different
+ * values depending on what does it mean:
+ *  - `*` -> any number of repetitions, 0 or more. If no cardinality
+ *           is set this one is de default one. [0,n)
+ *  - `+` -> any number of repetitions but at least 1. [1,n)
+ *  - `?` -> none or one appearance. Also known as optional. [0,1]
+ *  - `{N}` -> exactly N repetitions [N,N].
+ *  - `{N,M}` -> a minimum of N and a maximum of M repetitions. [N,M]
+ *  - `{N, }` -> any number of repetitions but a minimum of N. [N,m)
+ */
 cardinality
  : '*'
  | '+'
  | '?'
- | '{' INT_LITERAL '}'
- | '{' INT_LITERAL ',' INT_LITERAL '}'
- | '{' INT_LITERAL ',''}'
+ | '{' min=INT_LITERAL '}'
+ | '{' min=INT_LITERAL ',' max=INT_LITERAL '}'
+ | '{' min=INT_LITERAL ',''}'
  ;
 
 // **********************************
 // TOKENS
 // **********************************
 
-// Keyworkds of the language.
+/* Keyworkds of the language.*/
 PREFIX_KW       :   'PREFIX'        ;
 BASE_KW         :   'BASE'          ;
 IMPORT_KW       :   'IMPORT'        ;
@@ -211,6 +239,10 @@ A_KW            :   'a'             ;
 
 LABEL
  : [a-zA-Z_][a-zA-Z0-9_-·]*
+ ;
+
+ID
+ : ([a-zA-Z_][a-zA-Z0-9_-·]*)?':'[a-zA-Z_][a-zA-Z0-9_-·]*
  ;
 
 IRI
@@ -237,7 +269,7 @@ SKIP_
  : ( WHITE_SPACE | COMMENT ) -> skip
  ;
 
-// FRAGMENTS
+/* FRAGMENTS*/
 
 fragment WHITE_SPACE
  : [ \t\r\n\f]+
