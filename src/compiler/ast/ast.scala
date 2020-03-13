@@ -92,7 +92,7 @@ private[compiler] class Error(node: ASTNode, code: Int, message: String) extends
 private[compiler] trait ASTWalker[TP, TR] {
 
   // Schema
-  def walk(schema: ASTNode, param: TP): TR
+  def walk(schema: Schema, param: TP): TR
 
   // Statements
   def walk(statement: Statement, param: TP): TR

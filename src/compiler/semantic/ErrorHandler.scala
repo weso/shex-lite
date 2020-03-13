@@ -25,18 +25,28 @@
 
 package compiler.semantic
 
-import compiler.ast.Error
+import compiler.ast.{Error, Warning}
 
 /**
- * Error handler system. This system helps to hold the errors found at compile time.
+ * The error handler is the abstraction used to deal with errors and warnings during the compilation time.
+ * Notice that this is just to wrapper that holds errors and warnings, it does not add any additional behaviour
+ * to what to do if there are warnings / errors.
  */
 private[compiler] trait ErrorHandler {
+
   /**
    * Returns whether the error handler has errors or not.
    *
    * @return true if has errors, false otherwise.
    */
   def hasErrors: Boolean
+
+  /**
+   * Returns whether the error handler has warnings or not.
+   *
+   * @return true if has errors, false otherwise.
+   */
+  def hasWarnings: Boolean
 
   /**
    * Adds errors to the error system.
@@ -46,7 +56,19 @@ private[compiler] trait ErrorHandler {
   def addError(error: Error): Unit
 
   /**
+   * Adds warnings to the error system.
+   *
+   * @param warning to add to the system.
+   */
+  def addWarning(warning: Warning): Unit
+
+  /**
    * Shows the errors through the terminal.
    */
   def showErrors(): Unit
+
+  /**
+   * Shows the warnings through the terminal.
+   */
+  def showWarnings(): Unit
 }
