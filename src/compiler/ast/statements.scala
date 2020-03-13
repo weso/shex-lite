@@ -71,7 +71,7 @@ private[compiler] class PrefixDeclaration(filename: String, line: Int, column: I
  * @param column   where the statement is located.
  * @param iri      is the resource to set as the base.
  */
-private[compiler] class BaseDeclaration(filename: String, line: Int, column: Int, iri: IRILiteral)
+private[compiler] class BaseDeclaration(filename: String, line: Int, column: Int, val iri: IRILiteral)
   extends DeclarationStmt(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
   override def toString: String = s"base -> $filename:$line:$column $iri"
@@ -106,7 +106,7 @@ private[compiler] class StartDeclaration(filename: String, line: Int, column: In
  * @param name       of the shape (shape label).
  * @param constraint to be associated to that label.
  */
-private[compiler] class ShapeDeclaration(filename: String, line: Int, column: Int, name: PrefixInvocation, val constraint: Constraint)
+private[compiler] class ShapeDeclaration(filename: String, line: Int, column: Int, val name: PrefixInvocation, val constraint: Constraint)
   extends DeclarationStmt(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
   override def toString: String = s"shape -> $filename:$line:$column $constraint"

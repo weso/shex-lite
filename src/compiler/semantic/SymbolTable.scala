@@ -24,7 +24,7 @@
  */
 package compiler.semantic
 
-import compiler.ast.{PrefixDeclaration, ShapeDeclaration}
+import compiler.ast.{BaseDeclaration, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
 
 /**
  * Table to store different symbols of the parsed expressions, that is shapes definitions and prefixes.
@@ -36,6 +36,9 @@ import compiler.ast.{PrefixDeclaration, ShapeDeclaration}
  * - Start: Start prefix can can be updated.
  */
 private[compiler] trait SymbolTable {
+
+  val base: BaseDeclaration   // The base declaration. Can be override.
+  val start: StartDeclaration // The start declaration. Cannot be override.
 
   /**
    * Inserts a prefix in the prefixes table, if it exists it will update its record.
