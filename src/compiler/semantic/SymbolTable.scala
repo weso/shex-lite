@@ -37,8 +37,35 @@ import compiler.ast.{ASTNode, BaseDeclaration, PrefixDeclaration, ShapeDeclarati
  */
 private[compiler] trait SymbolTable {
 
-  var base: BaseDeclaration   // The base declaration. Can be override.
-  var start: StartDeclaration // The start declaration. Cannot be override.
+  /**
+    * Changes the base declaration to the one in the parameter.
+    *
+    * @param base to be set as the new base.
+    * @return either a warning if the base was already set or the base declaration the first time.
+    */
+  def setBase(base: BaseDeclaration): Either[Warning, BaseDeclaration]
+
+  /**
+    * Gets the declaration attached to the base variable.
+    *
+    * @return the declaration attached to the base variable.
+    */
+  def getBase(): Option[BaseDeclaration]
+
+  /**
+    * Sets the start declarations to the given one. If the start was already set an error is thrown.
+    *
+    * @param start to set as the start declaration.
+    * @return either the start declaration or an error.
+    */
+  def setStart(start: StartDeclaration): Either[Error, StartDeclaration]
+
+  /**
+    * Gets the start declaration.
+    *
+    * @return either the start declaration or an error if no start was declared.
+    */
+  def getStart(): Either[Error, StartDeclaration]
 
   /**
     * Inserts a prefix in the prefixes table, if it exists it will update its record and create a warning.
