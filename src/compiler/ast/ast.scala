@@ -66,9 +66,9 @@ private[compiler] class Schema(filename: String, line: Int, column: Int, val sta
  * @param code of the warning, check all possible codes at shex-lite.org.
  * @param message of the warning.
  */
-private[compiler] class Warning(node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
+private[compiler] class Warning(val node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
-  override def toString: String = s"warning[$code] at $filename:$line:$column --> $message"
+  override def toString: String = s"warning[$code] at $filename:$line:$column --> $message. For more informatio look at http://shex-lite.org/warnings/$code]"
 }
 
 /**
@@ -78,9 +78,9 @@ private[compiler] class Warning(node: ASTNode, code: Int, message: String) exten
  * @param code of the error, check all possible codes at shex-lite.org.
  * @param message of the error.
  */
-private[compiler] class Error(node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
+private[compiler] class Error(val node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
-  override def toString: String = s"error[$code] at $filename:$line:$column --> $message"
+  override def toString: String = s"error[$code] at $filename:$line:$column --> $message. For more informatio look at http://shex-lite.org/erros/$code]"
 }
 
 /**
@@ -123,6 +123,9 @@ private[compiler] trait ASTWalker[TP, TR] {
   def walk(constraint: StringLiteral, param: TP): TR
   def walk(constraint: RealLiteral, param: TP): TR
   def walk(constraint: ValueSetConstraint, param: TP): TR
+
+  def walk(constraint: Warning, param: TP): TR
+  def walk(constraint: Error, param: TP): TR
 }
 
 /**
@@ -158,4 +161,6 @@ class DeflautASTWalker extends ASTWalker[Any,Any] {
   override def walk(constraint: StringLiteral, param: Any): Any = null
   override def walk(constraint: RealLiteral, param: Any): Any = null
   override def walk(constraint: ValueSetConstraint, param: Any): Any = null
+  override def walk(constraint: Warning, param: Any): Any = null
+  override def walk(constraint: Error, param: Any): Any = null
 }
