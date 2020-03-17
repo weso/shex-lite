@@ -5,7 +5,7 @@ import compiler.ast._
 /**
  * This layer of abstraction
  */
-class AbstractSemanticWalker extends ASTWalker[Any, Any] {
+abstract class AbstractSemanticWalker extends ASTWalker[Any, Any] {
   override def walk(schema: Schema, param: Any): Any = schema.statements.map(st => st.walk(this, param))
   override def walk(statement: Statement, param: Any): Any = null
   override def walk(statement: ImportStatement, param: Any): Any = statement.iri.walk(this, param)

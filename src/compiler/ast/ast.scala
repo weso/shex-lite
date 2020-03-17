@@ -123,4 +123,7 @@ private[compiler] trait ASTWalker[TP, TR] {
   def walk(constraint: StringLiteral, param: TP): TR
   def walk(constraint: RealLiteral, param: TP): TR
   def walk(constraint: ValueSetConstraint, param: TP): TR
+
+  def walk(warning: Warning, param: TP): TR
+  def walk(error: Error, param: TP): TR
 }
