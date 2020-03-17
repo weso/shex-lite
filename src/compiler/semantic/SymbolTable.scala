@@ -24,7 +24,7 @@
  */
 package compiler.semantic
 
-import compiler.ast.{BaseDeclaration, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
+import compiler.ast.{ASTNode, BaseDeclaration, PrefixDeclaration, ShapeDeclaration, StartDeclaration, Error, Warning}
 
 /**
  * Table to store different symbols of the parsed expressions, that is shapes definitions and prefixes.
@@ -37,22 +37,51 @@ import compiler.ast.{BaseDeclaration, PrefixDeclaration, ShapeDeclaration, Start
  */
 private[compiler] trait SymbolTable {
 
-  val base: BaseDeclaration   // The base declaration. Can be override.
-  val start: StartDeclaration // The start declaration. Cannot be override.
+  /**
+    * Changes the base declaration to the one in the parameter.
+    *
+    * @param base to be set as the new base.
+    * @return either a warning if the base was already set or the base declaration the first time.
+    */
+  def setBase(base: BaseDeclaration): Either[Warning, BaseDeclaration]
 
   /**
-   * Inserts a prefix in the prefixes table, if it exists it will update its record.
-   *
-   * @param prefixDef is the prefix definition to be inserted.
-   */
-  def insert(prefixDef: PrefixDeclaration): Unit
+    * Gets the declaration attached to the base variable.
+    *
+    * @return the declaration attached to the base variable.
+    */
+  def getBase(): Option[BaseDeclaration]
 
   /**
-   * Inserts a shape in the shapes table, shapes definitions must be unique.
-   *
-   * @param shapeDef is the shape definition to be inserted.
-   */
-  def insert(shapeDef: ShapeDeclaration): Unit
+    * Sets the start declarations to the given one. If the start was already set an error is thrown.
+    *
+    * @param start to set as the start declaration.
+    * @return either the start declaration or an error.
+    */
+  def setStart(start: StartDeclaration): Either[Error, StartDeclaration]
+
+  /**
+    * Gets the start declaration.
+    *
+    * @return either the start declaration or an error if no start was declared.
+    */
+  def getStart(): Either[Error, StartDeclaration]
+
+  /**
+    * Inserts a prefix in the prefixes table, if it exists it will update its record and create a warning.
+    *
+    * @param prefixDef is the prefix definition to be inserted.
+    * @return an either object, AST Node will be a warning/error, the prefix declaration is present if no errors happen.
+    */
+  def insert(prefixDef: PrefixDeclaration): Either[Warning, PrefixDeclaration]
+
+  /**
+    * Inserts a shape in the shapes table, if it exists it will create an error.
+    *
+    * @param shapeDef is the shape definition to be inserted.
+    * @return an either object, AST Node will be a warning/error, the shape declaration is present if no errors happen.
+    */
+  def insert(shapeDef: ShapeDeclaration): Either[Error, ShapeDeclaration]
 
   /**
    * Gets the prefix definition indexed at the given prefix name.
@@ -60,7 +89,7 @@ private[compiler] trait SymbolTable {
    * @param prefixName is the prefix name to look for in the table.
    * @return is a option object that might contain the prefix definition.
    */
-  def getPrefix(prefixName: String): Option[PrefixDeclaration]
+  def getPrefix(prefixName: String): Either[Error, PrefixDeclaration]
 
   /**
    * Gets the shape definition indexed at the given shape name.
@@ -68,5 +97,5 @@ private[compiler] trait SymbolTable {
    * @param shapeName is the prefix name to look for in the table.
    * @return is a option object that might contain the prefix definition.
    */
-  def getShape(shapeName: String): Option[ShapeDeclaration]
+  def getShape(shapeName: String): Either[Error, ShapeDeclaration]
 }

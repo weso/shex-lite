@@ -66,9 +66,9 @@ private[compiler] class Schema(filename: String, line: Int, column: Int, val sta
  * @param code of the warning, check all possible codes at shex-lite.org.
  * @param message of the warning.
  */
-private[compiler] class Warning(node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
+private[compiler] class Warning(val node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
-  override def toString: String = s"warning[$code] at $filename:$line:$column --> $message"
+  override def toString: String = s"warning[$code] at $filename:$line:$column --> $message. For more informatio look at http://shex-lite.org/warnings/$code]"
 }
 
 /**
@@ -78,9 +78,9 @@ private[compiler] class Warning(node: ASTNode, code: Int, message: String) exten
  * @param code of the error, check all possible codes at shex-lite.org.
  * @param message of the error.
  */
-private[compiler] class Error(node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
+private[compiler] class Error(val node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
-  override def toString: String = s"error[$code] at $filename:$line:$column --> $message"
+  override def toString: String = s"error[$code] at $filename:$line:$column --> $message. For more informatio look at http://shex-lite.org/erros/$code]"
 }
 
 /**
@@ -124,6 +124,43 @@ private[compiler] trait ASTWalker[TP, TR] {
   def walk(constraint: RealLiteral, param: TP): TR
   def walk(constraint: ValueSetConstraint, param: TP): TR
 
-  def walk(warning: Warning, param: TP): TR
-  def walk(error: Error, param: TP): TR
+  def walk(constraint: Warning, param: TP): TR
+  def walk(constraint: Error, param: TP): TR
+}
+
+/**
+  * Default implementation for the AST walker. It only propagates the action to all the children of each node.
+  */
+class DeflautASTWalker extends ASTWalker[Any,Any] {
+  override def walk(schema: Schema, param: Any): Any = schema.statements.map(st => st.walk(this, param))
+  override def walk(statement: Statement, param: Any): Any = null
+  override def walk(statement: ImportStatement, param: Any): Any = statement.iri.walk(this, param)
+  override def walk(statement: DeclarationStmt, param: Any): Any = null
+  override def walk(declaration: PrefixDeclaration, param: Any): Any = declaration.iri.walk(this, param)
+  override def walk(declaration: BaseDeclaration, param: Any): Any = declaration.iri.walk(this, param)
+  override def walk(declaration: StartDeclaration, param: Any): Any = declaration.ref.walk(this, param)
+  override def walk(declaration: ShapeDeclaration, param: Any): Any = declaration.constraint.walk(this, param)
+  override def walk(constraint: Constraint, param: Any): Any = null
+  override def walk(constraint: TripleConstraint, param: Any): Any = {
+    constraint.property.walk(this, param)
+    constraint.constraint.walk(this, param)
+    constraint.cardinality.walk(this, param)
+  }
+  override def walk(constraint: Cardinality, param: Any): Any = null
+  override def walk(constraint: NodeConstraint, param: Any): Any = null
+  override def walk(constraint: LiteralNodeConstraint, param: Any): Any = null
+  override def walk(constraint: IRINodeConstraint, param: Any): Any = null
+  override def walk(constraint: AnyTypeNodeConstraint, param: Any): Any = null
+  override def walk(constraint: BNodeNodeConstraint, param: Any): Any = null
+  override def walk(constraint: NonLiteralNodeConstraint, param: Any): Any = null
+  override def walk(constraint: Invocation, param: Any): Any = constraint.decl.walk(this, param)
+  override def walk(constraint: PrefixInvocation, param: Any): Any = constraint.decl.walk(this, param)
+  override def walk(constraint: ShapeInvocation, param: Any): Any = constraint.decl.walk(this, param)
+  override def walk[TL](constraint: Literal[TL], param: Any): Any = null
+  override def walk(constraint: IRILiteral, param: Any): Any = null
+  override def walk(constraint: StringLiteral, param: Any): Any = null
+  override def walk(constraint: RealLiteral, param: Any): Any = null
+  override def walk(constraint: ValueSetConstraint, param: Any): Any = null
+  override def walk(constraint: Warning, param: Any): Any = null
+  override def walk(constraint: Error, param: Any): Any = null
 }
