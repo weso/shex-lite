@@ -1,7 +1,103 @@
-Introduction {#intro}
+About ShEx Lite {#intro}
 =====================
 ShEx-Lite is a subset of the specification of Shape Expressions. Shape Expressions is a structural schema language for RDF graphs. It allows one to describe profiles of data.
 
 The Shape Expressions (ShEx) language describes RDF nodes and graph structures. A node constraint describes an RDF node (IRI, blank node or literal) and a shape describes the triples involving nodes in an RDF graph. These descriptions identify predicates and their associated cardinalities and datatypes. ShEx shapes can be used to communicate data structures associated with some process or interface, generate or validate data, or drive user interfaces.
 
-This document defines the ShEx language. See the Shape Expressions Primer for a non-normative description of ShEx. 
+This document defines the ShEx language. See the Shape Expressions Primer for a non-normative description of ShEx.
+
+## Features ## {#features}
+ShEx Lite includes a set of features that make it a robust-safe-fast language to validate rdf / graph data at light speeds.
+
+### Reduced Syntax ### {#features-rs}
+As stated before, ShEx Lite represents a subset of the Shape Expressions Syntax and any source developed as `.shexl` are compatible with ShEx implementations. The specification of the ShEx Lite compact syntax is the following.
+
+```antlr
+schema
+ : statement+ EOF
+ ;
+
+statement
+ : definition_statement
+ | import_statement
+ ;
+
+definition_statement
+ : base_definition
+ | start_definition
+ | prefix_definition
+ | shape_definition
+ ;
+
+base_definition
+ : BASE_KW IRI
+ ;
+
+start_definition
+ : START_KW = shape_invocation
+ ;
+
+prefix_definition
+ : PREFIX_KW LABEL? : IRI
+ ;
+
+shape_definition
+ : shape_name constraint
+ ;
+
+import_statement
+ : IMPORT_KW IRI
+ ;
+
+shape_name
+ : ID         // Node.
+ | IRI        // IRI.
+ ;
+
+shape_invocation
+ : @ shape_name
+ ;
+
+constraint
+ : CLOSED_KW constraint
+ | node_constraint
+ | { triple_constraint }                            // A single triple constraint.
+ | { (triple_constraint ;)+ triple_constraint }     // Multiple triple constraints. (eachOfs)
+ ;
+
+triple_constraint
+ : (ID | A_KW) node_constraint cardinality?
+ ;
+
+node_constraint
+ : .                    // Anything.
+ | shape_invocation     // Shape reference.
+ | ID                   // Datatype.
+ | LITERAL_KW           // Node kind.
+ | IRI_KW
+ | BNODE_KW
+ | NON_LITERAL_KW
+ | [ value_set_type* ]  // Value set.
+ ;
+
+value_set_type
+ : ID                   // Prefix invocation.
+ | shape_invocation     // Shape invocation.
+ | STRING_LITERAL       // String literal.
+ | REAL_LITERAL         // Real literal.
+ ;
+
+cardinality
+ : *
+ | +
+ | ?
+ | { min=INT_LITERAL }
+ | { min=INT_LITERAL , max=INT_LITERAL }
+ | { min=INT_LITERAL ,}
+ ;
+```
+
+### Compiler Error System ### {#features-ces}
+The Error System of the Compiler has been also been improved to increase safety...
+
+### Boosted Validation Process ### {#features-rs}
