@@ -79,9 +79,17 @@ ShEx Lite is primarily distributed under the terms of both the MIT license and t
 
 See [LICENSE-MIT](LICENSE-MIT.md), [LICENSE-GNU](LICENSE-GNU), and [COPYRIGHT](COPYRIGHT) for details.
 
+<<<<<<< HEAD
 ## Trademark
 The ShEx Lite language is an open source, community project governed by a core team. It is also sponsored by the Web Semantics Oviedo Research Group at University of Oviedo ("WESO"), which owns and protects the ShEx Lite trademark and logo.
 
+=======
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Trademark
+The ShEx Lite language is an open source, community project governed by a core team. It is also sponsored by the Web Semantics Oviedo Research Group at University of Oviedo ("WESO"), which owns and protects the ShEx Lite trademark and logo.
+
+>>>>>>> semantic-validation-impl
 If you want to use these names or brands, please read the media guide.
 
 Third-party logos may be subject to third-party copyrights and trademarks. See Licenses for details.
