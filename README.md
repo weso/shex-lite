@@ -69,7 +69,7 @@ documents in the `doc` directory.
 - **Guillermo Facundo Colunga** - *Initial work* - [thewilly](https://github.com/thewilly)
 - **Alejandro González Hevia** - *Core Proposals Reviewer* - [alejgh](https://github.com/alejgh)
 - **Jose Emilio Labra Gayo** - *Core Proposals Reviewer* - [labra](https://github.com/labra)
-- **Danie Fernández Álvarez** - *Core Proposals Reviewer* - [labra](https://github.com/DaniFdezAlvarez)
+- **Daniel Fernández Álvarez** - *Core Proposals Reviewer* - [danifdezalvarez](https://github.com/DaniFdezAlvarez)
 
 See also the list of [contributors](https://github.com/weso/shex-lite/graphs/contributors) who participated in this project.
 
