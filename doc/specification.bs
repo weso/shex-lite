@@ -1,38 +1,10 @@
-Language Specification {#intro}
+Getting Started {#gs}
 =====================
 
 Shape Expressions (ShEx) is a schema language for describing RDF graphs structures. ShEx was originally developed in late 2013 to provide a human-readable syntax for OSLC Resource Shapes. Now ShEx-Lite has as an aim to reduce the complexity of ShEx by defining an specification of the 20% more used characteristics that allow up to the 80% of the expressiveness.
 
-## Compact Syntax ## {#shex-lite-lang}
+## Install ## {#gs-installing}
 
-## Validation ## {#shex-lite-lang}
+## Compile ## {#gs-compiling}
 
-## Structure of a Shape Expression ## {#shex-lite-lang}
-
-## ShEx-Lite File ## {#shex-lite-lang}
-
-### Structure ### {#shex-lite-lang}
-
-
-## Directives ## {#shex-lite-lang}
-
-### Prefixes ### {#shex-lite-lang}
-
-### Bases ### {#shex-lite-lang}
-
-### Start ### {#shex-lite-lang}
-
-
-## Shape ## {#shex-lite-lang}
-
-### Structure ### {#shex-lite-lang}
-
-### Triple Expression ### {#shex-lite-lang}
-
-#### Triple Constraint #### {#shex-lite-lang}
-
-##### Property ##### {#shex-lite-lang}
-
-##### Node Constraint ##### {#shex-lite-lang}
-
-##### Cardinality ##### {#shex-lite-lang}
+## Validate ## {#shex-lite-lang}

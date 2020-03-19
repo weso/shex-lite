@@ -12,90 +12,128 @@ ShEx Lite includes a set of features that make it a robust-safe-fast language to
 ### Reduced Syntax ### {#features-rs}
 As stated before, ShEx Lite represents a subset of the Shape Expressions Syntax and any source developed as `.shexl` are compatible with ShEx implementations. The specification of the ShEx Lite compact syntax is the following.
 
+#### Schema #### {#features-rs-schema}
 ```antlr
-schema
- : statement+ EOF
- ;
-
-statement
- : definition_statement
- | import_statement
- ;
-
-definition_statement
- : base_definition
- | start_definition
- | prefix_definition
- | shape_definition
- ;
-
-base_definition
- : BASE_KW IRI
- ;
-
-start_definition
- : START_KW = shape_invocation
- ;
-
-prefix_definition
- : PREFIX_KW LABEL? : IRI
- ;
-
-shape_definition
- : shape_name constraint
- ;
-
-import_statement
- : IMPORT_KW IRI
- ;
-
-shape_name
- : ID         // Node.
- | IRI        // IRI.
- ;
-
-shape_invocation
- : @ shape_name
- ;
-
-constraint
- : CLOSED_KW constraint
- | node_constraint
- | { triple_constraint }                            // A single triple constraint.
- | { (triple_constraint ;)+ triple_constraint }     // Multiple triple constraints. (eachOfs)
- ;
-
-triple_constraint
- : (ID | A_KW) node_constraint cardinality?
- ;
-
-node_constraint
- : .                    // Anything.
- | shape_invocation     // Shape reference.
- | ID                   // Datatype.
- | LITERAL_KW           // Node kind.
- | IRI_KW
- | BNODE_KW
- | NON_LITERAL_KW
- | [ value_set_type* ]  // Value set.
- ;
-
-value_set_type
- : ID                   // Prefix invocation.
- | shape_invocation     // Shape invocation.
- | STRING_LITERAL       // String literal.
- | REAL_LITERAL         // Real literal.
- ;
-
-cardinality
- : *
- | +
- | ?
- | { min=INT_LITERAL }
- | { min=INT_LITERAL , max=INT_LITERAL }
- | { min=INT_LITERAL ,}
- ;
+schema ::= statement+ EOF
 ```
+The top level element of the grammar is the shema, that is what we want to represent with this grammar. A schema is defined as a non-empty set of statements.
+
+#### Statement #### {#features-rs-statement}
+```antlr
+statement := definition_statement
+          |  import_statement
+```
+The statements are the second level of the grammar.
+Each statement can be: a definition or an import statement. import is not a definition but an statement as it does not declare anything.
+
+This rule is intended to be extended in the future with more statements.
+
+#### Definition #### {#features-rs-definition}
+```antlr
+definition_statement := base_definition
+                     | start_definition
+                     | prefix_definition
+                     | shape_definition
+```
+The third level are the definitions, up to this level everything in a shema is a definition, directives like base, start, prefix or shapes definitions.
+
+#### Base #### {#features-rs-base}
+```antlr
+base_definition := BASE_KW IRI
+```
+A base definition is the directive that defines the base IRI. It if defined as the keywork `base` and the IRI.
+
+#### Start #### {#features-rs-base}
+```antlr
+start_definition := START_KW '=' shape_invocation
+```
+The start definition defines the shape that will be used as the default one during the validation. It is defined by the `start` keyword, then an `=` symbol and the shape invocation.
+
+#### Prefix Definition #### {#features-rs-prefix-definition}
+```antlr
+prefix_definition := PREFIX_KW LABEL? ':' IRI
+```
+A prefix definition is the association of an IRI to a label. It is defined by the `prefix` keyword, the label that is optional (can be the null prefix), the `:` symbol, and the IRI.
+
+#### Shape Definition #### {#features-rs-shape-definition}
+```antlr
+shape_definition := shape_name constraint
+```
+The shape definition is the core of the validation as it is use to build the schema that the nodes will be validated against. It is defined as the conjunction of a shape name and an expression.
+
+#### Import #### {#features-rs-import}
+```antlr
+import_statement := IMPORT_KW IRI
+```
+The import statement imports another shex-lite schema defined in a separated file. It is defined as the keyword `import` and the corresponding IRI pointing to the .shexl file.
+
+#### Shape Name #### {#features-rs-shape-name}
+```antlr
+shape_name := ID         // Node.
+           | IRI         // IRI.
+```
+The shape name is the corresponding label associated to a shape_definition. It can be a node or an IRI.
+
+#### Shape Invocation #### {#features-shape-invocation}
+```antlr
+shape_invocation := '@' shape_name
+```
+A shape invocation is the toold used to make reference to the expression defined for that shape name. It is defined as a `@` symbol and the shape_name, it doesn't matter if it is an IRI or a Node.
+
+#### Constraint #### {#features-constraint}
+```antlr
+constraint := CLOSED_KW constraint
+           | node_constraint
+           | '{' triple_constraint '}'                            // A single triple constraint.
+           | '{' (triple_constraint ';')+ triple_constraint '}'   // Multiple triple constraints. (eachOfs)
+```
+An expresion up to this point is only a triple_expression but this rule prepares the syntax for future extension.
+
+#### Triple Constraint #### {#features-triple-constraint}
+```antlr
+triple_constraint := (ID | A_KW) node_constraint cardinality?
+```
+A triple constraint is the abstraction of the well known eachOf of ShEx. In our case as we don't have the eachOneOf we don't need to expand this rule. Therefore the triple constraint is defined as a property, a node constraint and the cardinality. If no cardilaity is pressent the default one will be the [0,n).
+
+#### Node Constraint #### {#features-node-constraint}
+```antlr
+node_constraint := '.'                 // Anything.
+                | shape_invocation     // Shape reference.
+                | ID                   // Datatype.
+                | LITERAL_KW           // Node kind.
+                | IRI_KW
+                | BNODE_KW
+                | NON_LITERAL_KW
+                | '[' value_set_type* ']'  // Value set.
+```
+Describe the allow values of a node. It can be: Anything. A datatype. Notice that a datatype actually is a prefix invocation. A node kind. A value set. Or a shape reference.
+
+#### Value Set Type #### {#features-value-set-type}
+```antlr
+value_set_type := ID                  // Prefix invocation.
+               | shape_invocation     // Shape invocation.
+               | STRING_LITERAL       // String literal.
+               | REAL_LITERAL         // Real literal.
+```
+Represents the possible values that a value set might contain.
+
+#### Cardinality #### {#features-cardinalioty}
+```antlr
+cardinality := '*'
+            | '+'
+            | '?'
+            | { min=INT_LITERAL }
+            | { min=INT_LITERAL , max=INT_LITERAL }
+            | { min=INT_LITERAL ,}
+```
+As seen previously a triple constraint is formed by a property, a node constraint and a cardinality. The cardinality might take different values depending on what does it mean:
+ - `*` -> any number of repetitions, 0 or more. If no cardinality is set this one is de default one. [0,n)
+ - `+` -> any number of repetitions but at least 1. [1,n)
+ - `?` -> none or one appearance. Also known as optional. [0,1]
+ - `{N}` -> exactly N repetitions [N,N].
+ - `{N,M}` -> a minimum of N and a maximum of M repetitions. [N,M]
+ - `{N, }` -> any number of repetitions but a minimum of N. [N,m)
+
 
 ### Compiler Error System ### {#features-ces}
 The Error System of the Compiler has been also been improved to increase safety...

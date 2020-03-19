@@ -7,7 +7,7 @@ Status: LD
 Group: Semantics Web Oviedo
 URL: https://github.com/weso/
 Markup Shorthands: markdown yes
-Max ToC Depth: 5
+Max ToC Depth: 3
 Editor: Guillermo Facundo Colunga, University of Oviedo https://github.com/thewilly
 Editor: Alejandro González Hevia, University of Oviedo http://github.com/alejgh
 Editor: Jose Emilio Labra Gayo, University of Oviedo http://github.com/labra
