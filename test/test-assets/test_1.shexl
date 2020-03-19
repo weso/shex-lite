@@ -1,0 +1,18 @@
+PREFIX : <http://google.es/>
+PREFIX xsd: <http://schema.org/>
+
+BASE <http://weso.es>
+
+START = @:User
+
+<Person> {
+    :name       xsd:string      ;
+    :surname    xsd:string      ;
+    :withUser   @:User          ;
+    :aLiteral   Literal
+}
+
+:User {
+    :uid        xsd:integer     ;
+    :knows      @<Person>*
+}
