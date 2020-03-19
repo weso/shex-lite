@@ -27,7 +27,7 @@ matrix:
         email: thewilly.work@gmail.com
         on:
           branch:
-            shex-lite-2.0-dev
+            master
 
       branches:
         except:
