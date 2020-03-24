@@ -1,7 +1,5 @@
 package compiler
 
-import java.util.Objects
-
 import compiler.ast.{BaseDeclaration, IRILiteral, PrefixDeclaration, ShapeInvocation, StartDeclaration}
 import compiler.semantic.{MemoryErrorHandler, MemorySymbolTable}
 import org.scalatest.funsuite.AnyFunSuite
