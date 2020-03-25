@@ -4,6 +4,10 @@
 |--------------------|:----------------:|:----------:|
 |**ubuntu 18.04 LTS**|x86_64|[![Build Status](https://travis-ci.org/weso/shex-lite.svg?branch=master)](https://travis-ci.org/weso/shex-lite)|
 
+|                    | **Master** |
+|--------------------|:----------------:|
+|**Code Coverage**|[![codecov.io](https://codecov.io/github/weso/shex-lite/coverage.svg?branch=master)](https://codecov.io/github/weso/shex-lite?branch=master)|
+
 ## Welcome to ShEx Lite
 ShEx Lite is a lightweight version of [ShEx](https://github.com/weso/shex-s) that has as an aim reduce the complexity of the syntax, improve the semactic analisis of the schemas and boost the performance of the validation process.
 
