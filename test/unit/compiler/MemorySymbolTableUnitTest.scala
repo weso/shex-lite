@@ -22,7 +22,7 @@
 
 package compiler
 
-import compiler.ast.{BaseDeclaration, IRILiteral, PrefixDeclaration, ShapeInvocation, StartDeclaration}
+import compiler.ast.{BaseDeclaration, IRILiteral, PrefixDeclaration, PrefixInvocation, ShapeDeclaration, ShapeInvocation, StartDeclaration}
 import compiler.semantic.{MemoryErrorHandler, MemorySymbolTable}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
@@ -45,13 +45,18 @@ class MemorySymbolTableUnitTest extends AnyFunSuite with BeforeAndAfter {
   val newPrefix = new PrefixDeclaration("example", 3, 1, "xsd",
     new IRILiteral("example", 3, 2, "<http://foaf.org/>"))
 
+  val shape = new ShapeDeclaration("example", 4,1,
+    new PrefixInvocation("example", 4,2, "this is my shape name", prefix), null)
+
   before {
     MemorySymbolTable.restore()
+    MemoryErrorHandler.restore()
   }
 
   // Test Cases.
 
   test("Check that the default base is correct") {
+    assert(MemorySymbolTable.DEFAULT_BASE.equals("<internal>"))
     assert(MemorySymbolTable.getBase(newBase).isRight)
     assert(MemorySymbolTable.getBase(newBase).right.get.iri.value.equals(MemorySymbolTable.DEFAULT_BASE))
 
@@ -60,8 +65,12 @@ class MemorySymbolTableUnitTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasWarnings)
   }
 
+  test("Check that the default source file is correct") {
+    assert(MemorySymbolTable.DEFAULT_SOURCE_FILE.equals("memsys.table"))
+  }
+
   test("Check that the base can be set") {
-    MemorySymbolTable.setBase(base)
+    MemorySymbolTable.setBase(newBase, base)
     assert(MemorySymbolTable.getBase(newBase).right.get equals base)
 
     // Check that there are no errors nor warnings.
@@ -69,17 +78,22 @@ class MemorySymbolTableUnitTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasWarnings)
   }
 
+  test("Check that the base cannot be set to a null reference") {
+    MemorySymbolTable.setBase(newBase,null)
+    assert(MemoryErrorHandler.hasErrors)
+  }
+
   test("Check that the base can only be changed once") {
     val nWarnings = MemoryErrorHandler.warnings.size
 
-    MemorySymbolTable.setBase(base)
+    MemorySymbolTable.setBase(newBase,base)
     assert(MemorySymbolTable.getBase(newBase).right.get equals base)
 
     // Check that there are no errors nor warnings.
     assert(!MemoryErrorHandler.hasErrors)
     //assert(nWarnings equals MemoryErrorHandler.warnings.size)
 
-    MemorySymbolTable.setBase(newBase)
+    MemorySymbolTable.setBase(newBase, newBase)
     assert(!MemorySymbolTable.getBase(newBase).right.get.equals(newBase))
 
     // Check that there are no errors nor warnings.
@@ -92,13 +106,27 @@ class MemorySymbolTableUnitTest extends AnyFunSuite with BeforeAndAfter {
   }
 
   test("Check that the start variable can be set") {
-    MemorySymbolTable.setStart(new StartDeclaration("test", 4,4,null))
+    MemorySymbolTable.setStart(newBase, new StartDeclaration("test", 4,4,null))
     assert(MemorySymbolTable.getStart(newBase).getOrElse(null).filename equals "test")
   }
 
-  test("Check that the override a prefix generates a warning") {
-    assert(MemorySymbolTable.insert(prefix).isRight)
-    assert(MemorySymbolTable.insert(newPrefix).isLeft)
+  test("Check that the start variable cannot be set to null") {
+    assert(MemorySymbolTable.setStart(newBase, null).isLeft)
+    println(MemorySymbolTable.setStart(newBase, null))
+    assert(MemoryErrorHandler.hasErrors)
+  }
+
+  test("Check that the start variable cannot be override") {
+    MemorySymbolTable.setStart(newBase, new StartDeclaration("test", 4,4,null))
+    assert(MemorySymbolTable.getStart(newBase).getOrElse(null).filename equals "test")
+
+    MemorySymbolTable.setStart(newBase, new StartDeclaration("test", 4,4,null))
+    assert(MemoryErrorHandler.hasErrors)
+  }
+
+  test("Check that the override a prefix generates an error") {
+    assert(MemorySymbolTable.insert(newBase, prefix).isRight)
+    assert(MemorySymbolTable.insert(newBase, newPrefix).isLeft)
 
     // Check that the change is correct.
     assert(MemorySymbolTable.getPrefix(newBase, prefix.name).isRight)
@@ -106,5 +134,40 @@ class MemorySymbolTableUnitTest extends AnyFunSuite with BeforeAndAfter {
 
     // Check that there is errors and warnings.
     assert(MemoryErrorHandler.hasErrors)
+  }
+
+  test("Check that override a shape generates an error") {
+    assert(MemorySymbolTable.insert(newBase, shape).isRight)
+    assert(MemorySymbolTable.insert(newBase, shape).isLeft)
+
+    // Check that the change is not done.
+    assert(MemorySymbolTable.getShape(newBase, shape.name.content).isRight)
+    assert(MemorySymbolTable.getShape(newBase, shape.name.content).isRight)
+
+    // Check that there is errors and warnings.
+    assert(MemoryErrorHandler.hasErrors)
+  }
+
+  test("Check that a prefix cannot be retrieved from an empty prefix name") {
+    assert(MemorySymbolTable.getPrefix(base, null).isLeft)
+    assert(MemorySymbolTable.getPrefix(base, "").isLeft)
+  }
+
+  test("Check that retrieving a non existing prefix raises an error") {
+    assert(MemorySymbolTable.getPrefix(base, "NonExistingPrefix").isLeft)
+  }
+
+  test("Check that retrieving a non existing shape raises an error") {
+    assert(MemorySymbolTable.getShape(base, "NonExistingShape").isLeft)
+  }
+
+  test("Check that an existing shape can be retrieved") {
+    assert(MemorySymbolTable.insert(shape, shape).isRight)
+    assert(MemorySymbolTable.getShape(shape, shape.name.content).isRight)
+  }
+
+  test("Check that a shape cannot be retrieved from an empty shape name") {
+    assert(MemorySymbolTable.getShape(shape, null).isLeft)
+    assert(MemorySymbolTable.getShape(shape, "").isLeft)
   }
 }
