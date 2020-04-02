@@ -1,20 +1,42 @@
+/*
+ * Short version for non-lawyers:
+ *
+ * The ShEx Lite Project is dual-licensed under GNU 3.0 and
+ * MIT terms.
+ *
+ * Longer version:
+ *
+ * Copyrights in the ShEx Lite project are retained by their contributors. No
+ * copyright assignment is required to contribute to the ShEx Lite project.
+ *
+ * Some files include explicit copyright notices and/or license notices.
+ * For full authorship information, see the version control history.
+ *
+ * Except as otherwise noted (below and/or in individual files), ShEx Lite is
+ * licensed under the GNU, Version 3.0 <LICENSE-GNU> or
+ * <https://choosealicense.com/licenses/gpl-3.0/> or the MIT license
+ * <LICENSE-MIT> or <http://opensource.org/licenses/MIT>, at your option.
+ *
+ * The ShEx Lite Project includes packages written by third parties.
+ */
+
 package compiler.syntactic
 
-import compiler.syntactic.generated.{ShexlBaseVisitor, ShexlLexer, ShexlParser}
 import compiler.ast._
+import compiler.syntactic.generated.{ShexlBaseVisitor, ShexlLexer, ShexlParser}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
 import scala.jdk.CollectionConverters._
 
-class ParseVisitor(filename: String) extends ShexlBaseVisitor[ASTNode] {
+class ShExLSyntacticParser(filename: String) extends ShexlBaseVisitor[ASTNode] {
 
   final val FILENAME = this.filename
 
   def parse(): Schema = {
     val input = CharStreams.fromFileName(FILENAME)
-    val lexer = new ShexlLexer( input )
-    val tokens = new CommonTokenStream( lexer )
-    val parser = new ShexlParser( tokens )
+    val lexer = new ShexlLexer(input)
+    val tokens = new CommonTokenStream(lexer)
+    val parser = new ShexlParser(tokens)
 
     parser.schema().accept(this).asInstanceOf[Schema]
   }
@@ -27,7 +49,6 @@ class ParseVisitor(filename: String) extends ShexlBaseVisitor[ASTNode] {
   }
 
 
-
   override def visitImport_statement(ctx: ShexlParser.Import_statementContext): ImportStatement = {
     val iri = new IRILiteral(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, ctx.IRI().getText)
     new ImportStatement(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, iri)
@@ -36,6 +57,10 @@ class ParseVisitor(filename: String) extends ShexlBaseVisitor[ASTNode] {
   override def visitStart_definition(ctx: ShexlParser.Start_definitionContext): StartDeclaration = {
     val shapeRef = visitShape_invocation(ctx.shape_invocation())
     new StartDeclaration(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, shapeRef)
+  }
+
+  override def visitShape_invocation(ctx: ShexlParser.Shape_invocationContext): ShapeInvocation = {
+    visitShape_name(ctx.shape_name())
   }
 
   override def visitBase_definition(ctx: ShexlParser.Base_definitionContext): BaseDeclaration = {
@@ -56,12 +81,8 @@ class ParseVisitor(filename: String) extends ShexlBaseVisitor[ASTNode] {
     new ShapeDeclaration(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, prefixInvocation, constraint)
   }
 
-  override def visitShape_invocation(ctx: ShexlParser.Shape_invocationContext): ShapeInvocation = {
-    visitShape_name(ctx.shape_name())
-  }
-
   override def visitShape_name(ctx: ShexlParser.Shape_nameContext): ShapeInvocation = {
-    if(ctx.ID() != null) {
+    if (ctx.ID() != null) {
       new ShapeInvocation(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, ctx.ID().getText)
     } else {
       new ShapeInvocation(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, ctx.IRI().getText)
@@ -69,11 +90,11 @@ class ParseVisitor(filename: String) extends ShexlBaseVisitor[ASTNode] {
   }
 
   override def visitConstraint(ctx: ShexlParser.ConstraintContext): Constraint = {
-    if(ctx.node_constraint() != null) {
+    if (ctx.node_constraint() != null) {
       ctx.node_constraint().accept(this).asInstanceOf[NodeConstraint]
-    } else if(ctx.constraint() != null) {
+    } else if (ctx.constraint() != null) {
       ctx.constraint().accept(this).asInstanceOf[Constraint]
-    } else /*if(ctx.triple_constraint() != null)*/  {
+    } else /*if(ctx.triple_constraint() != null)*/ {
       val constraints = ctx.triple_constraint().asScala.toList.map(cons => cons.accept(this)).asInstanceOf[List[TripleConstraint]]
       new TripleExpressionConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, constraints)
     }
@@ -83,7 +104,7 @@ class ParseVisitor(filename: String) extends ShexlBaseVisitor[ASTNode] {
     val property = new PrefixInvocation(FILENAME, ctx.ID.getSymbol.getLine, ctx.ID.getSymbol.getCharPositionInLine, ctx.ID.getText)
     val constraint = ctx.node_constraint().accept(this).asInstanceOf[NodeConstraint]
     var cardinality = new Cardinality(FILENAME, ctx.node_constraint().start.getLine, ctx.node_constraint().start.getCharPositionInLine, 1, 1)
-    if(ctx.cardinality() != null) {
+    if (ctx.cardinality() != null) {
       cardinality = ctx.cardinality().accept(this).asInstanceOf[Cardinality]
     }
     new TripleConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, property, constraint, cardinality)
@@ -91,12 +112,12 @@ class ParseVisitor(filename: String) extends ShexlBaseVisitor[ASTNode] {
 
   override def visitNode_constraint(ctx: ShexlParser.Node_constraintContext): NodeConstraint = {
 
-    if(ctx.ID() != null) {
+    if (ctx.ID() != null) {
       new PrefixInvocation(FILENAME, ctx.ID().getSymbol.getLine, ctx.ID.getSymbol.getCharPositionInLine, ctx.ID().getText)
-    } else if(ctx.shape_invocation() != null) {
+    } else if (ctx.shape_invocation() != null) {
       //new ShapeInvocation(FILENAME, ctx.ID().getSymbol.getLine, ctx.ID.getSymbol.getCharPositionInLine, ctx.shape_invocation().getText)
       ctx.shape_invocation().accept(this).asInstanceOf[ShapeInvocation]
-    } else if(!ctx.value_set_type().isEmpty) {
+    } else if (!ctx.value_set_type().isEmpty) {
       val values = ctx.value_set_type().asScala.toList.map(v => v.accept(this)).asInstanceOf[List[ValidValueSetConstraint]]
       new ValueSetConstraint(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, values)
     } else {
@@ -111,17 +132,17 @@ class ParseVisitor(filename: String) extends ShexlBaseVisitor[ASTNode] {
   }
 
   override def visitCardinality(ctx: ShexlParser.CardinalityContext): Cardinality = {
-    if(ctx.min == null) {
+    if (ctx.min == null) {
       ctx.getText match {
         case "*" => new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, 0, Int.MaxValue)
         case "+" => new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, 1, Int.MaxValue)
         case "?" => new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, 0, 1)
       }
     } else {
-      if(ctx.max != null) {
+      if (ctx.max != null) {
         new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, Integer.parseInt(ctx.min.getText), Integer.parseInt(ctx.max.getText))
       } else {
-        if(ctx.getText.contains(",")) {
+        if (ctx.getText.contains(",")) {
           new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, Integer.parseInt(ctx.min.getText), Int.MaxValue)
         } else {
           new Cardinality(FILENAME, ctx.start.getLine, ctx.start.getCharPositionInLine, Integer.parseInt(ctx.min.getText), Integer.parseInt(ctx.min.getText))

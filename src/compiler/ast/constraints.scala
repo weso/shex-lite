@@ -1,3 +1,25 @@
+/*
+ * Short version for non-lawyers:
+ *
+ * The ShEx Lite Project is dual-licensed under GNU 3.0 and
+ * MIT terms.
+ *
+ * Longer version:
+ *
+ * Copyrights in the ShEx Lite project are retained by their contributors. No
+ * copyright assignment is required to contribute to the ShEx Lite project.
+ *
+ * Some files include explicit copyright notices and/or license notices.
+ * For full authorship information, see the version control history.
+ *
+ * Except as otherwise noted (below and/or in individual files), ShEx Lite is
+ * licensed under the GNU, Version 3.0 <LICENSE-GNU> or
+ * <https://choosealicense.com/licenses/gpl-3.0/> or the MIT license
+ * <LICENSE-MIT> or <http://opensource.org/licenses/MIT>, at your option.
+ *
+ * The ShEx Lite Project includes packages written by third parties.
+ */
+
 package compiler.ast
 
 /**
@@ -22,6 +44,7 @@ private[compiler] abstract class Constraint(filename: String, line: Int, column:
 private[compiler] class TripleExpressionConstraint(filename: String, line: Int, column: Int, constraints: List[TripleConstraint])
   extends Constraint(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = {
     val sb = new StringBuilder()
     sb.append(constraints.size)
@@ -49,9 +72,10 @@ private[compiler] class TripleExpressionConstraint(filename: String, line: Int, 
  * @param constraint  to be applies to the property.
  * @param cardinality of the constraint.
  */
-private[compiler] class TripleConstraint(filename: String,line: Int, column: Int, val property: PrefixInvocation, val constraint: NodeConstraint,
+private[compiler] class TripleConstraint(filename: String, line: Int, column: Int, val property: PrefixInvocation, val constraint: NodeConstraint,
                                          val cardinality: Cardinality) extends Constraint(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"triple constraint -> $filename:$line:$column $property $constraint $cardinality"
 }
 
@@ -68,6 +92,7 @@ private[compiler] class TripleConstraint(filename: String,line: Int, column: Int
 private[compiler] class Cardinality(filename: String, line: Int, column: Int, val min: BigInt, val max: BigInt)
   extends ASTNode(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"cardinality -> $filename:$line:$column $min $max"
 }
 
@@ -95,6 +120,7 @@ private[compiler] abstract class NodeConstraint(filename: String, line: Int, col
 private[compiler] class LiteralNodeConstraint(filename: String, line: Int, column: Int)
   extends NodeConstraint(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"Literal -> $filename:$line:$column"
 }
 
@@ -108,6 +134,7 @@ private[compiler] class LiteralNodeConstraint(filename: String, line: Int, colum
 private[compiler] class IRINodeConstraint(filename: String, line: Int, column: Int)
   extends NodeConstraint(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"IRI -> $filename:$line:$column"
 }
 
@@ -121,6 +148,7 @@ private[compiler] class IRINodeConstraint(filename: String, line: Int, column: I
 private[compiler] class AnyTypeNodeConstraint(filename: String, line: Int, column: Int)
   extends NodeConstraint(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"AnyType -> $filename:$line:$column"
 }
 
@@ -134,6 +162,7 @@ private[compiler] class AnyTypeNodeConstraint(filename: String, line: Int, colum
 private[compiler] class BNodeNodeConstraint(filename: String, line: Int, column: Int)
   extends NodeConstraint(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"BNode -> $filename:$line:$column"
 }
 
@@ -147,6 +176,7 @@ private[compiler] class BNodeNodeConstraint(filename: String, line: Int, column:
 private[compiler] class NonLiteralNodeConstraint(filename: String, line: Int, column: Int)
   extends NodeConstraint(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"NonLiteral -> $filename:$line:$column"
 }
 
@@ -178,6 +208,7 @@ private[compiler] abstract class Invocation(filename: String, line: Int, column:
 private[compiler] class PrefixInvocation(filename: String, line: Int, column: Int, content: String, decl: PrefixDeclaration = null)
   extends Invocation(filename, line, column, content, decl) with ValidValueSetConstraint {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"Prefix Invocation -> $filename:$line:$column $content $decl"
 }
 
@@ -193,6 +224,7 @@ private[compiler] class PrefixInvocation(filename: String, line: Int, column: In
 private[compiler] class ShapeInvocation(filename: String, line: Int, column: Int, content: String, decl: PrefixDeclaration = null)
   extends Invocation(filename, line, column, content, decl) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"Shape Invocation -> $filename:$line:$column $content $decl"
 }
 
@@ -223,6 +255,7 @@ private[compiler] abstract class Literal[T](filename: String, line: Int, column:
 private[compiler] class IRILiteral(filename: String, line: Int, column: Int, value: String)
   extends Literal[String](filename, line, column, value) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"IRI Literal -> $filename:$line:$column $value"
 }
 
@@ -237,6 +270,7 @@ private[compiler] class IRILiteral(filename: String, line: Int, column: Int, val
 private[compiler] class StringLiteral(filename: String, line: Int, column: Int, value: String)
   extends Literal[String](filename, line, column, value) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"String Literal -> $filename:$line:$column $value"
 }
 
@@ -251,6 +285,7 @@ private[compiler] class StringLiteral(filename: String, line: Int, column: Int, 
 private[compiler] class RealLiteral(filename: String, line: Int, column: Int, value: Double)
   extends Literal[Double](filename, line, column, value) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"Real Literal -> $filename:$line:$column $value"
 }
 
@@ -269,6 +304,7 @@ private[compiler] class RealLiteral(filename: String, line: Int, column: Int, va
 private[compiler] class ValueSetConstraint(filename: String, line: Int, column: Int, val set: List[ValidValueSetConstraint])
   extends NodeConstraint(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"Value Set -> $filename:$line:$column $set"
 }
 

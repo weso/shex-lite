@@ -1,101 +1,110 @@
 /*
- * MIT License
+ * Short version for non-lawyers:
  *
- * Copyright (c) 2020 WESO Research Group, University of Oviedo.
+ * The ShEx Lite Project is dual-licensed under GNU 3.0 and
+ * MIT terms.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Longer version:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Copyrights in the ShEx Lite project are retained by their contributors. No
+ * copyright assignment is required to contribute to the ShEx Lite project.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * Some files include explicit copyright notices and/or license notices.
+ * For full authorship information, see the version control history.
  *
+ * Except as otherwise noted (below and/or in individual files), ShEx Lite is
+ * licensed under the GNU, Version 3.0 <LICENSE-GNU> or
+ * <https://choosealicense.com/licenses/gpl-3.0/> or the MIT license
+ * <LICENSE-MIT> or <http://opensource.org/licenses/MIT>, at your option.
+ *
+ * The ShEx Lite Project includes packages written by third parties.
  */
 package compiler.semantic
 
-import compiler.ast.{ASTNode, BaseDeclaration, PrefixDeclaration, ShapeDeclaration, StartDeclaration, Error, Warning}
+import compiler.ast.{BaseDeclaration, Error, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
 
 /**
- * Table to store different symbols of the parsed expressions, that is shapes definitions and prefixes.
- *
- * Behaviour:
- * - Prefixes: When a prefix name is repeated its record its updated.
- * - Shapes: Shapes names must be unique, so definitions cannot be override.
- * - Base: Base prefix can be updated.
- * - Start: Start prefix can can be updated.
+ * Represents the data structure that holds the data used by the compiler during the validation process. By default and
+ * after https://github.com/weso/shex-lite-evolution/pull/16 the default behaviour for all declarations is that no
+ * redefinition is allowed. That way the language will be kept clean.
  */
 private[compiler] trait SymbolTable {
 
   /**
-    * Changes the base declaration to the one in the parameter.
-    *
-    * @param base to be set as the new base.
-    * @return either a warning if the base was already set or the base declaration the first time.
-    */
-  def setBase(base: BaseDeclaration): Either[Warning, BaseDeclaration]
+   * Sets the value of the base. The base is the default iri that will be referenced from the relative iris of the
+   * schema. Notice that this method should be only called once, after it should produce an error as no redefinition
+   * is allowed.
+   *
+   * @param base is the value that will be set as the base.
+   * @return either an error if the base was already set or the new base declaration if it is the first time the method
+   *         is called.
+   */
+  def setBase(base: BaseDeclaration): Either[Error, BaseDeclaration]
 
   /**
-    * Gets the declaration attached to the base variable.
-    *
-    * @return the declaration attached to the base variable.
-    */
-  def getBase(): Option[BaseDeclaration]
+   * Gets the base declaration. If the base declaration does not even exists internally by some reason an error will be
+   * returned. Else the value set as the base declaration will be returned.
+   *
+   * @return either an error if the base does not even exists internally or the base declaration.
+   */
+  def getBase(): Either[Error, BaseDeclaration]
 
   /**
-    * Sets the start declarations to the given one. If the start was already set an error is thrown.
-    *
-    * @param start to set as the start declaration.
-    * @return either the start declaration or an error.
-    */
+   * Sets the value for the start declaration. The start is a pointer to a shape definition that will be use at
+   * validation time. It indicates the validator which is the default shape definition to use in case no other shape
+   * reference is set in the corresponding shape-map. Notice that this method should be only called once as the
+   * redefinition is not allowed.
+   *
+   * @param start is the value that will be set as the start.
+   * @return either an error if the start parameter is not valid or is trying to redefine the start. Or the start
+   *         declaration set as new value.
+   */
   def setStart(start: StartDeclaration): Either[Error, StartDeclaration]
 
   /**
-    * Gets the start declaration.
-    *
-    * @return either the start declaration or an error if no start was declared.
-    */
+   * Gets the start declaration. If no start declaration exists in the schema then will return a compiler error.
+   *
+   * @return either the start declaration or an error if no start declaration exists in the schema.
+   */
   def getStart(): Either[Error, StartDeclaration]
 
   /**
-    * Inserts a prefix in the prefixes table, if it exists it will update its record and create a warning.
-    *
-    * @param prefixDef is the prefix definition to be inserted.
-    * @return an either object, AST Node will be a warning/error, the prefix declaration is present if no errors happen.
-    */
-  def insert(prefixDef: PrefixDeclaration): Either[Warning, PrefixDeclaration]
+   * Stores a prefix declaration in the data structure for future references. Prefix redefinition is not allowed,
+   * therefore if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
+   * the value stored will be returned.
+   *
+   * @param prefixDef is the prefix definition to be stored. Must be unique, otherwise an error will be thrown.
+   * @return if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
+   *         the value stored will be returned.
+   */
+  def insert(prefixDef: PrefixDeclaration): Either[Error, PrefixDeclaration]
 
   /**
-    * Inserts a shape in the shapes table, if it exists it will create an error.
-    *
-    * @param shapeDef is the shape definition to be inserted.
-    * @return an either object, AST Node will be a warning/error, the shape declaration is present if no errors happen.
-    */
+   * Stores a shape declaration in the data structure for future references. Shape redefinition is not allowed,
+   * therefore if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
+   * the value stored will be returned.
+   *
+   * @param shapeDef is the shape definition to be stored. Must be unique, otherwise an error will be thrown.
+   * @return if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
+   *         the value stored will be returned.
+   */
   def insert(shapeDef: ShapeDeclaration): Either[Error, ShapeDeclaration]
 
   /**
-   * Gets the prefix definition indexed at the given prefix name.
+   * Gets the prefix declaration indexed by its prefix name. If no prefix is found indexed by that prefix name a
+   * compiler error will be raised.
    *
-   * @param prefixName is the prefix name to look for in the table.
-   * @return is a option object that might contain the prefix definition.
+   * @param prefixName is the key that will be used to look for the prefix definition in the persistence.
+   * @return either the prefix declaration indexed at the prefix name key or an error otherwise.
    */
   def getPrefix(prefixName: String): Either[Error, PrefixDeclaration]
 
   /**
-   * Gets the shape definition indexed at the given shape name.
+   * Gets the shape declaration indexed by its shape name. If no shape is found indexed by that shape name a
+   * compiler error will be raised.
    *
-   * @param shapeName is the prefix name to look for in the table.
-   * @return is a option object that might contain the prefix definition.
+   * @param shapeName is the key that will be used to look for the shape definition in the persistence.
+   * @return either the shape declaration indexed at the shape name key or an error otherwise.
    */
   def getShape(shapeName: String): Either[Error, ShapeDeclaration]
 }
