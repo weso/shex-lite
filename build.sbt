@@ -13,4 +13,4 @@ Test / unmanagedSourceDirectories += baseDirectory.value / "test/unit"
 libraryDependencies += "org.antlr" % "antlr4" % "4.8-1"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.0" % "test"
 
-lazy val shexlite = project in file (".")
+coverageExcludedPackages := "compiler.syntactic.generated.*"

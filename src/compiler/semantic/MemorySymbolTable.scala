@@ -53,13 +53,13 @@ object MemorySymbolTable extends SymbolTable {
    * @return either an error if the base was already set or the new base declaration if it is the first time the method
    *         is called.
    */
-  override def setBase(base: BaseDeclaration): Either[ast.Error, BaseDeclaration] = {
+  override def setBase(requester:ASTNode, base: BaseDeclaration): Either[ast.Error, BaseDeclaration] = {
     if(!_base.iri.value.equals(DEFAULT_BASE)) {
       // 1. Check if the existing base declaration is different from the default, if it is then should not be changed.
       Left(new ast.Error(base, -1, "Base redefinition is not allowed."))
     } else if(Objects.isNull(base)) {
       // 2. Check the integrity of the new reference.
-      Left(new ast.Error(null, -1, "Null reference detected."))
+      Left(new ast.Error(requester, -1, "Null reference detected."))
     } else {
       // 3. If pass all previous checks then the base can be changed.
       _base = base
@@ -94,13 +94,13 @@ object MemorySymbolTable extends SymbolTable {
    * @return either an error if the start parameter is not valid or is trying to redefine the start. Or the start
    *         declaration set as new value.
    */
-  override def setStart(start: StartDeclaration): Either[ast.Error, StartDeclaration] = {
+  override def setStart(requester:ASTNode, start: StartDeclaration): Either[ast.Error, StartDeclaration] = {
     if(Objects.nonNull(_start)) {
       // 1. Check if the base has been already set, if yes then should not be changed.
       Left(new ast.Error(start, -1, "Start redefinition is not allowed."))
     } else if(Objects.isNull(start)) {
       // 2. Check the integrity of the new reference.
-      Left(new ast.Error(null, -1, "Null reference detected."))
+      Left(new ast.Error(requester, -1, "Null reference detected."))
     } else {
       // 3. If pass all previous checks then the start can be changed.
       _start = start
@@ -133,7 +133,7 @@ object MemorySymbolTable extends SymbolTable {
    * @return if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  override def insert(prefixDef: PrefixDeclaration): Either[ast.Error, PrefixDeclaration] = {
+  override def insert(requester:ASTNode, prefixDef: PrefixDeclaration): Either[ast.Error, PrefixDeclaration] = {
     if(Objects.isNull(prefixDef)) {
       // 1. If the prefix reference to insert is null raise an error.
       Left(new ast.Error(null, -1, "Null reference detected."))
@@ -156,13 +156,13 @@ object MemorySymbolTable extends SymbolTable {
    * @return if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  override def insert(shapeDef: ShapeDeclaration): Either[ast.Error, ShapeDeclaration] = {
+  override def insert(requester:ASTNode, shapeDef: ShapeDeclaration): Either[ast.Error, ShapeDeclaration] = {
     if(Objects.isNull(shapeDef)) {
       // 1. If the prefix reference to insert is null raise an error.
       Left(new ast.Error(null, -1, "Null reference detected."))
     } else if(_shapesTable.contains(shapeDef.name.content)) {
       // 2. If the table has already an entry for the given prefix definition raise an error.
-      Left(new ast.Error(shapeDef, -1, "Prefix redefinition is not allowed."))
+      Left(new ast.Error(shapeDef, -1, "Shape redefinition is not allowed."))
     } else {
       // 3. If previous checks passed then store the prefix definition in the table.
       _shapesTable.put(shapeDef.name.content, shapeDef)
