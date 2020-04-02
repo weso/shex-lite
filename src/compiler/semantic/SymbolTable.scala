@@ -35,11 +35,12 @@ private[compiler] trait SymbolTable {
    * schema. Notice that this method should be only called once, after it should produce an error as no redefinition
    * is allowed.
    *
+   * @param requester is the ast node that request to set the base declaration.
    * @param base is the value that will be set as the base.
    * @return either an error if the base was already set or the new base declaration if it is the first time the method
    *         is called.
    */
-  def setBase(base: BaseDeclaration): Either[Error, BaseDeclaration]
+  def setBase(requester: ASTNode, base: BaseDeclaration): Either[Error, BaseDeclaration]
 
   /**
    * Gets the base declaration. If the base declaration does not even exists internally by some reason an error will be
@@ -56,11 +57,12 @@ private[compiler] trait SymbolTable {
    * reference is set in the corresponding shape-map. Notice that this method should be only called once as the
    * redefinition is not allowed.
    *
+   * @param requester is the ast node that request to set the start declaration.
    * @param start is the value that will be set as the start.
    * @return either an error if the start parameter is not valid or is trying to redefine the start. Or the start
    *         declaration set as new value.
    */
-  def setStart(start: StartDeclaration): Either[Error, StartDeclaration]
+  def setStart(requester: ASTNode, start: StartDeclaration): Either[Error, StartDeclaration]
 
   /**
    * Gets the start declaration. If no start declaration exists in the schema then will return a compiler error.
@@ -75,22 +77,24 @@ private[compiler] trait SymbolTable {
    * therefore if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
    * the value stored will be returned.
    *
+   * @param requester is the ast node that request to insert the prefix definition.
    * @param prefixDef is the prefix definition to be stored. Must be unique, otherwise an error will be thrown.
    * @return if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  def insert(prefixDef: PrefixDeclaration): Either[Error, PrefixDeclaration]
+  def insert(requester: ASTNode, prefixDef: PrefixDeclaration): Either[Error, PrefixDeclaration]
 
   /**
    * Stores a shape declaration in the data structure for future references. Shape redefinition is not allowed,
    * therefore if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
    * the value stored will be returned.
    *
+   * @param requester is the ast node that request to insert the shape definition.
    * @param shapeDef is the shape definition to be stored. Must be unique, otherwise an error will be thrown.
    * @return if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  def insert(shapeDef: ShapeDeclaration): Either[Error, ShapeDeclaration]
+  def insert(requester: ASTNode, shapeDef: ShapeDeclaration): Either[Error, ShapeDeclaration]
 
   /**
    * Gets the prefix declaration indexed by its prefix name. If no prefix is found indexed by that prefix name a
