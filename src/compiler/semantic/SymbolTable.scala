@@ -21,7 +21,7 @@
  */
 package compiler.semantic
 
-import compiler.ast.{BaseDeclaration, Error, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
+import compiler.ast.{ASTNode, BaseDeclaration, Error, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
 
 /**
  * Represents the data structure that holds the data used by the compiler during the validation process. By default and
@@ -45,9 +45,10 @@ private[compiler] trait SymbolTable {
    * Gets the base declaration. If the base declaration does not even exists internally by some reason an error will be
    * returned. Else the value set as the base declaration will be returned.
    *
+   * @param requester is the ast node that request access to the base declaration.
    * @return either an error if the base does not even exists internally or the base declaration.
    */
-  def getBase(): Either[Error, BaseDeclaration]
+  def getBase(requester: ASTNode): Either[Error, BaseDeclaration]
 
   /**
    * Sets the value for the start declaration. The start is a pointer to a shape definition that will be use at
@@ -64,9 +65,10 @@ private[compiler] trait SymbolTable {
   /**
    * Gets the start declaration. If no start declaration exists in the schema then will return a compiler error.
    *
+   * @param requester is the ast node that request access to the start declaration.
    * @return either the start declaration or an error if no start declaration exists in the schema.
    */
-  def getStart(): Either[Error, StartDeclaration]
+  def getStart(requester: ASTNode): Either[Error, StartDeclaration]
 
   /**
    * Stores a prefix declaration in the data structure for future references. Prefix redefinition is not allowed,
@@ -94,17 +96,19 @@ private[compiler] trait SymbolTable {
    * Gets the prefix declaration indexed by its prefix name. If no prefix is found indexed by that prefix name a
    * compiler error will be raised.
    *
+   * @param requester is the ast node that request access to the prefix declaration.
    * @param prefixName is the key that will be used to look for the prefix definition in the persistence.
    * @return either the prefix declaration indexed at the prefix name key or an error otherwise.
    */
-  def getPrefix(prefixName: String): Either[Error, PrefixDeclaration]
+  def getPrefix(requester:ASTNode, prefixName: String): Either[Error, PrefixDeclaration]
 
   /**
    * Gets the shape declaration indexed by its shape name. If no shape is found indexed by that shape name a
    * compiler error will be raised.
    *
+   * @param requester is the ast node that request access to the shape declaration.
    * @param shapeName is the key that will be used to look for the shape definition in the persistence.
    * @return either the shape declaration indexed at the shape name key or an error otherwise.
    */
-  def getShape(shapeName: String): Either[Error, ShapeDeclaration]
+  def getShape(requester: ASTNode, shapeName: String): Either[Error, ShapeDeclaration]
 }

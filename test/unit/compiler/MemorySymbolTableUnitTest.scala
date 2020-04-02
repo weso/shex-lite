@@ -24,9 +24,10 @@ package compiler
 
 import compiler.ast.{BaseDeclaration, IRILiteral, PrefixDeclaration, ShapeInvocation, StartDeclaration}
 import compiler.semantic.{MemoryErrorHandler, MemorySymbolTable}
+import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
-class MemorySymbolTableUnitTest extends AnyFunSuite {
+class MemorySymbolTableUnitTest extends AnyFunSuite with BeforeAndAfter {
 
   // Creating a first base.
   val base = new BaseDeclaration("example", 0, 1,
@@ -44,11 +45,15 @@ class MemorySymbolTableUnitTest extends AnyFunSuite {
   val newPrefix = new PrefixDeclaration("example", 3, 1, "xsd",
     new IRILiteral("example", 3, 2, "<http://foaf.org/>"))
 
+  before {
+    MemorySymbolTable.restore()
+  }
 
   // Test Cases.
 
   test("Check that the default base is correct") {
-    assert(MemorySymbolTable.getBase.get.iri.value equals "<internal>")
+    assert(MemorySymbolTable.getBase(newBase).isRight)
+    assert(MemorySymbolTable.getBase(newBase).right.get.iri.value.equals(MemorySymbolTable.DEFAULT_BASE))
 
     // Check that there are no errors nor warnings.
     assert(!MemoryErrorHandler.hasErrors)
@@ -57,39 +62,38 @@ class MemorySymbolTableUnitTest extends AnyFunSuite {
 
   test("Check that the base can be set") {
     MemorySymbolTable.setBase(base)
-    assert(MemorySymbolTable.getBase.get equals base)
+    assert(MemorySymbolTable.getBase(newBase).right.get equals base)
 
     // Check that there are no errors nor warnings.
     assert(!MemoryErrorHandler.hasErrors)
     assert(!MemoryErrorHandler.hasWarnings)
   }
 
-  test("Check that the base can be changed and no errors/warnings are generated") {
+  test("Check that the base can only be changed once") {
     val nWarnings = MemoryErrorHandler.warnings.size
 
     MemorySymbolTable.setBase(base)
-    assert(MemorySymbolTable.getBase.get equals base)
+    assert(MemorySymbolTable.getBase(newBase).right.get equals base)
 
     // Check that there are no errors nor warnings.
     assert(!MemoryErrorHandler.hasErrors)
     //assert(nWarnings equals MemoryErrorHandler.warnings.size)
 
     MemorySymbolTable.setBase(newBase)
-    assert(MemorySymbolTable.getBase.get equals newBase)
+    assert(!MemorySymbolTable.getBase(newBase).right.get.equals(newBase))
 
     // Check that there are no errors nor warnings.
-    assert(!MemoryErrorHandler.hasErrors)
+    assert(MemoryErrorHandler.hasErrors)
     //assert(nWarnings equals MemoryErrorHandler.warnings.size+2)
   }
 
   test("Check that the start variable has a correct default value") {
-    println(MemorySymbolTable.getStart())
-    assert(MemorySymbolTable.getStart().isLeft)
+    assert(MemorySymbolTable.getStart(newBase).isLeft)
   }
 
   test("Check that the start variable can be set") {
     MemorySymbolTable.setStart(new StartDeclaration("test", 4,4,null))
-    assert(MemorySymbolTable.getStart().getOrElse(null).filename equals "test")
+    assert(MemorySymbolTable.getStart(newBase).getOrElse(null).filename equals "test")
   }
 
   test("Check that the override a prefix generates a warning") {
@@ -97,11 +101,10 @@ class MemorySymbolTableUnitTest extends AnyFunSuite {
     assert(MemorySymbolTable.insert(newPrefix).isLeft)
 
     // Check that the change is correct.
-    assert(MemorySymbolTable.getPrefix(prefix.name).isRight)
-    assert(MemorySymbolTable.getPrefix(newPrefix.name).isRight)
+    assert(MemorySymbolTable.getPrefix(newBase, prefix.name).isRight)
+    assert(MemorySymbolTable.getPrefix(newBase, newPrefix.name).isRight)
 
     // Check that there is errors and warnings.
     assert(MemoryErrorHandler.hasErrors)
-    assert(MemoryErrorHandler.hasWarnings)
   }
 }

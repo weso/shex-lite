@@ -22,6 +22,8 @@
 
 package compiler.ast
 
+import compiler.semantic.MemoryErrorHandler
+
 /**
  * AST node represents a node in the Abstract Syntax Tree (AST). The nodes are generated
  * by the parser. Later they are used at semantic analysis and the tree will be attributed
@@ -89,6 +91,9 @@ private[compiler] class Schema(filename: String, line: Int, column: Int, val sta
  * @param message of the warning.
  */
 private[compiler] class Warning(val node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
+  // Add the warning to the error handler.
+  MemoryErrorHandler.addWarning(this)
+
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
 
   override def toString: String = s"warning[$code] at $filename:$line:$column --> $message. For more informatio look at http://shex-lite.org/warnings/$code]"
@@ -102,6 +107,9 @@ private[compiler] class Warning(val node: ASTNode, code: Int, message: String) e
  * @param message of the error.
  */
 private[compiler] class Error(val node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
+  // Add the error to the error handler.
+  MemoryErrorHandler.addError(this)
+
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
 
   override def toString: String = s"error[$code] at $filename:$line:$column --> $message. For more informatio look at http://shex-lite.org/erros/$code]"
