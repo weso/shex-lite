@@ -68,4 +68,12 @@ object MemoryErrorHandler extends ErrorHandler {
    * Shows the warnings through the terminal.
    */
   override def showWarnings(): Unit = warnings.map(println)
+
+  /**
+   * For mocking this method is added. It restores the symbol table to default values.
+   */
+  private[compiler] def restore(): Unit = {
+    errors.clear()
+    warnings.clear()
+  }
 }
