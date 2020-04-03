@@ -34,19 +34,14 @@ matrix:
           - gh-pages
 
     - language: scala
-      scala:
-        - 2.13.1
-        - 2.12.10
+      scala: 2.12.10
       jdk: openjdk8
-      sudo: false
-
-      script:
-        - if [[ "$TRAVIS_SCALA_VERSION" == 2.12.* ]];
-          then
-            sbt ++$TRAVIS_SCALA_VERSION  clean coverage test coverageReport && bash <(curl -s https://codecov.io/bash);
-          else
-            sbt ++$TRAVIS_SCALA_VERSION  clean test && echo "Skipping code coverage reporting and docs on 2.13";
-          fi
+      script: sbt ++$TRAVIS_SCALA_VERSION  clean coverage test coverageReport
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)
+
+    - language: scala
+      scala: 2.13.1
+      jdk: openjdk8
+      script: sbt ++$TRAVIS_SCALA_VERSION  clean test && echo "Skipping code coverage reporting and docs on 2.13";
