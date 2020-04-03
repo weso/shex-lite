@@ -22,7 +22,10 @@
 
 package compiler
 
+import java.util.Objects
+
 import com.typesafe.scalalogging.Logger
+import compiler.ast.{ASTNode, ASTWalker}
 import compiler.semantic.{IdentificationWalker, MemoryErrorHandler, MemorySymbolTable}
 import compiler.syntactic.ShExLSyntacticParser
 import org.scalatest.BeforeAndAfter
@@ -89,4 +92,50 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemorySymbolTable.getBase(null).getOrElse(null).iri.value.equals(MemorySymbolTable.DEFAULT_BASE))
   }
 
+  /**
+   * By default the redefinition of an start is not allowed. Therefore if the identification walker detects this case
+   * should delegate in the symbol table the creation of an error.
+   */
+  test("Check that an start redefinition is detected by the identification walker") {
+    // Parsing a sample file that contains an start redefinition.
+    val ast = new ShExLSyntacticParser("test/assets/incorrect_schema_using_start_redefinition_1.shexl").parse()
+
+    // Initially should not be any errors.
+    logger.debug(s"Memory Error Handler values before identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(!MemoryErrorHandler.hasErrors)
+
+    // Then we walk the AST and here the error should be generated.
+    ast.walk(new IdentificationWalker(), null)
+
+    // Check that the error have been generated.
+    logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(MemoryErrorHandler.hasErrors)
+  }
+
+  /**
+   * An start definition that is correctly defined in a schema should be identified by the identification walker, added
+   * to the corresponding symbol table and no errors should be generated.
+   */
+  test("Check that an start declaration is detected by the identification walker") {
+
+    // Parsing a sample file that contains a single start definition.
+    val ast = new ShExLSyntacticParser("test/assets/correct_schema_using_start_1.shexl").parse()
+
+    // Initially should not be any errors.
+    logger.debug(s"Memory Error Handler values before identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(!MemoryErrorHandler.hasErrors)
+
+    // Then we walk the AST and here no error should be generated.
+    ast.walk(new IdentificationWalker(), null)
+
+    // Check that no errors where generated.
+    logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(!MemoryErrorHandler.hasErrors)
+
+    // Check that the start value in the symbol table is right.
+    assert(MemorySymbolTable.getStart(null).isRight)
+
+    // Check that the actual value of the start in the symbol table has been updated and therefore is not null.
+    assert(Objects.nonNull(MemorySymbolTable.getStart(null).getOrElse(null)))
+  }
 }

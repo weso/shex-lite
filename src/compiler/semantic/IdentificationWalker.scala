@@ -23,7 +23,7 @@
 package compiler.semantic
 
 import com.typesafe.scalalogging.Logger
-import compiler.ast.{BaseDeclaration, DefaultASTWalker}
+import compiler.ast.{BaseDeclaration, DefaultASTWalker, StartDeclaration}
 
 /**
  * The identification walker is the tool that travels the AST just to identify possible definitions an add the
@@ -47,5 +47,20 @@ class IdentificationWalker extends DefaultASTWalker {
 
     // Adds the base to the memory table. Policies about redefinition and other things are delegated to the ST.
     MemorySymbolTable.setBase(declaration, declaration)
+  }
+
+  /**
+   * Identifies an start declaration. Once this method is called to walk over an start declaration if delegates to the
+   * symbol table the action of adding it to the context or raising an error.
+   *
+   * @param declaration that is being walked and will be added to the symbol table.
+   * @param param is the parameter is any needed.
+   * @return either the base declaration if no error happen or a compile error otherwise.
+   */
+  override def walk(declaration: StartDeclaration, param: Any): Any = {
+    logger.debug(s"Walking over a start declaration [$declaration].")
+
+    // Adds the start to the memory table. Policies about redefinition and other things are delegated to the ST.
+    MemorySymbolTable.setStart(declaration, declaration)
   }
 }
