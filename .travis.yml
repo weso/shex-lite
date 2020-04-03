@@ -35,9 +35,11 @@ matrix:
 
     - language: scala
       scala: 2.13.1
+      jdk: oraclejdk8
+      sudo: false
 
       script:
-        - sbt -Djava.specification.version=9.1 clean coverage test coverageReport
+        - sbt clean coverage test coverageReport
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)
