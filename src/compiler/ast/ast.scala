@@ -185,7 +185,7 @@ private[compiler] trait ASTWalker[TP, TR] {
 /**
  * Default implementation for the AST walker. It only propagates the action to all the children of each node.
  */
-class DeflautASTWalker extends ASTWalker[Any, Any] {
+class DefaultASTWalker extends ASTWalker[Any, Any] {
   override def walk(schema: Schema, param: Any): Any = schema.statements.map(st => st.walk(this, param))
 
   override def walk(statement: Statement, param: Any): Any = null
