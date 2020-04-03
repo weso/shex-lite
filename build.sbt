@@ -3,6 +3,7 @@ name := "shExLite"
 version := "0.1"
 
 scalaVersion := "2.13.1"
+crossScalaVersions := Seq("2.12.10", "2.13.1")
 
 Compile / scalaSource := baseDirectory.value / "src"
 Compile / unmanagedSourceDirectories += baseDirectory.value / "src/library"
