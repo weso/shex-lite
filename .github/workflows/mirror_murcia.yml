@@ -1,23 +1,13 @@
 name: Mirror @ Murcia Organization
 
-on:
-  push:
-    branches:
-      master
-  delete:
-    branches:
-      master
+on: [push, delete]
 
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2-beta
-      with:
-        repository: weso/repo-synchronizer-action
-        token: ${{ secrets.WESOBOT_ACCESS_TOKEN}}
     - name: repo-sync
-      uses: ./
+      uses: wei/git-sync@v1
       env:
         SOURCE_REPO: "git@github.com:weso/shex-lite.git"
         SOURCE_BRANCH: "master"
@@ -25,4 +15,4 @@ jobs:
         DESTINATION_BRANCH: "master"
         SSH_PRIVATE_KEY: ${{ secrets.IZERTIS_GITHUB_SSH_KEY }}
       with:
-         args: $SOURCE_REPO $SOURCE_BRANCH $DESTINATION_REPO $DESTINATION_BRANCH
+        args: $SOURCE_REPO $SOURCE_BRANCH $DESTINATION_REPO $DESTINATION_BRANCH
