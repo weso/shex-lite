@@ -34,7 +34,10 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
 
   // In order to be sure that on each test case we do not have data from previous tests.
   after {
+    logger.debug("Restoring memory symbol table.")
     MemorySymbolTable.restore()
+
+    logger.debug("Restoring memory error handler.")
     MemoryErrorHandler.restore()
   }
 
