@@ -33,7 +33,7 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
   final val logger = Logger[IdentificationWalkerTest]
 
   // In order to be sure that on each test case we do not have data from previous tests.
-  before {
+  after {
     logger.debug("Restoring memory symbol table.")
     MemorySymbolTable.restore()
 

@@ -29,7 +29,7 @@ import compiler.ast._
 import compiler.syntactic.generated.{ShexlBaseVisitor, ShexlLexer, ShexlParser}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 class ShExLSyntacticParser(filename: String) extends ShexlBaseVisitor[ASTNode] {
 
