@@ -48,7 +48,7 @@ class MemorySymbolTableUnitTest extends AnyFunSuite with BeforeAndAfter {
   val shape = new ShapeDeclaration("example", 4,1,
     new PrefixInvocation("example", 4,2, "this is my shape name", prefix), null)
 
-  before {
+  after {
     MemorySymbolTable.restore()
     MemoryErrorHandler.restore()
   }

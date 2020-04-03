@@ -50,14 +50,14 @@ object MemoryErrorHandler extends ErrorHandler {
    *
    * @param error to add to the system.
    */
-  override def addError(error: Error): Unit = errors.addOne(error)
+  override def addError(error: Error): Unit = errors += error
 
   /**
    * Adds warnings to the error system.
    *
    * @param warning to add to the system.
    */
-  override def addWarning(warning: Warning): Unit = warnings.addOne(warning)
+  override def addWarning(warning: Warning): Unit = warnings += warning
 
   /**
    * Shows the errors through the terminal.
@@ -75,5 +75,11 @@ object MemoryErrorHandler extends ErrorHandler {
   private[compiler] def restore(): Unit = {
     errors.clear()
     warnings.clear()
+  }
+
+  override def toString: String = {
+    val result = new StringBuilder
+    errors.map(_.toString).map(value => result.append(value + "\n"))
+    result.toString()
   }
 }

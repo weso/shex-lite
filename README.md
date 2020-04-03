@@ -3,6 +3,7 @@
 |                    | **Architecture** | **Master** |
 |--------------------|:----------------:|:----------:|
 |**ubuntu 18.04 LTS**|x86_64|[![Build Status](https://travis-ci.org/weso/shex-lite.svg?branch=master)](https://travis-ci.org/weso/shex-lite)|
+|**amazon linux 2**|x86_64|[![Build Status](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiRUE1M2VkRUhxa01WdWphR3Q5eW9GN3gvZExpTnlQNTJUci9wNUR3cU9DbXBFMXREcnZ4UU9NR3dWeEZpNHhxZGdaem84NHJyOUx0ekdWcG5ON215a1A4PSIsIml2UGFyYW1ldGVyU3BlYyI6IitKbnZwL094R1ZhWDZCQm8iLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)](https://console.aws.amazon.com/codesuite/codebuild/projects/shex-lite/history?region=us-east-1)|
 
 |                    | **Master** |
 |--------------------|:----------------:|
