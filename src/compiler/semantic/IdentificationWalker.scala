@@ -22,6 +22,7 @@
 
 package compiler.semantic
 
+import com.typesafe.scalalogging.Logger
 import compiler.ast.{BaseDeclaration, DefaultASTWalker}
 
 /**
@@ -29,6 +30,9 @@ import compiler.ast.{BaseDeclaration, DefaultASTWalker}
  * information found to the symbol table.
  */
 class IdentificationWalker extends DefaultASTWalker {
+
+  // Default logger
+  final val logger = Logger[IdentificationWalker]
 
   /**
    * Identifies a base declaration. It looks for base declarations and add the content of the abse declaration  to
@@ -39,6 +43,8 @@ class IdentificationWalker extends DefaultASTWalker {
    * @return either the base declaration if no error happen or a compile error otherwise.
    */
   override def walk(declaration: BaseDeclaration, param: Any): Any = {
+    logger.debug(s"Walking over a base declaration [$declaration].")
+
     // Adds the base to the memory table. Policies about redefinition and other things are delegated to the ST.
     MemorySymbolTable.setBase(declaration, declaration)
   }

@@ -22,6 +22,7 @@
 
 package compiler
 
+import com.typesafe.scalalogging.Logger
 import compiler.semantic.{IdentificationWalker, MemoryErrorHandler, MemorySymbolTable}
 import compiler.syntactic.ShExLSyntacticParser
 import org.scalatest.BeforeAndAfter
@@ -29,9 +30,14 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
 
+  final val logger = Logger[IdentificationWalkerTest]
+
   // In order to be sure that on each test case we do not have data from previous tests.
   before {
+    logger.debug("Restoring memory symbol table.")
     MemorySymbolTable.restore()
+
+    logger.debug("Restoring memory error handler.")
     MemoryErrorHandler.restore()
   }
 
@@ -45,12 +51,14 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     val ast = new ShExLSyntacticParser("test/assets/incorrect_schema_using_base_redefinition_1.shexl").parse()
 
     // Initially should not be any errors.
+    logger.debug(s"Memory Error Handler values before identification visitor: [${MemoryErrorHandler.toString()}].")
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here the error should be generated.
     ast.walk(new IdentificationWalker(), null)
 
     // Check that the error have been generated.
+    logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
     assert(MemoryErrorHandler.hasErrors)
   }
 
@@ -64,12 +72,14 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     val ast = new ShExLSyntacticParser("test/assets/correct_schema_using_base_1.shexl").parse()
 
     // Initially should not be any errors.
+    logger.debug(s"Memory Error Handler values before identification visitor: [${MemoryErrorHandler.toString()}].")
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here no error should be generated.
     ast.walk(new IdentificationWalker(), null)
 
     // Check that no errors where generated.
+    logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
     assert(!MemoryErrorHandler.hasErrors)
 
     // Check that the base value in the symbol table is right.

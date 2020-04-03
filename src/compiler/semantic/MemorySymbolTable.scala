@@ -23,12 +23,17 @@ package compiler.semantic
 
 import java.util.Objects
 
+import com.typesafe.scalalogging.Logger
 import compiler.ast
 import compiler.ast.{ASTNode, BaseDeclaration, IRILiteral, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
+import compiler.syntactic.ShExLSyntacticParser
 
 import scala.collection.mutable.HashMap
 
 object MemorySymbolTable extends SymbolTable {
+
+  // Default logger
+  final val logger = Logger[ShExLSyntacticParser]
 
   // Default values.
   final val DEFAULT_BASE = "<internal>"
@@ -54,14 +59,18 @@ object MemorySymbolTable extends SymbolTable {
    *         is called.
    */
   override def setBase(requester:ASTNode, base: BaseDeclaration): Either[ast.Error, BaseDeclaration] = {
+    logger.debug(s"Setting the value of a base. Requester [$requester]. Value [$base]")
     if(!_base.iri.value.equals(DEFAULT_BASE)) {
       // 1. Check if the existing base declaration is different from the default, if it is then should not be changed.
+      logger.error("Base redefinition attempt.")
       Left(new ast.Error(base, -1, "Base redefinition is not allowed."))
     } else if(Objects.isNull(base)) {
       // 2. Check the integrity of the new reference.
+      logger.error("New value for the base is a null reference.")
       Left(new ast.Error(requester, -1, "Null reference detected."))
     } else {
       // 3. If pass all previous checks then the base can be changed.
+      logger.debug("Changing the value of the base.")
       _base = base
       Right(_base)
     }
@@ -77,9 +86,11 @@ object MemorySymbolTable extends SymbolTable {
   override def getBase(requester: ASTNode): Either[ast.Error, BaseDeclaration] = {
     if(Objects.isNull(_base)) {
       // If by some reason the base reference is broken.
+      logger.error("The stored value of the base is null.")
       Left(new ast.Error(requester, -1, "Null reference detected. Accessing to a non existing base."))
     } else {
       // If there exists a base just return it.
+      logger.debug(s"Seding the value of the base to requester [$requester]")
       Right(_base)
     }
   }

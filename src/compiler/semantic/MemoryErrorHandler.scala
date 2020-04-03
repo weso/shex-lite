@@ -76,4 +76,10 @@ object MemoryErrorHandler extends ErrorHandler {
     errors.clear()
     warnings.clear()
   }
+
+  override def toString: String = {
+    val result = new StringBuilder
+    errors.map(_.toString).map(value => result.append(value + "\n"))
+    result.toString()
+  }
 }
