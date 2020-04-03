@@ -1,3 +1,25 @@
+/*
+ * Short version for non-lawyers:
+ *
+ * The ShEx Lite Project is dual-licensed under GNU 3.0 and
+ * MIT terms.
+ *
+ * Longer version:
+ *
+ * Copyrights in the ShEx Lite project are retained by their contributors. No
+ * copyright assignment is required to contribute to the ShEx Lite project.
+ *
+ * Some files include explicit copyright notices and/or license notices.
+ * For full authorship information, see the version control history.
+ *
+ * Except as otherwise noted (below and/or in individual files), ShEx Lite is
+ * licensed under the GNU, Version 3.0 <LICENSE-GNU> or
+ * <https://choosealicense.com/licenses/gpl-3.0/> or the MIT license
+ * <LICENSE-MIT> or <http://opensource.org/licenses/MIT>, at your option.
+ *
+ * The ShEx Lite Project includes packages written by third parties.
+ */
+
 package compiler.ast
 
 /**
@@ -24,6 +46,7 @@ private[compiler] abstract class Statement(filename: String, line: Int, column: 
 private[compiler] class ImportStatement(filename: String, line: Int, column: Int, val iri: IRILiteral)
   extends Statement(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"import -> $filename:$line:$column $iri"
 }
 
@@ -58,6 +81,7 @@ private[compiler] class DeclarationStmt(filename: String, line: Int, column: Int
 private[compiler] class PrefixDeclaration(filename: String, line: Int, column: Int, val name: String, val iri: IRILiteral)
   extends DeclarationStmt(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"prefix -> $filename:$line:$column $name:$iri"
 }
 
@@ -74,6 +98,7 @@ private[compiler] class PrefixDeclaration(filename: String, line: Int, column: I
 private[compiler] class BaseDeclaration(filename: String, line: Int, column: Int, val iri: IRILiteral)
   extends DeclarationStmt(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"base -> $filename:$line:$column $iri"
 }
 
@@ -91,6 +116,7 @@ private[compiler] class BaseDeclaration(filename: String, line: Int, column: Int
 private[compiler] class StartDeclaration(filename: String, line: Int, column: Int, val ref: ShapeInvocation)
   extends DeclarationStmt(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"start -> $filename:$line:$column $ref"
 }
 
@@ -109,5 +135,6 @@ private[compiler] class StartDeclaration(filename: String, line: Int, column: In
 private[compiler] class ShapeDeclaration(filename: String, line: Int, column: Int, val name: PrefixInvocation, val constraint: Constraint)
   extends DeclarationStmt(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
+
   override def toString: String = s"shape -> $filename:$line:$column $constraint"
 }
