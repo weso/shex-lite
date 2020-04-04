@@ -183,4 +183,49 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     // Check that the prefix value in the symbol table is right.
     assert(MemorySymbolTable.getPrefix(null, "xsd").isRight)
   }
+
+  /**
+   * By default the redefinition of a shape is not allowed. Therefore if the identification walker detects this case
+   * should delegate in the symbol table the creation of an error.
+   */
+  test("Check that a shape redefinition is detected by the identification walker") {
+
+    // Parsing a sample file that contains a prefix redefinition.
+    val ast = new ShExLSyntacticParser("test/assets/incorrect_schema_using_shape_redefinition_1.shexl").parse()
+
+    // Initially should not be any errors.
+    logger.debug(s"Memory Error Handler values before identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(!MemoryErrorHandler.hasErrors)
+
+    // Then we walk the AST and here the error should be generated.
+    ast.walk(new IdentificationWalker(), null)
+
+    // Check that the error have been generated.
+    logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(MemoryErrorHandler.hasErrors)
+  }
+
+  /**
+   * An shape definition that is correctly defined in a schema should be identified by the identification walker, added
+   * to the corresponding symbol table and no errors should be generated.
+   */
+  test("Check that a shape declaration is detected by the identification walker") {
+
+    // Parsing a sample file that contains a single start definition.
+    val ast = new ShExLSyntacticParser("test/assets/correct_schema_using_shape_1.shexl").parse()
+
+    // Initially should not be any errors.
+    logger.debug(s"Memory Error Handler values before identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(!MemoryErrorHandler.hasErrors)
+
+    // Then we walk the AST and here no error should be generated.
+    ast.walk(new IdentificationWalker(), null)
+
+    // Check that no errors where generated.
+    logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(!MemoryErrorHandler.hasErrors)
+
+    // Check that the prefix value in the symbol table is right.
+    assert(MemorySymbolTable.getShape(null, ":User").isRight)
+  }
 }
