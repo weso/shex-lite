@@ -23,7 +23,7 @@
 package compiler.semantic
 
 import com.typesafe.scalalogging.Logger
-import compiler.ast.{BaseDeclaration, DefaultASTWalker, PrefixDeclaration, StartDeclaration}
+import compiler.ast.{BaseDeclaration, DefaultASTWalker, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
 
 /**
  * The identification walker is the tool that travels the AST just to identify possible definitions an add the
@@ -76,6 +76,21 @@ class IdentificationWalker extends DefaultASTWalker {
     logger.debug(s"Walking over a prefix declaration [$declaration]")
 
     // Ads the prefix ot the symbol table. Policies about redefinition and other things are delegated to the ST.
+    MemorySymbolTable.insert(declaration, declaration)
+  }
+
+  /**
+   * Identifies a shape declaration. Once this method is called to walk over an shape declaration if delegates to the
+   * symbol table the action of adding it to the context or raising an error.
+   *
+   * @param declaration
+   * @param param
+   * @return
+   */
+  override def walk(declaration: ShapeDeclaration, param: Any): Any = {
+    logger.debug(s"Walking over a prefix declaration [$declaration]")
+
+    // Adds the shape to the symbol table. Policies about redefinition and other things are delegated to the ST.
     MemorySymbolTable.insert(declaration, declaration)
   }
 }
