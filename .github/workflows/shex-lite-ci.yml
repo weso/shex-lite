@@ -58,5 +58,7 @@ jobs:
       with:
         java-version: 12
         architecture: x64
+    - name: Install sbt
+      run: brew install sbt
     - name: Run tests
       run: sbt ++2.13.1! clean test
