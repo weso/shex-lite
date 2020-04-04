@@ -17,6 +17,6 @@ libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 
 libraryDependencies += "org.antlr" % "antlr4" % "4.8-1"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.1" % "test"
 
 coverageExcludedPackages := "compiler.syntactic.generated.*"
