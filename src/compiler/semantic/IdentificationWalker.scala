@@ -24,6 +24,7 @@ package compiler.semantic
 
 import com.typesafe.scalalogging.Logger
 import compiler.ast.{BaseDeclaration, DefaultASTWalker, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
+import compiler.internal.MemorySymbolTable
 
 /**
  * The identification walker is the tool that travels the AST just to identify possible definitions an add the

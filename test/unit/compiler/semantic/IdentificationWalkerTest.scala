@@ -26,7 +26,8 @@ import java.util.Objects
 
 import com.typesafe.scalalogging.Logger
 import compiler.ast.{ASTNode, ASTWalker}
-import compiler.semantic.{IdentificationWalker, MemoryErrorHandler, MemorySymbolTable}
+import compiler.internal.{MemoryErrorHandler, MemorySymbolTable}
+import compiler.semantic.{IdentificationWalker, MemoryErrorHandler}
 import compiler.syntactic.ShExLSyntacticParser
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite

@@ -23,7 +23,8 @@
 package compiler
 
 import compiler.ast.{BaseDeclaration, IRILiteral, PrefixDeclaration, PrefixInvocation, ShapeDeclaration, ShapeInvocation, StartDeclaration}
-import compiler.semantic.{MemoryErrorHandler, MemorySymbolTable}
+import compiler.internal.{MemoryErrorHandler, MemorySymbolTable}
+import compiler.semantic.MemoryErrorHandler
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 

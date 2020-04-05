@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.semantic
+package compiler.internal
 
 import compiler.ast.{Error, Warning}
 

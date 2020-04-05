@@ -22,7 +22,7 @@
 
 package compiler.ast
 
-import compiler.semantic.MemoryErrorHandler
+import compiler.internal.MemoryErrorHandler
 
 /**
  * AST node represents a node in the Abstract Syntax Tree (AST). The nodes are generated

@@ -19,13 +19,14 @@
  *
  * The ShEx Lite Project includes packages written by third parties.
  */
-package compiler.semantic
+
+package compiler.internal
 
 import java.util.Objects
 
 import com.typesafe.scalalogging.Logger
 import compiler.ast
-import compiler.ast.{ASTNode, BaseDeclaration, IRILiteral, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
+import compiler.ast._
 import compiler.syntactic.ShExLSyntacticParser
 
 import scala.collection.mutable.HashMap
