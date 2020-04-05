@@ -20,16 +20,13 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal
-
-import compiler.ast.{Error, Warning}
+package compiler.internal.error
 
 import scala.collection.mutable.ListBuffer
 
-object MemoryErrorHandler extends ErrorHandler {
+object MemoryErrorHandler extends ErrHandler {
 
-  val errors = new ListBuffer[Error]()
-  var warnings = new ListBuffer[Warning]()
+  val errors = new ListBuffer[Err]()
 
   /**
    * Returns whether the error handler has errors or not.
@@ -39,25 +36,11 @@ object MemoryErrorHandler extends ErrorHandler {
   override def hasErrors: Boolean = !errors.isEmpty
 
   /**
-   * Returns whether the error handler has warnings or not.
-   *
-   * @return true if has errors, false otherwise.
-   */
-  override def hasWarnings: Boolean = !warnings.isEmpty
-
-  /**
    * Adds errors to the error system.
    *
    * @param error to add to the system.
    */
-  override def addError(error: Error): Unit = errors += error
-
-  /**
-   * Adds warnings to the error system.
-   *
-   * @param warning to add to the system.
-   */
-  override def addWarning(warning: Warning): Unit = warnings += warning
+  override def addError(error: Err): Unit = errors += error
 
   /**
    * Shows the errors through the terminal.
@@ -65,16 +48,10 @@ object MemoryErrorHandler extends ErrorHandler {
   override def showErrors(): Unit = errors.map(println)
 
   /**
-   * Shows the warnings through the terminal.
-   */
-  override def showWarnings(): Unit = warnings.map(println)
-
-  /**
    * For mocking this method is added. It restores the symbol table to default values.
    */
   private[compiler] def restore(): Unit = {
     errors.clear()
-    warnings.clear()
   }
 
   override def toString: String = {

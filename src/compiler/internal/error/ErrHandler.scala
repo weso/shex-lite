@@ -20,16 +20,14 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal
-
-import compiler.ast.{Error, Warning}
+package compiler.internal.error
 
 /**
  * The error handler is the abstraction used to deal with errors and warnings during the compilation time.
  * Notice that this is just to wrapper that holds errors and warnings, it does not add any additional behaviour
  * to what to do if there are warnings / errors.
  */
-private[compiler] trait ErrorHandler {
+private[compiler] trait ErrHandler {
 
   /**
    * Returns whether the error handler has errors or not.
@@ -39,33 +37,14 @@ private[compiler] trait ErrorHandler {
   def hasErrors: Boolean
 
   /**
-   * Returns whether the error handler has warnings or not.
-   *
-   * @return true if has errors, false otherwise.
-   */
-  def hasWarnings: Boolean
-
-  /**
    * Adds errors to the error system.
    *
    * @param error to add to the system.
    */
-  def addError(error: Error): Unit
-
-  /**
-   * Adds warnings to the error system.
-   *
-   * @param warning to add to the system.
-   */
-  def addWarning(warning: Warning): Unit
+  def addError(error: Err): Unit
 
   /**
    * Shows the errors through the terminal.
    */
   def showErrors(): Unit
-
-  /**
-   * Shows the warnings through the terminal.
-   */
-  def showWarnings(): Unit
 }

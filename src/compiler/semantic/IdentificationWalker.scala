@@ -24,13 +24,16 @@ package compiler.semantic
 
 import com.typesafe.scalalogging.Logger
 import compiler.ast.{BaseDeclaration, DefaultASTWalker, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
-import compiler.internal.MemorySymbolTable
+import compiler.internal.error.{CompilerErr, CompilerErrSource, ErrType}
+import compiler.internal.symboltable.SymbolTable
 
 /**
  * The identification walker is the tool that travels the AST just to identify possible definitions an add the
  * information found to the symbol table.
+ *
+ * @param symbolTable is the symbol table used as a context.
  */
-class IdentificationWalker extends DefaultASTWalker {
+class IdentificationWalker(symbolTable: SymbolTable) extends DefaultASTWalker {
 
   // Default logger
   final val logger = Logger[IdentificationWalker]
@@ -43,11 +46,13 @@ class IdentificationWalker extends DefaultASTWalker {
    * @param param is the parameter is any needed.
    * @return either the base declaration if no error happen or a compile error otherwise.
    */
-  override def walk(declaration: BaseDeclaration, param: Any): Any = {
-    logger.debug(s"Walking over a base declaration [$declaration].")
-
-    // Adds the base to the memory table. Policies about redefinition and other things are delegated to the ST.
-    MemorySymbolTable.setBase(declaration, declaration)
+  override def walk(declaration: BaseDeclaration, param: Any): Any = symbolTable.setBase(declaration) match {
+    case Left(err) =>
+      new CompilerErr(
+        new CompilerErrSource(declaration, s"base declaration ${declaration.iri.value}"),
+        err
+      )
+    case _ =>
   }
 
   /**
@@ -58,11 +63,13 @@ class IdentificationWalker extends DefaultASTWalker {
    * @param param is the parameter is any needed.
    * @return either the base declaration if no error happen or a compile error otherwise.
    */
-  override def walk(declaration: StartDeclaration, param: Any): Any = {
-    logger.debug(s"Walking over a start declaration [$declaration].")
-
-    // Adds the start to the memory table. Policies about redefinition and other things are delegated to the ST.
-    MemorySymbolTable.setStart(declaration, declaration)
+  override def walk(declaration: StartDeclaration, param: Any): Any = symbolTable.setStart(declaration) match {
+    case Left(err) =>
+      new CompilerErr(
+        new CompilerErrSource(declaration, s"start declaration ${declaration.ref.content}"),
+        err
+      )
+    case _ =>
   }
 
   /**
@@ -73,11 +80,13 @@ class IdentificationWalker extends DefaultASTWalker {
    * @param param is the parameter if any needed.
    * @return either the prefix declaration if no error happen or a compile error otherwise.
    */
-  override def walk(declaration: PrefixDeclaration, param: Any): Any = {
-    logger.debug(s"Walking over a prefix declaration [$declaration]")
-
-    // Ads the prefix ot the symbol table. Policies about redefinition and other things are delegated to the ST.
-    MemorySymbolTable.insert(declaration, declaration)
+  override def walk(declaration: PrefixDeclaration, param: Any): Any = symbolTable += declaration match {
+    case Left(err) =>
+      new CompilerErr(
+        new CompilerErrSource(declaration, s"prefix declaration ${declaration.name}: ${declaration.iri.value}"),
+        err
+      )
+    case _ =>
   }
 
   /**
@@ -88,10 +97,12 @@ class IdentificationWalker extends DefaultASTWalker {
    * @param param
    * @return
    */
-  override def walk(declaration: ShapeDeclaration, param: Any): Any = {
-    logger.debug(s"Walking over a prefix declaration [$declaration]")
-
-    // Adds the shape to the symbol table. Policies about redefinition and other things are delegated to the ST.
-    MemorySymbolTable.insert(declaration, declaration)
+  override def walk(declaration: ShapeDeclaration, param: Any): Any = symbolTable += declaration match {
+    case Left(err) =>
+      new CompilerErr(
+        new CompilerErrSource(declaration, s"shape declaration ${declaration.name}: ${declaration.constraint}"),
+        err
+      )
+    case _ =>
   }
 }
