@@ -193,7 +193,7 @@ private[compiler] class NonLiteralNodeConstraint(filename: String, line: Int, co
  * @param content  of the invocation, can be the prefix:property or the iri:shape.
  * @param decl     to the statement where the variable to be invoke id declared.
  */
-private[compiler] abstract class Invocation(filename: String, line: Int, column: Int, val content: String, val decl: DeclarationStmt)
+private[compiler] abstract class Invocation(filename: String, line: Int, column: Int, val content: String, var decl: DeclarationStmt)
   extends NodeConstraint(filename, line, column)
 
 /**
@@ -207,6 +207,9 @@ private[compiler] abstract class Invocation(filename: String, line: Int, column:
  */
 private[compiler] class PrefixInvocation(filename: String, line: Int, column: Int, content: String, decl: PrefixDeclaration = null)
   extends Invocation(filename, line, column, content, decl) with ValidValueSetConstraint {
+
+  def isRelativeIRI: Boolean = content.contains(":")
+
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
 
   override def toString: String = s"Prefix Invocation -> $filename:$line:$column $content $decl"

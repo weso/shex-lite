@@ -163,7 +163,10 @@ class DefaultASTWalker extends ASTWalker[Any, Any] {
 
   override def walk(declaration: StartDeclaration, param: Any): Any = declaration.ref.walk(this, param)
 
-  override def walk(declaration: ShapeDeclaration, param: Any): Any = declaration.constraint.walk(this, param)
+  override def walk(declaration: ShapeDeclaration, param: Any): Any = {
+    declaration.name.walk(this, param)
+    declaration.constraint.walk(this, param)
+  }
 
   override def walk(constraint: Constraint, param: Any): Any = null
 

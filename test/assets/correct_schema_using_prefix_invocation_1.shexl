@@ -1,0 +1,8 @@
+PREFIX : <http://google.es/>
+PREFIX xsd: <http://schema.org/>
+
+xsd:User .
+
+:Person .
+
+<Animal> .

@@ -22,6 +22,42 @@
 
 package compiler.semantic
 
-private[compiler] class InvocationsCheckerWalker {
+import compiler.ast.{DefaultASTWalker, PrefixInvocation, ShapeDeclaration}
+import compiler.internal.error.{CompilerErr, CompilerErrSource}
+import compiler.internal.symboltable.SymbolTable
 
+/**
+ * The invocations checker keeps track that every invocation or reference that appears at the schema is semantically
+ * correct. For that check the information that appears in the symbol table and therefore it its need to previously
+ * execute the DefinitionsCheckerWalker in order to add the information to the symbol table.
+ */
+private[compiler] class InvocationsCheckerWalker(symbolTable: SymbolTable) extends DefaultASTWalker {
+
+  override def walk(constraint: PrefixInvocation, param: Any): Any = constraint.isRelativeIRI match {
+    case true => {
+      // Check that the prefix is in the st.
+      val prefixName = constraint.content.split(":")(0)
+      symbolTable.getPrefix(prefixName) match {
+        case Left(err) =>
+          new CompilerErr(
+            new CompilerErrSource(constraint, s"prefix invocation [$prefixName]"),
+            err
+          )
+
+        case Right(prefixDeclaration) => constraint.decl = prefixDeclaration
+      }
+    }
+
+    case false => {
+      symbolTable.getBase match {
+        case Left(err) =>
+          new CompilerErr(
+            new CompilerErrSource(constraint, s"base invocation [${constraint.content}]"),
+            err
+          )
+
+        case Right(baseDeclaration) => constraint.decl = baseDeclaration
+      }
+    }
+  }
 }

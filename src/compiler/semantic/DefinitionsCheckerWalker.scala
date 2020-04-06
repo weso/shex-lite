@@ -33,10 +33,10 @@ import compiler.internal.symboltable.SymbolTable
  *
  * @param symbolTable is the symbol table used as a context.
  */
-private[compiler] class IdentificationWalker(symbolTable: SymbolTable) extends DefaultASTWalker {
+private[compiler] class DefinitionsCheckerWalker(symbolTable: SymbolTable) extends DefaultASTWalker {
 
   // Default logger
-  final val logger = Logger[IdentificationWalker]
+  final val logger = Logger[DefinitionsCheckerWalker]
 
   /**
    * Identifies a base declaration. It looks for base declarations and add the content of the abse declaration  to
