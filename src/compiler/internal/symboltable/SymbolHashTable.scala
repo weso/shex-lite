@@ -138,11 +138,9 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
    */
   override def +=(shapeDef: ShapeDeclaration): Either[ErrType, Option[ShapeDeclaration]] = shapeDef match {
     case null => Left(NullReferenceErr)
-    case _ => {
-      policy.projectInsertAction(this, shapeDef) match {
+    case _ => policy.projectInsertAction(this, shapeDef) match {
         case Some(error) => Left(error)
-        case None => Right(_shapesTable.put(shapeDef.name.content, shapeDef))
-      }
+        case None => Right(_shapesTable.put(shapeDef.getShapeLabel, shapeDef))
     }
   }
 
@@ -154,7 +152,7 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
    * @return either the prefix declaration indexed at the prefix name key or an error otherwise.
    */
   override def getPrefix(prefixName: String): Either[ErrType, PrefixDeclaration] = {
-    if(Objects.isNull(prefixName) || prefixName.isEmpty) {
+    if(Objects.isNull(prefixName)) {
       // 1. Check if the prefix to look for does even have an acceptable shape.
       Left(NullReferenceErr)
     } else if(!_prefixesTable.contains(prefixName)) {

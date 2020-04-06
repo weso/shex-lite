@@ -134,7 +134,18 @@ private[compiler] class StartDeclaration(filename: String, line: Int, column: In
  */
 private[compiler] class ShapeDeclaration(filename: String, line: Int, column: Int, val name: PrefixInvocation, val constraint: Constraint)
   extends DeclarationStmt(filename, line, column) {
+
+  def getShapeLabel: String = {
+
+    if(name.content.split(":").size == 2) {
+      name.content.split(":")(1)
+    } else {
+      val shapeName = name.content.dropRight(1)
+      shapeName.drop(1)
+    }
+  }
+
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
 
-  override def toString: String = s"shape -> $filename:$line:$column $constraint"
+  override def toString: String = s"shape -> $filename:$line:$column $name $constraint"
 }

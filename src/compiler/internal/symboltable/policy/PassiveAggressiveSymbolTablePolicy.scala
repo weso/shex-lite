@@ -65,7 +65,7 @@ private[compiler] object PassiveAggressiveSymbolTablePolicy extends SymbolTableP
   }
 
   private def projectInsertShape(symbolTable: SymbolTable, shape: ShapeDeclaration): Option[ErrType] =
-    symbolTable.getShape(shape.name.content) match {
+    symbolTable.getShape(shape.getShapeLabel) match {
       case Right(_) => Option(ShapeOverrideErr)
       case Left(_) => Option.empty
     }

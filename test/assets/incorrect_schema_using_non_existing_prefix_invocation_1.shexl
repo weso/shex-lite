@@ -1,0 +1,7 @@
+PREFIX : <http://google.es/>
+
+xsd:User . # This prefix has not been declared
+
+:Person .
+
+<Animal> .
