@@ -39,8 +39,6 @@ class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
 
   final val st = new SymbolHashTable(PassiveAggressiveSymbolTablePolicy)
 
-  final val st = new SymbolHashTable(PassiveAggressiveSymbolTablePolicy)
-
   // In order to be sure that on each test case we do not have data from previous tests.
   after {
     logger.debug("Restoring memory symbol table.")
