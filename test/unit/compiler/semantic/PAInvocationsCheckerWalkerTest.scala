@@ -28,18 +28,26 @@ import com.typesafe.scalalogging.Logger
 import compiler.internal.error.MemoryErrorHandler
 import compiler.internal.symboltable.SymbolHashTable
 import compiler.internal.symboltable.policy.PassiveAggressiveSymbolTablePolicy
-import compiler.semantic.{IdentificationWalker}
+import compiler.semantic.{DefinitionsCheckerWalker}
 import compiler.syntactic.ShExLSyntacticParser
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
-class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
+class PAInvocationsCheckerWalkerTest extends AnyFunSuite with BeforeAndAfter {
 
-  final val logger = Logger[PAIdentificationWalkerTest]
+  final val logger = Logger[PAInvocationsCheckerWalkerTest]
 
   final val st = new SymbolHashTable(PassiveAggressiveSymbolTablePolicy)
 
   // In order to be sure that on each test case we do not have data from previous tests.
+  before {
+    logger.debug("Restoring memory symbol table.")
+    st.restore()
+
+    logger.debug("Restoring memory error handler.")
+    MemoryErrorHandler.restore()
+  }
+
   after {
     logger.debug("Restoring memory symbol table.")
     st.restore()
@@ -62,7 +70,7 @@ class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here the error should be generated.
-    ast.walk(new IdentificationWalker(st), null)
+    ast.walk(new DefinitionsCheckerWalker(st), null)
 
     // Check that the error have been generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -83,7 +91,7 @@ class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here no error should be generated.
-    ast.walk(new IdentificationWalker(st), null)
+    ast.walk(new DefinitionsCheckerWalker(st), null)
 
     // Check that no errors where generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -109,7 +117,7 @@ class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here the error should be generated.
-    ast.walk(new IdentificationWalker(st), null)
+    ast.walk(new DefinitionsCheckerWalker(st), null)
 
     // Check that the error have been generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -130,7 +138,7 @@ class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here no error should be generated.
-    ast.walk(new IdentificationWalker(st), null)
+    ast.walk(new DefinitionsCheckerWalker(st), null)
 
     // Check that no errors where generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -157,7 +165,7 @@ class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here the error should be generated.
-    ast.walk(new IdentificationWalker(st), null)
+    ast.walk(new DefinitionsCheckerWalker(st), null)
 
     // Check that the error have been generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -178,7 +186,7 @@ class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here no error should be generated.
-    ast.walk(new IdentificationWalker(st), null)
+    ast.walk(new DefinitionsCheckerWalker(st), null)
 
     // Check that no errors where generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -202,7 +210,7 @@ class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here the error should be generated.
-    ast.walk(new IdentificationWalker(st), null)
+    ast.walk(new DefinitionsCheckerWalker(st), null)
 
     // Check that the error have been generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -223,7 +231,7 @@ class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here no error should be generated.
-    ast.walk(new IdentificationWalker(st), null)
+    ast.walk(new DefinitionsCheckerWalker(st), null)
 
     // Check that no errors where generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
