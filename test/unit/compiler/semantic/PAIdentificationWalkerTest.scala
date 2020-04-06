@@ -25,20 +25,24 @@ package compiler
 import java.util.Objects
 
 import com.typesafe.scalalogging.Logger
-import compiler.ast.{ASTNode, ASTWalker}
-import compiler.semantic.{IdentificationWalker, MemoryErrorHandler, MemorySymbolTable}
+import compiler.internal.error.MemoryErrorHandler
+import compiler.internal.symboltable.SymbolHashTable
+import compiler.internal.symboltable.policy.PassiveAggressiveSymbolTablePolicy
+import compiler.semantic.{IdentificationWalker}
 import compiler.syntactic.ShExLSyntacticParser
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
-class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
+class PAIdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
 
-  final val logger = Logger[IdentificationWalkerTest]
+  final val logger = Logger[PAIdentificationWalkerTest]
+
+  final val st = new SymbolHashTable(PassiveAggressiveSymbolTablePolicy)
 
   // In order to be sure that on each test case we do not have data from previous tests.
   after {
     logger.debug("Restoring memory symbol table.")
-    MemorySymbolTable.restore()
+    st.restore()
 
     logger.debug("Restoring memory error handler.")
     MemoryErrorHandler.restore()
@@ -58,7 +62,7 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here the error should be generated.
-    ast.walk(new IdentificationWalker(), null)
+    ast.walk(new IdentificationWalker(st), null)
 
     // Check that the error have been generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -79,17 +83,17 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here no error should be generated.
-    ast.walk(new IdentificationWalker(), null)
+    ast.walk(new IdentificationWalker(st), null)
 
     // Check that no errors where generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
     assert(!MemoryErrorHandler.hasErrors)
 
     // Check that the base value in the symbol table is right.
-    assert(MemorySymbolTable.getBase(null).isRight)
+    assert(st.getBase.isRight)
 
     // Check that the actual value of the base in the symbol table has been updated.
-    assert(!MemorySymbolTable.getBase(null).getOrElse(null).iri.value.equals(MemorySymbolTable.DEFAULT_BASE))
+    assert(!st.getBase.getOrElse(null).iri.value.equals(st.DEFAULT_BASE))
   }
 
   /**
@@ -105,7 +109,7 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here the error should be generated.
-    ast.walk(new IdentificationWalker(), null)
+    ast.walk(new IdentificationWalker(st), null)
 
     // Check that the error have been generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -126,17 +130,17 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here no error should be generated.
-    ast.walk(new IdentificationWalker(), null)
+    ast.walk(new IdentificationWalker(st), null)
 
     // Check that no errors where generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
     assert(!MemoryErrorHandler.hasErrors)
 
     // Check that the start value in the symbol table is right.
-    assert(MemorySymbolTable.getStart(null).isRight)
+    assert(st.getStart.isRight)
 
     // Check that the actual value of the start in the symbol table has been updated and therefore is not null.
-    assert(Objects.nonNull(MemorySymbolTable.getStart(null).getOrElse(null)))
+    assert(Objects.nonNull(st.getStart.getOrElse(null)))
   }
 
   /**
@@ -153,7 +157,7 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here the error should be generated.
-    ast.walk(new IdentificationWalker(), null)
+    ast.walk(new IdentificationWalker(st), null)
 
     // Check that the error have been generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -174,14 +178,14 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here no error should be generated.
-    ast.walk(new IdentificationWalker(), null)
+    ast.walk(new IdentificationWalker(st), null)
 
     // Check that no errors where generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
     assert(!MemoryErrorHandler.hasErrors)
 
     // Check that the prefix value in the symbol table is right.
-    assert(MemorySymbolTable.getPrefix(null, "xsd").isRight)
+    assert(st.getPrefix("xsd").isRight)
   }
 
   /**
@@ -198,7 +202,7 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here the error should be generated.
-    ast.walk(new IdentificationWalker(), null)
+    ast.walk(new IdentificationWalker(st), null)
 
     // Check that the error have been generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
@@ -219,13 +223,13 @@ class IdentificationWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Then we walk the AST and here no error should be generated.
-    ast.walk(new IdentificationWalker(), null)
+    ast.walk(new IdentificationWalker(st), null)
 
     // Check that no errors where generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
     assert(!MemoryErrorHandler.hasErrors)
 
     // Check that the prefix value in the symbol table is right.
-    assert(MemorySymbolTable.getShape(null, ":User").isRight)
+    assert(st.getShape(":User").isRight)
   }
 }

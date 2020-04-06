@@ -22,7 +22,7 @@
 
 package compiler.ast
 
-import compiler.semantic.MemoryErrorHandler
+import compiler.internal.error.MemoryErrorHandler
 
 /**
  * AST node represents a node in the Abstract Syntax Tree (AST). The nodes are generated
@@ -80,39 +80,6 @@ private[compiler] class Schema(filename: String, line: Int, column: Int, val sta
     statements.foreach(s => sb.append(s + "\n"))
     sb.toString()
   }
-}
-
-/**
- * A warning is an event that does not compromise the result of the compilation but the user must be aware of because
- * might have side effects on the result.
- *
- * @param node    that produces the warning.
- * @param code    of the warning, check all possible codes at shex-lite.org.
- * @param message of the warning.
- */
-private[compiler] class Warning(val node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
-  // Add the warning to the error handler.
-  MemoryErrorHandler.addWarning(this)
-
-  override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
-
-  override def toString: String = s"warning[$code] at $filename:$line:$column --> $message. For more informatio look at http://shex-lite.org/warnings/$code]"
-}
-
-/**
- * A error is an event that does compromise the result of the compilation and therefore it cannot produce a result.
- *
- * @param node    that produces the error.
- * @param code    of the error, check all possible codes at shex-lite.org.
- * @param message of the error.
- */
-private[compiler] class Error(val node: ASTNode, code: Int, message: String) extends ASTNode(node.filename, node.line, node.column) {
-  // Add the error to the error handler.
-  MemoryErrorHandler.addError(this)
-
-  override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
-
-  override def toString: String = s"error[$code] at $filename:$line:$column --> $message. For more informatio look at http://shex-lite.org/erros/$code]"
 }
 
 /**
@@ -176,10 +143,6 @@ private[compiler] trait ASTWalker[TP, TR] {
   def walk(constraint: RealLiteral, param: TP): TR
 
   def walk(constraint: ValueSetConstraint, param: TP): TR
-
-  def walk(constraint: Warning, param: TP): TR
-
-  def walk(constraint: Error, param: TP): TR
 }
 
 /**
@@ -239,8 +202,4 @@ class DefaultASTWalker extends ASTWalker[Any, Any] {
   override def walk(constraint: RealLiteral, param: Any): Any = null
 
   override def walk(constraint: ValueSetConstraint, param: Any): Any = null
-
-  override def walk(constraint: Warning, param: Any): Any = null
-
-  override def walk(constraint: Error, param: Any): Any = null
 }

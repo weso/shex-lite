@@ -19,25 +19,24 @@
  *
  * The ShEx Lite Project includes packages written by third parties.
  */
-package compiler.semantic
+
+package compiler.internal.symboltable
 
 import java.util.Objects
 
 import com.typesafe.scalalogging.Logger
-import compiler.ast
-import compiler.ast.{ASTNode, BaseDeclaration, IRILiteral, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
+import compiler.ast._
+import compiler.internal.error.{BaseNotFoundErr, ErrType, NullReferenceErr, PrefixNotFoundErr, ShapeOverrideErr}
+import compiler.internal.symboltable.policy.SymbolTablePolicy
 import compiler.syntactic.ShExLSyntacticParser
 
 import scala.collection.mutable.HashMap
 
-object MemorySymbolTable extends SymbolTable {
+
+private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends SymbolTable {
 
   // Default logger
   final val logger = Logger[ShExLSyntacticParser]
-
-  // Default values.
-  final val DEFAULT_BASE = "<internal>"
-  final val DEFAULT_SOURCE_FILE = "memsys.table"
 
   // Auxiliary data structures used to store prefixes and shapes.
   private final val _prefixesTable = new HashMap[String, PrefixDeclaration]()
@@ -54,25 +53,17 @@ object MemorySymbolTable extends SymbolTable {
    * schema. Notice that this method should be only called once, after it should produce an error as no redefinition
    * is allowed.
    *
-   * @param base is the value that will be set as the base.
+   * @param base      is the value that will be set as the base.
    * @return either an error if the base was already set or the new base declaration if it is the first time the method
    *         is called.
    */
-  override def setBase(requester:ASTNode, base: BaseDeclaration): Either[ast.Error, BaseDeclaration] = {
-    logger.debug(s"Setting the value of a base. Requester [$requester]. Value [$base]")
-    if(!_base.iri.value.equals(DEFAULT_BASE)) {
-      // 1. Check if the existing base declaration is different from the default, if it is then should not be changed.
-      logger.error("Base redefinition attempt.")
-      Left(new ast.Error(base, -1, "Base redefinition is not allowed."))
-    } else if(Objects.isNull(base)) {
-      // 2. Check the integrity of the new reference.
-      logger.error("New value for the base is a null reference.")
-      Left(new ast.Error(requester, -1, "Null reference detected."))
-    } else {
-      // 3. If pass all previous checks then the base can be changed.
-      logger.debug("Changing the value of the base.")
-      _base = base
-      Right(_base)
+  override def setBase(base: BaseDeclaration): Either[ErrType, BaseDeclaration] = base match {
+    case null => Left(NullReferenceErr)
+    case _ => {
+      policy.projectInsertAction(this, base) match {
+        case Some(error) => Left(error)
+        case None => _base = base; Right(_base)
+      }
     }
   }
 
@@ -80,19 +71,11 @@ object MemorySymbolTable extends SymbolTable {
    * Gets the base declaration. If the base declaration does not even exists internally by some reason an error will be
    * returned. Else the value set as the base declaration will be returned.
    *
-   * @param requester is the ast node that request access to the base declaration.
    * @return either an error if the base does not even exists internally or the base declaration.
    */
-  override def getBase(requester: ASTNode): Either[ast.Error, BaseDeclaration] = {
-    if(Objects.isNull(_base)) {
-      // If by some reason the base reference is broken.
-      logger.error("The stored value of the base is null.")
-      Left(new ast.Error(requester, -1, "Null reference detected. Accessing to a non existing base."))
-    } else {
-      // If there exists a base just return it.
-      logger.debug(s"Seding the value of the base to requester [$requester]")
-      Right(_base)
-    }
+  override def getBase: Either[ErrType, BaseDeclaration] = _base match {
+    case null => Left(BaseNotFoundErr)
+    case _ => Right(_base)
   }
 
   /**
@@ -101,38 +84,28 @@ object MemorySymbolTable extends SymbolTable {
    * reference is set in the corresponding shape-map. Notice that this method should be only called once as the
    * redefinition is not allowed.
    *
-   * @param start is the value that will be set as the start.
+   * @param start     is the value that will be set as the start.
    * @return either an error if the start parameter is not valid or is trying to redefine the start. Or the start
    *         declaration set as new value.
    */
-  override def setStart(requester:ASTNode, start: StartDeclaration): Either[ast.Error, StartDeclaration] = {
-    if(Objects.nonNull(_start)) {
-      // 1. Check if the base has been already set, if yes then should not be changed.
-      Left(new ast.Error(start, -1, "Start redefinition is not allowed."))
-    } else if(Objects.isNull(start)) {
-      // 2. Check the integrity of the new reference.
-      Left(new ast.Error(requester, -1, "Null reference detected."))
-    } else {
-      // 3. If pass all previous checks then the start can be changed.
-      _start = start
-      Right(_start)
+  override def setStart(start: StartDeclaration): Either[ErrType, StartDeclaration] = start match {
+    case null => Left(NullReferenceErr)
+    case _ => {
+      policy.projectInsertAction(this, start) match {
+        case Some(error) => Left(error)
+        case None => _start = start; Right(_start)
+      }
     }
   }
 
   /**
    * Gets the start declaration. If no start declaration exists in the schema then will return a compiler error.
    *
-   * @param requester is the ast node that request access to the start declaration.
    * @return either the start declaration or an error if no start declaration exists in the schema.
    */
-  override def getStart(requester: ASTNode): Either[ast.Error, StartDeclaration] = {
-    if(Objects.isNull(_start)) {
-      // If by some reason the start reference is broken.
-      Left(new ast.Error(requester, -1, "Null reference detected. Accessing to a non existing start."))
-    } else {
-      // If there exists an start just return it.
-      Right(_start)
-    }
+  override def getStart: Either[ErrType, StartDeclaration] =  _start match {
+    case null => Left(BaseNotFoundErr)
+    case _ => Right(_start)
   }
 
   /**
@@ -144,17 +117,13 @@ object MemorySymbolTable extends SymbolTable {
    * @return if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  override def insert(requester:ASTNode, prefixDef: PrefixDeclaration): Either[ast.Error, PrefixDeclaration] = {
-    if(Objects.isNull(prefixDef)) {
-      // 1. If the prefix reference to insert is null raise an error.
-      Left(new ast.Error(null, -1, "Null reference detected."))
-    } else if(_prefixesTable.contains(prefixDef.name)) {
-      // 2. If the table has already an entry for the given prefix definition raise an error.
-      Left(new ast.Error(prefixDef, -1, "Prefix redefinition is not allowed."))
-    } else {
-      // 3. If previous checks passed then store the prefix definition in the table.
-      _prefixesTable.put(prefixDef.name, prefixDef)
-      Right(prefixDef)
+  override def +=(prefixDef: PrefixDeclaration): Either[ErrType,  Option[PrefixDeclaration]] = prefixDef match {
+    case null => Left(NullReferenceErr)
+    case _ => {
+      policy.projectInsertAction(this, prefixDef) match {
+        case Some(error) => Left(error)
+        case None => Right(_prefixesTable.put(prefixDef.name, prefixDef))
+      }
     }
   }
 
@@ -163,21 +132,17 @@ object MemorySymbolTable extends SymbolTable {
    * therefore if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
    * the value stored will be returned.
    *
-   * @param shapeDef is the shape definition to be stored. Must be unique, otherwise an error will be thrown.
+   * @param shapeDef  is the shape definition to be stored. Must be unique, otherwise an error will be thrown.
    * @return if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  override def insert(requester:ASTNode, shapeDef: ShapeDeclaration): Either[ast.Error, ShapeDeclaration] = {
-    if(Objects.isNull(shapeDef)) {
-      // 1. If the prefix reference to insert is null raise an error.
-      Left(new ast.Error(null, -1, "Null reference detected."))
-    } else if(_shapesTable.contains(shapeDef.name.content)) {
-      // 2. If the table has already an entry for the given prefix definition raise an error.
-      Left(new ast.Error(shapeDef, -1, "Shape redefinition is not allowed."))
-    } else {
-      // 3. If previous checks passed then store the prefix definition in the table.
-      _shapesTable.put(shapeDef.name.content, shapeDef)
-      Right(shapeDef)
+  override def +=(shapeDef: ShapeDeclaration): Either[ErrType, Option[ShapeDeclaration]] = shapeDef match {
+    case null => Left(NullReferenceErr)
+    case _ => {
+      policy.projectInsertAction(this, shapeDef) match {
+        case Some(error) => Left(error)
+        case None => Right(_shapesTable.put(shapeDef.name.content, shapeDef))
+      }
     }
   }
 
@@ -185,17 +150,16 @@ object MemorySymbolTable extends SymbolTable {
    * Gets the prefix declaration indexed by its prefix name. If no prefix is found indexed by that prefix name a
    * compiler error will be raised.
    *
-   * @param requester is the ast node that request access to the prefix declaration.
    * @param prefixName is the key that will be used to look for the prefix definition in the persistence.
    * @return either the prefix declaration indexed at the prefix name key or an error otherwise.
    */
-  override def getPrefix(requester:ASTNode, prefixName: String): Either[ast.Error, PrefixDeclaration] = {
+  override def getPrefix(prefixName: String): Either[ErrType, PrefixDeclaration] = {
     if(Objects.isNull(prefixName) || prefixName.isEmpty) {
       // 1. Check if the prefix to look for does even have an acceptable shape.
-      Left(new ast.Error(requester, -1, "Cannot access null-empty prefixes."))
+      Left(NullReferenceErr)
     } else if(!_prefixesTable.contains(prefixName)) {
       // 2. Check if the prefix is stored in the table.
-      Left(new ast.Error(requester, -1, "The prefix has not been defined."))
+      Left(PrefixNotFoundErr)
     } else {
       Right(_prefixesTable.get(prefixName).get)
     }
@@ -205,34 +169,26 @@ object MemorySymbolTable extends SymbolTable {
    * Gets the shape declaration indexed by its shape name. If no shape is found indexed by that shape name a
    * compiler error will be raised.
    *
-   * @param requester is the ast node that request access to the shape declaration.
    * @param shapeName is the key that will be used to look for the shape definition in the persistence.
    * @return either the shape declaration indexed at the shape name key or an error otherwise.
    */
-  override def getShape(requester: ASTNode, shapeName: String): Either[ast.Error, ShapeDeclaration] = {
+  override def getShape(shapeName: String): Either[ErrType, ShapeDeclaration] = {
     if(Objects.isNull(shapeName) || shapeName.isEmpty) {
       // 1. Check if the prefix to look for does even have an acceptable shape.
-      Left(new ast.Error(requester, -1, "Cannot access null-empty shapes."))
+      Left(NullReferenceErr)
     } else if(!_shapesTable.contains(shapeName)) {
       // 2. Check if the prefix is stored in the table.
-      Left(new ast.Error(requester, -1, "The shape has not been defined."))
+      Left(ShapeOverrideErr)
     } else {
       Right(_shapesTable.get(shapeName).get)
     }
   }
 
-  /**
-   * For mocking this method is added. It restores the symbol table to default values.
-   */
   private[compiler] def restore(): Unit = {
-
-    // To be changed by a correct logging library.
-    println("Restoring symbol table to defaults.")
-
-    _shapesTable.clear()
-    _prefixesTable.clear()
-    _start = null
     _base = new BaseDeclaration(DEFAULT_SOURCE_FILE, 0,0,
       new IRILiteral(DEFAULT_SOURCE_FILE, 0, 0, DEFAULT_BASE))
+    _start = null
+    _prefixesTable.clear()
+    _shapesTable.clear()
   }
 }
