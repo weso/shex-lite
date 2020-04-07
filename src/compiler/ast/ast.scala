@@ -114,6 +114,8 @@ private[compiler] trait ASTWalker[TP, TR] {
 
   def walk(constraint: TripleConstraint, param: TP): TR
 
+  def walk(constraint: TripleExpressionConstraint, param: TP): TR
+
   def walk(constraint: Cardinality, param: TP): TR
 
   def walk(constraint: NodeConstraint, param: TP): TR
@@ -174,6 +176,12 @@ class DefaultASTWalker extends ASTWalker[Any, Any] {
     constraint.property.walk(this, param)
     constraint.constraint.walk(this, param)
     constraint.cardinality.walk(this, param)
+  }
+
+  def walk(constraint: TripleExpressionConstraint, param: Any): Any = {
+    for(const <- constraint.constraints) {
+      const.walk(this, param)
+    }
   }
 
   override def walk(constraint: Cardinality, param: Any): Any = null

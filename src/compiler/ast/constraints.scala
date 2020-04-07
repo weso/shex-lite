@@ -41,7 +41,7 @@ private[compiler] abstract class Constraint(filename: String, line: Int, column:
  * @param column      where the constraint is located.
  * @param constraints is the set of triple constraints that build the expression.
  */
-private[compiler] class TripleExpressionConstraint(filename: String, line: Int, column: Int, constraints: List[TripleConstraint])
+private[compiler] class TripleExpressionConstraint(filename: String, line: Int, column: Int, val constraints: List[TripleConstraint])
   extends Constraint(filename, line, column) {
   override def walk[TP, TR](walker: ASTWalker[TP, TR], param: TP): TR = walker.walk(this, param)
 
