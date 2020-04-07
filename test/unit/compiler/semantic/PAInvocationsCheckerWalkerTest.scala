@@ -238,6 +238,6 @@ class PAInvocationsCheckerWalkerTest extends AnyFunSuite with BeforeAndAfter {
     assert(!MemoryErrorHandler.hasErrors)
 
     // Check that the prefix value in the symbol table is right.
-    assert(st.getShape("User").isRight)
+    assert(st.getShape(":User").isRight)
   }
 }

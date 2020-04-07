@@ -26,7 +26,7 @@ import java.util.Objects
 
 import com.typesafe.scalalogging.Logger
 import compiler.ast._
-import compiler.internal.error.{BaseNotFoundErr, ErrType, NullReferenceErr, PrefixNotFoundErr, ShapeOverrideErr}
+import compiler.internal.error.{BaseNotFoundErr, ErrType, NullReferenceErr, PrefixNotFoundErr, ShapeNotFoundErr, ShapeOverrideErr}
 import compiler.internal.symboltable.policy.SymbolTablePolicy
 import compiler.syntactic.ShExLSyntacticParser
 
@@ -140,7 +140,7 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
     case null => Left(NullReferenceErr)
     case _ => policy.projectInsertAction(this, shapeDef) match {
         case Some(error) => Left(error)
-        case None => Right(_shapesTable.put(shapeDef.getShapeLabel, shapeDef))
+        case None => Right(_shapesTable.put(shapeDef.name.content, shapeDef))
     }
   }
 
@@ -176,7 +176,7 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
       Left(NullReferenceErr)
     } else if(!_shapesTable.contains(shapeName)) {
       // 2. Check if the prefix is stored in the table.
-      Left(ShapeOverrideErr)
+      Left(ShapeNotFoundErr)
     } else {
       Right(_shapesTable.get(shapeName).get)
     }

@@ -24,7 +24,7 @@ package compiler.semantic
 
 import com.typesafe.scalalogging.Logger
 import compiler.PAInvocationsCheckerWalkerTest
-import compiler.ast.{BaseDeclaration, PrefixDeclaration, PrefixInvocation}
+import compiler.ast.{BaseDeclaration, PrefixDeclaration, PrefixInvocation, ShapeDeclaration, ShapeInvocation, TripleExpressionConstraint}
 import compiler.internal.error.MemoryErrorHandler
 import compiler.internal.symboltable.SymbolHashTable
 import compiler.internal.symboltable.policy.PassiveAggressiveSymbolTablePolicy
@@ -70,19 +70,19 @@ class DefinitionsCheckerWalterTest extends AnyFunSuite with BeforeAndAfter {
 
     assert(st.getPrefix("").isRight)
     assert(st.getPrefix("xsd").isRight)
-    assert(st.getShape("User").isRight)
-    assert(st.getShape("Person").isRight)
-    assert(st.getShape("Animal").isRight)
+    assert(st.getShape("xsd:User").isRight)
+    assert(st.getShape(":Person").isRight)
+    assert(st.getShape("<Animal>").isRight)
 
-    st.getShape("User") match {
+    st.getShape("xsd:User") match {
       case Right(shape) => assert(shape.name.decl.asInstanceOf[PrefixDeclaration].name.equals("xsd"))
     }
 
-    st.getShape("Person") match {
+    st.getShape(":Person") match {
       case Right(shape) => assert(shape.name.decl.asInstanceOf[PrefixDeclaration].name.equals(""))
     }
 
-    st.getShape("Animal") match {
+    st.getShape("<Animal>") match {
       case Right(shape) => assert(shape.name.decl.isInstanceOf[BaseDeclaration])
     }
 
@@ -108,6 +108,58 @@ class DefinitionsCheckerWalterTest extends AnyFunSuite with BeforeAndAfter {
     // Check that the error has been generated.
     logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
     assert(MemoryErrorHandler.hasErrors)
+  }
+
+  test("Check that a shape invocation that exists does pass the checker") {
+
+    // Parsing a sample file that contains a base redefinition.
+    val ast = new ShExLSyntacticParser("test/assets/correct_schema_using_shape_invocation_1.shexl").parse()
+
+    // Initially should not be any errors.
+    logger.debug(s"Memory Error Handler values before identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(!MemoryErrorHandler.hasErrors)
+
+    // Then we walk the AST and here the error should be generated.
+    ast.walk(new DefinitionsCheckerWalker(st), null)
+    ast.walk(new InvocationsCheckerWalker(st), null)
+
+    assert(st.getStart.isRight)
+    st.getStart match {
+      case Right(start) => assert(start.ref.content.equals(":Person"))
+    }
+
+    st.getShape(":Person") match {
+      case Left(_) => fail("The shape :Person must exists")
+      case Right(shape) => assert(
+        shape.constraint.asInstanceOf[TripleExpressionConstraint].constraints(0)
+          .constraint.asInstanceOf[ShapeInvocation]
+          .decl.asInstanceOf[ShapeDeclaration]
+          .name.content.equals("<Car>")
+      )
+    }
+
+    // Check that the error have been generated.
+    logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(!MemoryErrorHandler.hasErrors)
+  }
+
+  test("Check that a shape invocation that does not exists does not pass the checker") {
+
+    // Parsing a sample file that contains a base redefinition.
+    val ast = new ShExLSyntacticParser("test/assets/incorrect_schema_using_non_existing_shape_invocation_1.shexl").parse()
+
+    // Initially should not be any errors.
+    logger.debug(s"Memory Error Handler values before identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(!MemoryErrorHandler.hasErrors)
+
+    // Then we walk the AST and here the error should be generated.
+    ast.walk(new DefinitionsCheckerWalker(st), null)
+    ast.walk(new InvocationsCheckerWalker(st), null)
+
+    // Check that the error have been generated.
+    logger.debug(s"Memory Error Handler values after identification visitor: [${MemoryErrorHandler.toString()}].")
+    assert(MemoryErrorHandler.hasErrors)
+    assert(MemoryErrorHandler.errors.size == 2)
   }
 
 }

@@ -1,0 +1,10 @@
+PREFIX : <http://google.es/>
+PREFIX xsd: <http://schema.org/>
+
+START = @:Person
+
+:Person {
+    xsd:owns_car   @<Car>
+}
+
+<Car>   .

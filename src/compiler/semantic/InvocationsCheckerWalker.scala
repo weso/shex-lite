@@ -22,7 +22,7 @@
 
 package compiler.semantic
 
-import compiler.ast.{DefaultASTWalker, PrefixInvocation, ShapeDeclaration}
+import compiler.ast.{DefaultASTWalker, PrefixInvocation, ShapeDeclaration, ShapeInvocation}
 import compiler.internal.error.{CompilerErr, CompilerErrSource}
 import compiler.internal.symboltable.SymbolTable
 
@@ -59,5 +59,14 @@ private[compiler] class InvocationsCheckerWalker(symbolTable: SymbolTable) exten
         case Right(baseDeclaration) => constraint.decl = baseDeclaration
       }
     }
+  }
+
+  override def walk(constraint: ShapeInvocation, param: Any): Any = symbolTable.getShape(constraint.content) match {
+    case Left(err) =>
+      new CompilerErr(
+        new CompilerErrSource(constraint, s"shape invocation [${constraint.content}]"),
+        err
+      )
+    case Right(declaration) => constraint.decl = declaration
   }
 }
