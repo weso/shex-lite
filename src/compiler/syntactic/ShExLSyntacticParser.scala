@@ -114,7 +114,7 @@ class ShExLSyntacticParser(filename: String) extends ShexlBaseVisitor[ASTNode] {
   }
 
   override def visitTriple_constraint(ctx: ShexlParser.Triple_constraintContext): ASTNode = {
-    logger.debug(s"Visiting a triple constraint: $ctx")
+    logger.debug(s"Visiting a triple constraint: ${ctx.ID()}")
     val property = new PrefixInvocation(FILENAME, ctx.ID.getSymbol.getLine, ctx.ID.getSymbol.getCharPositionInLine, ctx.ID.getText)
     val constraint = ctx.node_constraint().accept(this).asInstanceOf[NodeConstraint]
     var cardinality = new Cardinality(FILENAME, ctx.node_constraint().start.getLine, ctx.node_constraint().start.getCharPositionInLine, 1, 1)

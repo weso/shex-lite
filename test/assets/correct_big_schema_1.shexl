@@ -1,0 +1,55 @@
+PREFIX :       <http://arquisoft.github.io/viadeSpec/>
+PREFIX gpx:    <https://www.w3.org/ns/pim/gpx#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+
+IMPORT <gpx.shex>
+
+# Represents a route
+:Route {
+ :a                      [ viade:Route ] ; # Up to now the a token is not valid.
+ schema:name            xsd:string	 ;
+ schema:description	    xsd:string ? ;
+ :points                @:Points ? ;
+# :gpx                   @:GPX ? ;
+ :hasComments           xsd:string ;
+ :hasMediaAttached      @:Image
+}
+
+# RDF List of points of a route
+:Points CLOSED {
+   rdf:first @:GeoCoordinates ;
+   rdf:rest  [ "rest-string" ]
+}
+
+# Represents geo coordinates following: https://schema.org/GeoCoordinates
+:GeoCoordinates {
+ schema:name         xsd:string  ? ;
+ schema:description  xsd:string  ? ;
+ schema:elevation    xsd:decimal ? ;
+ schema:latitude     xsd:decimal   ;
+ schema:longitude    xsd:decimal
+}
+
+:UserComment {
+ schema:text          xsd:string ;
+ schema:publishedDate xsd:datetime ;
+ schema:author        @:PodProfile
+}
+
+:Image {
+ schema:contentUrl    IRI ;
+ schema:publishedDate xsd:datetime;
+ schema:author        @:PodProfile
+}
+
+:Video {
+ schema:contentUrl    IRI;
+ schema:publishedDate xsd:dateTime;
+ schema:author        @:PodProfile
+}
+
+# TODO: Add more properties for POD profiles
+:PodProfile IRI
