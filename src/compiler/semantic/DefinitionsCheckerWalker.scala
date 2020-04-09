@@ -23,7 +23,6 @@
 package compiler.semantic
 
 import com.typesafe.scalalogging.Logger
-import compiler.ast.{BaseDeclaration, DefaultASTWalker, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
 import compiler.internal.error.{CompilerErr, CompilerErrSource, ErrType}
 import compiler.internal.symboltable.SymbolTable
 

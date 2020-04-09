@@ -23,6 +23,7 @@
 package compiler.internal.symboltable.policy
 
 import compiler.ast._
+import compiler.ast.stmt.{BaseDefStmt, PrefixDefStmt, ShapeDefStmt, StartDefStmt}
 import compiler.internal.error._
 import compiler.internal.symboltable.SymbolTable
 
@@ -35,37 +36,37 @@ private[compiler] object PassiveAggressiveSymbolTablePolicy extends SymbolTableP
    * @param node        to insert in the given st.
    * @return an option object that if contains something means that the action will produce an event.
    */
-  override def projectInsertAction(symbolTable: SymbolTable, node: ASTNode): Option[ErrType] = node match {
-    case base: BaseDeclaration => projectSetBase(symbolTable, base)
-    case start: StartDeclaration => projectSetStart(symbolTable, start)
-    case prefix: PrefixDeclaration => projectInsertPrefix(symbolTable, prefix)
-    case shape: ShapeDeclaration => projectInsertShape(symbolTable, shape)
+  override def projectInsertAction(symbolTable: SymbolTable, node: NodeWithPosition): Option[ErrType] = node match {
+    case base: BaseDefStmt => projectSetBase(symbolTable, base)
+    case start: StartDefStmt => projectSetStart(symbolTable, start)
+    case prefix: PrefixDefStmt => projectInsertPrefix(symbolTable, prefix)
+    case shape: ShapeDefStmt => projectInsertShape(symbolTable, shape)
     case _ => Option(NonValidActionErr)
   }
 
-  private def projectSetBase(symbolTable: SymbolTable, node: BaseDeclaration): Option[ErrType] = {
-    if(!symbolTable.getBase.getOrElse(null).iri.value.equals(symbolTable.DEFAULT_BASE)) {
+  private def projectSetBase(symbolTable: SymbolTable, node: BaseDefStmt): Option[ErrType] = {
+    if(!symbolTable.getBase.getOrElse(null).expression.asLiteralIRIValueExpr.value.equals(symbolTable.DEFAULT_BASE)) {
       Option(BaseOverrideErr)
     } else {
       Option.empty
     }
   }
 
-  private def projectSetStart(symbolTable: SymbolTable, node: StartDeclaration): Option[ErrType] =
+  private def projectSetStart(symbolTable: SymbolTable, node: StartDefStmt): Option[ErrType] =
     symbolTable.getStart match {
       case Right(_) => Option(StartOverrideErr)
       case _ => Option.empty
   }
 
 
-  private def projectInsertPrefix(symbolTable: SymbolTable, prefix: PrefixDeclaration): Option[ErrType] =
-    symbolTable.getPrefix(prefix.name) match {
+  private def projectInsertPrefix(symbolTable: SymbolTable, prefix: PrefixDefStmt): Option[ErrType] =
+    symbolTable.getPrefix(prefix.label) match {
       case Right(_) => Option(PrefixOverrideErr)
       case Left(_) => Option.empty
   }
 
-  private def projectInsertShape(symbolTable: SymbolTable, shape: ShapeDeclaration): Option[ErrType] =
-    symbolTable.getShape(shape.name.content) match {
+  private def projectInsertShape(symbolTable: SymbolTable, shape: ShapeDefStmt): Option[ErrType] =
+    symbolTable.getShape(shape.label.asCallPrefixExpr.label) match {
       case Right(_) => Option(ShapeOverrideErr)
       case Left(_) => Option.empty
     }

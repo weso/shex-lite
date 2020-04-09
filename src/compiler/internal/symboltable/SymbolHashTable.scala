@@ -25,10 +25,10 @@ package compiler.internal.symboltable
 import java.util.Objects
 
 import com.typesafe.scalalogging.Logger
-import compiler.ast._
-import compiler.internal.error.{BaseNotFoundErr, ErrType, NullReferenceErr, PrefixNotFoundErr, ShapeNotFoundErr, ShapeOverrideErr}
+import compiler.ast.expr.LiteralIRIValueExpr
+import compiler.ast.stmt.{BaseDefStmt, PrefixDefStmt, ShapeDefStmt, StartDefStmt}
+import compiler.internal.error._
 import compiler.internal.symboltable.policy.SymbolTablePolicy
-import compiler.syntactic.ShExLSyntacticParser
 
 import scala.collection.mutable.HashMap
 
@@ -36,17 +36,16 @@ import scala.collection.mutable.HashMap
 private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends SymbolTable {
 
   // Default logger
-  final val logger = Logger[ShExLSyntacticParser]
+  final val logger = Logger[SymbolHashTable]
 
   // Auxiliary data structures used to store prefixes and shapes.
-  private final val _prefixesTable = new HashMap[String, PrefixDeclaration]()
-  private final val _shapesTable = new HashMap[String, ShapeDeclaration]()
+  private final val _prefixesTable = new HashMap[String, PrefixDefStmt]()
+  private final val _shapesTable = new HashMap[String, ShapeDefStmt]()
 
   // Initial base and start definitions.
-  private var _base = new BaseDeclaration(DEFAULT_SOURCE_FILE, 0,0,
-    new IRILiteral(DEFAULT_SOURCE_FILE, 0, 0, DEFAULT_BASE))
+  private var _base = new BaseDefStmt(0,0, new LiteralIRIValueExpr(0, 0, DEFAULT_BASE))
 
-  private var _start: StartDeclaration = null // The start declaration initially has no value.
+  private var _start: StartDefStmt = null // The start declaration initially has no value.
 
   /**
    * Sets the value of the base. The base is the default iri that will be referenced from the relative iris of the
@@ -57,7 +56,7 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
    * @return either an error if the base was already set or the new base declaration if it is the first time the method
    *         is called.
    */
-  override def setBase(base: BaseDeclaration): Either[ErrType, BaseDeclaration] = base match {
+  override def setBase(base: BaseDefStmt): Either[ErrType, BaseDefStmt] = base match {
     case null => Left(NullReferenceErr)
     case _ => {
       policy.projectInsertAction(this, base) match {
@@ -73,7 +72,7 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
    *
    * @return either an error if the base does not even exists internally or the base declaration.
    */
-  override def getBase: Either[ErrType, BaseDeclaration] = _base match {
+  override def getBase: Either[ErrType, BaseDefStmt] = _base match {
     case null => Left(BaseNotFoundErr)
     case _ => Right(_base)
   }
@@ -88,7 +87,7 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
    * @return either an error if the start parameter is not valid or is trying to redefine the start. Or the start
    *         declaration set as new value.
    */
-  override def setStart(start: StartDeclaration): Either[ErrType, StartDeclaration] = start match {
+  override def setStart(start: StartDefStmt): Either[ErrType, StartDefStmt] = start match {
     case null => Left(NullReferenceErr)
     case _ => {
       policy.projectInsertAction(this, start) match {
@@ -103,7 +102,7 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
    *
    * @return either the start declaration or an error if no start declaration exists in the schema.
    */
-  override def getStart: Either[ErrType, StartDeclaration] =  _start match {
+  override def getStart: Either[ErrType, StartDefStmt] =  _start match {
     case null => Left(BaseNotFoundErr)
     case _ => Right(_start)
   }
@@ -117,12 +116,12 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
    * @return if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  override def +=(prefixDef: PrefixDeclaration): Either[ErrType,  Option[PrefixDeclaration]] = prefixDef match {
+  override def +=(prefixDef: PrefixDefStmt): Either[ErrType,  Option[PrefixDefStmt]] = prefixDef match {
     case null => Left(NullReferenceErr)
     case _ => {
       policy.projectInsertAction(this, prefixDef) match {
         case Some(error) => Left(error)
-        case None => Right(_prefixesTable.put(prefixDef.name, prefixDef))
+        case None => Right(_prefixesTable.put(prefixDef.label, prefixDef))
       }
     }
   }
@@ -136,11 +135,11 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
    * @return if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  override def +=(shapeDef: ShapeDeclaration): Either[ErrType, Option[ShapeDeclaration]] = shapeDef match {
+  override def +=(shapeDef: ShapeDefStmt): Either[ErrType, Option[ShapeDefStmt]] = shapeDef match {
     case null => Left(NullReferenceErr)
     case _ => policy.projectInsertAction(this, shapeDef) match {
         case Some(error) => Left(error)
-        case None => Right(_shapesTable.put(shapeDef.name.content, shapeDef))
+        case None => Right(_shapesTable.put(shapeDef.label.asCallPrefixExpr.label, shapeDef))
     }
   }
 
@@ -151,7 +150,7 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
    * @param prefixName is the key that will be used to look for the prefix definition in the persistence.
    * @return either the prefix declaration indexed at the prefix name key or an error otherwise.
    */
-  override def getPrefix(prefixName: String): Either[ErrType, PrefixDeclaration] = {
+  override def getPrefix(prefixName: String): Either[ErrType, PrefixDefStmt] = {
     if(Objects.isNull(prefixName)) {
       // 1. Check if the prefix to look for does even have an acceptable shape.
       Left(NullReferenceErr)
@@ -170,7 +169,7 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
    * @param shapeName is the key that will be used to look for the shape definition in the persistence.
    * @return either the shape declaration indexed at the shape name key or an error otherwise.
    */
-  override def getShape(shapeName: String): Either[ErrType, ShapeDeclaration] = {
+  override def getShape(shapeName: String): Either[ErrType, ShapeDefStmt] = {
     if(Objects.isNull(shapeName) || shapeName.isEmpty) {
       // 1. Check if the prefix to look for does even have an acceptable shape.
       Left(NullReferenceErr)
@@ -183,8 +182,7 @@ private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends S
   }
 
   private[compiler] def restore(): Unit = {
-    _base = new BaseDeclaration(DEFAULT_SOURCE_FILE, 0,0,
-      new IRILiteral(DEFAULT_SOURCE_FILE, 0, 0, DEFAULT_BASE))
+    _base = new BaseDefStmt(0,0, new LiteralIRIValueExpr(0, 0, DEFAULT_BASE))
     _start = null
     _prefixesTable.clear()
     _shapesTable.clear()

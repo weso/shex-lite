@@ -22,7 +22,7 @@
 
 package compiler.internal.symboltable.policy
 
-import compiler.ast.ASTNode
+import compiler.ast.{NodeWithPosition}
 import compiler.internal.error.ErrType
 import compiler.internal.symboltable.SymbolTable
 
@@ -38,5 +38,5 @@ private[compiler] trait SymbolTablePolicy {
    * @param node to insert in the given st.
    * @return an option object that if contains something means that the action will produce an event.
    */
-  def projectInsertAction(symbolTable: SymbolTable, node: ASTNode): Option[ErrType]
+  def projectInsertAction(symbolTable: SymbolTable, node: NodeWithPosition): Option[ErrType]
 }

@@ -29,11 +29,6 @@ package compiler.internal.error
 trait ErrSource {
 
   /**
-   * Source file where the error is being generated.
-   */
-  val sourceFile: String
-
-  /**
    * Line where the error is being generated.
    */
   val line: Int

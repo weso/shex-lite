@@ -22,7 +22,7 @@
 
 package compiler.internal.symboltable
 
-import compiler.ast.{BaseDeclaration, PrefixDeclaration, ShapeDeclaration, StartDeclaration}
+import compiler.ast.stmt.{BaseDefStmt, PrefixDefStmt, ShapeDefStmt, StartDefStmt}
 import compiler.internal.error.ErrType
 
 /**
@@ -45,7 +45,7 @@ private[compiler] trait SymbolTable {
    * @return either an error if the base was already set or the new base declaration if it is the first time the method
    *         is called.
    */
-  def setBase(base: BaseDeclaration): Either[ErrType, BaseDeclaration]
+  def setBase(base: BaseDefStmt): Either[ErrType, BaseDefStmt]
 
   /**
    * Gets the base declaration. If the base declaration does not even exists internally by some reason an error will be
@@ -53,7 +53,7 @@ private[compiler] trait SymbolTable {
    *
    * @return either an error if the base does not even exists internally or the base declaration.
    */
-  def getBase: Either[ErrType, BaseDeclaration]
+  def getBase: Either[ErrType, BaseDefStmt]
 
   /**
    * Sets the value for the start declaration. The start is a pointer to a shape definition that will be use at
@@ -65,14 +65,14 @@ private[compiler] trait SymbolTable {
    * @return either an error if the start parameter is not valid or is trying to redefine the start. Or the start
    *         declaration set as new value.
    */
-  def setStart(start: StartDeclaration): Either[ErrType, StartDeclaration]
+  def setStart(start: StartDefStmt): Either[ErrType, StartDefStmt]
 
   /**
    * Gets the start declaration. If no start declaration exists in the schema then will return a compiler error.
    *
    * @return either the start declaration or an error if no start declaration exists in the schema.
    */
-  def getStart: Either[ErrType, StartDeclaration]
+  def getStart: Either[ErrType, StartDefStmt]
 
   /**
    * Stores a prefix declaration in the data structure for future references. Prefix redefinition is not allowed,
@@ -83,7 +83,7 @@ private[compiler] trait SymbolTable {
    * @return if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  def +=(prefixDef: PrefixDeclaration): Either[ErrType, Option[PrefixDeclaration]]
+  def +=(prefixDef: PrefixDefStmt): Either[ErrType, Option[PrefixDefStmt]]
 
   /**
    * Stores a shape declaration in the data structure for future references. Shape redefinition is not allowed,
@@ -94,23 +94,23 @@ private[compiler] trait SymbolTable {
    * @return if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  def +=(shapeDef: ShapeDeclaration): Either[ErrType, Option[ShapeDeclaration]]
+  def +=(shapeDef: ShapeDefStmt): Either[ErrType, Option[ShapeDefStmt]]
 
   /**
    * Gets the prefix declaration indexed by its prefix name. If no prefix is found indexed by that prefix name a
    * compiler error will be raised.
    *
-   * @param prefixName is the key that will be used to look for the prefix definition in the persistence.
+   * @param prefixLbl is the key that will be used to look for the prefix definition in the persistence.
    * @return either the prefix declaration indexed at the prefix name key or an error otherwise.
    */
-  def getPrefix(prefixName: String): Either[ErrType, PrefixDeclaration]
+  def getPrefix(prefixLbl: String): Either[ErrType, PrefixDefStmt]
 
   /**
    * Gets the shape declaration indexed by its shape name. If no shape is found indexed by that shape name a
    * compiler error will be raised.
    *
-   * @param shapeName is the key that will be used to look for the shape definition in the persistence.
+   * @param shapeLbl is the key that will be used to look for the shape definition in the persistence.
    * @return either the shape declaration indexed at the shape name key or an error otherwise.
    */
-  def getShape(shapeName: String): Either[ErrType, ShapeDeclaration]
+  def getShape(shapeLbl: String): Either[ErrType, ShapeDefStmt]
 }

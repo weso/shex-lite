@@ -28,7 +28,6 @@ import compiler.ast.{BaseDeclaration, PrefixDeclaration, PrefixInvocation, Shape
 import compiler.internal.error.MemoryErrorHandler
 import compiler.internal.symboltable.SymbolHashTable
 import compiler.internal.symboltable.policy.PassiveAggressiveSymbolTablePolicy
-import compiler.syntactic.ShExLSyntacticParser
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 

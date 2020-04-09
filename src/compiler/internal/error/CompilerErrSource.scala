@@ -22,27 +22,22 @@
 
 package compiler.internal.error
 
-import compiler.ast.ASTNode
+import compiler.ast.{NodeWithPosition}
 
 /**
  * Compiler implementation of the error source trait.
  *
  * @param cause that describes the event that trigger the error.
  */
-private[compiler] class CompilerErrSource(val node: ASTNode, val cause: String) extends ErrSource {
-
-  /**
-   * Source file where the error is being generated.
-   */
-  override val sourceFile: String = node.filename
+private[compiler] class CompilerErrSource(val node: NodeWithPosition, val cause: String) extends ErrSource {
 
   /**
    * Line where the error is being generated.
    */
-  override val line: Int = node.line
+  override val line: Int = node.getPosition.line
 
   /**
    * Column where the error is being generated.
    */
-  override val column: Int = node.column
+  override val column: Int = node.getPosition.column
 }

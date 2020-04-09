@@ -29,7 +29,6 @@ import compiler.internal.error.MemoryErrorHandler
 import compiler.internal.symboltable.SymbolHashTable
 import compiler.internal.symboltable.policy.PassiveAggressiveSymbolTablePolicy
 import compiler.semantic.{DefinitionsCheckerWalker}
-import compiler.syntactic.ShExLSyntacticParser
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
