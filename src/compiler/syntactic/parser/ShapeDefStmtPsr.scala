@@ -20,20 +20,20 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.Expression
-import compiler.ast.stmt.ShapeDefStmt
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.Expression
+import ast.stmt.ShapeDefStmt
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The shape definition statement sub-parser generates a shape definition statement from the context of the parser.
  * It delegates the creation of the label and the expression to its own sub-parsers.
  *
  * @override Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class ShapeDefStmtPsr(ctx: Shexl2Parser.Shape_def_stmtContext, visitor: ShExLiteASTBuilderVisitor)
@@ -42,9 +42,10 @@ class ShapeDefStmtPsr(ctx: Shexl2Parser.Shape_def_stmtContext, visitor: ShExLite
   override def getParseResult: ShapeDefStmt = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val label: Expression = ctx.label.accept(visitor).asExpression()
     val expression: Expression = ctx.expr.accept(visitor).asExpression()
 
-   new ShapeDefStmt(line, column, label, expression)
+    new ShapeDefStmt(line, column, interval, label, expression)
   }
 }

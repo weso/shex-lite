@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.stmt
+package ast.stmt
 
 /**
  * A base class for all the definitions.
@@ -35,5 +35,6 @@ trait DefinitionStmt extends Statement {
 
   // Override default methods to indicate that this is a Definition Statement.
   override def isDefinitionStmt: Boolean = true
+
   override def asDefinitionStmt: DefinitionStmt = this
 }

@@ -20,9 +20,12 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.stmt
-import compiler.ast.Position
-import compiler.ast.expr.Expression
+package ast.stmt
+
+import ast.Position
+import ast.expr.Expression
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * The base definition statement is the unique association of an expression to the base value of the schema. An
@@ -31,15 +34,23 @@ import compiler.ast.expr.Expression
  * can be associated to a base value.
  *
  * @author Guillermo Facundo Colunga.
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
- * @param column in the source code where the token that generates de Base Definition Statement is located.
+ * @param line       in the source code where the token that generates de Base Definition Statement is located.
+ * @param column     in the source code where the token that generates de Base Definition Statement is located.
  * @param expression that is assigned to the Base Definition Statement.
  */
-class BaseDefStmt(line: Int, column: Int, val expression: Expression) extends DefinitionStmt {
+class BaseDefStmt(line: Int, column: Int, interval: Interval, val expression: Expression) extends DefinitionStmt {
   override def getPosition: Position = Position.pos(line, column)
+
+  override def getRange: Interval = interval
 
   // Override default methods to indicate that this is a Base Definition Statement.
   override def isBaseDefStmt: Boolean = true
+
   override def asBaseDefStmt: BaseDefStmt = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+
 }

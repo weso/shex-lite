@@ -7,7 +7,27 @@ prefix xsd:    <http://www.w3.org/2001/XMLSchema#>
 
 import <gpx.shex>
 
+base <google.es>
+
+prefix gpx:     <newGPXPrefix>
+prefix rdf:     <ImOverridingToo>
+base <lñkasdjf>
+
+start = @:GeoCoordinates
+
+start = @<GeoCoordinates>
+
 # Represents a route
+:Route {
+ :a                      [ viade:Route ]  # Up to now the a token is not valid.
+ schema:name            xsd:string
+ schema:description	    xsd:string ?
+ :points                @:Points ?
+# :gpx                   @:GPX ?
+ :hasComments           xsd:string
+ :hasMediaAttached      @:Image
+}
+
 :Route {
  :a                      [ viade:Route ]  # Up to now the a token is not valid.
  schema:name            xsd:string

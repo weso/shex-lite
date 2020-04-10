@@ -20,18 +20,18 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.ConstraintNodeLiteralExpr
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.ConstraintNodeLiteralExpr
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The constraint node literal expression parser generates a constraint node literal from the parser context.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class ConstraintNodeLiteralExprPsr(ctx: Shexl2Parser.Constraint_node_literal_exprContext,
@@ -40,7 +40,8 @@ class ConstraintNodeLiteralExprPsr(ctx: Shexl2Parser.Constraint_node_literal_exp
   override def getParseResult: ConstraintNodeLiteralExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
 
-    new ConstraintNodeLiteralExpr(line, column)
+    new ConstraintNodeLiteralExpr(line, column, interval)
   }
 }

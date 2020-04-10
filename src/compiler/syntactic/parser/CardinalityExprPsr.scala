@@ -20,18 +20,18 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.CardinalityExpr
-import compiler.syntactic.generated.{Shexl2Parser, ShexlParser}
-import compiler.syntactic.ShExLiteASTBuilderVisitor
+import ast.expr.CardinalityExpr
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * This parser extracts a cardinality expression from the parser cardinality context.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor that will propagate any needed call.
  */
 class CardinalityExprPsr(ctx: Shexl2Parser.Cardinality_exprContext, visitor: ShExLiteASTBuilderVisitor)
@@ -40,25 +40,26 @@ class CardinalityExprPsr(ctx: Shexl2Parser.Cardinality_exprContext, visitor: ShE
   override def getParseResult: CardinalityExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
 
     if (ctx.min == null) {
       // If there is no min value is because it is a built in cardinality.
       ctx.getText match {
-        case "*" => new CardinalityExpr(line, column, CardinalityExpr.MinValue,
+        case "*" => new CardinalityExpr(line, column, interval, CardinalityExpr.MinValue,
           CardinalityExpr.MaxValue)
-        case "+" => new CardinalityExpr(line, column, CardinalityExpr.MinValue+1,
+        case "+" => new CardinalityExpr(line, column, interval, CardinalityExpr.MinValue + 1,
           CardinalityExpr.MaxValue)
-        case "?" => new CardinalityExpr(line, column, 0, 1)
+        case "?" => new CardinalityExpr(line, column, interval, 0, 1)
       }
     } else {
       // If it is not a built in cardinality thn we have to check which case of the allowed ones is.
       if (ctx.max != null) {
-        new CardinalityExpr(line, column, Integer.parseInt(ctx.min.getText), Integer.parseInt(ctx.max.getText))
+        new CardinalityExpr(line, column, interval, Integer.parseInt(ctx.min.getText), Integer.parseInt(ctx.max.getText))
       } else {
         if (ctx.getText.contains(",")) {
-          new CardinalityExpr(line, column, Integer.parseInt(ctx.min.getText), Int.MaxValue)
+          new CardinalityExpr(line, column, interval, Integer.parseInt(ctx.min.getText), Int.MaxValue)
         } else {
-          new CardinalityExpr(line, column, Integer.parseInt(ctx.min.getText), Integer.parseInt(ctx.min.getText))
+          new CardinalityExpr(line, column, interval, Integer.parseInt(ctx.min.getText), Integer.parseInt(ctx.min.getText))
         }
       }
     }

@@ -20,23 +20,33 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
-import compiler.ast.Position
+package ast.expr
+
+import ast.Position
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A Literal IRI Value Expression is a literal that contains an IRI value. It is used to store IRIs that appear in the
  * source code.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
+ * @param line   in the source code where the token that generates de Base Definition Statement is located.
  * @param column in the source code where the token that generates de Base Definition Statement is located.
- * @param value of the IRI.
+ * @param value  of the IRI.
  */
-class LiteralIRIValueExpr(line: Int, column:Int, val value: String) extends LiteralExpr {
+class LiteralIRIValueExpr(line: Int, column: Int, interval: Interval, val value: String) extends LiteralExpr {
+
   override def getPosition: Position = new Position(line, column)
+
+  override def getRange: Interval = interval
 
   // Override default methods to indicate that this is a Literal IRI Value Expression.
   override def isLiteralIRIValueExpr: Boolean = true
+
   override def asLiteralIRIValueExpr: LiteralIRIValueExpr = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
 }

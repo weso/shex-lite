@@ -20,20 +20,20 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.Expression
-import compiler.ast.stmt.PrefixDefStmt
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.Expression
+import ast.stmt.PrefixDefStmt
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The prefix definition statement sub-parser generates a prefix definition statement from the context of the parser.
  * It delegates the creation of the iri literal expression to its own sub-parser.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class PrefixDefStmtPsr(ctx: Shexl2Parser.Prefix_def_stmtContext, visitor: ShExLiteASTBuilderVisitor)
@@ -42,9 +42,10 @@ class PrefixDefStmtPsr(ctx: Shexl2Parser.Prefix_def_stmtContext, visitor: ShExLi
   override def getParseResult: PrefixDefStmt = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val label = if (ctx.LABEL == null) "" else ctx.LABEL.getText
     val iri: Expression = ctx.iri.accept(visitor).asExpression()
 
-    new PrefixDefStmt(line, column, label, iri)
+    new PrefixDefStmt(line, column, interval, label, iri)
   }
 }

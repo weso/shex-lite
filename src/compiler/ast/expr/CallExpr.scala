@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
+package ast.expr
 
 /**
  * A base class for all the call expressions of the ast.
@@ -35,5 +35,6 @@ trait CallExpr extends ConstraintNodeExpr with ConstraintValidValueSetExpr {
 
   // Override default methods to indicate that this is a Call Expression.
   override def isCallExpr: Boolean = true
+
   override def asCallExpr: CallExpr = this
 }

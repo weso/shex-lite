@@ -20,14 +20,14 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal.error
+package internal.error
 
 /**
  * The error handler is the abstraction used to deal with errors and warnings during the compilation time.
  * Notice that this is just to wrapper that holds errors and warnings, it does not add any additional behaviour
  * to what to do if there are warnings / errors.
  */
-private[compiler] trait ErrHandler {
+trait ErrHandler {
 
   /**
    * Returns whether the error handler has errors or not.

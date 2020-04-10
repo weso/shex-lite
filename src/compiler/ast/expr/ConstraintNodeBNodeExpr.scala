@@ -20,22 +20,31 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
-import compiler.ast.Position
+package ast.expr
+
+import ast.Position
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A Constraint Node BNode Expression indicated that a node constraint is of type BNode. Does not add more functionality
  * than the classification of the node constraint type.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
+ * @param line   in the source code where the token that generates de Base Definition Statement is located.
  * @param column in the source code where the token that generates de Base Definition Statement is located.
  */
-class ConstraintNodeBNodeExpr(line: Int, column: Int) extends ConstraintNodeExpr {
-  override def getPosition: Position = Position.pos(line,column)
+class ConstraintNodeBNodeExpr(line: Int, column: Int, interval: Interval) extends ConstraintNodeExpr {
+  override def getPosition: Position = Position.pos(line, column)
 
   // Override default methods to indicate that this is a Constraint Node BNode Expression.
   override def isConstraintNodeBNodeExpr: Boolean = true
+
   override def asConstraintNodeBNodeExpr: ConstraintNodeBNodeExpr = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+  override def getRange: Interval = interval
 }

@@ -20,9 +20,9 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.NodeWithPosition
+import ast.NodeWithPosition
 
 /**
  * The Parser interface is the trait that all sub-parsers of the syntax analyzer will implement. It defines a common
@@ -36,6 +36,7 @@ trait Parser[T <: NodeWithPosition] {
 
   /**
    * Gets the result of parsing.
+   *
    * @return
    */
   def getParseResult: T

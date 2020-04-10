@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal.error
+package internal.error
 
 /**
  * The error type standardises the different types of errors that the compiler can throw, that way, error types are not

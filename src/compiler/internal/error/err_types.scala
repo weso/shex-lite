@@ -20,33 +20,39 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal.error
+package internal.error
 
 /**
  * Skeleton fot error type objects.
  *
- * @param code of the error. must be unique.
+ * @param code        of the error. must be unique.
  * @param description of the error.
  */
-private[compiler] class SuperErrorType(val code: String, val description: String) extends ErrType
+class SuperErrorType(val code: String, val description: String) extends ErrType
 
 /**
  * Element Override Error Types.
  */
-private[compiler] object BaseOverrideErr extends SuperErrorType("E001", "attempt to override a base directive value")
-private[compiler] object StartOverrideErr extends SuperErrorType("E002", "attempt to override an start directive value")
-private[compiler] object PrefixOverrideErr extends SuperErrorType("E003", "attempt to override an already defined prefix")
-private[compiler] object ShapeOverrideErr extends SuperErrorType("E004", "attempt to override an already defined shape")
+object BaseOverrideErr extends SuperErrorType("E001", "attempt to override a base directive value")
+
+object StartOverrideErr extends SuperErrorType("E002", "attempt to override an start directive value")
+
+object PrefixOverrideErr extends SuperErrorType("E003", "attempt to override an already defined prefix")
+
+object ShapeOverrideErr extends SuperErrorType("E004", "attempt to override an already defined shape")
 
 /**
  * Element Not Found Error.
  */
-private[compiler] object BaseNotFoundErr extends SuperErrorType("E005", "base not defined")
-private[compiler] object StartNotFoundErr extends SuperErrorType("E006", "start not defined")
-private[compiler] object PrefixNotFoundErr extends SuperErrorType("E007", "prefix not defined")
-private[compiler] object ShapeNotFoundErr extends SuperErrorType("E008", "shape not defined")
+object BaseNotFoundErr extends SuperErrorType("E005", "base not defined")
+
+object StartNotFoundErr extends SuperErrorType("E006", "start not defined")
+
+object PrefixNotFoundErr extends SuperErrorType("E007", "prefix not defined")
+
+object ShapeNotFoundErr extends SuperErrorType("E008", "shape not defined")
 
 
-private[compiler] object NullReferenceErr extends SuperErrorType("E009", "null reference")
+object NullReferenceErr extends SuperErrorType("E009", "null reference")
 
-private[compiler] object NonValidActionErr extends SuperErrorType("E010", "non valid action")
+object NonValidActionErr extends SuperErrorType("E010", "non valid action")

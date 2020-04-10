@@ -20,20 +20,20 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.{Expression}
-import compiler.ast.stmt.BaseDefStmt
-import compiler.syntactic.generated.Shexl2Parser
-import compiler.syntactic.{ShExLiteASTBuilderVisitor}
+import ast.expr.Expression
+import ast.stmt.BaseDefStmt
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The base definition statement sub-parser creates a new base definition statement from the parser context. It
  * delegates the creation of the iri literal to its corresponding sub-parser.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class BaseDefStmtPsr(ctx: Shexl2Parser.Base_def_stmtContext, visitor: ShExLiteASTBuilderVisitor)
@@ -42,8 +42,9 @@ class BaseDefStmtPsr(ctx: Shexl2Parser.Base_def_stmtContext, visitor: ShExLiteAS
   override def getParseResult: BaseDefStmt = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val iri: Expression = ctx.iri.accept(visitor).asExpression()
 
-    new BaseDefStmt(line, column, iri)
+    new BaseDefStmt(line, column, interval, iri)
   }
 }

@@ -20,8 +20,11 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
-import compiler.ast.Position
+package ast.expr
+
+import ast.Position
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A constraint triple expression represents the conjunction of a property, a constraint and a cardinality. All three
@@ -29,18 +32,26 @@ import compiler.ast.Position
  * appropriate type.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
- * @param column in the source code where the token that generates de Base Definition Statement is located.
- * @param property that will conform to the given constraint and cardinality.
- * @param constraint that will be applied over the given property.
+ * @param line        in the source code where the token that generates de Base Definition Statement is located.
+ * @param column      in the source code where the token that generates de Base Definition Statement is located.
+ * @param property    that will conform to the given constraint and cardinality.
+ * @param constraint  that will be applied over the given property.
  * @param cardinality that will be applied over the given constraint and property.
  */
-class ConstraintTripleExpr(line: Int, column: Int, val property: Expression,val constraint: Expression,
+class ConstraintTripleExpr(line: Int, column: Int, interval: Interval, val property: Expression, val constraint: Expression,
                            val cardinality: Expression) extends ConstraintExpr {
   override def getPosition: Position = Position.pos(line, column)
 
+  override def getRange: Interval = interval
+
   // Override default methods to indicate that this is a Constraint Triple Expression.
   override def isConstraintTripleExpr: Boolean = true
+
   override def asConstraintTripleExpr: ConstraintTripleExpr = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+
 }

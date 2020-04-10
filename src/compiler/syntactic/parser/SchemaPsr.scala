@@ -20,12 +20,12 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.Schema
-import compiler.ast.stmt.Statement
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.Schema
+import ast.stmt.Statement
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 import scala.collection.JavaConverters._
 
@@ -34,8 +34,7 @@ import scala.collection.JavaConverters._
  * that are implemented on each rule.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class SchemaPsr(ctx: Shexl2Parser.SchemaContext, visitor: ShExLiteASTBuilderVisitor) extends Parser[Schema] {

@@ -20,23 +20,10 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal.symboltable.policy
+package internal.io
 
-import compiler.ast.{NodeWithPosition}
-import compiler.internal.error.ErrType
-import compiler.internal.symboltable.SymbolTable
-
-/**
- * Defines a policy that will be used by the symbol table to decide whether an action is allowed.
- */
-private[compiler] trait SymbolTablePolicy {
-
-  /**
-   * Projects an insert action over the given symbol table.
-   *
-   * @param symbolTable to project the insert action over.
-   * @param node to insert in the given st.
-   * @return an option object that if contains something means that the action will produce an event.
-   */
-  def projectInsertAction(symbolTable: SymbolTable, node: NodeWithPosition): Option[ErrType]
+trait CompilerMsgType {
+  def getCode: String
+  def getDescription: String
+  def getSuperType:String = "message"
 }

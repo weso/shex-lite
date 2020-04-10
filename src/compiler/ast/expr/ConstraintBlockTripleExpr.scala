@@ -20,22 +20,33 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
-import compiler.ast.Position
+package ast.expr
+
+import ast.Position
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A Constraint Block Triple Expression represents a constraint composed of multiple expressions.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
+ * @param line   in the source code where the token that generates de Base Definition Statement is located.
  * @param column in the source code where the token that generates de Base Definition Statement is located.
- * @param body of the block that contains the expressions.
+ * @param body   of the block that contains the expressions.
  */
-class ConstraintBlockTripleExpr(line: Int, column: Int, val body: List[Expression]) extends ConstraintExpr {
+class ConstraintBlockTripleExpr(line: Int, column: Int, interval: Interval, val body: List[Expression]) extends ConstraintExpr {
   override def getPosition: Position = Position.pos(line, column)
+
+  override def getRange: Interval = interval
 
   // Override default methods to indicate that this is a Constraint Block Triple Expression.
   override def isConstraintBlockTripleExpr: Boolean = true
+
   override def asConstraintBlockTripleExpr: ConstraintBlockTripleExpr = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+
 }

@@ -20,15 +20,16 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast
+package ast
 
-import compiler.ast.expr.Expression
-import compiler.ast.stmt.Statement
+import ast.expr.Expression
+import ast.stmt.Statement
+import ast.visitor.Visitable
 
 /**
  * Base class for all nodes of the abstract syntax tree.
  */
-trait NodeWithPosition extends Visitable {
+trait NodeWithPosition extends NodeWithTokenRange with Visitable {
 
   /**
    * Gets the position object that points to the source file.
@@ -53,9 +54,11 @@ trait NodeWithPosition extends Visitable {
 
   // Expression
   def isExpression(): Boolean = false
+
   def asExpression(): Expression = throw new IllegalStateException(s"$this is not an Expression")
 
   // Statement
   def isStatement(): Boolean = false
+
   def asStatement(): Statement = throw new IllegalStateException(s"$this is not an Statement")
 }

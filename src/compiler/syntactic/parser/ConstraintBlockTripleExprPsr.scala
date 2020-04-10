@@ -20,11 +20,12 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.{ConstraintBlockTripleExpr, Expression}
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.{ConstraintBlockTripleExpr, Expression}
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 import scala.collection.JavaConverters._
 
@@ -33,8 +34,7 @@ import scala.collection.JavaConverters._
  * parser context.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class ConstraintBlockTripleExprPsr(ctx: Shexl2Parser.Constraint_block_triple_exprContext,
@@ -43,11 +43,12 @@ class ConstraintBlockTripleExprPsr(ctx: Shexl2Parser.Constraint_block_triple_exp
   override def getParseResult: ConstraintBlockTripleExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
 
     // Would be nice to avoid the as Instance Of here...
     val expressions: List[Expression] = ctx.constraint_triple_expr().asScala
       .map(expr => expr.accept(visitor)).toList.asInstanceOf[List[Expression]]
 
-    new ConstraintBlockTripleExpr(line, column, expressions)
+    new ConstraintBlockTripleExpr(line, column, interval, expressions)
   }
 }

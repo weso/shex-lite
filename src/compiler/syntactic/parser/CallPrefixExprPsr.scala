@@ -20,18 +20,18 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.{CallPrefixExpr, Expression}
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.{CallPrefixExpr, Expression}
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The call prefix expression parser creates a call prefix expression from the parser context.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor top propagate any action.
  */
 class CallPrefixExprPsr(ctx: Shexl2Parser.Call_prefix_exprContext, visitor: ShExLiteASTBuilderVisitor)
@@ -40,19 +40,20 @@ class CallPrefixExprPsr(ctx: Shexl2Parser.Call_prefix_exprContext, visitor: ShEx
   override def getParseResult: CallPrefixExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
 
     ctx.base_relative_lbl match {
       case null => {
-        val label = if (ctx.pref_lbl == null ) "" else ctx.pref_lbl.getText
+        val label = if (ctx.pref_lbl == null) "" else ctx.pref_lbl.getText
         val arg = ctx.shape_lbl.getText
 
-        new CallPrefixExpr(line, column, label, arg)
+        new CallPrefixExpr(line, column, interval, label, arg)
       }
-      case _=> {
+      case _ => {
         val label = "base"
         val arg = ctx.base_relative_lbl.accept(visitor).asInstanceOf[Expression].asLiteralIRIValueExpr.value
 
-        new CallPrefixExpr(line, column, label, arg)
+        new CallPrefixExpr(line, column, interval, label, arg)
       }
     }
   }

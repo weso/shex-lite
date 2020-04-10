@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal.error
+package internal.error
 
 /**
  * The error source describes the source event that trigger the error to be generates. That is the source file, the line

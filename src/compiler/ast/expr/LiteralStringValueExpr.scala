@@ -20,21 +20,33 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
-import compiler.ast.Position
+package ast.expr
+
+import ast.Position
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A Literal String Value Expression is a literal that contains an String value. It is used to store Strings that appear
  * in the source code.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
+ * @param line   in the source code where the token that generates de Base Definition Statement is located.
  * @param column in the source code where the token that generates de Base Definition Statement is located.
- * @param value of the String.
+ * @param value  of the String.
  */
-class LiteralStringValueExpr(line: Int, column: Int, val value: String) extends LiteralExpr with ConstraintValidValueSetExpr {
+class LiteralStringValueExpr(line: Int, column: Int, interval: Interval, val value: String) extends LiteralExpr with ConstraintValidValueSetExpr {
   override def getPosition: Position = Position.pos(line, column)
+
+  override def getRange: Interval = interval
+
   override def isLiteralStringValueExpr: Boolean = true
+
   override def asLiteralStringValueExpr: LiteralStringValueExpr = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+
 }

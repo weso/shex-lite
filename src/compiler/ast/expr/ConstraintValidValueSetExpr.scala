@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
+package ast.expr
 
 /**
  * A base class for all the valid value set expressions of the ast.
@@ -35,5 +35,6 @@ trait ConstraintValidValueSetExpr extends ConstraintNodeExpr {
 
   // Override default methods to indicate that this is a Constraint Node Valid Value Set Expression.
   override def isConstraintValidValueSetExpr: Boolean = true
+
   override def asConstraintValidValueSetExpr: ConstraintValidValueSetExpr = this
 }

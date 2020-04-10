@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
+package ast.expr
 
 /**
  * A base class for all the literal expressions of the ast.
@@ -35,5 +35,6 @@ trait LiteralExpr extends Expression {
 
   // Override default methods to indicate that this is a Literal Expression.
   override def isLiteralExpr: Boolean = true
+
   override def asLiteralExpr: LiteralExpr = this
 }

@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal.error
+package internal.error
 
 import scala.collection.mutable.ListBuffer
 
@@ -50,7 +50,7 @@ object MemoryErrorHandler extends ErrHandler {
   /**
    * For mocking this method is added. It restores the symbol table to default values.
    */
-  private[compiler] def restore(): Unit = {
+  def restore(): Unit = {
     errors.clear()
   }
 

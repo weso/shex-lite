@@ -20,22 +20,33 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
-import compiler.ast.Position
+package ast.expr
+
+import ast.Position
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A Constraint Node IRI Expression indicated that a node constraint is of type IRI. Does not add more functionality
  * than the classification of the node constraint type.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
+ * @param line   in the source code where the token that generates de Base Definition Statement is located.
  * @param column in the source code where the token that generates de Base Definition Statement is located.
  */
-class ConstraintNodeIRIExpr(line: Int, column: Int) extends ConstraintNodeExpr {
+class ConstraintNodeIRIExpr(line: Int, column: Int, interval: Interval) extends ConstraintNodeExpr {
   override def getPosition: Position = Position.pos(line, column)
+
+  override def getRange: Interval = interval
 
   // Override default methods to indicate that this is a Constraint Node IRI Expression.
   override def isConstraintNodeIRIExpr: Boolean = true
+
   override def asConstraintNodeIRIExpr: ConstraintNodeIRIExpr = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+
 }

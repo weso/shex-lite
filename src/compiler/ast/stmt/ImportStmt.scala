@@ -20,9 +20,12 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.stmt
-import compiler.ast.Position
-import compiler.ast.expr.Expression
+package ast.stmt
+
+import ast.Position
+import ast.expr.Expression
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * The import statement is a directive that allows to import an schema defined in a different file. The file is
@@ -30,15 +33,23 @@ import compiler.ast.expr.Expression
  * will be checked by the semantic validator later.
  *
  * @author Guillermo Facundo Colunga.
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
- * @param column in the source code where the token that generates de Base Definition Statement is located.
+ * @param line       in the source code where the token that generates de Base Definition Statement is located.
+ * @param column     in the source code where the token that generates de Base Definition Statement is located.
  * @param expression that points or contains the schema to import.
  */
-class ImportStmt(line: Int, column: Int, expression: Expression) extends Statement {
+class ImportStmt(line: Int, column: Int, interval: Interval, val expression: Expression) extends Statement {
   override def getPosition: Position = Position.pos(line, column)
+
+  override def getRange: Interval = interval
 
   // Override default methods to indicate that this is an Import Statement.
   override def isImportStmt: Boolean = true
+
   override def asImportStmt: ImportStmt = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+
 }

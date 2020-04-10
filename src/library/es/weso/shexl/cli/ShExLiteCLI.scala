@@ -20,8 +20,21 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast
+package es.weso.shexl.cli
 
-trait Visitable {
+import org.backuity.clist._
 
+
+
+
+object ShExLiteCLI extends CliMain[Unit](name = "cat", description = "concatenate files and print on the standard output") {
+
+    var showAll        = opt[Boolean](abbrev = "A", description = "equivalent to -vET")
+
+
+    def run: Unit = {
+
+      println("showAll  = " + showAll)
+
+    }
 }

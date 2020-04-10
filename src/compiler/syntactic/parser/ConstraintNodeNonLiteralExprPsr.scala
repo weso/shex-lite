@@ -20,19 +20,19 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.ConstraintNodeNonLiteralExpr
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.ConstraintNodeNonLiteralExpr
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The constraint node non literal expression parser generates a constraint non literal expression from the parser
  * context.
  *
  * @override Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class ConstraintNodeNonLiteralExprPsr(ctx: Shexl2Parser.Constraint_node_non_literal_exprContext,
@@ -41,7 +41,8 @@ class ConstraintNodeNonLiteralExprPsr(ctx: Shexl2Parser.Constraint_node_non_lite
   override def getParseResult: ConstraintNodeNonLiteralExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
 
-    new ConstraintNodeNonLiteralExpr(line, column)
+    new ConstraintNodeNonLiteralExpr(line, column, interval)
   }
 }

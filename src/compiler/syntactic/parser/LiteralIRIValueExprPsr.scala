@@ -20,18 +20,18 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.LiteralIRIValueExpr
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.LiteralIRIValueExpr
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The Literal IRI Value Expression sub-parser creates a literal with iri value from the parser context.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class LiteralIRIValueExprPsr(ctx: Shexl2Parser.Literal_iri_value_exprContext, visitor: ShExLiteASTBuilderVisitor)
@@ -40,8 +40,9 @@ class LiteralIRIValueExprPsr(ctx: Shexl2Parser.Literal_iri_value_exprContext, vi
   override def getParseResult: LiteralIRIValueExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val value = ctx.IRI_LITERAL().getText
 
-    new LiteralIRIValueExpr(line, column, value)
+    new LiteralIRIValueExpr(line, column, interval, value)
   }
 }

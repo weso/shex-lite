@@ -20,169 +20,84 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal.symboltable
+package internal.symboltable
 
 import java.util.Objects
 
+import ast.expr.LiteralIRIValueExpr
+import ast.stmt.{BaseDefStmt, PrefixDefStmt, ShapeDefStmt, StartDefStmt}
 import com.typesafe.scalalogging.Logger
-import compiler.ast.expr.LiteralIRIValueExpr
-import compiler.ast.stmt.{BaseDefStmt, PrefixDefStmt, ShapeDefStmt, StartDefStmt}
-import compiler.internal.error._
-import compiler.internal.symboltable.policy.SymbolTablePolicy
+import internal.error._
+import org.antlr.v4.runtime.misc.Interval
 
 import scala.collection.mutable.HashMap
 
 
-private[compiler] class SymbolHashTable(val policy: SymbolTablePolicy) extends SymbolTable {
+class SymbolHashTable extends SymbolTable {
 
   // Default logger
   final val logger = Logger[SymbolHashTable]
 
   // Auxiliary data structures used to store prefixes and shapes.
-  private final val _prefixesTable = new HashMap[String, PrefixDefStmt]()
-  private final val _shapesTable = new HashMap[String, ShapeDefStmt]()
+  final val _prefixesTable = new HashMap[String, SymbolTableEntry[PrefixDefStmt]]()
+  final val _shapesTable = new HashMap[String, SymbolTableEntry[ShapeDefStmt]]()
 
   // Initial base and start definitions.
-  private var _base = new BaseDefStmt(0,0, new LiteralIRIValueExpr(0, 0, DEFAULT_BASE))
+  private var _base = new DefaultSymbolTableEntry[BaseDefStmt](
+    new BaseDefStmt(0, 0, null,
+      new LiteralIRIValueExpr(0, 0, null, DEFAULT_BASE)
+    )
+  )
 
-  private var _start: StartDefStmt = null // The start declaration initially has no value.
+  private var _start: DefaultSymbolTableEntry[StartDefStmt] = _ // The start declaration initially has no value.
 
-  /**
-   * Sets the value of the base. The base is the default iri that will be referenced from the relative iris of the
-   * schema. Notice that this method should be only called once, after it should produce an error as no redefinition
-   * is allowed.
-   *
-   * @param base      is the value that will be set as the base.
-   * @return either an error if the base was already set or the new base declaration if it is the first time the method
-   *         is called.
-   */
-  override def setBase(base: BaseDefStmt): Either[ErrType, BaseDefStmt] = base match {
-    case null => Left(NullReferenceErr)
-    case _ => {
-      policy.projectInsertAction(this, base) match {
-        case Some(error) => Left(error)
-        case None => _base = base; Right(_base)
-      }
-    }
-  }
+  override def setBase(base: BaseDefStmt): Unit = _base = new DefaultSymbolTableEntry[BaseDefStmt](base)
 
-  /**
-   * Gets the base declaration. If the base declaration does not even exists internally by some reason an error will be
-   * returned. Else the value set as the base declaration will be returned.
-   *
-   * @return either an error if the base does not even exists internally or the base declaration.
-   */
-  override def getBase: Either[ErrType, BaseDefStmt] = _base match {
-    case null => Left(BaseNotFoundErr)
-    case _ => Right(_base)
-  }
+  override def getBase: BaseDefStmt = _base.content
 
-  /**
-   * Sets the value for the start declaration. The start is a pointer to a shape definition that will be use at
-   * validation time. It indicates the validator which is the default shape definition to use in case no other shape
-   * reference is set in the corresponding shape-map. Notice that this method should be only called once as the
-   * redefinition is not allowed.
-   *
-   * @param start     is the value that will be set as the start.
-   * @return either an error if the start parameter is not valid or is trying to redefine the start. Or the start
-   *         declaration set as new value.
-   */
-  override def setStart(start: StartDefStmt): Either[ErrType, StartDefStmt] = start match {
-    case null => Left(NullReferenceErr)
-    case _ => {
-      policy.projectInsertAction(this, start) match {
-        case Some(error) => Left(error)
-        case None => _start = start; Right(_start)
-      }
-    }
-  }
+  override def getNumberOfCallsForBase: Int = _base.getNumberOfCalls
 
-  /**
-   * Gets the start declaration. If no start declaration exists in the schema then will return a compiler error.
-   *
-   * @return either the start declaration or an error if no start declaration exists in the schema.
-   */
-  override def getStart: Either[ErrType, StartDefStmt] =  _start match {
-    case null => Left(BaseNotFoundErr)
-    case _ => Right(_start)
-  }
+  override def setStart(start: StartDefStmt): Unit = _start = new DefaultSymbolTableEntry[StartDefStmt](start)
 
-  /**
-   * Stores a prefix declaration in the data structure for future references. Prefix redefinition is not allowed,
-   * therefore if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
-   * the value stored will be returned.
-   *
-   * @param prefixDef is the prefix definition to be stored. Must be unique, otherwise an error will be thrown.
-   * @return if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
-   *         the value stored will be returned.
-   */
-  override def +=(prefixDef: PrefixDefStmt): Either[ErrType,  Option[PrefixDefStmt]] = prefixDef match {
-    case null => Left(NullReferenceErr)
-    case _ => {
-      policy.projectInsertAction(this, prefixDef) match {
-        case Some(error) => Left(error)
-        case None => Right(_prefixesTable.put(prefixDef.label, prefixDef))
-      }
-    }
-  }
-
-  /**
-   * Stores a shape declaration in the data structure for future references. Shape redefinition is not allowed,
-   * therefore if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
-   * the value stored will be returned.
-   *
-   * @param shapeDef  is the shape definition to be stored. Must be unique, otherwise an error will be thrown.
-   * @return if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
-   *         the value stored will be returned.
-   */
-  override def +=(shapeDef: ShapeDefStmt): Either[ErrType, Option[ShapeDefStmt]] = shapeDef match {
-    case null => Left(NullReferenceErr)
-    case _ => policy.projectInsertAction(this, shapeDef) match {
-        case Some(error) => Left(error)
-        case None => Right(_shapesTable.put(shapeDef.label.asCallPrefixExpr.label, shapeDef))
-    }
-  }
-
-  /**
-   * Gets the prefix declaration indexed by its prefix name. If no prefix is found indexed by that prefix name a
-   * compiler error will be raised.
-   *
-   * @param prefixName is the key that will be used to look for the prefix definition in the persistence.
-   * @return either the prefix declaration indexed at the prefix name key or an error otherwise.
-   */
-  override def getPrefix(prefixName: String): Either[ErrType, PrefixDefStmt] = {
-    if(Objects.isNull(prefixName)) {
-      // 1. Check if the prefix to look for does even have an acceptable shape.
-      Left(NullReferenceErr)
-    } else if(!_prefixesTable.contains(prefixName)) {
-      // 2. Check if the prefix is stored in the table.
-      Left(PrefixNotFoundErr)
+  override def getStart: StartDefStmt = {
+    if(Objects.isNull(_start)) {
+      null
     } else {
-      Right(_prefixesTable.get(prefixName).get)
+      _start.content
     }
   }
 
-  /**
-   * Gets the shape declaration indexed by its shape name. If no shape is found indexed by that shape name a
-   * compiler error will be raised.
-   *
-   * @param shapeName is the key that will be used to look for the shape definition in the persistence.
-   * @return either the shape declaration indexed at the shape name key or an error otherwise.
-   */
-  override def getShape(shapeName: String): Either[ErrType, ShapeDefStmt] = {
-    if(Objects.isNull(shapeName) || shapeName.isEmpty) {
-      // 1. Check if the prefix to look for does even have an acceptable shape.
-      Left(NullReferenceErr)
-    } else if(!_shapesTable.contains(shapeName)) {
-      // 2. Check if the prefix is stored in the table.
-      Left(ShapeNotFoundErr)
-    } else {
-      Right(_shapesTable.get(shapeName).get)
-    }
+  override def +=(prefixDef: PrefixDefStmt): Unit =
+    _prefixesTable.put(prefixDef.label, new DefaultSymbolTableEntry[PrefixDefStmt](prefixDef))
+
+  override def +=(shapeDef: ShapeDefStmt): Unit =
+    _shapesTable.put(
+      s"${shapeDef.label.asCallPrefixExpr.label}:${shapeDef.label.asCallPrefixExpr.argument}",
+      new DefaultSymbolTableEntry[ShapeDefStmt](shapeDef)
+    )
+
+  override def getPrefix(prefixLbl: String): PrefixDefStmt = _prefixesTable.get(prefixLbl) match {
+    case None => null
+    case Some(element) => element.getContent
   }
 
-  private[compiler] def restore(): Unit = {
-    _base = new BaseDefStmt(0,0, new LiteralIRIValueExpr(0, 0, DEFAULT_BASE))
+  override def getNumberOfCallsForPrefix(prefixLbl: String): Int = _prefixesTable.get(prefixLbl) match {
+    case None => throw new IllegalStateException(s"the prefix label $prefixLbl is not in the symbol table")
+    case Some(element) => element.getNumberOfCalls
+  }
+
+  override def getShape(prefixLbl: String, shapeLbl: String): ShapeDefStmt =
+    _shapesTable.get(s"$prefixLbl:$shapeLbl") match {
+      case None => null
+      case Some(element) => element.getContent
+  }
+
+  def restore(): Unit = {
+    _base = new DefaultSymbolTableEntry[BaseDefStmt](
+      new BaseDefStmt(0, 0, new Interval(0,0),
+        new LiteralIRIValueExpr(0, 0, new Interval(0,0), DEFAULT_BASE)
+      )
+    )
     _start = null
     _prefixesTable.clear()
     _shapesTable.clear()

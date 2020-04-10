@@ -20,9 +20,12 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.stmt
-import compiler.ast.Position
-import compiler.ast.expr.Expression
+package ast.stmt
+
+import ast.Position
+import ast.expr.Expression
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A prefix definition associates an expression, presumably an identifier or similar with another expression that also
@@ -30,16 +33,24 @@ import compiler.ast.expr.Expression
  * without modifying this class.
  *
  * @author Guillermo Facundo Colunga.
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
- * @param column in the source code where the token that generates de Base Definition Statement is located.
- * @param label that identifies the Prefix Definition Statement.
+ * @param line       in the source code where the token that generates de Base Definition Statement is located.
+ * @param column     in the source code where the token that generates de Base Definition Statement is located.
+ * @param label      that identifies the Prefix Definition Statement.
  * @param expression that will be associated to the label of the Prefix Definition Statement.
  */
-class PrefixDefStmt(line: Int, column: Int, val label: String, val expression: Expression) extends DefinitionStmt {
+class PrefixDefStmt(line: Int, column: Int, interval: Interval, val label: String, val expression: Expression) extends DefinitionStmt {
   override def getPosition: Position = Position.pos(line, column)
+
+  override def getRange: Interval = interval
 
   // Override default methods to indicate that this is a Prefix Definition Statement.
   override def isPrefixDefStmt: Boolean = true
+
   override def asPrefixDefStmt: PrefixDefStmt = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+
 }

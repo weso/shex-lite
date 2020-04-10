@@ -22,26 +22,74 @@
 
 package compiler
 
-import compiler.ast.Schema
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.{Shexl2Lexer, Shexl2Parser}
+import ast.{Position, Schema}
+import ast.visitor.PrettyPrintASTVisitor
+import es.weso.shexl.ShExLCompiler
+import internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg}
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.{Shexl2Lexer, Shexl2Parser}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 import org.scalatest.funsuite.AnyFunSuite
 
 class SchemaTest extends AnyFunSuite {
 
   test("sdfg") {
+
+    val compileResult = ShExLCompiler.parseFile("test/assets/correct_big_schema_2.shexl")
+
+    //println(s"Errors: ${compileResult.hasErrors}")
+    //println(s"Warnings: ${compileResult.hasWarnings}")
+    //println(compileResult.getSchema)
+
+    compileResult.getSchema match {
+      case Left(error) => //println(error)
+      case Right(schema) => {
+        println(schema.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  def time[R](block: => R): R = {
+    val t0 = System.nanoTime()
+    val result = block    // call-by-name
+    val t1 = System.nanoTime()
+    println("Elapsed time: " + (t1 - t0) + "ns")
+    result
+  }
+
+  def oldCode = {
     //println(SchemaBuilder.fromFile("test/assets/correct_big_schema_2.shexl"))
     val input = CharStreams.fromFileName("test/assets/correct_big_schema_2.shexl")
     val lexer = new Shexl2Lexer(input)
     val tokens = new CommonTokenStream(lexer)
     val parser = new Shexl2Parser(tokens)
 
-    val ast = parser.schema().accept(new ShExLiteASTBuilderVisitor())
+    val ast = time { parser.schema().accept(new ShExLiteASTBuilderVisitor()) }
 
-    println(ast)
-    ast.asInstanceOf[Schema].stmts.foreach(stmt => println(s"\t$stmt"))
+    val sb = new StringBuilder()
+    ast.asInstanceOf[Schema].accept(new PrettyPrintASTVisitor(), sb)
 
+    val errMsg = new DefaultCompilerMsg(new Position(2,20), new Interval(0, 40), "Prefix lalala is overriding prefix lalale", CompilerMsgErrorType.PrefixOverride)
+
+    println(errMsg.toPrintableString(input))
+
+    //println(sb.toString())
   }
+
 
 }

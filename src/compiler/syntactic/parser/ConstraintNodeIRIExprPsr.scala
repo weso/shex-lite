@@ -20,19 +20,19 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.ConstraintNodeIRIExpr
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.ConstraintNodeIRIExpr
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The constraint node iri expression sub-parser generates a constraint node of type iri expression from the context
  * of the parser.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class ConstraintNodeIRIExprPsr(ctx: Shexl2Parser.Constraint_node_iri_exprContext, visitor: ShExLiteASTBuilderVisitor)
@@ -41,7 +41,8 @@ class ConstraintNodeIRIExprPsr(ctx: Shexl2Parser.Constraint_node_iri_exprContext
   override def getParseResult: ConstraintNodeIRIExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
 
-    new ConstraintNodeIRIExpr(line, column)
+    new ConstraintNodeIRIExpr(line, column, interval)
   }
 }

@@ -20,19 +20,19 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.ConstraintNodeAnyTypeExpr
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.ConstraintNodeAnyTypeExpr
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The constraint node any type expression sub-parser generates a constraint node of any type expression from the
  * context of the parser.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to delegate any action.
  */
 class ConstraintNodeAnyTypeExprPsr(ctx: Shexl2Parser.Constraint_node_any_type_exprContext,
@@ -41,7 +41,8 @@ class ConstraintNodeAnyTypeExprPsr(ctx: Shexl2Parser.Constraint_node_any_type_ex
   override def getParseResult: ConstraintNodeAnyTypeExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
 
-    new ConstraintNodeAnyTypeExpr(line, column)
+    new ConstraintNodeAnyTypeExpr(line, column, interval)
   }
 }

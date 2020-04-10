@@ -20,20 +20,20 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.Expression
-import compiler.ast.stmt.ImportStmt
-import compiler.syntactic.generated.Shexl2Parser
-import compiler.syntactic._
+import ast.expr.Expression
+import ast.stmt.ImportStmt
+import org.antlr.v4.runtime.misc.Interval
+import syntactic._
+import syntactic.generated.Shexl2Parser
 
 /**
  * The import statement sub-parser generates an import statement from the parser context. It is an experimental feature
  * yet. It delegates the creation of the iri to its own sub-parser.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class ImportStmtPsr(ctx: Shexl2Parser.Import_stmtContext, visitor: ShExLiteASTBuilderVisitor)
@@ -42,10 +42,11 @@ class ImportStmtPsr(ctx: Shexl2Parser.Import_stmtContext, visitor: ShExLiteASTBu
   override def getParseResult: ImportStmt = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val iri: Expression = ctx.iri.accept(visitor).asExpression()
 
     // Generate a warning here as the import is just an experimental feature.
 
-    new ImportStmt(line, column, iri)
+    new ImportStmt(line, column, interval, iri)
   }
 }

@@ -20,20 +20,20 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal.symboltable
+package internal.symboltable
 
-import compiler.ast.stmt.{BaseDefStmt, PrefixDefStmt, ShapeDefStmt, StartDefStmt}
-import compiler.internal.error.ErrType
+import ast.stmt.{BaseDefStmt, PrefixDefStmt, ShapeDefStmt, StartDefStmt}
+import internal.error.ErrType
 
 /**
  * Represents the data structure that holds the data used by the compiler during the validation process. By default and
  * after https://github.com/weso/shex-lite-evolution/pull/16 the default behaviour for all declarations is that no
  * redefinition is allowed. That way the language will be kept clean.
  */
-private[compiler] trait SymbolTable {
+trait SymbolTable {
 
   // Default values.
-  final val DEFAULT_BASE = "<internal>"
+  final val DEFAULT_BASE = "<internal://base>"
   final val DEFAULT_SOURCE_FILE = "memsys.table"
 
   /**
@@ -45,7 +45,7 @@ private[compiler] trait SymbolTable {
    * @return either an error if the base was already set or the new base declaration if it is the first time the method
    *         is called.
    */
-  def setBase(base: BaseDefStmt): Either[ErrType, BaseDefStmt]
+  def setBase(base: BaseDefStmt): Unit
 
   /**
    * Gets the base declaration. If the base declaration does not even exists internally by some reason an error will be
@@ -53,7 +53,15 @@ private[compiler] trait SymbolTable {
    *
    * @return either an error if the base does not even exists internally or the base declaration.
    */
-  def getBase: Either[ErrType, BaseDefStmt]
+  def getBase: BaseDefStmt
+
+  /**
+   * Gets the number of times that the base has been called. The base is called each time it is accessed in the table.
+   *
+   * @return the number of times that the base has been called. The base is called each time it is accessed in the
+   *         table.
+   */
+  def getNumberOfCallsForBase: Int
 
   /**
    * Sets the value for the start declaration. The start is a pointer to a shape definition that will be use at
@@ -65,14 +73,14 @@ private[compiler] trait SymbolTable {
    * @return either an error if the start parameter is not valid or is trying to redefine the start. Or the start
    *         declaration set as new value.
    */
-  def setStart(start: StartDefStmt): Either[ErrType, StartDefStmt]
+  def setStart(start: StartDefStmt): Unit
 
   /**
    * Gets the start declaration. If no start declaration exists in the schema then will return a compiler error.
    *
    * @return either the start declaration or an error if no start declaration exists in the schema.
    */
-  def getStart: Either[ErrType, StartDefStmt]
+  def getStart: StartDefStmt
 
   /**
    * Stores a prefix declaration in the data structure for future references. Prefix redefinition is not allowed,
@@ -83,7 +91,7 @@ private[compiler] trait SymbolTable {
    * @return if a prefix declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  def +=(prefixDef: PrefixDefStmt): Either[ErrType, Option[PrefixDefStmt]]
+  def +=(prefixDef: PrefixDefStmt): Unit
 
   /**
    * Stores a shape declaration in the data structure for future references. Shape redefinition is not allowed,
@@ -94,7 +102,7 @@ private[compiler] trait SymbolTable {
    * @return if a shape declaration attempts to override a previous value a compiler error will be raised. Otherwise
    *         the value stored will be returned.
    */
-  def +=(shapeDef: ShapeDefStmt): Either[ErrType, Option[ShapeDefStmt]]
+  def +=(shapeDef: ShapeDefStmt): Unit
 
   /**
    * Gets the prefix declaration indexed by its prefix name. If no prefix is found indexed by that prefix name a
@@ -103,14 +111,25 @@ private[compiler] trait SymbolTable {
    * @param prefixLbl is the key that will be used to look for the prefix definition in the persistence.
    * @return either the prefix declaration indexed at the prefix name key or an error otherwise.
    */
-  def getPrefix(prefixLbl: String): Either[ErrType, PrefixDefStmt]
+  def getPrefix(prefixLbl: String): PrefixDefStmt
 
   /**
-   * Gets the shape declaration indexed by its shape name. If no shape is found indexed by that shape name a
-   * compiler error will be raised.
+   * Gets the number of times that the prefix has been called. The prefix is called each time it is accessed in the
+   * table.
    *
+   * @param prefixLbl is the key that will be used to look for the prefix definition in the persistence.
+   * @return the number of times that the prefix has been called. The prefix is called each time it is accessed in the
+   *         table.
+   */
+  def getNumberOfCallsForPrefix(prefixLbl: String): Int
+
+  /**
+   * Gets the shape declaration indexed by its shape name and the prefix label. If no shape is found indexed by that
+   * shape name a compiler error will be raised.
+   *
+   * @param prefixLbl is the key that will be used to look for the prefix definition in the persistence.
    * @param shapeLbl is the key that will be used to look for the shape definition in the persistence.
    * @return either the shape declaration indexed at the shape name key or an error otherwise.
    */
-  def getShape(shapeLbl: String): Either[ErrType, ShapeDefStmt]
+  def getShape(prefixLbl: String, shapeLbl: String): ShapeDefStmt
 }

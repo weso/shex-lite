@@ -20,11 +20,12 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.{ConstraintValueSetExpr, Expression}
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.{ConstraintValueSetExpr, Expression}
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 import scala.collection.JavaConverters._
 
@@ -33,8 +34,7 @@ import scala.collection.JavaConverters._
  * It delegates the action of creating the value set to each one of the value sets included to their own sub-parsers.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class ConstraintValueSetExprPsr(ctx: Shexl2Parser.Constraint_value_set_exprContext, visitor: ShExLiteASTBuilderVisitor)
@@ -43,11 +43,12 @@ class ConstraintValueSetExprPsr(ctx: Shexl2Parser.Constraint_value_set_exprConte
   override def getParseResult: ConstraintValueSetExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
 
     // Would be nice to remove the as instance of from here but as antlr generates java...
     val valueSet = ctx.constraint_valid_value_set_type().asScala
       .map(ex => ex.accept(visitor)).toList.asInstanceOf[List[Expression]]
 
-    new ConstraintValueSetExpr(line, column, valueSet)
+    new ConstraintValueSetExpr(line, column, interval, valueSet)
   }
 }

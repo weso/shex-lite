@@ -20,9 +20,9 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.stmt
+package ast.stmt
 
-import compiler.ast.NodeWithPosition
+import ast.NodeWithPosition
 
 /**
  * A base class for all the statements.
@@ -36,26 +36,32 @@ trait Statement extends NodeWithPosition {
 
   // Override default values from node with position.
   override def isStatement(): Boolean = true
+
   override def asStatement(): Statement = this
 
   // Definition Statement.
   def isDefinitionStmt: Boolean = false
+
   def asDefinitionStmt: DefinitionStmt = throw new IllegalStateException(s"$this is not a DefinitionStmt")
 
   // Prefix Definition Statement.
   def isPrefixDefStmt: Boolean = false
+
   def asPrefixDefStmt: PrefixDefStmt = throw new IllegalStateException(s"$this is not a PrefixDefStmt")
 
   // Shape Definition Statement.
   def isShapeDefStmt: Boolean = false
+
   def asShapeDefStmt: ShapeDefStmt = throw new IllegalStateException(s"$this is not a ShapeDefStmt")
 
   // Base Definition Statement.
   def isBaseDefStmt: Boolean = false
+
   def asBaseDefStmt: BaseDefStmt = throw new IllegalStateException(s"$this is not a BaseDefStmt")
 
   // Start Definition Statement.
   def isStartDefStmt: Boolean = false
+
   def asStartDefStmt: StartDefStmt = throw new IllegalStateException(s"$this is not a StartDefStmt")
 
 
@@ -64,5 +70,6 @@ trait Statement extends NodeWithPosition {
 
   // Import Statement.
   def isImportStmt: Boolean = false
+
   def asImportStmt: ImportStmt = throw new IllegalStateException(s"$this is not an ImportStmt")
 }

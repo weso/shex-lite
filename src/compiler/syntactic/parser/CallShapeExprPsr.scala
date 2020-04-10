@@ -20,41 +20,42 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.{CallPrefixExpr, CallShapeExpr, Expression}
-import compiler.syntactic.generated.{Shexl2Parser, ShexlParser}
-import compiler.syntactic.ShExLiteASTBuilderVisitor
+import ast.expr.{CallPrefixExpr, CallShapeExpr, Expression}
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The call shape expression parser generates a call shape expression  from the parser context.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class CallShapeExprPsr(ctx: Shexl2Parser.Call_shape_exprContext, visitor: ShExLiteASTBuilderVisitor)
-  extends Parser[CallShapeExpr]{
+  extends Parser[CallShapeExpr] {
 
   override def getParseResult: CallShapeExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
 
     ctx.base_relative_lbl match {
       case null => {
-        val prefix = if (ctx.prefix_lbl == null ) "" else ctx.prefix_lbl.getText
+        val prefix = if (ctx.prefix_lbl == null) "" else ctx.prefix_lbl.getText
         val shape = ctx.shape_lbl.getText
-        val prefixCall = new CallPrefixExpr(line, column, prefix, shape)
+        val prefixCall = new CallPrefixExpr(line, column, interval, prefix, shape)
 
-        new CallShapeExpr(line, column, prefixCall)
+        new CallShapeExpr(line, column, interval, prefixCall)
       }
       case _ => {
         val prefix = "base"
         val shape = ctx.base_relative_lbl.accept(visitor).asInstanceOf[Expression].asLiteralIRIValueExpr.value
-        val prefixCall = new CallPrefixExpr(line, column, prefix, shape)
+        val prefixCall = new CallPrefixExpr(line, column, interval, prefix, shape)
 
-        new CallShapeExpr(line, column, prefixCall)
+        new CallShapeExpr(line, column, interval, prefixCall)
       }
     }
   }

@@ -20,16 +20,16 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.internal.error
+package internal.error
 
-import compiler.ast.{NodeWithPosition}
+import ast.NodeWithPosition
 
 /**
  * Compiler implementation of the error source trait.
  *
  * @param cause that describes the event that trigger the error.
  */
-private[compiler] class CompilerErrSource(val node: NodeWithPosition, val cause: String) extends ErrSource {
+class CompilerErrSource(val node: NodeWithPosition, val cause: String) extends ErrSource {
 
   /**
    * Line where the error is being generated.

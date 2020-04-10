@@ -20,12 +20,12 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic
+package syntactic
 
-import compiler.ast.NodeWithPosition
-import compiler.ast.stmt.BaseDefStmt
-import compiler.syntactic.generated.{Shexl2BaseVisitor, Shexl2Parser}
-import compiler.syntactic.parser._
+import ast.NodeWithPosition
+import ast.stmt.BaseDefStmt
+import syntactic.generated.{Shexl2BaseVisitor, Shexl2Parser}
+import syntactic.parser._
 
 class ShExLiteASTBuilderVisitor extends Shexl2BaseVisitor[NodeWithPosition] {
 
@@ -70,7 +70,7 @@ class ShExLiteASTBuilderVisitor extends Shexl2BaseVisitor[NodeWithPosition] {
   }
 
   override def visitConstraint_block_triple_expr(ctx: Shexl2Parser.Constraint_block_triple_exprContext):
-    NodeWithPosition = {
+  NodeWithPosition = {
     new ConstraintBlockTripleExprPsr(ctx, this).getParseResult
   }
 
@@ -83,12 +83,12 @@ class ShExLiteASTBuilderVisitor extends Shexl2BaseVisitor[NodeWithPosition] {
   }
 
   override def visitConstraint_node_any_type_expr(ctx: Shexl2Parser.Constraint_node_any_type_exprContext):
-    NodeWithPosition = {
+  NodeWithPosition = {
     new ConstraintNodeAnyTypeExprPsr(ctx, this).getParseResult
   }
 
   override def visitConstraint_node_non_literal_expr(ctx: Shexl2Parser.Constraint_node_non_literal_exprContext):
-    NodeWithPosition = {
+  NodeWithPosition = {
     new ConstraintNodeNonLiteralExprPsr(ctx, this).getParseResult
   }
 
@@ -97,12 +97,12 @@ class ShExLiteASTBuilderVisitor extends Shexl2BaseVisitor[NodeWithPosition] {
   }
 
   override def visitConstraint_node_bnode_expr(ctx: Shexl2Parser.Constraint_node_bnode_exprContext):
-    NodeWithPosition = {
+  NodeWithPosition = {
     new ConstraintNodeBNodeExprPsr(ctx, this).getParseResult
   }
 
   override def visitConstraint_node_literal_expr(ctx: Shexl2Parser.Constraint_node_literal_exprContext):
-    NodeWithPosition = {
+  NodeWithPosition = {
     new ConstraintNodeLiteralExprPsr(ctx, this).getParseResult
   }
 

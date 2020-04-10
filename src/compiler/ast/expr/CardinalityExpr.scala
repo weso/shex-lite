@@ -20,21 +20,23 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
-import compiler.ast.Position
+package ast.expr
+
+import ast.Position
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A cardinality represents a range. And will be applied to express hop many times a property with a given constraint
  * can appear in a node.This range can go from MinValue to MaxValue.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
+ * @param line   in the source code where the token that generates de Base Definition Statement is located.
  * @param column in the source code where the token that generates de Base Definition Statement is located.
- * @param min value of the range. Must be MinValue or greater.
- * @param max value of the range. If equals MaxValue then will be interpreted as open upper bound.
+ * @param min    value of the range. Must be MinValue or greater.
+ * @param max    value of the range. If equals MaxValue then will be interpreted as open upper bound.
  */
-class CardinalityExpr(line: Int, column: Int, val min: Int, val max: Int) extends Expression {
+class CardinalityExpr(line: Int, column: Int, interval: Interval, val min: Int, val max: Int) extends Expression {
   /**
    * Gets the position object that points to the source file.
    *
@@ -42,15 +44,28 @@ class CardinalityExpr(line: Int, column: Int, val min: Int, val max: Int) extend
    */
   override def getPosition: Position = Position.pos(line, column)
 
+  override def getRange: Interval = interval
+
   // Override default methods to indicate that this is a Cardinality Expression.
   override def isCardinalityExpr: Boolean = true
+
   override def asCardinalityExpr: CardinalityExpr = this
 
   def isOptionalCardinality: Boolean = (min == 0) && (max == 1)
+
   def isEmptyCardinality: Boolean = (min == 0) && (max == 0)
+
   def isUpperBoundOpen: Boolean = max == CardinalityExpr.MaxValue
+
   def isValid: Boolean = (CardinalityExpr.MinValue <= min) && (max <= CardinalityExpr.MaxValue) && (min <= max)
+
   def countElementsInRange: Int = max - min
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+
 }
 
 /**

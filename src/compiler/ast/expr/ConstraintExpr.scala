@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
+package ast.expr
 
 /**
  * A base class for all the constraints.
@@ -35,5 +35,6 @@ trait ConstraintExpr extends Expression {
 
   // Override default methods to indicate that this is a Constraint Expression.
   override def isConstraintExpr: Boolean = true
+
   override def asConstraintExpr: ConstraintExpr = this
 }

@@ -20,29 +20,30 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.LiteralRealValueExpr
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.LiteralRealValueExpr
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The literal real value expression sub-parser generates a literal of real type with the value provided in the context
  * of the parser.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class LiteralRealValueExprPsr(ctx: Shexl2Parser.Literal_real_value_exprContext, visitor: ShExLiteASTBuilderVisitor)
-  extends Parser[LiteralRealValueExpr]{
+  extends Parser[LiteralRealValueExpr] {
 
   override def getParseResult: LiteralRealValueExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val value: Double = ctx.REAL_LITERAL().getText.toDouble
 
-    new LiteralRealValueExpr(line, column, value)
+    new LiteralRealValueExpr(line, column, interval, value)
   }
 }

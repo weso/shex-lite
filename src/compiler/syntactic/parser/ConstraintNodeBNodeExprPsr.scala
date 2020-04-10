@@ -20,18 +20,18 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.ConstraintNodeBNodeExpr
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.ConstraintNodeBNodeExpr
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The constraint node bnode expression parser generates a constraint node of type bnode from the parser context.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class ConstraintNodeBNodeExprPsr(ctx: Shexl2Parser.Constraint_node_bnode_exprContext,
@@ -41,7 +41,8 @@ class ConstraintNodeBNodeExprPsr(ctx: Shexl2Parser.Constraint_node_bnode_exprCon
   override def getParseResult: ConstraintNodeBNodeExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
 
-    new ConstraintNodeBNodeExpr(line, column)
+    new ConstraintNodeBNodeExpr(line, column, interval)
   }
 }

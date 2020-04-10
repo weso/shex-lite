@@ -20,15 +20,19 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast
+package ast
 
-import compiler.ast.stmt.Statement
+import ast.stmt.Statement
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 class Schema(val stmts: List[Statement]) extends NodeWithPosition {
-  /**
-   * Gets the position object that points to the source file.
-   *
-   * @return a position object containing the position in the source file.
-   */
+
   override def getPosition: Position = stmts(0).getPosition
+
+  override def getRange: Interval = stmts(0).getRange
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
 }

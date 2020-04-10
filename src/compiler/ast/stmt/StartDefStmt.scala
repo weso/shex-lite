@@ -20,10 +20,12 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.stmt
+package ast.stmt
 
-import compiler.ast.Position
-import compiler.ast.expr.Expression
+import ast.Position
+import ast.expr.Expression
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A Start Definition Statement assigns an expression to the start value of the schema. In an schema must only be one
@@ -32,15 +34,23 @@ import compiler.ast.expr.Expression
  * later by the semantic analyzer.
  *
  * @author Guillermo Facundo Colunga.
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
- * @param column in the source code where the token that generates de Base Definition Statement is located.
+ * @param line       in the source code where the token that generates de Base Definition Statement is located.
+ * @param column     in the source code where the token that generates de Base Definition Statement is located.
  * @param expression that will be pointed by the start value of the schema.
  */
-class StartDefStmt(line: Int, column: Int, val expression: Expression) extends DefinitionStmt {
+class StartDefStmt(line: Int, column: Int, interval: Interval, val expression: Expression) extends DefinitionStmt {
   override def getPosition: Position = Position.pos(line, column)
+
+  override def getRange: Interval = interval
 
   // Override default methods to indicate that this is as Start Definition Statement.
   override def isStartDefStmt: Boolean = true
+
   override def asStartDefStmt: StartDefStmt = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+
 }

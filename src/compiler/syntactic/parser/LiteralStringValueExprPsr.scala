@@ -20,19 +20,19 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.LiteralStringValueExpr
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.LiteralStringValueExpr
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The literal string value expression sub-parser creates a literal of string type with the value provided by the
  * context of the parser.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class LiteralStringValueExprPsr(ctx: Shexl2Parser.Literal_string_value_exprContext, visitor: ShExLiteASTBuilderVisitor)
@@ -41,8 +41,9 @@ class LiteralStringValueExprPsr(ctx: Shexl2Parser.Literal_string_value_exprConte
   override def getParseResult: LiteralStringValueExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val value: String = ctx.STRING_LITERAL().getText
 
-    new LiteralStringValueExpr(line, column, value)
+    new LiteralStringValueExpr(line, column, interval, value)
   }
 }

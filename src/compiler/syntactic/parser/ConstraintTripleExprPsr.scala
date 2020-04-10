@@ -20,19 +20,18 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr
-import compiler.ast.expr._
-import compiler.syntactic.generated.{Shexl2Parser, ShexlParser}
-import compiler.syntactic.ShExLiteASTBuilderVisitor
+import ast.expr._
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * This parser extracts a triple constraint expression from the parser triple constraint context.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser
+ * @param ctx     of the parser
  * @param visitor that will propagate any needed call.
  */
 class ConstraintTripleExprPsr(ctx: Shexl2Parser.Constraint_triple_exprContext, visitor: ShExLiteASTBuilderVisitor)
@@ -41,14 +40,15 @@ class ConstraintTripleExprPsr(ctx: Shexl2Parser.Constraint_triple_exprContext, v
   override def getParseResult: ConstraintTripleExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val property: Expression = ctx.property.accept(visitor).asExpression()
     val constraint: Expression = ctx.constraint.accept(visitor).asExpression()
     val cardinality: Expression =
-      if(ctx.cardinality== null)
-        new CardinalityExpr(line, column, 0, 1)
-    else
+      if (ctx.cardinality == null)
+        new CardinalityExpr(line, column, interval, 0, 1)
+      else
         ctx.cardinality.accept(visitor).asExpression()
 
-    new ConstraintTripleExpr(line, column, property, constraint, cardinality)
+    new ConstraintTripleExpr(line, column, interval, property, constraint, cardinality)
   }
 }

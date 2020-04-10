@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast
+package ast
 
 /**
  * A position in a source file. Lines and columns start counting at 1.
@@ -33,7 +33,7 @@ class Position(val line: Int, val column: Int) extends Comparable[Position] {
    */
   def isValid: Boolean = line >= Position.HOME.line && column > Position.HOME.line
 
-  override def compareTo(position: Position):Int = {
+  override def compareTo(position: Position): Int = {
     if (this.line < position.line) return -1
     if (this.line > position.line) return +1
     if (this.column < position.column) return -1
@@ -47,7 +47,7 @@ object Position {
   /**
    * The first position in the file
    */
-  final val HOME = new Position(1,1)
+  final val HOME = new Position(1, 1)
 
   /**
    * Convenient factory method.

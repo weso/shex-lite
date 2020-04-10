@@ -20,20 +20,20 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.syntactic.parser
+package syntactic.parser
 
-import compiler.ast.expr.Expression
-import compiler.ast.stmt.StartDefStmt
-import compiler.syntactic.ShExLiteASTBuilderVisitor
-import compiler.syntactic.generated.Shexl2Parser
+import ast.expr.Expression
+import ast.stmt.StartDefStmt
+import org.antlr.v4.runtime.misc.Interval
+import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.generated.Shexl2Parser
 
 /**
  * The start definition statement sub-parser creates an start definition statement from the context of the parser.
  * It delegates the creation of the expression that represents the called shape to its own sub-parser.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param ctx of the parser.
+ * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
 class StartDefStmtPsr(ctx: Shexl2Parser.Start_def_stmtContext, visitor: ShExLiteASTBuilderVisitor)
@@ -42,8 +42,9 @@ class StartDefStmtPsr(ctx: Shexl2Parser.Start_def_stmtContext, visitor: ShExLite
   override def getParseResult: StartDefStmt = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
+    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val calledShape: Expression = ctx.shape.accept(visitor).asExpression()
 
-    new StartDefStmt(line, column, calledShape)
+    new StartDefStmt(line, column, interval, calledShape)
   }
 }

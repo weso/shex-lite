@@ -20,23 +20,34 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler.ast.expr
-import compiler.ast.Position
+package ast.expr
+
+import ast.Position
+import ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A Literal Real Value Expression is a literal that contains a real value. It is used to store real numbers that appear
  * in the source code.
  *
  * @author Guillermo Facundo Colunga
- *
- * @param line in the source code where the token that generates de Base Definition Statement is located.
+ * @param line   in the source code where the token that generates de Base Definition Statement is located.
  * @param column in the source code where the token that generates de Base Definition Statement is located.
- * @param value of the real number.
+ * @param value  of the real number.
  */
-class LiteralRealValueExpr(line: Int, column: Int, val value: Double) extends LiteralExpr with ConstraintValidValueSetExpr {
+class LiteralRealValueExpr(line: Int, column: Int, interval: Interval, val value: Double) extends LiteralExpr with ConstraintValidValueSetExpr {
   override def getPosition: Position = Position.pos(line, column)
+
+  override def getRange: Interval = interval
 
   // Override default methods to indicate that this is a Literal Real Value Expression.
   override def isLiteralRealValueExpr: Boolean = true
+
   override def asLiteralRealValueExpr: LiteralRealValueExpr = this
+
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
+
+
 }
