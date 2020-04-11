@@ -1,0 +1,57 @@
+prefix :       <http://arquisoft.github.io/viadeSpec/>
+prefix gpx:    <https://www.w3.org/ns/pim/gpx#>
+prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+prefix schema: <http://schema.org/>
+prefix xsd:    <http://www.w3.org/2001/XMLSchema#>
+
+import <gpx.shex>
+
+base <google.es>
+
+# Represents a route
+:Route {
+ :a                      [ xsd:Route ]  # Up to now the a token is not valid.
+ schema:name            xsd:string
+ schema:description	    xsd:string ?
+ :points                @:Points ?
+# :gpx                   @:GPX ?
+ :hasComments           xsd:string
+ :hasMediaAttached      @:Image
+}
+
+# RDF List of points of a route
+:Points {
+   rdf:first @:GeoCoordinates
+   rdf:rest  [ "rest-string" ]
+}
+
+# Represents geo coordinates following: https://schema.org/GeoCoordinates
+:GeoCoordinates {
+ schema:name         xsd:string  ?
+ schema:description  xsd:string  ?
+ schema:elevation    xsd:decimal ?
+ schema:latitude     xsd:decimal
+ schema:longitude    xsd:decimal
+}
+
+:UserComment {
+ schema:text          xsd:string
+ schema:publishedDate xsd:datetime
+ schema:author        @:PodProfile
+}
+
+:Image {
+ schema:contentUrl    iri
+ schema:publishedDate xsd:datetime
+ schema:author        @:PodProfile
+}
+
+:Video {
+ schema:contentUrl    iri
+ schema:publishedDate xsd:dateTime
+ schema:author        @:PodProfile
+}
+
+# TODO: Add more properties for POD profiles
+:PodProfile iri

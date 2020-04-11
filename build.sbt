@@ -7,8 +7,8 @@ lazy val scala213 = "2.13.1"
 scalaVersion in ThisBuild := scala213
 crossScalaVersions := Seq(scala212, scala213)
 
-Compile / scalaSource := baseDirectory.value / "src"
-Compile / unmanagedSourceDirectories += baseDirectory.value / "src/library"
+Compile / scalaSource := baseDirectory.value / "src/compiler"
+Compile / unmanagedSourceDirectories += baseDirectory.value / "src/lib"
 
 Test / unmanagedSourceDirectories += baseDirectory.value / "test/benchmark"
 Test / unmanagedSourceDirectories += baseDirectory.value / "test/unit"
@@ -21,4 +21,8 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 libraryDependencies += "org.antlr" % "antlr4" % "4.8-1"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.1" % "test"
 
-coverageExcludedPackages := "compiler.syntactic.generated.*"
+libraryDependencies ++= Seq(
+  "org.backuity.clist" %% "clist-core"   % "3.5.1",
+  "org.backuity.clist" %% "clist-macros" % "3.5.1" % "provided")
+
+coverageExcludedPackages := "compiler.es.weso.shexlc.syntactic.generated.*"

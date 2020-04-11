@@ -24,37 +24,13 @@ package compiler
 
 import java.io.File
 
-import com.typesafe.scalalogging.Logger
-import compiler.internal.error.MemoryErrorHandler
-import compiler.internal.symboltable.SymbolHashTable
-import compiler.internal.symboltable.policy.PassiveAggressiveSymbolTablePolicy
-import compiler.semantic.{DefinitionsCheckerWalker, DefinitionsCheckerWalterTest, InvocationsCheckerWalker}
-import compiler.syntactic.ShExLSyntacticParser
+import es.weso.shexl.ShExLCompiler
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
 class IntegrationTest extends AnyFunSuite with BeforeAndAfter {
 
-  final val logger = Logger[DefinitionsCheckerWalterTest]
-
-  final val st = new SymbolHashTable(PassiveAggressiveSymbolTablePolicy)
-
-  // In order to be sure that on each test case we do not have data from previous tests.
-  before {
-    logger.debug("Restoring memory symbol table.")
-    st.restore()
-
-    logger.debug("Restoring memory error handler.")
-    MemoryErrorHandler.restore()
-  }
-
-  after {
-    logger.debug("Restoring memory symbol table.")
-    st.restore()
-
-    logger.debug("Restoring memory error handler.")
-    MemoryErrorHandler.restore()
-  }
+  var compiler = ShExLCompiler
 
   generateTestCases()
 
@@ -64,45 +40,16 @@ class IntegrationTest extends AnyFunSuite with BeforeAndAfter {
 
     for(file <- correctFiles) {
       test(s"Compiling file $file should pass without errors") {
-        //st.restore()
-        //MemoryErrorHandler.restore()
-
         // Parsing a sample file that contains a base redefinition.
-        val ast = new ShExLSyntacticParser(file).parse()
-        assert(!MemoryErrorHandler.hasErrors)
-
-        // Then we walk the AST and here the error should be generated.
-        ast.walk(new DefinitionsCheckerWalker(st), null)
-        ast.walk(new InvocationsCheckerWalker(st), null)
-
-        // Check that the error have been generated.
-        MemoryErrorHandler.showErrors()
-        assert(!MemoryErrorHandler.hasErrors)
-
-        //st.restore()
-        //MemoryErrorHandler.restore()
+        val ast = compiler.parseFile(file)
+        assert(!ast.hasErrors)
       }
     }
 
     for(file <- incorrectFiles) {
       test(s"Compiling file $file should generate errors") {
-        //st.restore()
-        //MemoryErrorHandler.restore()
-
-        // Parsing a sample file that contains a base redefinition.
-        val ast = new ShExLSyntacticParser(file).parse()
-        assert(!MemoryErrorHandler.hasErrors)
-
-        // Then we walk the AST and here the error should be generated.
-        ast.walk(new DefinitionsCheckerWalker(st), null)
-        ast.walk(new InvocationsCheckerWalker(st), null)
-
-        // Check that the error have been generated.
-        MemoryErrorHandler.showErrors()
-        assert(MemoryErrorHandler.hasErrors)
-
-        //st.restore()
-        //MemoryErrorHandler.restore()
+        val ast = compiler.parseFile(file)
+        assert(ast.hasErrors)
       }
     }
 
