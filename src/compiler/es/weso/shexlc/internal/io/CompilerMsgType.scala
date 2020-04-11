@@ -20,22 +20,10 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexlc.internal.io
 
-import es.weso.shexlc.ast.Schema
-import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
-
-class ShExLCompileResult(schema: Either[CompilerMsg, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
-
-  def hasErrors: Boolean = compilerMsgsHandler.hasErrorMsgs
-
-  def hasWarnings: Boolean = compilerMsgsHandler.hasWarningMsgs
-
-  def isCorrect: Boolean = !hasErrors && !hasErrors
-
-  def getErrors: List[CompilerMsg] = compilerMsgsHandler.getErrorMsgs
-
-  def getWarnings: List[CompilerMsg] = compilerMsgsHandler.getWarningMsgs
-
-  def getSchema: Either[CompilerMsg, Schema] = schema
+trait CompilerMsgType {
+  def getCode: String
+  def getDescription: String
+  def getSuperType:String = "message"
 }

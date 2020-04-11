@@ -20,22 +20,49 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexlc.internal.io
 
-import es.weso.shexlc.ast.Schema
-import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
+trait CompilerMsgsHandler {
 
-class ShExLCompileResult(schema: Either[CompilerMsg, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
+  /**
+   * Gets whether the compiler messages handler has errors or not.
+   *
+   * @return true if the handler contains any message that is an error. False otherwise.
+   */
+  def hasErrorMsgs: Boolean
 
-  def hasErrors: Boolean = compilerMsgsHandler.hasErrorMsgs
+  /**
+   * Gets whether the compiler messages handler has warnings or not.
+   *
+   * @return true if the handler contains any message that is an warning. False otherwise.
+   */
+  def hasWarningMsgs: Boolean
 
-  def hasWarnings: Boolean = compilerMsgsHandler.hasWarningMsgs
+  /**
+   *
+   * @param msg
+   */
+  def addMsg(msg: CompilerMsg)
 
-  def isCorrect: Boolean = !hasErrors && !hasErrors
+  /**
+   *
+   * @return
+   */
+  def getErrorMsgs: List[CompilerMsg]
 
-  def getErrors: List[CompilerMsg] = compilerMsgsHandler.getErrorMsgs
+  /**
+   *
+   * @return
+   */
+  def getWarningMsgs: List[CompilerMsg]
 
-  def getWarnings: List[CompilerMsg] = compilerMsgsHandler.getWarningMsgs
+  /**
+   *
+   */
+  def showErrorMsgs: Unit
 
-  def getSchema: Either[CompilerMsg, Schema] = schema
+  /**
+   *
+   */
+  def showWarningMsgs: Unit
 }

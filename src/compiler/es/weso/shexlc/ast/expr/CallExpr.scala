@@ -20,22 +20,21 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexlc.ast.expr
 
-import es.weso.shexlc.ast.Schema
-import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
+/**
+ * A base class for all the call expressions of the es.weso.shexlc.ast.
+ *
+ * This call expression trait is just used as a mean to know if an expression is a call, any call. For
+ * that it overrides the super is and as methods but let other calls is's and as's to its children. Not need to
+ * implement here any more methods except those that will be mandatory for all calls.
+ *
+ * @author Guillermo Facundo Colunga
+ */
+trait CallExpr extends ConstraintNodeExpr with ConstraintValidValueSetExpr {
 
-class ShExLCompileResult(schema: Either[CompilerMsg, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
+  // Override default methods to indicate that this is a Call Expression.
+  override def isCallExpr: Boolean = true
 
-  def hasErrors: Boolean = compilerMsgsHandler.hasErrorMsgs
-
-  def hasWarnings: Boolean = compilerMsgsHandler.hasWarningMsgs
-
-  def isCorrect: Boolean = !hasErrors && !hasErrors
-
-  def getErrors: List[CompilerMsg] = compilerMsgsHandler.getErrorMsgs
-
-  def getWarnings: List[CompilerMsg] = compilerMsgsHandler.getWarningMsgs
-
-  def getSchema: Either[CompilerMsg, Schema] = schema
+  override def asCallExpr: CallExpr = this
 }

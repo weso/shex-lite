@@ -20,22 +20,21 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexlc.ast
 
-import es.weso.shexlc.ast.Schema
-import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
+import org.antlr.v4.runtime.misc.Interval
 
-class ShExLCompileResult(schema: Either[CompilerMsg, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
+/**
+ * A node with range is a node that contains an antlr interval, which is the range of tokens that generate the node.
+ *
+ * @author Guillermo Facundo Colunga
+ */
+trait NodeWithTokenRange {
 
-  def hasErrors: Boolean = compilerMsgsHandler.hasErrorMsgs
-
-  def hasWarnings: Boolean = compilerMsgsHandler.hasWarningMsgs
-
-  def isCorrect: Boolean = !hasErrors && !hasErrors
-
-  def getErrors: List[CompilerMsg] = compilerMsgsHandler.getErrorMsgs
-
-  def getWarnings: List[CompilerMsg] = compilerMsgsHandler.getWarningMsgs
-
-  def getSchema: Either[CompilerMsg, Schema] = schema
+  /**
+   * Gets the range of tokens from the source on which the node was generated.
+   *
+   * @return the range of tokens from the source on which the node was generated.
+   */
+  def getRange: Interval
 }

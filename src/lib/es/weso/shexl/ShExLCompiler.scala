@@ -22,14 +22,14 @@
 
 package es.weso.shexl
 
-import ast.Schema
-import internal.io.{CompilerMsg, CompilerMsgsHandler}
-import internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg, DefaultCompilerMsgsHandler}
-import internal.symboltable.SymbolHashTable
+import es.weso.shexlc.ast.Schema
+import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
+import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg, DefaultCompilerMsgsHandler}
+import es.weso.shexlc.internal.symboltable.SymbolHashTable
 import org.antlr.v4.runtime.{CharStream, CharStreams, CommonTokenStream}
-import semantic.{Sem01TypeCheckingVisitor, Sem02DefCheckingVisitor}
-import syntactic.Syn01ASTBuilderVisitor
-import syntactic.generated.{Shexl2Lexer, Shexl2Parser}
+import es.weso.shexlc.semantic.{Sem01TypeCheckingVisitor, Sem02DefCheckingVisitor}
+import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
+import es.weso.shexlc.syntactic.generated.{Shexl2Lexer, Shexl2Parser}
 
 object ShExLCompiler {
 
@@ -49,7 +49,7 @@ object ShExLCompiler {
 
     val ast = new Syn01ASTBuilderVisitor().visitSchema(parseTree.schema())
 
-    // Depending on the flags here the schema/ast has to be validated.
+    // Depending on the flags here the schema/es.weso.shexlc.ast has to be validated.
     new Sem01TypeCheckingVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
     new Sem02DefCheckingVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
 

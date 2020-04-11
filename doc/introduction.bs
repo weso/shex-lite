@@ -16,14 +16,14 @@ As stated before, ShEx Lite represents a subset of the Shape Expressions Syntax 
 ```antlr
 schema ::= statement+ EOF
 ```
-The top level element of the grammar is the shema, that is what we want to represent with this grammar. A schema is defined as a non-empty set of statements.
+The top level element of the es.weso.shexlc.grammar is the shema, that is what we want to represent with this es.weso.shexlc.grammar. A schema is defined as a non-empty set of statements.
 
 #### Statement #### {#features-rs-statement}
 ```antlr
 statement := definition_statement
           |  import_statement
 ```
-The statements are the second level of the grammar.
+The statements are the second level of the es.weso.shexlc.grammar.
 Each statement can be: a definition or an import statement. import is not a definition but an statement as it does not declare anything.
 
 This rule is intended to be extended in the future with more statements.

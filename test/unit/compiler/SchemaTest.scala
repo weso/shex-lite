@@ -22,13 +22,13 @@
 
 package compiler
 
-import ast.{Position, Schema}
-import ast.visitor.PrettyPrintASTVisitor
+import es.weso.shexlc.ast.{Position, Schema}
+import es.weso.shexlc.ast.visitor.PrettyPrintASTVisitor
 import es.weso.shexl.ShExLCompiler
-import internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg}
+import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg}
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.Syn01ASTBuilderVisitor
-import syntactic.generated.{Shexl2Lexer, Shexl2Parser}
+import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
+import es.weso.shexlc.syntactic.generated.{Shexl2Lexer, Shexl2Parser}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 import org.scalatest.funsuite.AnyFunSuite
 

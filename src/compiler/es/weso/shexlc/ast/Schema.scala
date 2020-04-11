@@ -20,22 +20,19 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexlc.ast
 
-import es.weso.shexlc.ast.Schema
-import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
+import es.weso.shexlc.ast.stmt.Statement
+import es.weso.shexlc.ast.visitor.ShExLiteGenericVisitor
+import org.antlr.v4.runtime.misc.Interval
 
-class ShExLCompileResult(schema: Either[CompilerMsg, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
+class Schema(val stmts: List[Statement]) extends NodeWithPosition {
 
-  def hasErrors: Boolean = compilerMsgsHandler.hasErrorMsgs
+  override def getPosition: Position = stmts(0).getPosition
 
-  def hasWarnings: Boolean = compilerMsgsHandler.hasWarningMsgs
+  override def getRange: Interval = stmts(0).getRange
 
-  def isCorrect: Boolean = !hasErrors && !hasErrors
-
-  def getErrors: List[CompilerMsg] = compilerMsgsHandler.getErrorMsgs
-
-  def getWarnings: List[CompilerMsg] = compilerMsgsHandler.getWarningMsgs
-
-  def getSchema: Either[CompilerMsg, Schema] = schema
+  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+    visitor.visit(this, param)
+  }
 }

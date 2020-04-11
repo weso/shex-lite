@@ -20,22 +20,17 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexlc.ast.expr
 
-import es.weso.shexlc.ast.Schema
-import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
+/**
+ * A base class for all the Constraint Nodes Expressions.
+ *
+ * @author Guillermo Facundo Colunga
+ */
+trait ConstraintNodeExpr extends ConstraintExpr {
 
-class ShExLCompileResult(schema: Either[CompilerMsg, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
+  // Override default methods to indicate that this is a Constraint Node Expression.
+  override def isConstraintNodeExpr: Boolean = true
 
-  def hasErrors: Boolean = compilerMsgsHandler.hasErrorMsgs
-
-  def hasWarnings: Boolean = compilerMsgsHandler.hasWarningMsgs
-
-  def isCorrect: Boolean = !hasErrors && !hasErrors
-
-  def getErrors: List[CompilerMsg] = compilerMsgsHandler.getErrorMsgs
-
-  def getWarnings: List[CompilerMsg] = compilerMsgsHandler.getWarningMsgs
-
-  def getSchema: Either[CompilerMsg, Schema] = schema
+  override def asConstraintNodeExpr: ConstraintNodeExpr = this
 }

@@ -20,22 +20,19 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexlc.internal.symboltable
 
-import es.weso.shexlc.ast.Schema
-import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
+class DefaultSymbolTableEntry[T](var content: T) extends SymbolTableEntry[T] {
 
-class ShExLCompileResult(schema: Either[CompilerMsg, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
+  private var nOfCalls = 0
 
-  def hasErrors: Boolean = compilerMsgsHandler.hasErrorMsgs
+  override def getContent: T = content
 
-  def hasWarnings: Boolean = compilerMsgsHandler.hasWarningMsgs
+  override def setContent(content: T): Unit = this.content = content
 
-  def isCorrect: Boolean = !hasErrors && !hasErrors
+  override def getNumberOfCalls: Int = nOfCalls
 
-  def getErrors: List[CompilerMsg] = compilerMsgsHandler.getErrorMsgs
+  override def addOneCall(): Unit = nOfCalls += 1
 
-  def getWarnings: List[CompilerMsg] = compilerMsgsHandler.getWarningMsgs
-
-  def getSchema: Either[CompilerMsg, Schema] = schema
+  override def addNCalls(n: Int): Unit = nOfCalls += n
 }
