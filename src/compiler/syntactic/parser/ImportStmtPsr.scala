@@ -36,7 +36,7 @@ import syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class ImportStmtPsr(ctx: Shexl2Parser.Import_stmtContext, visitor: ShExLiteASTBuilderVisitor)
+class ImportStmtPsr(ctx: Shexl2Parser.Import_stmtContext, visitor: Syn01ASTBuilderVisitor)
   extends Parser[ImportStmt] {
 
   override def getParseResult: ImportStmt = {

@@ -23,13 +23,13 @@
 package syntactic
 
 import ast.NodeWithPosition
-import ast.stmt.BaseDefStmt
+import ast.Schema
 import syntactic.generated.{Shexl2BaseVisitor, Shexl2Parser}
 import syntactic.parser._
 
-class ShExLiteASTBuilderVisitor extends Shexl2BaseVisitor[NodeWithPosition] {
+class Syn01ASTBuilderVisitor extends Shexl2BaseVisitor[NodeWithPosition] {
 
-  override def visitSchema(ctx: Shexl2Parser.SchemaContext): NodeWithPosition = {
+  override def visitSchema(ctx: Shexl2Parser.SchemaContext): Schema = {
     new SchemaPsr(ctx, this).getParseResult
   }
 
@@ -37,7 +37,7 @@ class ShExLiteASTBuilderVisitor extends Shexl2BaseVisitor[NodeWithPosition] {
     new ImportStmtPsr(ctx, this).getParseResult
   }
 
-  override def visitBase_def_stmt(ctx: Shexl2Parser.Base_def_stmtContext): BaseDefStmt = {
+  override def visitBase_def_stmt(ctx: Shexl2Parser.Base_def_stmtContext): NodeWithPosition = {
     new BaseDefStmtPsr(ctx, this).getParseResult
   }
 

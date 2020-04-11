@@ -24,7 +24,7 @@ package syntactic.parser
 
 import ast.expr.{ConstraintValueSetExpr, Expression}
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.Shexl2Parser
 
 import scala.collection.JavaConverters._
@@ -37,7 +37,7 @@ import scala.collection.JavaConverters._
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class ConstraintValueSetExprPsr(ctx: Shexl2Parser.Constraint_value_set_exprContext, visitor: ShExLiteASTBuilderVisitor)
+class ConstraintValueSetExprPsr(ctx: Shexl2Parser.Constraint_value_set_exprContext, visitor: Syn01ASTBuilderVisitor)
   extends Parser[ConstraintValueSetExpr] {
 
   override def getParseResult: ConstraintValueSetExpr = {

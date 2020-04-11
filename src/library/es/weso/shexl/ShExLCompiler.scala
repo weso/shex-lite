@@ -28,7 +28,7 @@ import internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg, DefaultCompil
 import internal.symboltable.SymbolHashTable
 import org.antlr.v4.runtime.{CharStream, CharStreams, CommonTokenStream}
 import semantic.{Sem01TypeCheckingVisitor, Sem02DefCheckingVisitor}
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.{Shexl2Lexer, Shexl2Parser}
 
 object ShExLCompiler {
@@ -47,7 +47,7 @@ object ShExLCompiler {
     val tokens = new CommonTokenStream(lexer)
     val parseTree = new Shexl2Parser(tokens)
 
-    val ast = parseTree.schema().accept(new ShExLiteASTBuilderVisitor()).asInstanceOf[Schema]
+    val ast = new Syn01ASTBuilderVisitor().visitSchema(parseTree.schema())
 
     // Depending on the flags here the schema/ast has to be validated.
     new Sem01TypeCheckingVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
@@ -73,5 +73,4 @@ object ShExLCompiler {
 
     new ShExLCompileResult(parsedSchema, compilerMsgsHandler)
   }
-
 }

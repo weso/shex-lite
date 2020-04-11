@@ -24,7 +24,7 @@ package syntactic.parser
 
 import ast.expr.LiteralIRIValueExpr
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.Shexl2Parser
 
 /**
@@ -34,7 +34,7 @@ import syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class LiteralIRIValueExprPsr(ctx: Shexl2Parser.Literal_iri_value_exprContext, visitor: ShExLiteASTBuilderVisitor)
+class LiteralIRIValueExprPsr(ctx: Shexl2Parser.Literal_iri_value_exprContext, visitor: Syn01ASTBuilderVisitor)
   extends Parser[LiteralIRIValueExpr] {
 
   override def getParseResult: LiteralIRIValueExpr = {

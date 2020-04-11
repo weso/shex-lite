@@ -24,7 +24,7 @@ package syntactic.parser
 
 import ast.expr.{CallPrefixExpr, CallShapeExpr, Expression}
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.Shexl2Parser
 
 /**
@@ -34,7 +34,7 @@ import syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class CallShapeExprPsr(ctx: Shexl2Parser.Call_shape_exprContext, visitor: ShExLiteASTBuilderVisitor)
+class CallShapeExprPsr(ctx: Shexl2Parser.Call_shape_exprContext, visitor: Syn01ASTBuilderVisitor)
   extends Parser[CallShapeExpr] {
 
   override def getParseResult: CallShapeExpr = {

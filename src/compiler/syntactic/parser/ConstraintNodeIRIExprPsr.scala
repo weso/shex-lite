@@ -24,7 +24,7 @@ package syntactic.parser
 
 import ast.expr.ConstraintNodeIRIExpr
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.Shexl2Parser
 
 /**
@@ -35,7 +35,7 @@ import syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class ConstraintNodeIRIExprPsr(ctx: Shexl2Parser.Constraint_node_iri_exprContext, visitor: ShExLiteASTBuilderVisitor)
+class ConstraintNodeIRIExprPsr(ctx: Shexl2Parser.Constraint_node_iri_exprContext, visitor: Syn01ASTBuilderVisitor)
   extends Parser[ConstraintNodeIRIExpr] {
 
   override def getParseResult: ConstraintNodeIRIExpr = {

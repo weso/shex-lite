@@ -25,7 +25,7 @@ package syntactic.parser
 import ast.expr.Expression
 import ast.stmt.StartDefStmt
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.Shexl2Parser
 
 /**
@@ -36,7 +36,7 @@ import syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class StartDefStmtPsr(ctx: Shexl2Parser.Start_def_stmtContext, visitor: ShExLiteASTBuilderVisitor)
+class StartDefStmtPsr(ctx: Shexl2Parser.Start_def_stmtContext, visitor: Syn01ASTBuilderVisitor)
   extends Parser[StartDefStmt] {
 
   override def getParseResult: StartDefStmt = {

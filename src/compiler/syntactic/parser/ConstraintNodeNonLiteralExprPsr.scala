@@ -24,7 +24,7 @@ package syntactic.parser
 
 import ast.expr.ConstraintNodeNonLiteralExpr
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.Shexl2Parser
 
 /**
@@ -36,7 +36,7 @@ import syntactic.generated.Shexl2Parser
  * @param visitor to propagate any action.
  */
 class ConstraintNodeNonLiteralExprPsr(ctx: Shexl2Parser.Constraint_node_non_literal_exprContext,
-                                      visitor: ShExLiteASTBuilderVisitor) extends Parser[ConstraintNodeNonLiteralExpr] {
+                                      visitor: Syn01ASTBuilderVisitor) extends Parser[ConstraintNodeNonLiteralExpr] {
 
   override def getParseResult: ConstraintNodeNonLiteralExpr = {
     val line = ctx.start.getLine

@@ -24,7 +24,7 @@ package syntactic.parser
 
 import ast.expr.CardinalityExpr
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.Shexl2Parser
 
 /**
@@ -34,7 +34,7 @@ import syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor that will propagate any needed call.
  */
-class CardinalityExprPsr(ctx: Shexl2Parser.Cardinality_exprContext, visitor: ShExLiteASTBuilderVisitor)
+class CardinalityExprPsr(ctx: Shexl2Parser.Cardinality_exprContext, visitor: Syn01ASTBuilderVisitor)
   extends Parser[CardinalityExpr] {
 
   override def getParseResult: CardinalityExpr = {

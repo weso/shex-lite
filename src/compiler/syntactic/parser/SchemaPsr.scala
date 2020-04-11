@@ -24,7 +24,7 @@ package syntactic.parser
 
 import ast.Schema
 import ast.stmt.Statement
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.Shexl2Parser
 
 import scala.collection.JavaConverters._
@@ -37,7 +37,7 @@ import scala.collection.JavaConverters._
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class SchemaPsr(ctx: Shexl2Parser.SchemaContext, visitor: ShExLiteASTBuilderVisitor) extends Parser[Schema] {
+class SchemaPsr(ctx: Shexl2Parser.SchemaContext, visitor: Syn01ASTBuilderVisitor) extends Parser[Schema] {
 
   override def getParseResult: Schema = {
     val statements: List[Statement] = ctx.statement().asScala

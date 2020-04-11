@@ -25,7 +25,7 @@ package syntactic.parser
 import ast.expr.Expression
 import ast.stmt.ShapeDefStmt
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.Shexl2Parser
 
 /**
@@ -36,7 +36,7 @@ import syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class ShapeDefStmtPsr(ctx: Shexl2Parser.Shape_def_stmtContext, visitor: ShExLiteASTBuilderVisitor)
+class ShapeDefStmtPsr(ctx: Shexl2Parser.Shape_def_stmtContext, visitor: Syn01ASTBuilderVisitor)
   extends Parser[ShapeDefStmt] {
 
   override def getParseResult: ShapeDefStmt = {

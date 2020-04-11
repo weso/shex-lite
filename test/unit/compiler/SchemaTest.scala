@@ -27,7 +27,7 @@ import ast.visitor.PrettyPrintASTVisitor
 import es.weso.shexl.ShExLCompiler
 import internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg}
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.{Shexl2Lexer, Shexl2Parser}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 import org.scalatest.funsuite.AnyFunSuite
@@ -79,7 +79,7 @@ class SchemaTest extends AnyFunSuite {
     val tokens = new CommonTokenStream(lexer)
     val parser = new Shexl2Parser(tokens)
 
-    val ast = time { parser.schema().accept(new ShExLiteASTBuilderVisitor()) }
+    val ast = time { parser.schema().accept(new Syn01ASTBuilderVisitor()) }
 
     val sb = new StringBuilder()
     ast.asInstanceOf[Schema].accept(new PrettyPrintASTVisitor(), sb)

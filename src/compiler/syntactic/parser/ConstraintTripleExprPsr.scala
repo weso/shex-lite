@@ -24,7 +24,7 @@ package syntactic.parser
 
 import ast.expr._
 import org.antlr.v4.runtime.misc.Interval
-import syntactic.ShExLiteASTBuilderVisitor
+import syntactic.Syn01ASTBuilderVisitor
 import syntactic.generated.Shexl2Parser
 
 /**
@@ -34,7 +34,7 @@ import syntactic.generated.Shexl2Parser
  * @param ctx     of the parser
  * @param visitor that will propagate any needed call.
  */
-class ConstraintTripleExprPsr(ctx: Shexl2Parser.Constraint_triple_exprContext, visitor: ShExLiteASTBuilderVisitor)
+class ConstraintTripleExprPsr(ctx: Shexl2Parser.Constraint_triple_exprContext, visitor: Syn01ASTBuilderVisitor)
   extends Parser[ConstraintTripleExpr] {
 
   override def getParseResult: ConstraintTripleExpr = {
