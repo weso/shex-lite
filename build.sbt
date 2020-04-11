@@ -8,7 +8,7 @@ scalaVersion in ThisBuild := scala213
 crossScalaVersions := Seq(scala212, scala213)
 
 Compile / scalaSource := baseDirectory.value / "src/compiler"
-Compile / unmanagedSourceDirectories += baseDirectory.value / "src/library"
+Compile / unmanagedSourceDirectories += baseDirectory.value / "src/lib"
 
 Test / unmanagedSourceDirectories += baseDirectory.value / "test/benchmark"
 Test / unmanagedSourceDirectories += baseDirectory.value / "test/unit"
