@@ -52,7 +52,10 @@ class SymbolHashTable extends SymbolTable {
 
   override def setBase(base: BaseDefStmt): Unit = _base = new DefaultSymbolTableEntry[BaseDefStmt](base)
 
-  override def getBase: BaseDefStmt = _base.content
+  override def getBase: BaseDefStmt = {
+    _base.addOneCall()
+    _base.content
+  }
 
   override def getNumberOfCallsForBase: Int = _base.getNumberOfCalls
 
@@ -62,6 +65,7 @@ class SymbolHashTable extends SymbolTable {
     if(Objects.isNull(_start)) {
       null
     } else {
+      _start.addOneCall()
       _start.content
     }
   }
@@ -69,15 +73,27 @@ class SymbolHashTable extends SymbolTable {
   override def +=(prefixDef: PrefixDefStmt): Unit =
     _prefixesTable.put(prefixDef.label, new DefaultSymbolTableEntry[PrefixDefStmt](prefixDef))
 
-  override def +=(shapeDef: ShapeDefStmt): Unit =
-    _shapesTable.put(
-      s"${shapeDef.label.asCallPrefixExpr.label}:${shapeDef.label.asCallPrefixExpr.argument}",
-      new DefaultSymbolTableEntry[ShapeDefStmt](shapeDef)
-    )
+  override def +=(shapeDef: ShapeDefStmt): Unit = {
+    val isRelativeShape = shapeDef.label.isCallBaseExpr
+    if (isRelativeShape) {
+      _shapesTable.put(
+        s"$DEFAULT_BASE:${shapeDef.label.asCallBaseExpr.argument}",
+        new DefaultSymbolTableEntry[ShapeDefStmt](shapeDef)
+      )
+    } else {
+      _shapesTable.put(
+        s"${shapeDef.label.asCallPrefixExpr.label}:${shapeDef.label.asCallPrefixExpr.argument}",
+        new DefaultSymbolTableEntry[ShapeDefStmt](shapeDef)
+      )
+    }
+  }
 
   override def getPrefix(prefixLbl: String): PrefixDefStmt = _prefixesTable.get(prefixLbl) match {
     case None => null
-    case Some(element) => element.getContent
+    case Some(element) => {
+      element.addOneCall()
+      element.getContent
+    }
   }
 
   override def getNumberOfCallsForPrefix(prefixLbl: String): Int = _prefixesTable.get(prefixLbl) match {
@@ -88,7 +104,10 @@ class SymbolHashTable extends SymbolTable {
   override def getShape(prefixLbl: String, shapeLbl: String): ShapeDefStmt =
     _shapesTable.get(s"$prefixLbl:$shapeLbl") match {
       case None => null
-      case Some(element) => element.getContent
+      case Some(element) => {
+        element.addOneCall()
+        element.getContent
+      }
   }
 
   def restore(): Unit = {

@@ -27,7 +27,7 @@ import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
 import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg, DefaultCompilerMsgsHandler}
 import es.weso.shexlc.internal.symboltable.SymbolHashTable
 import org.antlr.v4.runtime.{CharStream, CharStreams, CommonTokenStream}
-import es.weso.shexlc.semantic.{Sem01TypeCheckingVisitor, Sem02DefCheckingVisitor}
+import es.weso.shexlc.semantic.{Sem01TypeCheckingVisitor, Sem02DefCheckingVisitor, Sem03CallCheckingVisitor, Sem50UnusedPrefixFinderVisitor}
 import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
 import es.weso.shexlc.syntactic.generated.{Shexl2Lexer, Shexl2Parser}
 
@@ -35,15 +35,17 @@ object ShExLCompiler {
 
   private var config: ShExLCompilerConfig = null
   private var inputCharStream: CharStream = null
-  private val symbolTable = new SymbolHashTable
+  private var symbolTable = new SymbolHashTable
   private var compilerMsgsHandler: CompilerMsgsHandler = null
   private var parsedSchema: Either[CompilerMsg, Schema] = null;
 
 
   def parseFile(filepath: String): ShExLCompileResult = {
     inputCharStream = CharStreams.fromFileName(filepath)
+    val caseInsensitiveCharStream = new CaseChangingCharStream(inputCharStream, false);
     compilerMsgsHandler = new DefaultCompilerMsgsHandler(inputCharStream)
-    val lexer = new Shexl2Lexer(inputCharStream)
+    symbolTable = new SymbolHashTable
+    val lexer = new Shexl2Lexer(caseInsensitiveCharStream)
     val tokens = new CommonTokenStream(lexer)
     val parseTree = new Shexl2Parser(tokens)
 
@@ -52,11 +54,16 @@ object ShExLCompiler {
     // Depending on the flags here the schema/es.weso.shexlc.ast has to be validated.
     new Sem01TypeCheckingVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
     new Sem02DefCheckingVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
+    new Sem03CallCheckingVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
+
+    // Small optimizations / warnings generation.
+    new Sem50UnusedPrefixFinderVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
 
     if(/*config.flags.contains(ShExLCompilerFlag.ErrorEmission) &&*/ compilerMsgsHandler.hasErrorMsgs) {
       compilerMsgsHandler.showErrorMsgs
       Left(compilerMsgsHandler.getErrorMsgs)
     }
+    compilerMsgsHandler.showWarningMsgs
 
     if(compilerMsgsHandler.hasErrorMsgs) {
       parsedSchema = Left(

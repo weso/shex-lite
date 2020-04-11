@@ -152,4 +152,10 @@ trait Expression extends NodeWithPosition {
 
   def asCallShapeExpr: CallShapeExpr =
     throw new IllegalStateException(s"$this is not an CallShapeExpr")
+
+  // Call Base Expression.
+  def isCallBaseExpr = false
+
+  def asCallBaseExpr: CallBaseExpr =
+    throw new IllegalStateException(s"$this is not an CallBaseExpr")
 }

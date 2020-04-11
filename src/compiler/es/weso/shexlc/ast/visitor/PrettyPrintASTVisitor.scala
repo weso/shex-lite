@@ -108,6 +108,13 @@ class PrettyPrintASTVisitor extends ShExLiteGenericVisitor[StringBuilder, String
     sb.toString()
   }
 
+  override def visit(expr: CallBaseExpr, param: StringBuilder): String = {
+    val sb = new StringBuilder()
+    val arg = expr.argument
+    sb.append(s"BaseCall:$arg")
+    sb.toString()
+  }
+
   override def visit(expr: CardinalityExpr, param: StringBuilder): String = {
     val sb = new StringBuilder()
     val min = expr.min

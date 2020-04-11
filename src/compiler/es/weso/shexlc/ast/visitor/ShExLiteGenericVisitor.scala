@@ -47,6 +47,8 @@ trait ShExLiteGenericVisitor[TP, TR] {
 
   def visit(expr: CallShapeExpr, param: TP): TR
 
+  def visit(expr: CallBaseExpr, param: TP): TR
+
   def visit(expr: CardinalityExpr, param: TP): TR
 
   def visit(expr: ConstraintBlockTripleExpr, param: TP): TR

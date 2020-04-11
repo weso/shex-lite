@@ -22,7 +22,7 @@
 
 package es.weso.shexlc.syntactic.parser
 
-import es.weso.shexlc.ast.expr.{CallPrefixExpr, CallShapeExpr, Expression}
+import es.weso.shexlc.ast.expr.{CallBaseExpr, CallPrefixExpr, CallShapeExpr, Expression}
 import org.antlr.v4.runtime.misc.Interval
 import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
 import es.weso.shexlc.syntactic.generated.Shexl2Parser
@@ -51,9 +51,8 @@ class CallShapeExprPsr(ctx: Shexl2Parser.Call_shape_exprContext, visitor: Syn01A
         new CallShapeExpr(line, column, interval, prefixCall)
       }
       case _ => {
-        val prefix = "base"
         val shape = ctx.base_relative_lbl.accept(visitor).asInstanceOf[Expression].asLiteralIRIValueExpr.value
-        val prefixCall = new CallPrefixExpr(line, column, interval, prefix, shape)
+        val prefixCall = new CallBaseExpr(line, column, interval, shape)
 
         new CallShapeExpr(line, column, interval, prefixCall)
       }

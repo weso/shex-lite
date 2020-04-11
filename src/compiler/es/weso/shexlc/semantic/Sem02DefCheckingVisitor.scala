@@ -76,7 +76,15 @@ class Sem02DefCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsg
   }
 
   override def visit(stmt: ShapeDefStmt, param: Unit): Unit = {
-    val existingSTValue = symbolTable.getShape(stmt.label.asCallPrefixExpr.label, stmt.label.asCallPrefixExpr.argument)
+    val isRelativeShape = stmt.label.isCallBaseExpr
+    var existingSTValue: ShapeDefStmt = null
+
+    if(isRelativeShape) {
+      existingSTValue = symbolTable.getShape(symbolTable.DEFAULT_BASE, stmt.label.asCallBaseExpr.argument)
+    } else {
+      existingSTValue = symbolTable.getShape(stmt.label.asCallPrefixExpr.label, stmt.label.asCallPrefixExpr.argument)
+    }
+
     // 1. Does the symbol table contains the shape?
     if(Objects.nonNull(existingSTValue)) {
       msgsHandler.addMsg(
@@ -98,17 +106,29 @@ class Sem02DefCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsg
 
   override def visit(stmt: StartDefStmt, param: Unit): Unit = {
     val existingSTValue = symbolTable.getStart
+    var cause: String = ""
+
     // Has been already set?
     if(Objects.nonNull(existingSTValue)) {
+
+      if(stmt.expression.asCallShapeExpr.label.isCallBaseExpr) {
+        cause = s"this start definition overrides the previous one " +
+          s"(${existingSTValue.getLine}:${existingSTValue.getColumn})" +
+          s" with value " +
+          s"${existingSTValue.expression.asCallShapeExpr.label.asCallBaseExpr.argument}:"
+      } else {
+        cause = s"this start definition overrides the previous one " +
+          s"(${existingSTValue.getLine}:${existingSTValue.getColumn})" +
+          s" with value " +
+          s"${existingSTValue.expression.asCallShapeExpr.label.asCallPrefixExpr.label}:" +
+          s"${existingSTValue.expression.asCallShapeExpr.label.asCallPrefixExpr.argument}"
+      }
+
       msgsHandler.addMsg(
         new DefaultCompilerMsg(
           stmt.getPosition,
           stmt.getRange,
-          s"this start definition overrides the previous one " +
-            s"(${existingSTValue.getLine}:${existingSTValue.getColumn})" +
-            s" with value " +
-            s"${existingSTValue.expression.asCallShapeExpr.label.asCallPrefixExpr.label}:" +
-            s"${existingSTValue.expression.asCallShapeExpr.label.asCallPrefixExpr.argument}",
+          cause,
           CompilerMsgErrorType.StartOverride
         )
       )

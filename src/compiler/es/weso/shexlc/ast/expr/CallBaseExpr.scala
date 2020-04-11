@@ -20,42 +20,34 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexlc.internal.io.impl
+package es.weso.shexlc.ast.expr
 
 import es.weso.shexlc.ast.Position
+import es.weso.shexlc.ast.stmt.Statement
 import es.weso.shexlc.ast.visitor.ShExLiteGenericVisitor
-import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgType}
-import org.antlr.v4.runtime.{CharStream}
 import org.antlr.v4.runtime.misc.Interval
 
-class DefaultCompilerMsg(pos: Position, tokenRange: Interval, cause: String, mType: CompilerMsgType) extends CompilerMsg {
+/**
+ *
+ * @param line
+ * @param column
+ * @param interval
+ * @param argument
+ * @param definition
+ */
+class CallBaseExpr(line: Int, column: Int, interval: Interval, val argument: String,
+                   var definition: Statement = null) extends CallExpr {
 
-  override def getCompilerMsgType: CompilerMsgType = mType
+  override def getPosition: Position = Position.pos(line, column)
 
-  override def getMessage: String = cause
+  override def getRange: Interval = interval
 
-  override def getPosition: Position = pos
+  // Override default methods to indicate that this is a Call Prefix Expression.
+  override def isCallBaseExpr: Boolean = true
 
-  override def getRange: Interval = tokenRange
+  override def asCallBaseExpr: CallBaseExpr = this
 
   override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
-    throw new IllegalStateException(s"$this should not be visited")
-  }
-
-  override def toPrintableString(input: CharStream): String = {
-    val sb = new StringBuilder()
-    sb.append(s"${mType.getSuperType}")
-    sb.append("\n")
-    sb.append(s"--> ${input.getSourceName}:${pos.line}:${pos.column}")
-    sb.append("\n | ")
-    sb.append(s"${input.getText(tokenRange)}")
-    sb.append("\n | ")
-
-    //    for(_ <- 0 to pos.column-1) {
-//      sb.append(" ")
-//    }
-    sb.append(s"^ $cause")
-    sb.append("\n")
-    sb.toString()
+    visitor.visit(this, param)
   }
 }

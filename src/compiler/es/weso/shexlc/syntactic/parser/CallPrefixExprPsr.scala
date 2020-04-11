@@ -22,7 +22,7 @@
 
 package es.weso.shexlc.syntactic.parser
 
-import es.weso.shexlc.ast.expr.{CallPrefixExpr, Expression}
+import es.weso.shexlc.ast.expr.{CallBaseExpr, CallExpr, CallPrefixExpr, Expression}
 import org.antlr.v4.runtime.misc.Interval
 import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
 import es.weso.shexlc.syntactic.generated.Shexl2Parser
@@ -35,9 +35,9 @@ import es.weso.shexlc.syntactic.generated.Shexl2Parser
  * @param visitor top propagate any action.
  */
 class CallPrefixExprPsr(ctx: Shexl2Parser.Call_prefix_exprContext, visitor: Syn01ASTBuilderVisitor)
-  extends Parser[CallPrefixExpr] {
+  extends Parser[CallExpr] {
 
-  override def getParseResult: CallPrefixExpr = {
+  override def getParseResult: CallExpr = {
     val line = ctx.start.getLine
     val column = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
@@ -53,7 +53,7 @@ class CallPrefixExprPsr(ctx: Shexl2Parser.Call_prefix_exprContext, visitor: Syn0
         val label = "base"
         val arg = ctx.base_relative_lbl.accept(visitor).asInstanceOf[Expression].asLiteralIRIValueExpr.value
 
-        new CallPrefixExpr(line, column, interval, label, arg)
+        new CallBaseExpr(line, column, interval, arg)
       }
     }
   }

@@ -58,6 +58,8 @@ class DefaultShExLiteGenericVisitor[TP] extends ShExLiteGenericVisitor[TP, Unit]
     expr.label.accept(this, param)
   }
 
+  def visit(expr: CallBaseExpr, param: TP): Unit = {}
+
   override def visit(expr: CardinalityExpr, param: TP): Unit = {}
 
   override def visit(expr: ConstraintBlockTripleExpr, param: TP): Unit = {

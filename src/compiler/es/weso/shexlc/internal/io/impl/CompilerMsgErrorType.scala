@@ -27,7 +27,7 @@ import es.weso.shexlc.internal.io.CompilerMsgType
 class CompilerMsgErrorType(code: String, description: String) extends CompilerMsgType {
   override def getCode: String = code
   override def getDescription: String = description
-  override def getSuperType:String = "error"
+  override def getSuperType:String = Console.RED + s"error($getCode): $getDescription" + Console.RESET
 }
 
 object CompilerMsgErrorType {

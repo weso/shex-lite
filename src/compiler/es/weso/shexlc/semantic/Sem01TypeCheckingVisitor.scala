@@ -98,12 +98,12 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
   }
 
   override def visit(stmt: ShapeDefStmt, param: Unit): Unit = {
-    if(!stmt.label.isCallPrefixExpr) {
+    if(!(stmt.label.isCallPrefixExpr || stmt.label.isCallBaseExpr)) {
       msgsHandler.addMsg(
         new DefaultCompilerMsg(
           stmt.label.getPosition,
           stmt.getRange,
-          s"${stmt.expression} is not a Call Prefix Expression",
+          s"${stmt.label} is not a Call Prefix or Base Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
       )
@@ -137,12 +137,12 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
   }
 
   override def visit(expr: CallShapeExpr, param: Unit): Unit = {
-    if(!expr.label.isCallPrefixExpr) {
+    if(!(expr.label.isCallPrefixExpr || expr.label.isCallBaseExpr)) {
       msgsHandler.addMsg(
         new DefaultCompilerMsg(
           expr.label.getPosition,
           expr.getRange,
-          s"${expr.label} is not a Call Prefix Expression",
+          s"${expr.label} is not a Call Prefix / Base Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
       )

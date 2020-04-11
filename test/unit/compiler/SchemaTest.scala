@@ -45,51 +45,10 @@ class SchemaTest extends AnyFunSuite {
     compileResult.getSchema match {
       case Left(error) => //println(error)
       case Right(schema) => {
+        assert(!compileResult.hasErrors)
         println(schema.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
       }
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  def time[R](block: => R): R = {
-    val t0 = System.nanoTime()
-    val result = block    // call-by-name
-    val t1 = System.nanoTime()
-    println("Elapsed time: " + (t1 - t0) + "ns")
-    result
-  }
-
-  def oldCode = {
-    //println(SchemaBuilder.fromFile("test/assets/correct_big_schema_2.shexl"))
-    val input = CharStreams.fromFileName("test/assets/correct_big_schema_2.shexl")
-    val lexer = new Shexl2Lexer(input)
-    val tokens = new CommonTokenStream(lexer)
-    val parser = new Shexl2Parser(tokens)
-
-    val ast = time { parser.schema().accept(new Syn01ASTBuilderVisitor()) }
-
-    val sb = new StringBuilder()
-    ast.asInstanceOf[Schema].accept(new PrettyPrintASTVisitor(), sb)
-
-    val errMsg = new DefaultCompilerMsg(new Position(2,20), new Interval(0, 40), "Prefix lalala is overriding prefix lalale", CompilerMsgErrorType.PrefixOverride)
-
-    println(errMsg.toPrintableString(input))
-
-    //println(sb.toString())
-  }
-
 
 }
