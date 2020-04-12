@@ -53,7 +53,7 @@ class DefaultShExLCompiler extends ShExLCompiler {
     if(Objects.isNull(filepath) || filepath.isEmpty) {
       throw new IllegalArgumentException("the filepath cannot be null nor be empty")
     }
-    this.compileQueue.addOne(filepath)
+    this.compileQueue += filepath
     this
   }
 
@@ -61,7 +61,7 @@ class DefaultShExLCompiler extends ShExLCompiler {
     if(Objects.isNull(filePaths) || filePaths.isEmpty) {
       throw new IllegalArgumentException("the file paths collection cannot be null nor be empty")
     }
-    this.compileQueue.addAll(filePaths)
+    this.compileQueue ++= filePaths
     this
   }
 
@@ -93,7 +93,7 @@ class DefaultShExLCompiler extends ShExLCompiler {
       showWarnings(compilerMsgsHandler)
 
       // Generate compile result.
-      compileResults.addOne(generateCompileResult(ast, compilerMsgsHandler))
+      compileResults += generateCompileResult(ast, compilerMsgsHandler)
     }
     compileQueue.clear()
     compileResults.toList
