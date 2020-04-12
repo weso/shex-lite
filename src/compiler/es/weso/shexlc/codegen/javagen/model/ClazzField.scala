@@ -20,21 +20,8 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexlc.codegen.javagen.model
 
-class ShExLCompilerFlag(cliOptionName: String, description: String, active: Boolean = false) {
-  override def toString: String = s"-$cliOptionName"
-}
+class ClazzField {
 
-object ShExLCompilerFlag {
-
-  // Compiler analysis
-  final val SyntaxAnalysis = new ShExLCompilerFlag("-sya", "Syntax Analysis", true)
-  final val SemanticAnalysis = new ShExLCompilerFlag("-sea", "Semantic Analysis", true)
-
-  // Warnings / Errors
-  final val WarningEmission = new ShExLCompilerFlag("-warn", "Warning Emission", true)
-  final val ErrorEmission = new ShExLCompilerFlag("-err", "Error Emission", true)
-
-  // Other flags down here.
 }

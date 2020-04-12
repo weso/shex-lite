@@ -22,62 +22,46 @@
 
 package es.weso.shexl
 
-import es.weso.shexlc.ast.Schema
-import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
-import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg, DefaultCompilerMsgsHandler}
-import es.weso.shexlc.internal.symboltable.SymbolHashTable
-import org.antlr.v4.runtime.{CharStream, CharStreams, CommonTokenStream}
-import es.weso.shexlc.semantic.{Sem01TypeCheckingVisitor, Sem02DefCheckingVisitor, Sem03CallCheckingVisitor, Sem50UnusedPrefixFinderVisitor}
-import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
-import es.weso.shexlc.syntactic.generated.{Shexl2Lexer, Shexl2Parser}
+/**
+ * The Shapes Expressions Lite Compiler is the main entry point for the public API. It allows to configure the compiler,
+ * compile files and generate target code from it.
+ *
+ * @author Guillermo Facundo Colunga.
+ */
+trait ShExLCompiler {
 
-object ShExLCompiler {
+  /**
+   * Sets the configuration for the compiler to compile. The configuration might include:
+   *  - Skipping warnings.
+   *  - Target language.
+   *  - Activate / De-activate compiler optimizations.
+   *
+   * @param config is the configuration object.
+   */
+  def setConfiguration(config: ShExLCompilerConfig): ShExLCompiler
 
-  private var config: ShExLCompilerConfig = null
-  private var inputCharStream: CharStream = null
-  private var symbolTable = new SymbolHashTable
-  private var compilerMsgsHandler: CompilerMsgsHandler = null
-  private var parsedSchema: Either[CompilerMsg, Schema] = null;
+  /**
+   * Adds one file to the compile queue. Non file will be processed until the compile method is called. Returns
+   * the compiler itself as an object so that method vectorization can be used.
+   *
+   * @param filepath of the file to compile.
+   * @return the compiler object with the file added.
+   */
+  def addFile(filepath: String): ShExLCompiler
 
+  /**
+   * Appends the compile queue with the file paths. Non file will be processed until the compile method is called. Returns
+   * the compiler itself as an object so that method vectorization can be used.
+   *
+   * @param filePaths is the collection that contains all the path to the files to compile.
+   * @return the compiler object with the files added.
+   */
+  def addFiles(filePaths: List[String]): ShExLCompiler
 
-  def parseFile(filepath: String): ShExLCompileResult = {
-    inputCharStream = CharStreams.fromFileName(filepath)
-    val caseInsensitiveCharStream = new CaseChangingCharStream(inputCharStream, false);
-    compilerMsgsHandler = new DefaultCompilerMsgsHandler(inputCharStream)
-    symbolTable = new SymbolHashTable
-    val lexer = new Shexl2Lexer(caseInsensitiveCharStream)
-    val tokens = new CommonTokenStream(lexer)
-    val parseTree = new Shexl2Parser(tokens)
-
-    val ast = new Syn01ASTBuilderVisitor().visitSchema(parseTree.schema())
-
-    // Depending on the flags here the schema/es.weso.shexlc.ast has to be validated.
-    new Sem01TypeCheckingVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
-    new Sem02DefCheckingVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
-    new Sem03CallCheckingVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
-
-    // Small optimizations / warnings generation.
-    new Sem50UnusedPrefixFinderVisitor(symbolTable, compilerMsgsHandler).visit(ast, ())
-
-    if(/*config.flags.contains(ShExLCompilerFlag.ErrorEmission) &&*/ compilerMsgsHandler.hasErrorMsgs) {
-      compilerMsgsHandler.showErrorMsgs
-      Left(compilerMsgsHandler.getErrorMsgs)
-    }
-    compilerMsgsHandler.showWarningMsgs
-
-    if(compilerMsgsHandler.hasErrorMsgs) {
-      parsedSchema = Left(
-        new DefaultCompilerMsg(
-          compilerMsgsHandler.getErrorMsgs.head.getPosition,
-          compilerMsgsHandler.getErrorMsgs.head.getRange,
-          "the source file contained errors and the compiler cannot create an schema",
-          CompilerMsgErrorType.CouldNotCreateSchemaForSource
-        )
-      )
-    } else {
-      parsedSchema = Right(ast)
-    }
-
-    new ShExLCompileResult(parsedSchema, compilerMsgsHandler)
-  }
+  /**
+   * Compiles all the files in the queue.
+   *
+   * @return a list containing one result object per file compiled.
+   */
+  def compile(): List[ShExLCompileResult]
 }

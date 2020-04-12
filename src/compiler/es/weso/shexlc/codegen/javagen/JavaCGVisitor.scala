@@ -20,31 +20,8 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler
-import es.weso.shexlc.ast.visitor.PrettyPrintASTVisitor
-import es.weso.shexl.DefaultShExLCompiler
-import org.scalatest.funsuite.AnyFunSuite
+package es.weso.shexlc.codegen.javagen
 
-class SchemaTest extends AnyFunSuite {
-
-  test("individual file compilation") {
-
-    val compileResult =
-      new DefaultShExLCompiler()
-        .addFile("test/assets/correct_schema_big_schema_2.shexl")
-        .compile()(0)
-
-    println(s"Errors: ${compileResult.hasErrors}")
-    println(s"Warnings: ${compileResult.hasWarnings}")
-    println(compileResult.getSchema)
-
-    compileResult.getSchema match {
-      case Left(error) => println(error.getMessage)
-      case Right(schema) => {
-        assert(!compileResult.hasErrors)
-        println(schema.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
-      }
-    }
-  }
+class JavaCGVisitor {
 
 }

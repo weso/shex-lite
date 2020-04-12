@@ -20,31 +20,20 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler
-import es.weso.shexlc.ast.visitor.PrettyPrintASTVisitor
-import es.weso.shexl.DefaultShExLCompiler
-import org.scalatest.funsuite.AnyFunSuite
+package es.weso.shexl
 
-class SchemaTest extends AnyFunSuite {
+import es.weso.shexlc.syntactic.generated.{Shexl2Lexer, Shexl2Parser}
+import org.antlr.v4.runtime.{CharStream, CharStreams, CommonTokenStream}
 
-  test("individual file compilation") {
+private[shexl] class ParseTreeGenerator(filepath: String) {
 
-    val compileResult =
-      new DefaultShExLCompiler()
-        .addFile("test/assets/correct_schema_big_schema_2.shexl")
-        .compile()(0)
+  var inputCharStream: CharStream = null
 
-    println(s"Errors: ${compileResult.hasErrors}")
-    println(s"Warnings: ${compileResult.hasWarnings}")
-    println(compileResult.getSchema)
-
-    compileResult.getSchema match {
-      case Left(error) => println(error.getMessage)
-      case Right(schema) => {
-        assert(!compileResult.hasErrors)
-        println(schema.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
-      }
-    }
+  def generateParseTree(): Shexl2Parser = {
+    inputCharStream = CharStreams.fromFileName(filepath)
+    val caseInsensitiveCharStream = new CaseChangingCharStream(inputCharStream, false)
+    val lexer = new Shexl2Lexer(caseInsensitiveCharStream)
+    val tokens = new CommonTokenStream(lexer)
+    new Shexl2Parser(tokens)
   }
-
 }

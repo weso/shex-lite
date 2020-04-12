@@ -1,4 +1,4 @@
-es.weso.shexlc.grammar Shexl2;
+grammar Shexl2;
 
 schema
  : statement+ EOF
@@ -87,7 +87,7 @@ constraint_node_expr
  ;
 
 constraint_block_triple_expr
- : '{' (constraint_triple_expr)+ '}'
+ : '{' (constraint_triple_expr ';'?)+ '}'
  ;
 
 constraint_triple_expr

@@ -28,7 +28,7 @@ import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgType}
 import org.antlr.v4.runtime.{CharStream}
 import org.antlr.v4.runtime.misc.Interval
 
-class DefaultCompilerMsg(pos: Position, tokenRange: Interval, cause: String, mType: CompilerMsgType) extends CompilerMsg {
+class DefaultCompilerMsg(pos: Position, contextRange: Interval, errorRange: Interval, cause: String, mType: CompilerMsgType) extends CompilerMsg {
 
   override def getCompilerMsgType: CompilerMsgType = mType
 
@@ -36,7 +36,7 @@ class DefaultCompilerMsg(pos: Position, tokenRange: Interval, cause: String, mTy
 
   override def getPosition: Position = pos
 
-  override def getRange: Interval = tokenRange
+  override def getRange: Interval = contextRange
 
   override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
     throw new IllegalStateException(s"$this should not be visited")
@@ -47,13 +47,17 @@ class DefaultCompilerMsg(pos: Position, tokenRange: Interval, cause: String, mTy
     sb.append(s"${mType.getSuperType}")
     sb.append("\n")
     sb.append(s"--> ${input.getSourceName}:${pos.line}:${pos.column}")
-    sb.append("\n | ")
-    sb.append(s"${input.getText(tokenRange)}")
-    sb.append("\n | ")
+    sb.append(s"\n\t${Console.CYAN}|${Console.RESET} ")
+    sb.append(s"\n${Console.CYAN}${pos.line}\t|${Console.RESET} ")
+    sb.append(s"${input.getText(contextRange)}")
+    sb.append(s"\n\t${Console.CYAN}|${Console.RESET} ")
 
-    //    for(_ <- 0 to pos.column-1) {
-//      sb.append(" ")
-//    }
+    val spaces = errorRange.a - contextRange.a
+
+    for(i <- 0 to spaces-1) {
+      sb.append(" ")
+    }
+
     sb.append(s"^ $cause")
     sb.append("\n")
     sb.toString()

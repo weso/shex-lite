@@ -31,6 +31,7 @@ import es.weso.shexlc.ast.visitor.DefaultShExLiteGenericVisitor
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
 import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg}
 import es.weso.shexlc.internal.symboltable.SymbolTable
+import org.antlr.v4.runtime.misc.Interval
 
 class Sem03CallCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
   extends DefaultShExLiteGenericVisitor[Unit] {
@@ -42,6 +43,7 @@ class Sem03CallCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
       msgsHandler.addMsg(
         new DefaultCompilerMsg(
           expr.getPosition,
+          expr.getRange,
           expr.getRange,
           s"the prefix `${expr.label}` has not been defined",
           CompilerMsgErrorType.PrefixNotFound
@@ -76,6 +78,7 @@ class Sem03CallCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           expr.label.getPosition,
           expr.getRange,
+          expr.label.getRange,
           cause,
           CompilerMsgErrorType.ShapeNotFound
         )
