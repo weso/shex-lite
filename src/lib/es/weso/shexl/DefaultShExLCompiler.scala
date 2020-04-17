@@ -25,6 +25,7 @@ package es.weso.shexl
 import java.util.Objects
 
 import es.weso.shexlc.ast.Schema
+import es.weso.shexlc.codegen.javagen.{CGJava01ValidSchemaCheckingVisitor, CGJava02ClassGeneratorVisitor}
 import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
 import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg, DefaultCompilerMsgsHandler}
 import es.weso.shexlc.internal.symboltable.{SymbolHashTable, SymbolTable}
@@ -37,7 +38,7 @@ import scala.collection.mutable.ListBuffer
 
 class DefaultShExLCompiler extends ShExLCompiler {
 
-  private[this] var config: ShExLCompilerConfig = ShExLCompilerConfig
+  private[this] var config: ShExLCompilerConfig = DefaultShExLCompilerConfig
   private[this] val compileQueue = new ListBuffer[String]()
   private[this] val compileResults = new ListBuffer[ShExLCompileResult]()
 
@@ -87,6 +88,7 @@ class DefaultShExLCompiler extends ShExLCompiler {
       optimizeAST(ast, symbolTable, compilerMsgsHandler)
 
       // Code generation would be going here.
+      generateCode(ast, symbolTable, compilerMsgsHandler)
 
       // If errors/warnings show them.
       showErrors(compilerMsgsHandler)
@@ -114,6 +116,13 @@ class DefaultShExLCompiler extends ShExLCompiler {
     if(config.generateWarnings) new Sem50UnusedPrefixFinderVisitor(st, msgsHandler).visit(root, ())
   }
 
+  private[this] def generateCode(root: Schema, st: SymbolTable, msgsHandler: CompilerMsgsHandler): Unit = {
+    if(config.generateCode) {
+      new CGJava01ValidSchemaCheckingVisitor(st, msgsHandler).visit(root, ())
+      if(!msgsHandler.hasErrorMsgs) new CGJava02ClassGeneratorVisitor(msgsHandler).visit(root, "")
+    }
+  }
+
   private[this] def showErrors(msgsHandler: CompilerMsgsHandler): Unit = {
     if(msgsHandler.hasErrorMsgs) {
       msgsHandler.showErrorMsgs
@@ -127,17 +136,9 @@ class DefaultShExLCompiler extends ShExLCompiler {
   }
 
   private[this] def generateCompileResult(root: Schema, msgsHandler: CompilerMsgsHandler): ShExLCompileResult = {
-    var parsedSchema: Either[CompilerMsg, Schema] = null
+    var parsedSchema: Either[String, Schema] = null
     if(msgsHandler.hasErrorMsgs) {
-      parsedSchema = Left(
-        new DefaultCompilerMsg(
-          msgsHandler.getErrorMsgs.head.getPosition,
-          msgsHandler.getErrorMsgs.head.getRange,
-          msgsHandler.getErrorMsgs.head.getRange,
-          "the source file contained errors and the compiler cannot create an schema",
-          CompilerMsgErrorType.CouldNotCreateSchemaForSource
-        )
-      )
+      parsedSchema = Left(Console.RED + "error:" + Console.RESET + " aborting due to previous error")
     } else {
       parsedSchema = Right(root)
     }

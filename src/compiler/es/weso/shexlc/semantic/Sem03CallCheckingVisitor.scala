@@ -27,14 +27,14 @@ import java.util.Objects
 import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr._
 import es.weso.shexlc.ast.stmt._
-import es.weso.shexlc.ast.visitor.DefaultShExLiteGenericVisitor
+import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
 import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg}
 import es.weso.shexlc.internal.symboltable.SymbolTable
 import org.antlr.v4.runtime.misc.Interval
 
 class Sem03CallCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteGenericVisitor[Unit] {
+  extends DefaultShExLiteVisitor[Unit] {
 
   override def visit(expr: CallPrefixExpr, param: Unit): Unit = {
     val existingSTValue = symbolTable.getPrefix(expr.label)
@@ -61,15 +61,18 @@ class Sem03CallCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
 
     var existingSTValue: ShapeDefStmt = null
     var cause: String = ""
+    var errorRange: Interval = null;
 
     if(isRelativeShape) {
       existingSTValue = symbolTable.getShape(symbolTable.DEFAULT_BASE, expr.label.asCallBaseExpr.argument)
       cause = s"the shape `${expr.label.asCallBaseExpr.argument}` " +
         s"has not been defined in the scope of the prefix the base"
+      errorRange = expr.label.asCallBaseExpr.getRange
     } else {
       existingSTValue = symbolTable.getShape(expr.label.asCallPrefixExpr.label, expr.label.asCallPrefixExpr.argument)
       cause = s"the shape `${expr.label.asCallPrefixExpr.argument}` " +
         s"has not been defined in the scope of the prefix `${expr.label.asCallPrefixExpr.label}`"
+      errorRange = new Interval(expr.label.getRange.a+expr.label.asCallPrefixExpr.label.size+2, expr.label.getRange.a)
     }
 
     // 1. Is the shape defined in the table?
@@ -78,7 +81,7 @@ class Sem03CallCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           expr.label.getPosition,
           expr.getRange,
-          expr.label.getRange,
+          errorRange,
           cause,
           CompilerMsgErrorType.ShapeNotFound
         )

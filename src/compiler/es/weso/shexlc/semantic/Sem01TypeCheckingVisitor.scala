@@ -37,7 +37,7 @@ import es.weso.shexlc.internal.symboltable.SymbolTable
  * @param symbolTable is the symbol table used as a context.
  */
 class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteGenericVisitor[Unit] {
+  extends DefaultShExLiteVisitor[Unit] {
 
   override def visit(schema: Schema, param: Unit): Unit = {
     for(stmt <- schema.stmts) {

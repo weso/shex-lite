@@ -32,7 +32,7 @@ import es.weso.shexlc.internal.symboltable.SymbolTable
 import org.antlr.v4.runtime.misc.Interval
 
 class Sem02DefCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteGenericVisitor[Unit] {
+  extends DefaultShExLiteVisitor[Unit] {
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     val existingSTValue = symbolTable.getBase.expression.asLiteralIRIValueExpr.value

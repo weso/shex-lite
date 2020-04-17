@@ -31,15 +31,11 @@ class SchemaTest extends AnyFunSuite {
 
     val compileResult =
       new DefaultShExLCompiler()
-        .addFile("test/assets/correct_schema_big_schema_2.shexl")
+        .addFile("test/assets/incorrect_schema_big_schema_2.shexl")
         .compile()(0)
 
-    println(s"Errors: ${compileResult.hasErrors}")
-    println(s"Warnings: ${compileResult.hasWarnings}")
-    println(compileResult.getSchema)
-
-    compileResult.getSchema match {
-      case Left(error) => println(error.getMessage)
+    compileResult.getResult match {
+      case Left(error) => println(error)
       case Right(schema) => {
         assert(!compileResult.hasErrors)
         println(schema.accept(new PrettyPrintASTVisitor(), new StringBuilder()))

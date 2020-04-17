@@ -28,7 +28,7 @@ base <google.es>
 
 # Represents geo coordinates following: https://schema.org/GeoCoordinates
 :GeoCoordinates {
- schema:name         xsd:string  ?
+ schema:name         @gpx:string  ?
  schema:description  xsd:string  ?
  schema:elevation    xsd:decimal ?
  schema:latitude     xsd:decimal

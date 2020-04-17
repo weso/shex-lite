@@ -23,14 +23,14 @@
 package es.weso.shexlc.semantic
 
 import es.weso.shexlc.ast.stmt._
-import es.weso.shexlc.ast.visitor.DefaultShExLiteGenericVisitor
+import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
 import es.weso.shexlc.internal.io.impl._
 import es.weso.shexlc.internal.symboltable.SymbolTable
 import org.antlr.v4.runtime.misc.Interval
 
 class Sem50UnusedPrefixFinderVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteGenericVisitor[Unit] {
+  extends DefaultShExLiteVisitor[Unit] {
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     stmt.expression.accept(this, param)
