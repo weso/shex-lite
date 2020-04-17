@@ -33,6 +33,10 @@ class CompilerMsgWarningType(code: String, description: String) extends Compiler
 object CompilerMsgWarningType {
   final val PrefixNotUsed = new CompilerMsgWarningType("W001", "prefix definition not used")
   final val BaseSetButNotUsed = new CompilerMsgWarningType("W002", "base has been set but not used")
+
+  final val FeatureIgnored = new CompilerMsgWarningType("W003", "feature ignored")
+  final val SchemaWithoutDirectMapping = new CompilerMsgWarningType("W003", "schema includes " +
+    "constraints without a direct mapping to target language")
 }
 
 

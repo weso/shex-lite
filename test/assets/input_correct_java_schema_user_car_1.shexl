@@ -1,0 +1,14 @@
+prefix : <example.org>
+prefix xsd: <schema.org>
+
+:User {
+    :name       xsd:string  ;
+    :surname    xsd:string  ;
+    :age        xsd:integer ;
+    :knows      @:User *
+}
+
+: Car {
+    :plateNumber    xsd:string  ;
+    :owner          @:User
+}

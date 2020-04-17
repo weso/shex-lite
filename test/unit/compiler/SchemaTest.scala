@@ -21,29 +21,21 @@
  */
 
 package compiler
-
-import es.weso.shexlc.ast.{Position, Schema}
 import es.weso.shexlc.ast.visitor.PrettyPrintASTVisitor
-import es.weso.shexl.ShExLCompiler
-import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg}
-import org.antlr.v4.runtime.misc.Interval
-import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
-import es.weso.shexlc.syntactic.generated.{Shexl2Lexer, Shexl2Parser}
-import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
+import es.weso.shexl.DefaultShExLCompiler
 import org.scalatest.funsuite.AnyFunSuite
 
 class SchemaTest extends AnyFunSuite {
 
-  test("sdfg") {
+  test("individual file compilation") {
 
-    val compileResult = ShExLCompiler.parseFile("test/assets/correct_big_schema_2.shexl")
+    val compileResult =
+      new DefaultShExLCompiler()
+        .addFile("test/assets/incorrect_schema_big_schema_2.shexl")
+        .compile()(0)
 
-    //println(s"Errors: ${compileResult.hasErrors}")
-    //println(s"Warnings: ${compileResult.hasWarnings}")
-    //println(compileResult.getSchema)
-
-    compileResult.getSchema match {
-      case Left(error) => //println(error)
+    compileResult.getResult match {
+      case Left(error) => println(error)
       case Right(schema) => {
         assert(!compileResult.hasErrors)
         println(schema.accept(new PrettyPrintASTVisitor(), new StringBuilder()))

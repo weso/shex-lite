@@ -22,19 +22,18 @@
 
 package es.weso.shexl
 
-class ShExLCompilerFlag(cliOptionName: String, description: String, active: Boolean = false) {
-  override def toString: String = s"-$cliOptionName"
-}
+import es.weso.shexlc.syntactic.generated.{Shexl2Lexer, Shexl2Parser}
+import org.antlr.v4.runtime.{CharStream, CharStreams, CommonTokenStream}
 
-object ShExLCompilerFlag {
+private[shexl] class ParseTreeGenerator(filepath: String) {
 
-  // Compiler analysis
-  final val SyntaxAnalysis = new ShExLCompilerFlag("-sya", "Syntax Analysis", true)
-  final val SemanticAnalysis = new ShExLCompilerFlag("-sea", "Semantic Analysis", true)
+  var inputCharStream: CharStream = null
 
-  // Warnings / Errors
-  final val WarningEmission = new ShExLCompilerFlag("-warn", "Warning Emission", true)
-  final val ErrorEmission = new ShExLCompilerFlag("-err", "Error Emission", true)
-
-  // Other flags down here.
+  def generateParseTree(): Shexl2Parser = {
+    inputCharStream = CharStreams.fromFileName(filepath)
+    val caseInsensitiveCharStream = new CaseChangingCharStream(inputCharStream, false)
+    val lexer = new Shexl2Lexer(caseInsensitiveCharStream)
+    val tokens = new CommonTokenStream(lexer)
+    new Shexl2Parser(tokens)
+  }
 }
