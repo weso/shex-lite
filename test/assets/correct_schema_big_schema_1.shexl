@@ -9,7 +9,7 @@ IMPORT <gpx.shex>
 
 # Represents a route
 :Route {
- :a                      [ viade:Route ] ; # Up to now the a token is not valid.
+ :a                      [ xsd:Route ] ; # Up to now the a token is not valid.
  schema:name            xsd:string	 ;
  schema:description	    xsd:string ? ;
  :points                @:Points ? ;
@@ -19,7 +19,7 @@ IMPORT <gpx.shex>
 }
 
 # RDF List of points of a route
-:Points CLOSED {
+:Points {
    rdf:first @:GeoCoordinates ;
    rdf:rest  [ "rest-string" ]
 }

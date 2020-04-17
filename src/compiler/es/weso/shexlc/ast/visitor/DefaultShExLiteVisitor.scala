@@ -25,7 +25,7 @@ import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr._
 import es.weso.shexlc.ast.stmt._
 
-class DefaultShExLiteGenericVisitor[TP] extends ShExLiteGenericVisitor[TP, Unit] {
+class DefaultShExLiteVisitor[TP] extends ShExLiteGenericVisitor[TP, Unit] {
 
   override def visit(schema: Schema, param: TP): Unit = {
     schema.stmts.foreach(stmt => stmt.accept(this, param))

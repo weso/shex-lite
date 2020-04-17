@@ -22,4 +22,18 @@
 
 package es.weso.shexl
 
-class ShExLCompilerConfig(var flags: List[ShExLCompilerFlag])
+trait ShExLCompilerConfig {
+  def generateWarnings: Boolean = true
+  def generateCode: Boolean = true
+  def getTargetGenerationLanguage: String = "java"
+}
+
+private[shexl] object DefaultShExLCompilerConfig extends ShExLCompilerConfig {
+  override def generateCode: Boolean = false
+  override def getTargetGenerationLanguage: String = "none"
+}
+
+private[shexl] object NoWarningsShExLCompilerConfig extends ShExLCompilerConfig {
+  override def generateWarnings: Boolean = false
+  override def getTargetGenerationLanguage: String = "none"
+}

@@ -37,7 +37,7 @@ import es.weso.shexlc.internal.symboltable.SymbolTable
  * @param symbolTable is the symbol table used as a context.
  */
 class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteGenericVisitor[Unit] {
+  extends DefaultShExLiteVisitor[Unit] {
 
   override def visit(schema: Schema, param: Unit): Unit = {
     for(stmt <- schema.stmts) {
@@ -45,6 +45,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         msgsHandler.addMsg(
           new DefaultCompilerMsg(
             stmt.getPosition,
+            stmt.getRange,
             stmt.getRange,
             s"$stmt is not an statement",
             CompilerMsgErrorType.TypeCheckingError
@@ -61,6 +62,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           stmt.expression.getPosition,
           stmt.getRange,
+          stmt.expression.getRange,
           s"${stmt.expression} is not a Literal IRI Value Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
@@ -75,6 +77,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           stmt.expression.getPosition,
           stmt.getRange,
+          stmt.expression.getRange,
           s"${stmt.expression} is not a Literal IRI Value Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
@@ -89,6 +92,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           stmt.expression.getPosition,
           stmt.getRange,
+          stmt.expression.getRange,
           s"${stmt.expression} is not a Literal IRI Value Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
@@ -103,6 +107,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           stmt.label.getPosition,
           stmt.getRange,
+          stmt.label.getRange,
           s"${stmt.label} is not a Call Prefix or Base Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
@@ -114,6 +119,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           stmt.expression.getPosition,
           stmt.getRange,
+          stmt.expression.getRange,
           s"${stmt.expression} is not an Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
@@ -128,6 +134,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           stmt.expression.getPosition,
           stmt.getRange,
+          stmt.expression.getRange,
           s"${stmt.expression} is not a Call Shape Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
@@ -142,6 +149,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           expr.label.getPosition,
           expr.getRange,
+          expr.label.getRange,
           s"${expr.label} is not a Call Prefix / Base Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
@@ -157,6 +165,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
           new DefaultCompilerMsg(
             tripleExpr.getPosition,
             expr.getRange,
+            tripleExpr.getRange,
             s"$tripleExpr is not a Constraint Triple Expression",
             CompilerMsgErrorType.TypeCheckingError
           )
@@ -172,6 +181,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           expr.property.getPosition,
           expr.getRange,
+          expr.property.getRange,
           s"${expr.property} is not a Call Prefix Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
@@ -184,6 +194,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           expr.constraint.getPosition,
           expr.getRange,
+          expr.constraint.getRange,
           s"${expr.constraint} is not an Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
@@ -196,6 +207,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
         new DefaultCompilerMsg(
           expr.cardinality.getPosition,
           expr.getRange,
+          expr.cardinality.getRange,
           s"${expr.cardinality} is not a Cardinality Expression",
           CompilerMsgErrorType.TypeCheckingError
         )
@@ -211,6 +223,7 @@ class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMs
           new DefaultCompilerMsg(
             value.getPosition,
             expr.getRange,
+            value.getRange,
             s"$value is not a Valid Value Type Expression",
             CompilerMsgErrorType.TypeCheckingError
           )

@@ -56,4 +56,6 @@ object CompilerMsgErrorType {
    */
   final val CouldNotCreateSchemaForSource = new CompilerMsgErrorType("E011", "couldn't create schema for source file")
   final val TypeCheckingError = new CompilerMsgErrorType("E012", "not valid type")
+  final val CodeGeneratorError = new CompilerMsgErrorType("E013", "code generation error")
+  final val FeatureNotAvailable = new CompilerMsgErrorType("E013", "feature not available")
 }

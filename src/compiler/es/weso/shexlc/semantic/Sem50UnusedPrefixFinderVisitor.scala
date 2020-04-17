@@ -23,13 +23,14 @@
 package es.weso.shexlc.semantic
 
 import es.weso.shexlc.ast.stmt._
-import es.weso.shexlc.ast.visitor.DefaultShExLiteGenericVisitor
+import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
 import es.weso.shexlc.internal.io.impl._
 import es.weso.shexlc.internal.symboltable.SymbolTable
+import org.antlr.v4.runtime.misc.Interval
 
 class Sem50UnusedPrefixFinderVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteGenericVisitor[Unit] {
+  extends DefaultShExLiteVisitor[Unit] {
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     stmt.expression.accept(this, param)
@@ -39,6 +40,7 @@ class Sem50UnusedPrefixFinderVisitor(symbolTable: SymbolTable, msgsHandler: Comp
         new DefaultCompilerMsg(
           stmt.expression.getPosition,
           stmt.getRange,
+          stmt.expression.getRange,
           s"the base `${stmt.expression.asLiteralIRIValueExpr.value}` definition is set but not used",
           CompilerMsgWarningType.BaseSetButNotUsed
         )
@@ -54,6 +56,7 @@ class Sem50UnusedPrefixFinderVisitor(symbolTable: SymbolTable, msgsHandler: Comp
         new DefaultCompilerMsg(
           stmt.expression.getPosition,
           stmt.getRange,
+          new Interval(stmt.getRange.a + 7, stmt.getRange.b),
           s"the prefix `${stmt.label}` definition is not used",
           CompilerMsgWarningType.PrefixNotUsed
         )

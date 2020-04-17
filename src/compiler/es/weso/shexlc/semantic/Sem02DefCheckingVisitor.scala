@@ -29,9 +29,10 @@ import es.weso.shexlc.ast.visitor._
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
 import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg}
 import es.weso.shexlc.internal.symboltable.SymbolTable
+import org.antlr.v4.runtime.misc.Interval
 
 class Sem02DefCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteGenericVisitor[Unit] {
+  extends DefaultShExLiteVisitor[Unit] {
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     val existingSTValue = symbolTable.getBase.expression.asLiteralIRIValueExpr.value
@@ -43,6 +44,7 @@ class Sem02DefCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsg
       msgsHandler.addMsg(
         new DefaultCompilerMsg(
           stmt.getPosition,
+          stmt.getRange,
           stmt.getRange,
           s"this base definition overrides the previous one " +
             s"(${symbolTable.getBase.getLine}:${symbolTable.getBase.getColumn})" +
@@ -62,6 +64,7 @@ class Sem02DefCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsg
         new DefaultCompilerMsg(
           stmt.expression.getPosition,
           stmt.getRange,
+          new Interval(stmt.getRange.a+7, stmt.getRange.b),
           s"this prefix definition overrides the previous one " +
             s"(${existingSTValue.getLine}:${existingSTValue.getColumn}) with value " +
             s"${existingSTValue.expression.asLiteralIRIValueExpr.value}",
@@ -90,6 +93,7 @@ class Sem02DefCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsg
       msgsHandler.addMsg(
         new DefaultCompilerMsg(
           stmt.label.getPosition,
+          stmt.label.getRange,
           stmt.label.getRange,
           s"this shape definition overrides the previous one " +
             s"(${existingSTValue.getLine}:${existingSTValue.getColumn})",
@@ -127,6 +131,7 @@ class Sem02DefCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsg
       msgsHandler.addMsg(
         new DefaultCompilerMsg(
           stmt.getPosition,
+          stmt.getRange,
           stmt.getRange,
           cause,
           CompilerMsgErrorType.StartOverride

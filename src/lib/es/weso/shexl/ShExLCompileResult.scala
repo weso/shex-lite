@@ -25,7 +25,7 @@ package es.weso.shexl
 import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
 
-class ShExLCompileResult(schema: Either[CompilerMsg, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
+class ShExLCompileResult(schema: Either[String, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
 
   def hasErrors: Boolean = compilerMsgsHandler.hasErrorMsgs
 
@@ -37,5 +37,5 @@ class ShExLCompileResult(schema: Either[CompilerMsg, Schema], compilerMsgsHandle
 
   def getWarnings: List[CompilerMsg] = compilerMsgsHandler.getWarningMsgs
 
-  def getSchema: Either[CompilerMsg, Schema] = schema
+  def getResult: Either[String, Schema] = schema
 }
