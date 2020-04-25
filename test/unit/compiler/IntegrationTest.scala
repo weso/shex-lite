@@ -44,6 +44,7 @@ class IntegrationTest extends AnyFunSuite with BeforeAndAfter {
         // Parsing a sample file that contains a base redefinition.
         val ast = compiler.addFile(file).compile()(0)
         assert(!ast.hasErrors)
+        asset(false) // Error added to trigger weso-bot
       }
     }
 
