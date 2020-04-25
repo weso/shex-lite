@@ -38,6 +38,7 @@ class SchemaTest extends AnyFunSuite {
       case Left(error) => println(error)
       case Right(schema) => {
         assert(!compileResult.hasErrors)
+        assert(false)// Error introduced to trigger weso-bot on pr.
         println(schema.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
       }
     }
