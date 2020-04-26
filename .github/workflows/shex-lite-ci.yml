@@ -22,14 +22,6 @@ jobs:
         architecture: x64
     - name: Run tests
       run: sbt ++2.13.1! clean test
-    - name: comment on pr if fail
-      if: "github.event_name == 'pull_request' && failure()"
-      uses: unsplash/comment-on-pr@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.WESOBOT_ACCESS_TOKEN }}
-      with:
-        msg: "Hi, it seems that the tests on **Linux** with **sbt 2.13.1** failed. Check them out please."
-        check_for_duplicate_msg: false  # OPTIONAL
     
   # Test run on linux platform
   windows-test:
@@ -49,15 +41,7 @@ jobs:
         architecture: x64
     - name: Run tests
       run: sbt ++2.13.1! clean test
-    - name: comment on pr if fail
-      if: "github.event_name == 'pull_request' && failure()"
-      uses: unsplash/comment-on-pr@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.WESOBOT_ACCESS_TOKEN }}
-      with:
-        msg: "Hi, it seems that the tests on **Windows** with **sbt 2.13.1** failed. Check them out please."
-        check_for_duplicate_msg: false  # OPTIONAL
-
+      
   # Test run on linux platform
   macos-test:
     
@@ -78,14 +62,6 @@ jobs:
       run: brew install sbt
     - name: Run tests
       run: sbt ++2.13.1! clean test
-    - name: comment on pr if fail
-      if: "github.event_name == 'pull_request' && failure()"
-      uses: unsplash/comment-on-pr@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.WESOBOT_ACCESS_TOKEN }}
-      with:
-        msg: "Hi, it seems that the tests on **macOS** with **sbt 2.13.1** failed. Check them out please."
-        check_for_duplicate_msg: false  # OPTIONAL
 
   # Test run on linux platform
   coverage-report:
@@ -109,11 +85,3 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         fail_ci_if_error: true
-    - name: comment on pr if fail
-      if: "github.event_name == 'pull_request' && failure()"
-      uses: unsplash/comment-on-pr@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.WESOBOT_ACCESS_TOKEN }}
-      with:
-        msg: "Hi, it seems that the tests and coverage on **Linux** with **sbt 2.12.10** failed. Check them out please."
-        check_for_duplicate_msg: false  # OPTIONAL
