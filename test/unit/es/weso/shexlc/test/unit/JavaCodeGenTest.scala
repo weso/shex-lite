@@ -1,4 +1,4 @@
-package compiler
+package es.weso.shexlc.test.unit
 
 import java.io.File
 

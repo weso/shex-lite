@@ -20,9 +20,10 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler
-import es.weso.shexlc.ast.visitor.PrettyPrintASTVisitor
+package es.weso.shexlc.test.unit
+
 import es.weso.shexl.DefaultShExLCompiler
+import es.weso.shexlc.ast.visitor.PrettyPrintASTVisitor
 import org.scalatest.funsuite.AnyFunSuite
 
 class SchemaTest extends AnyFunSuite {

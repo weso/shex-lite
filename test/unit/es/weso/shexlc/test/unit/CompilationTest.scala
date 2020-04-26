@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package compiler
+package es.weso.shexlc.test.unit
 
 import java.io.File
 
