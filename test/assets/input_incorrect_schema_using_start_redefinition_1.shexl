@@ -1,0 +1,9 @@
+PREFIX : <http://google.es/>
+PREFIX xsd: <http://schema.org/>
+
+START = @<user>
+START = @<user2>
+
+<user> .
+
+<user2> .
