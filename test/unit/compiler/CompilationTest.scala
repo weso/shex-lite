@@ -28,7 +28,7 @@ import es.weso.shexl.DefaultShExLCompiler
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
-class IntegrationTest extends AnyFunSuite with BeforeAndAfter {
+class CompilationTest extends AnyFunSuite with BeforeAndAfter {
 
   var compiler = new DefaultShExLCompiler()
 

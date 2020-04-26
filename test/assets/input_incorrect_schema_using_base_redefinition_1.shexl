@@ -1,0 +1,5 @@
+PREFIX : <http://google.es/>
+PREFIX xsd: <http://schema.org/>
+
+BASE <http://i-m-a-base/>
+BASE <http://im-a-repeated-base/>
