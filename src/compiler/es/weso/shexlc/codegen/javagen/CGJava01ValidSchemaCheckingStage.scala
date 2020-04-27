@@ -22,6 +22,8 @@
 
 package es.weso.shexlc.codegen.javagen
 
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage, ShExLCompilerTargetLanguage}
+import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr._
 import es.weso.shexlc.ast.stmt._
 import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
@@ -29,7 +31,21 @@ import es.weso.shexlc.internal.io.CompilerMsgsHandler
 import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, CompilerMsgWarningType, DefaultCompilerMsg}
 import es.weso.shexlc.internal.symboltable.SymbolTable
 
-class CGJava01ValidSchemaCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler) extends DefaultShExLiteVisitor[Unit] {
+class CGJava01ValidSchemaCheckingStage extends DefaultShExLiteVisitor[Unit] with ShExLCompilerStage {
+
+  private[this] var symbolTable: SymbolTable = null
+  private[this] var msgsHandler: CompilerMsgsHandler = null
+
+  override def getPriority: Int = 20
+
+  override def execute(compiler: ShExLCompiler, ast: Schema): Unit = {
+    this.symbolTable = compiler.getCompilerSymbolTable
+    this.msgsHandler = compiler.getCompilerMsgsHandler
+    if(compiler.getConfiguration.generateCode
+      && compiler.getConfiguration.getTargetGenerationLanguages.contains(ShExLCompilerTargetLanguage.Java)) {
+      this.visit(ast, ())
+    }
+  }
 
 
   override def visit(stmt: ImportStmt, param: Unit): Unit = {

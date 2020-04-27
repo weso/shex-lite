@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl;
+package es.weso.shexl.impl;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.misc.Interval;

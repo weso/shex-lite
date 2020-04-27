@@ -22,6 +22,8 @@
 
 package es.weso.shexlc.semantic
 
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage}
+import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.stmt._
 import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
@@ -29,8 +31,19 @@ import es.weso.shexlc.internal.io.impl._
 import es.weso.shexlc.internal.symboltable.SymbolTable
 import org.antlr.v4.runtime.misc.Interval
 
-class Sem50UnusedPrefixFinderVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteVisitor[Unit] {
+class Sem50UnusedPrefixFinderStage
+  extends DefaultShExLiteVisitor[Unit] with ShExLCompilerStage {
+
+  private[this] var symbolTable: SymbolTable = null
+  private[this] var msgsHandler: CompilerMsgsHandler = null
+
+  override def getPriority: Int = 10
+
+  override def execute(compiler: ShExLCompiler, ast: Schema): Unit = {
+    this.symbolTable = compiler.getCompilerSymbolTable
+    this.msgsHandler = compiler.getCompilerMsgsHandler
+    this.visit(ast, ())
+  }
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     stmt.expression.accept(this, param)

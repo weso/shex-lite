@@ -2,13 +2,13 @@ package es.weso.shexlc.test.unit
 
 import java.io.File
 
-import es.weso.shexl.{DefaultShExLCompiler, ShExLCompilerConfig}
+import es.weso.shexl.impl.{ShExLCompilerImpl, ShExLCompilerConfig}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
 class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
 
-  var compiler = new DefaultShExLCompiler()
+  var compiler = new ShExLCompilerImpl()
   var config = new ShExLCompilerConfig {
     override def generateWarnings: Boolean = true
     //override def getTargetGenerationLanguage: String = targetLanguage
@@ -25,7 +25,7 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
     for(file <- correctFiles) {
       test(s"Compiling file and generating code for file $file should pass without errors") {
         // Parsing a sample file that contains a base redefinition.
-        val ast = compiler.addFile(file).compile()(0)
+        val ast = compiler.addSource(file).compile.getCompilationResult
         assert(!ast.hasErrors)
       }
     }
@@ -33,7 +33,7 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
     for(file <- incorrectFiles) {
       test(s"Compiling file and generating code for file $file should pass without errors") {
         // Parsing a sample file that contains a base redefinition.
-        val ast = compiler.addFile(file).compile()(0)
+        val ast = compiler.addSource(file).compile.getCompilationResult
         assert(ast.hasErrors)
       }
     }

@@ -1,13 +1,13 @@
 package es.weso.shexlc.test.benchmark
 
-import es.weso.shexl.{DefaultShExLCompiler, ShExLCompilerConfig}
+import es.weso.shexl.impl.{ShExLCompilerImpl, ShExLCompilerConfig}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
 class PerformanceTests extends AnyFunSuite with BeforeAndAfter {
 
   private[this] val iterations = 10000
-  private[this] var compiler = new DefaultShExLCompiler()
+  private[this] var compiler = new ShExLCompilerImpl()
   private[this] val correct_file = "test/assets/correct_schema_big_schema_2.shexl"
   private[this] val config_1 = new ShExLCompilerConfig {
     override def generateWarnings: Boolean = true
@@ -21,12 +21,12 @@ class PerformanceTests extends AnyFunSuite with BeforeAndAfter {
   var meanTime = 0L;
   while (i < iterations) {
     test(s"Compiling correct file at $i time should end in less thant 1000000000ns.") {
-      compiler = new DefaultShExLCompiler()
+      compiler = new ShExLCompilerImpl()
       compiler.setConfiguration(config_1)
-      compiler.addFile(correct_file)
+      compiler.addSource(correct_file)
 
       startTime = System.nanoTime()
-      compiler.compile()
+      compiler.compile
       time = System.nanoTime() - startTime
       assert(time < 1000000000)
     }

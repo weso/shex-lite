@@ -24,13 +24,13 @@ package es.weso.shexlc.test.unit
 
 import java.io.File
 
-import es.weso.shexl.DefaultShExLCompiler
+import es.weso.shexl.impl.ShExLCompilerImpl
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
 class CompilationTest extends AnyFunSuite with BeforeAndAfter {
 
-  var compiler = new DefaultShExLCompiler()
+  var compiler = new ShExLCompilerImpl()
 
   generateTestCases()
 
@@ -42,14 +42,14 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
     for(file <- correctFiles) {
       test(s"Compiling file $file should pass without errors") {
         // Parsing a sample file that contains a base redefinition.
-        val ast = compiler.addFile(file).compile()(0)
+        val ast = compiler.addSource(file).compile.getCompilationResult
         assert(!ast.hasErrors)
       }
     }
 
     for(file <- incorrectFiles) {
       test(s"Compiling file $file should generate errors") {
-        val ast = compiler.addFile(file).compile()(0)
+        val ast = compiler.addSource(file).compile.getCompilationResult
         assert(ast.hasErrors)
       }
     }
@@ -57,9 +57,9 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
     // Multiple file compiling
     test(s"Compiling multiple correct files at the same time should pass without errors") {
       for(file <- correctFiles) {
-        compiler.addFile(file)
+        compiler.addSource(file)
       }
-      val results = compiler.compile()
+      val results = compiler.compile.getCompilationResult.getIndividualResults
       for(result <- results) {
         assert(!result.hasErrors)
       }
@@ -67,9 +67,9 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
 
     test(s"Compiling multiple incorrect files at the same time should pass with errors") {
       for(file <- incorrectFiles) {
-        compiler.addFile(file)
+        compiler.addSource(file)
       }
-      val results = compiler.compile()
+      val results = compiler.compile.getCompilationResult.getIndividualResults
       for(result <- results) {
         assert(result.hasErrors)
       }

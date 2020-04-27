@@ -20,7 +20,7 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexlc.codegen.javagen
+package es.weso.shexlc.codegen.javagen.internal
 
 import java.io.PrintWriter
 
@@ -28,8 +28,7 @@ import es.weso.shexlc.ast.expr._
 import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
 
-class CGJava03FieldsGeneratorVisitor(msgsHandler: CompilerMsgsHandler, writer: PrintWriter)
-  extends DefaultShExLiteVisitor[String] {
+class CGJava03FieldsGenerator(msgsHandler: CompilerMsgsHandler, writer: PrintWriter) extends DefaultShExLiteVisitor[String] {
 
   override def visit(expr: ConstraintTripleExpr, param: String): Unit = {
     val property = expr.property

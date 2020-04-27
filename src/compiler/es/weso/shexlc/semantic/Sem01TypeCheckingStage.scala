@@ -22,6 +22,7 @@
 
 package es.weso.shexlc.semantic
 
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage}
 import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr._
 import es.weso.shexlc.ast.stmt._
@@ -34,10 +35,20 @@ import es.weso.shexlc.internal.symboltable.SymbolTable
  * The identification walker is the tool that travels the AST just to identify possible definitions an add the
  * information found to the symbol table.
  *
- * @param symbolTable is the symbol table used as a context.
  */
-class Sem01TypeCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteVisitor[Unit] {
+class Sem01TypeCheckingStage
+  extends DefaultShExLiteVisitor[Unit] with ShExLCompilerStage {
+
+  private[this] var symbolTable: SymbolTable = null
+  private[this] var msgsHandler: CompilerMsgsHandler = null
+
+  override def getPriority: Int = 1
+
+  override def execute(compiler: ShExLCompiler, ast: Schema): Unit = {
+    this.symbolTable = compiler.getCompilerSymbolTable
+    this.msgsHandler = compiler.getCompilerMsgsHandler
+    this.visit(ast, ())
+  }
 
   override def visit(schema: Schema, param: Unit): Unit = {
     for(stmt <- schema.stmts) {

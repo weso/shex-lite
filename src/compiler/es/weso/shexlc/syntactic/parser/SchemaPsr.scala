@@ -24,7 +24,7 @@ package es.weso.shexlc.syntactic.parser
 
 import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.stmt.Statement
-import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
+import es.weso.shexlc.syntactic.Syn01ASTBuilderStage
 import es.weso.shexlc.syntactic.generated.Shexl2Parser
 
 import scala.collection.JavaConverters._
@@ -37,7 +37,7 @@ import scala.collection.JavaConverters._
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class SchemaPsr(ctx: Shexl2Parser.SchemaContext, visitor: Syn01ASTBuilderVisitor) extends Parser[Schema] {
+class SchemaPsr(ctx: Shexl2Parser.SchemaContext, visitor: Syn01ASTBuilderStage) extends Parser[Schema] {
 
   override def getParseResult: Schema = {
     val statements: List[Statement] = ctx.statement().asScala

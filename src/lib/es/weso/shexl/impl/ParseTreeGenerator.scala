@@ -20,20 +20,20 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexl.impl
 
-trait ShExLCompilerConfig {
-  def generateWarnings: Boolean = true
-  def generateCode: Boolean = true
-  def getTargetGenerationLanguage: String = "java"
-}
+import es.weso.shexlc.syntactic.generated.{Shexl2Lexer, Shexl2Parser}
+import org.antlr.v4.runtime._
 
-private[shexl] object DefaultShExLCompilerConfig extends ShExLCompilerConfig {
-  override def generateCode: Boolean = false
-  override def getTargetGenerationLanguage: String = "none"
-}
+private[shexl] class ParseTreeGenerator(filepath: String) {
 
-private[shexl] object NoWarningsShExLCompilerConfig extends ShExLCompilerConfig {
-  override def generateWarnings: Boolean = false
-  override def getTargetGenerationLanguage: String = "none"
+  var inputCharStream: CharStream = null
+
+  def generateParseTree(): Shexl2Parser = {
+    inputCharStream = CharStreams.fromFileName(filepath)
+    val caseInsensitiveCharStream = new CaseChangingCharStream(inputCharStream, false)
+    val lexer = new Shexl2Lexer(caseInsensitiveCharStream)
+    val tokens = new CommonTokenStream(lexer)
+    new Shexl2Parser(tokens)
+  }
 }

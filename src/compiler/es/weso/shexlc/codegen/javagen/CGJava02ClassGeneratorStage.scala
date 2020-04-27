@@ -24,13 +24,30 @@ package es.weso.shexlc.codegen.javagen
 
 import java.io.{File, PrintWriter}
 
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage, ShExLCompilerTargetLanguage}
+import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr.{CallBaseExpr, CallPrefixExpr}
 import es.weso.shexlc.ast.stmt.ShapeDefStmt
 import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
+import es.weso.shexlc.codegen.javagen.internal.{CGJava03FieldsGenerator, CGJava04ConstructorGenerator, CGJava05GetSetGenerator}
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
+import es.weso.shexlc.internal.symboltable.SymbolTable
 
-class CGJava02ClassGeneratorVisitor(msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteVisitor[String] {
+class CGJava02ClassGeneratorStage extends DefaultShExLiteVisitor[String] with ShExLCompilerStage {
+
+  private[this] var symbolTable: SymbolTable = null
+  private[this] var msgsHandler: CompilerMsgsHandler = null
+
+  override def getPriority: Int = 21
+
+  override def execute(compiler: ShExLCompiler, ast: Schema): Unit = {
+    this.symbolTable = compiler.getCompilerSymbolTable
+    this.msgsHandler = compiler.getCompilerMsgsHandler
+    if(compiler.getConfiguration.generateCode
+      && compiler.getConfiguration.getTargetGenerationLanguages.contains(ShExLCompilerTargetLanguage.Java)) {
+      ast.accept(this, null)
+    }
+  }
 
   private[this] var className: String = ""
   private[this] var writer: PrintWriter = null
@@ -38,9 +55,9 @@ class CGJava02ClassGeneratorVisitor(msgsHandler: CompilerMsgsHandler)
   override def visit(stmt: ShapeDefStmt, param: String): Unit = {
     stmt.label.accept(this, param)
     writer = new PrintWriter(new File(className + ".java"))
-    val fieldsGen = new CGJava03FieldsGeneratorVisitor(msgsHandler, writer)
-    val constructorGen = new CGJava04ConstructorGeneratorVisitor(msgsHandler, writer)
-    val getSetGen = new CGJava05GetSetGeneratorVisitor(msgsHandler, writer)
+    val fieldsGen = new CGJava03FieldsGenerator(msgsHandler, writer)
+    val constructorGen = new CGJava04ConstructorGenerator(msgsHandler, writer)
+    val getSetGen = new CGJava05GetSetGenerator(msgsHandler, writer)
 
     writer.println(s"public class $className {")
     writer.println()

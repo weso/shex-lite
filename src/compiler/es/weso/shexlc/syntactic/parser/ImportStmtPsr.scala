@@ -36,7 +36,7 @@ import es.weso.shexlc.syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class ImportStmtPsr(ctx: Shexl2Parser.Import_stmtContext, visitor: Syn01ASTBuilderVisitor)
+class ImportStmtPsr(ctx: Shexl2Parser.Import_stmtContext, visitor: Syn01ASTBuilderStage)
   extends Parser[ImportStmt] {
 
   override def getParseResult: ImportStmt = {

@@ -24,7 +24,7 @@ package es.weso.shexlc.syntactic.parser
 
 import es.weso.shexlc.ast.expr.LiteralRealValueExpr
 import org.antlr.v4.runtime.misc.Interval
-import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
+import es.weso.shexlc.syntactic.Syn01ASTBuilderStage
 import es.weso.shexlc.syntactic.generated.Shexl2Parser
 
 /**
@@ -35,7 +35,7 @@ import es.weso.shexlc.syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class LiteralRealValueExprPsr(ctx: Shexl2Parser.Literal_real_value_exprContext, visitor: Syn01ASTBuilderVisitor)
+class LiteralRealValueExprPsr(ctx: Shexl2Parser.Literal_real_value_exprContext, visitor: Syn01ASTBuilderStage)
   extends Parser[LiteralRealValueExpr] {
 
   override def getParseResult: LiteralRealValueExpr = {

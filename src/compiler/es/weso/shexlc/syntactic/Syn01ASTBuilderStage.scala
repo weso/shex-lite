@@ -22,12 +22,14 @@
 
 package es.weso.shexlc.syntactic
 
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage}
+import es.weso.shexl.impl.AbstractShExLCompilerStageImpl
 import es.weso.shexlc.ast.NodeWithPosition
 import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.syntactic.generated.{Shexl2BaseVisitor, Shexl2Parser}
 import es.weso.shexlc.syntactic.parser._
 
-class Syn01ASTBuilderVisitor extends Shexl2BaseVisitor[NodeWithPosition] {
+class Syn01ASTBuilderStage extends Shexl2BaseVisitor[NodeWithPosition] {
 
   override def visitSchema(ctx: Shexl2Parser.SchemaContext): Schema = {
     new SchemaPsr(ctx, this).getParseResult

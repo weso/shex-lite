@@ -20,15 +20,18 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexlc.codegen.javagen
+package es.weso.shexlc.codegen.javagen.internal
 
 import java.io.PrintWriter
 
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage, ShExLCompilerTargetLanguage}
+import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr.{CallPrefixExpr, CallShapeExpr, ConstraintBlockTripleExpr}
 import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
+import es.weso.shexlc.internal.symboltable.SymbolTable
 
-class CGJava05GetSetGeneratorVisitor(msgsHandler: CompilerMsgsHandler, writer: PrintWriter)
+class CGJava05GetSetGenerator(msgsHandler: CompilerMsgsHandler, writer: PrintWriter)
   extends DefaultShExLiteVisitor[String] {
 
   override def visit(expr: ConstraintBlockTripleExpr, param: String): Unit = {

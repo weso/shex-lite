@@ -9,6 +9,7 @@ crossScalaVersions := Seq(scala212, scala213)
 
 Compile / scalaSource := baseDirectory.value / "src/compiler"
 Compile / unmanagedSourceDirectories += baseDirectory.value / "src/lib"
+Compile / unmanagedSourceDirectories += baseDirectory.value / "src/cli"
 
 Test / unmanagedSourceDirectories += baseDirectory.value / "test/benchmark"
 Test / unmanagedSourceDirectories += baseDirectory.value / "test/unit"

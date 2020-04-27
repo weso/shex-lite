@@ -22,7 +22,7 @@
 
 package es.weso.shexlc.test.unit
 
-import es.weso.shexl.DefaultShExLCompiler
+import es.weso.shexl.impl.{ShExLCompilerConfig, ShExLCompilerImpl}
 import es.weso.shexlc.ast.visitor.PrettyPrintASTVisitor
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -31,16 +31,20 @@ class SchemaTest extends AnyFunSuite {
   test("individual file compilation") {
 
     val compileResult =
-      new DefaultShExLCompiler()
-        .addFile("test/assets/incorrect_schema_big_schema_2.shexl")
-        .compile()(0)
+      new ShExLCompilerImpl()
+        .addSource("test/assets/incorrect_schema_big_schema_2.shexl")
+        .setConfiguration(new ShExLCompilerConfig {
+          override def generateWarnings: Boolean = true
+          //override def getTargetGenerationLanguage: String = targetLanguage
+          override def generateCode: Boolean = false
+        })
+        .compile.getCompilationResult
 
-    compileResult.getResult match {
-      case Left(error) => println(error)
-      case Right(schema) => {
-        assert(!compileResult.hasErrors)
-        println(schema.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
-      }
+    if(compileResult.hasErrors) {
+      compileResult.getIndividualResults.foreach(result => result.getErrors.foreach(err => println(err)))
+    } else {
+      assert(!compileResult.hasErrors)
+      compileResult.getIndividualResults.foreach(result => result.getGeneratedSchema.head.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
     }
   }
 

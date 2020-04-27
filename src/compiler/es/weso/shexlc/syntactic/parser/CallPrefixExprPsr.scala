@@ -24,7 +24,7 @@ package es.weso.shexlc.syntactic.parser
 
 import es.weso.shexlc.ast.expr.{CallBaseExpr, CallExpr, CallPrefixExpr, Expression}
 import org.antlr.v4.runtime.misc.Interval
-import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
+import es.weso.shexlc.syntactic.Syn01ASTBuilderStage
 import es.weso.shexlc.syntactic.generated.Shexl2Parser
 
 /**
@@ -34,7 +34,7 @@ import es.weso.shexlc.syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor top propagate any action.
  */
-class CallPrefixExprPsr(ctx: Shexl2Parser.Call_prefix_exprContext, visitor: Syn01ASTBuilderVisitor)
+class CallPrefixExprPsr(ctx: Shexl2Parser.Call_prefix_exprContext, visitor: Syn01ASTBuilderStage)
   extends Parser[CallExpr] {
 
   override def getParseResult: CallExpr = {

@@ -25,7 +25,7 @@ package es.weso.shexlc.syntactic.parser
 import es.weso.shexlc.ast.expr.Expression
 import es.weso.shexlc.ast.stmt.PrefixDefStmt
 import org.antlr.v4.runtime.misc.Interval
-import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
+import es.weso.shexlc.syntactic.Syn01ASTBuilderStage
 import es.weso.shexlc.syntactic.generated.Shexl2Parser
 
 /**
@@ -36,7 +36,7 @@ import es.weso.shexlc.syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor to propagate any action.
  */
-class PrefixDefStmtPsr(ctx: Shexl2Parser.Prefix_def_stmtContext, visitor: Syn01ASTBuilderVisitor)
+class PrefixDefStmtPsr(ctx: Shexl2Parser.Prefix_def_stmtContext, visitor: Syn01ASTBuilderStage)
   extends Parser[PrefixDefStmt] {
 
   override def getParseResult: PrefixDefStmt = {
