@@ -19,9 +19,15 @@ trait ShExLCompilerStage extends Comparable[ShExLCompilerStage] {
   def getPriority: Int
 
   /**
-   * Executes the Stage.
+   * Executes the stage, the passed variables can be modified so their value will be passed to the next stage.
+   *
+   * @param compiler that it is executing the stage.
+   * @param ast is the Abstract Syntax Tree that is being processed. Stages can modify the ast and next stages will
+   *            receive the modified AST.
+   * @param individualResult is the individual result that after all the stages will be given to the user. Each stage
+   *                         can append information on it.
    */
-  def execute(compiler: ShExLCompiler, ast: Schema)
+  def execute(compiler: ShExLCompiler, ast: Schema, individualResult: ShExLCompilerIndividualResult)
 
   override def compareTo(o: ShExLCompilerStage): Int = {
     // If the current element has a lower priority number means it is more important.

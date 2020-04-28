@@ -22,13 +22,11 @@
 
 package es.weso.shexlc.codegen.javagen.internal
 
-import java.io.PrintWriter
-
 import es.weso.shexlc.ast.expr._
 import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
 
-class CGJava03FieldsGenerator(msgsHandler: CompilerMsgsHandler, writer: PrintWriter) extends DefaultShExLiteVisitor[String] {
+class CGJava03FieldsGenerator(msgsHandler: CompilerMsgsHandler, stringBuilder: StringBuilder) extends DefaultShExLiteVisitor[String] {
 
   override def visit(expr: ConstraintTripleExpr, param: String): Unit = {
     val property = expr.property
@@ -39,15 +37,16 @@ class CGJava03FieldsGenerator(msgsHandler: CompilerMsgsHandler, writer: PrintWri
     constraint.accept(this, cardinality.asCardinalityExpr.max.toString)
 
     // Field name.
-    writer.println(s"${property.asCallPrefixExpr.argument.toLowerCase()};")
+    stringBuilder.append(s"${property.asCallPrefixExpr.argument.toLowerCase()};")
+    stringBuilder.append("\n")
   }
 
   override def visit(expr: CallPrefixExpr, isList: String): Unit = {
-    writer.print("\tprivate ")
+    stringBuilder.append("\tprivate ")
     expr.argument match {
-      case "string" => if(isList > "1") writer.print("List<String> ") else writer.print("String ")
-      case "integer" => if(isList > "1") writer.print("List<int> ") else writer.print("int ")
-      case "date" => if(isList > "1") writer.print("List<Date> ") else writer.print("Date ")
+      case "string" => if(isList > "1") stringBuilder.append("List<String> ") else stringBuilder.append("String ")
+      case "integer" => if(isList > "1") stringBuilder.append("List<int> ") else stringBuilder.append("int ")
+      case "date" => if(isList > "1") stringBuilder.append("List<Date> ") else stringBuilder.append("Date ")
       case _ =>
     }
   }
@@ -56,15 +55,15 @@ class CGJava03FieldsGenerator(msgsHandler: CompilerMsgsHandler, writer: PrintWri
     if(expr.label.isCallPrefixExpr) {
       val prefixCall = expr.label.asCallPrefixExpr
       if(isList > "1")
-        writer.print(s"\tprivate List<${prefixCall.argument.toLowerCase.capitalize}> ")
+        stringBuilder.append(s"\tprivate List<${prefixCall.argument.toLowerCase.capitalize}> ")
       else
-        writer.print(s"\tprivate ${prefixCall.argument.toLowerCase.capitalize} ")
+        stringBuilder.append(s"\tprivate ${prefixCall.argument.toLowerCase.capitalize} ")
     } else {
       val baseCall = expr.label.asCallBaseExpr
       if(isList > "1")
-        writer.print(s"\tprivate List<${baseCall.argument.toLowerCase.capitalize}> ")
+        stringBuilder.append(s"\tprivate List<${baseCall.argument.toLowerCase.capitalize}> ")
       else
-        writer.print(s"\tprivate ${baseCall.argument.toLowerCase.capitalize} ")
+        stringBuilder.append(s"\tprivate ${baseCall.argument.toLowerCase.capitalize} ")
     }
   }
 }

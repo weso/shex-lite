@@ -25,5 +25,8 @@ object ShExLiteCLI extends CliMain[Unit](name = "shexlc", description = "compile
 
       // Finally compile them.
       compiler.compile
+
+      compiler.getCompilationResult.getIndividualResults.foreach(res => res.printErrors)
+      compiler.getCompilationResult.getIndividualResults.foreach(res => res.printWarnings)
     }
 }

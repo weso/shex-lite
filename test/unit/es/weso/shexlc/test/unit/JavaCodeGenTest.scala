@@ -2,7 +2,8 @@ package es.weso.shexlc.test.unit
 
 import java.io.File
 
-import es.weso.shexl.impl.{ShExLCompilerImpl, ShExLCompilerConfig}
+import es.weso.shexl.ShExLCompilerTargetLanguage
+import es.weso.shexl.impl.{ShExLCompilerConfig, ShExLCompilerImpl}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -25,16 +26,26 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
     for(file <- correctFiles) {
       test(s"Compiling file and generating code for file $file should pass without errors") {
         // Parsing a sample file that contains a base redefinition.
-        val ast = compiler.addSource(file).compile.getCompilationResult
-        assert(!ast.hasErrors)
+        val compilationResult = compiler.addSource(file).compile.getCompilationResult
+        compilationResult.getIndividualResults.last.printErrors
+        compilationResult.getIndividualResults.last.printWarnings
+
+        val sources = compilationResult.getIndividualResults.toList(0).getGeneratedSources.get(ShExLCompilerTargetLanguage.Java).get.toList
+        sources.foreach(source => println(source.getSource))
+
+        assert(!compilationResult.hasErrors)
       }
     }
 
     for(file <- incorrectFiles) {
       test(s"Compiling file and generating code for file $file should pass without errors") {
         // Parsing a sample file that contains a base redefinition.
-        val ast = compiler.addSource(file).compile.getCompilationResult
-        assert(ast.hasErrors)
+        val compilationResult = compiler.addSource(file).compile.getCompilationResult
+        compilationResult.getIndividualResults.last.printErrors
+        compilationResult.getIndividualResults.last.printWarnings
+        println(compilationResult.getIndividualResults
+          .foreach(res => res.getGeneratedSources.size))
+        assert(compilationResult.hasErrors)
       }
     }
   }

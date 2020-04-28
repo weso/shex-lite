@@ -24,7 +24,8 @@ package es.weso.shexlc.codegen.javagen
 
 import java.io.{File, PrintWriter}
 
-import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage, ShExLCompilerTargetLanguage}
+import es.weso.shexl.impl.ShExLCompilerGeneratedSourceImpl
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerGeneratedSource, ShExLCompilerIndividualResult, ShExLCompilerStage, ShExLCompilerTargetLanguage}
 import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr.{CallBaseExpr, CallPrefixExpr}
 import es.weso.shexlc.ast.stmt.ShapeDefStmt
@@ -37,37 +38,63 @@ class CGJava02ClassGeneratorStage extends DefaultShExLiteVisitor[String] with Sh
 
   private[this] var symbolTable: SymbolTable = null
   private[this] var msgsHandler: CompilerMsgsHandler = null
+  private[this] var stringBuilder = new StringBuilder() // This string builder will contain the generated sources.
+  private[this] var result: ShExLCompilerIndividualResult = null
 
   override def getPriority: Int = 21
 
-  override def execute(compiler: ShExLCompiler, ast: Schema): Unit = {
+  override def execute(compiler: ShExLCompiler, ast: Schema, individualResult: ShExLCompilerIndividualResult): Unit = {
     this.symbolTable = compiler.getCompilerSymbolTable
     this.msgsHandler = compiler.getCompilerMsgsHandler
+    this.result = individualResult
+
     if(compiler.getConfiguration.generateCode
-      && compiler.getConfiguration.getTargetGenerationLanguages.contains(ShExLCompilerTargetLanguage.Java)) {
+      && compiler.getConfiguration.getTargetGenerationLanguages.contains(ShExLCompilerTargetLanguage.Java)
+      && !compiler.getCompilerMsgsHandler.hasErrorMsgs) {
       ast.accept(this, null)
     }
+
+    individualResult.setGeneratedSchema(Option(ast))
   }
 
   private[this] var className: String = ""
-  private[this] var writer: PrintWriter = null
 
   override def visit(stmt: ShapeDefStmt, param: String): Unit = {
-    stmt.label.accept(this, param)
-    writer = new PrintWriter(new File(className + ".java"))
-    val fieldsGen = new CGJava03FieldsGenerator(msgsHandler, writer)
-    val constructorGen = new CGJava04ConstructorGenerator(msgsHandler, writer)
-    val getSetGen = new CGJava05GetSetGenerator(msgsHandler, writer)
+    // Clean the string builder where the class will be generated.
+    this.stringBuilder = new StringBuilder()
 
-    writer.println(s"public class $className {")
-    writer.println()
+    stmt.label.accept(this, param)
+    val fieldsGen = new CGJava03FieldsGenerator(msgsHandler, stringBuilder)
+    val constructorGen = new CGJava04ConstructorGenerator(msgsHandler, stringBuilder)
+    val getSetGen = new CGJava05GetSetGenerator(msgsHandler, stringBuilder)
+
+    stringBuilder.append(s"public class $className {")
+    stringBuilder.append("\n")
     stmt.expression.accept(fieldsGen, param)
-    writer.println()
+    stringBuilder.append("\n")
     stmt.expression.accept(constructorGen, className)
-    writer.println()
+    stringBuilder.append("\n")
     stmt.expression.accept(getSetGen, param)
-    writer.println(s"}")
-    writer.flush()
+    stringBuilder.append(s"}")
+    stringBuilder.append("\n")
+
+    result.getGeneratedSources.get(ShExLCompilerTargetLanguage.Java) match {
+      case None => {
+        result.getGeneratedSources.put(
+          ShExLCompilerTargetLanguage.Java,
+          List(new ShExLCompilerGeneratedSourceImpl(
+            ShExLCompilerTargetLanguage.Java,
+            stringBuilder.toString()
+          ))
+        )
+      }
+      case Some(list) => {
+        result.getGeneratedSources.put(ShExLCompilerTargetLanguage.Java, list :+ new ShExLCompilerGeneratedSourceImpl(
+          ShExLCompilerTargetLanguage.Java,
+          stringBuilder.toString()
+        ))
+      }
+    }
   }
 
   override def visit(expr: CallBaseExpr, param: String): Unit = {

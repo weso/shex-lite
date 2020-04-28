@@ -24,7 +24,7 @@ package es.weso.shexlc.semantic
 
 import java.util.Objects
 
-import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage}
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerIndividualResult, ShExLCompilerStage}
 import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.stmt._
 import es.weso.shexlc.ast.visitor._
@@ -41,10 +41,11 @@ class Sem02DefCheckingStage
 
   override def getPriority: Int = 2
 
-  override def execute(compiler: ShExLCompiler, ast: Schema): Unit = {
+  override def execute(compiler: ShExLCompiler, ast: Schema, individualResult: ShExLCompilerIndividualResult): Unit = {
     this.symbolTable = compiler.getCompilerSymbolTable
     this.msgsHandler = compiler.getCompilerMsgsHandler
     this.visit(ast, ())
+    individualResult.setGeneratedSchema(Option(ast))
   }
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {

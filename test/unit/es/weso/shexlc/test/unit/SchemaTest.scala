@@ -22,30 +22,41 @@
 
 package es.weso.shexlc.test.unit
 
+import es.weso.shexl.ShExLCompilerTargetLanguage
 import es.weso.shexl.impl.{ShExLCompilerConfig, ShExLCompilerImpl}
-import es.weso.shexlc.ast.visitor.PrettyPrintASTVisitor
 import org.scalatest.funsuite.AnyFunSuite
 
 class SchemaTest extends AnyFunSuite {
 
   test("individual file compilation") {
 
-    val compileResult =
-      new ShExLCompilerImpl()
-        .addSource("test/assets/incorrect_schema_big_schema_2.shexl")
-        .setConfiguration(new ShExLCompilerConfig {
-          override def generateWarnings: Boolean = true
-          //override def getTargetGenerationLanguage: String = targetLanguage
-          override def generateCode: Boolean = false
-        })
+    val compiler = new ShExLCompilerImpl().setConfiguration(new ShExLCompilerConfig {
+      override def generateWarnings: Boolean = false
+      override def generateCode: Boolean = false
+    })
+
+    var compileResult =
+      compiler
+        .addSource("test/assets/correct_schema_big_schema_2.shexl")
         .compile.getCompilationResult
 
+    assert(!compileResult.hasErrors)
+
+    compileResult =
+      compiler
+        .addSource("test/assets/incorrect_schema_big_schema_2.shexl")
+        .compile.getCompilationResult
+
+    assert(compileResult.hasErrors)
+
     if(compileResult.hasErrors) {
-      compileResult.getIndividualResults.foreach(result => result.getErrors.foreach(err => println(err)))
+      //compileResult.getIndividualResults.foreach(result => result.getErrors.foreach(err => println(err.getMessage)))
     } else {
       assert(!compileResult.hasErrors)
-      compileResult.getIndividualResults.foreach(result => result.getGeneratedSchema.head.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
+      //compileResult.getIndividualResults.foreach(result => result.getGeneratedSchema.head.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
     }
+
+    //compileResult.getIndividualResults.foreach(result => result.getGeneratedSources.get(ShExLCompilerTargetLanguage.Java).get.foreach(source => println(source.getSource)))
   }
 
 }

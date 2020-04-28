@@ -22,7 +22,7 @@
 
 package es.weso.shexlc.semantic
 
-import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage}
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerIndividualResult, ShExLCompilerStage}
 import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr._
 import es.weso.shexlc.ast.stmt._
@@ -44,10 +44,11 @@ class Sem01TypeCheckingStage
 
   override def getPriority: Int = 1
 
-  override def execute(compiler: ShExLCompiler, ast: Schema): Unit = {
+  override def execute(compiler: ShExLCompiler, ast: Schema, individualResult: ShExLCompilerIndividualResult): Unit = {
     this.symbolTable = compiler.getCompilerSymbolTable
     this.msgsHandler = compiler.getCompilerMsgsHandler
     this.visit(ast, ())
+    individualResult.setGeneratedSchema(Option(ast))
   }
 
   override def visit(schema: Schema, param: Unit): Unit = {

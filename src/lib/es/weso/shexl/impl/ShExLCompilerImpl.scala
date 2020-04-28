@@ -155,6 +155,9 @@ class ShExLCompilerImpl extends ShExLCompiler {
       moveCompilerToState(ShExLCompilerState.Compiling)
     }
 
+    // 0. Clear any previous compilation results.
+    this.compilationResult = new ShExLCompilerResultImpl()
+
     // We have to compile each source
     for(source <- compilationQueue) {
 
@@ -163,44 +166,27 @@ class ShExLCompilerImpl extends ShExLCompiler {
       val parseTree = parser.generateParseTree()
 
       // 2. Clear the needed structures for the source compilation.
-      compilerMsgsHandler = new DefaultCompilerMsgsHandler(parser.inputCharStream)
-      compilerSymbolTable = new SymbolHashTable()
+      this.compilerMsgsHandler = new DefaultCompilerMsgsHandler(parser.inputCharStream)
+      this.compilerSymbolTable = new SymbolHashTable()
+      val individualCompilationResult =
+        new ShExLCompilerIndividualResultImpl(source, parser.inputCharStream, compilerMsgsHandler, Option.empty)
 
-      // TO DO... CREATE A NEW COMPILER RESULT (IT HAS NOT BEEN IMPLEMENTED YET)
 
       // 3. Build the AST that will be given to the different stages later.
       val ast = new Syn01ASTBuilderStage().visitSchema(parseTree.schema())
 
       // 4. for each step of the compiler execute with the current file.
-      while(this.compilerStages.size > 0) {
-        val stage = this.compilerStages.dequeue()
-        println(stage)
+
+      for(stage <- this.compilerStages) {
         // Execute the stage
-        stage.execute(this, ast)
-        // Iterate the stage
+        stage.execute(this, ast, individualCompilationResult)
       }
 
-      // If the compilation generated errors we won't pass the ast as it is corrupted.
-      if(compilerMsgsHandler.hasErrorMsgs) {
-        compilationResult.addIndividualResult(
-          new ShExLCompilerIndividualResultImpl(
-            source,
-            compilerMsgsHandler.getErrorMsgs,
-            compilerMsgsHandler.getWarningMsgs,
-            Option.empty
-          )
-        )
-      } else {
-        compilationResult.addIndividualResult(
-          new ShExLCompilerIndividualResultImpl(
-            source,
-            compilerMsgsHandler.getErrorMsgs,
-            compilerMsgsHandler.getWarningMsgs,
-            Option(ast)
-          )
-        )
-      }
+      //println(compilerMsgsHandler.getErrorMsgs.size)
+      compilationResult.addIndividualResult(individualCompilationResult)
     }
+
+    this.compilationQueue.clear()
 
     // 5. Move the compiler again to idle state.
     moveCompilerToState(ShExLCompilerState.Idle)

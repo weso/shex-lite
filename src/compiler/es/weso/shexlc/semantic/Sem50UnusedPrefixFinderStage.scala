@@ -22,7 +22,7 @@
 
 package es.weso.shexlc.semantic
 
-import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage}
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerIndividualResult, ShExLCompilerStage}
 import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.stmt._
 import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
@@ -39,10 +39,12 @@ class Sem50UnusedPrefixFinderStage
 
   override def getPriority: Int = 10
 
-  override def execute(compiler: ShExLCompiler, ast: Schema): Unit = {
+  override def execute(compiler: ShExLCompiler, ast: Schema, individualResult: ShExLCompilerIndividualResult): Unit = {
     this.symbolTable = compiler.getCompilerSymbolTable
     this.msgsHandler = compiler.getCompilerMsgsHandler
-    this.visit(ast, ())
+    if(compiler.getConfiguration.generateWarnings)
+      this.visit(ast, ())
+    individualResult.setGeneratedSchema(Option(ast))
   }
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {

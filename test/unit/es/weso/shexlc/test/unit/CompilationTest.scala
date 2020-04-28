@@ -24,13 +24,16 @@ package es.weso.shexlc.test.unit
 
 import java.io.File
 
-import es.weso.shexl.impl.ShExLCompilerImpl
+import es.weso.shexl.impl.{ShExLCompilerConfig, ShExLCompilerImpl}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
 class CompilationTest extends AnyFunSuite with BeforeAndAfter {
 
-  var compiler = new ShExLCompilerImpl()
+  val compiler = new ShExLCompilerImpl().setConfiguration(new ShExLCompilerConfig {
+    override def generateWarnings: Boolean = true
+    override def generateCode: Boolean = false
+  })
 
   generateTestCases()
 
@@ -42,15 +45,20 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
     for(file <- correctFiles) {
       test(s"Compiling file $file should pass without errors") {
         // Parsing a sample file that contains a base redefinition.
-        val ast = compiler.addSource(file).compile.getCompilationResult
-        assert(!ast.hasErrors)
+        val compilationResult = compiler.addSource(file).compile.getCompilationResult
+        assert(!compilationResult.hasErrors)
+        compilationResult.getIndividualResults.last.printErrors
+        compilationResult.getIndividualResults.last.printWarnings
       }
     }
 
     for(file <- incorrectFiles) {
       test(s"Compiling file $file should generate errors") {
-        val ast = compiler.addSource(file).compile.getCompilationResult
-        assert(ast.hasErrors)
+        val compilationResult = compiler.addSource(file).compile.getCompilationResult
+        println(compilationResult.getIndividualResults.head.getErrors.size)
+        assert(compilationResult.hasErrors)
+        compilationResult.getIndividualResults.last.printErrors
+        compilationResult.getIndividualResults.last.printWarnings
       }
     }
 
@@ -62,6 +70,8 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
       val results = compiler.compile.getCompilationResult.getIndividualResults
       for(result <- results) {
         assert(!result.hasErrors)
+        result.printErrors
+        result.printWarnings
       }
     }
 
@@ -72,6 +82,8 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
       val results = compiler.compile.getCompilationResult.getIndividualResults
       for(result <- results) {
         assert(result.hasErrors)
+        result.printErrors
+        result.printWarnings
       }
     }
 

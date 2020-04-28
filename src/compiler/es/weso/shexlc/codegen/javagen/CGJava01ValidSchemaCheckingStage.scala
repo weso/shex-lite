@@ -22,7 +22,7 @@
 
 package es.weso.shexlc.codegen.javagen
 
-import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage, ShExLCompilerTargetLanguage}
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerIndividualResult, ShExLCompilerStage, ShExLCompilerTargetLanguage}
 import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr._
 import es.weso.shexlc.ast.stmt._
@@ -38,13 +38,15 @@ class CGJava01ValidSchemaCheckingStage extends DefaultShExLiteVisitor[Unit] with
 
   override def getPriority: Int = 20
 
-  override def execute(compiler: ShExLCompiler, ast: Schema): Unit = {
+  override def execute(compiler: ShExLCompiler, ast: Schema, individualResult: ShExLCompilerIndividualResult): Unit = {
     this.symbolTable = compiler.getCompilerSymbolTable
     this.msgsHandler = compiler.getCompilerMsgsHandler
     if(compiler.getConfiguration.generateCode
       && compiler.getConfiguration.getTargetGenerationLanguages.contains(ShExLCompilerTargetLanguage.Java)) {
       this.visit(ast, ())
     }
+
+    individualResult.setGeneratedSchema(Option(ast))
   }
 
 
