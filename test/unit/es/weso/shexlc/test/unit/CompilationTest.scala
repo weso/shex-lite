@@ -24,13 +24,16 @@ package es.weso.shexlc.test.unit
 
 import java.io.File
 
-import es.weso.shexl.DefaultShExLCompiler
+import es.weso.shexl.impl.{ShExLCompilerConfig, ShExLCompilerImpl}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
 class CompilationTest extends AnyFunSuite with BeforeAndAfter {
 
-  var compiler = new DefaultShExLCompiler()
+  val compiler = new ShExLCompilerImpl().setConfiguration(new ShExLCompilerConfig {
+    override def generateWarnings: Boolean = true
+    override def generateCode: Boolean = false
+  })
 
   generateTestCases()
 
@@ -42,36 +45,45 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
     for(file <- correctFiles) {
       test(s"Compiling file $file should pass without errors") {
         // Parsing a sample file that contains a base redefinition.
-        val ast = compiler.addFile(file).compile()(0)
-        assert(!ast.hasErrors)
+        val compilationResult = compiler.addSource(file).compile.getCompilationResult
+        assert(!compilationResult.hasErrors)
+        compilationResult.getIndividualResults.last.printErrors
+        compilationResult.getIndividualResults.last.printWarnings
       }
     }
 
     for(file <- incorrectFiles) {
       test(s"Compiling file $file should generate errors") {
-        val ast = compiler.addFile(file).compile()(0)
-        assert(ast.hasErrors)
+        val compilationResult = compiler.addSource(file).compile.getCompilationResult
+        println(compilationResult.getIndividualResults.head.getErrors.size)
+        assert(compilationResult.hasErrors)
+        compilationResult.getIndividualResults.last.printErrors
+        compilationResult.getIndividualResults.last.printWarnings
       }
     }
 
     // Multiple file compiling
     test(s"Compiling multiple correct files at the same time should pass without errors") {
       for(file <- correctFiles) {
-        compiler.addFile(file)
+        compiler.addSource(file)
       }
-      val results = compiler.compile()
+      val results = compiler.compile.getCompilationResult.getIndividualResults
       for(result <- results) {
         assert(!result.hasErrors)
+        result.printErrors
+        result.printWarnings
       }
     }
 
     test(s"Compiling multiple incorrect files at the same time should pass with errors") {
       for(file <- incorrectFiles) {
-        compiler.addFile(file)
+        compiler.addSource(file)
       }
-      val results = compiler.compile()
+      val results = compiler.compile.getCompilationResult.getIndividualResults
       for(result <- results) {
         assert(result.hasErrors)
+        result.printErrors
+        result.printWarnings
       }
     }
 

@@ -22,26 +22,41 @@
 
 package es.weso.shexlc.test.unit
 
-import es.weso.shexl.DefaultShExLCompiler
-import es.weso.shexlc.ast.visitor.PrettyPrintASTVisitor
+import es.weso.shexl.ShExLCompilerTargetLanguage
+import es.weso.shexl.impl.{ShExLCompilerConfig, ShExLCompilerImpl}
 import org.scalatest.funsuite.AnyFunSuite
 
 class SchemaTest extends AnyFunSuite {
 
   test("individual file compilation") {
 
-    val compileResult =
-      new DefaultShExLCompiler()
-        .addFile("test/assets/incorrect_schema_big_schema_2.shexl")
-        .compile()(0)
+    val compiler = new ShExLCompilerImpl().setConfiguration(new ShExLCompilerConfig {
+      override def generateWarnings: Boolean = false
+      override def generateCode: Boolean = false
+    })
 
-    compileResult.getResult match {
-      case Left(error) => println(error)
-      case Right(schema) => {
-        assert(!compileResult.hasErrors)
-        println(schema.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
-      }
+    var compileResult =
+      compiler
+        .addSource("test/assets/correct_schema_big_schema_2.shexl")
+        .compile.getCompilationResult
+
+    assert(!compileResult.hasErrors)
+
+    compileResult =
+      compiler
+        .addSource("test/assets/incorrect_schema_big_schema_2.shexl")
+        .compile.getCompilationResult
+
+    assert(compileResult.hasErrors)
+
+    if(compileResult.hasErrors) {
+      //compileResult.getIndividualResults.foreach(result => result.getErrors.foreach(err => println(err.getMessage)))
+    } else {
+      assert(!compileResult.hasErrors)
+      //compileResult.getIndividualResults.foreach(result => result.getGeneratedSchema.head.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
     }
+
+    //compileResult.getIndividualResults.foreach(result => result.getGeneratedSources.get(ShExLCompilerTargetLanguage.Java).get.foreach(source => println(source.getSource)))
   }
 
 }

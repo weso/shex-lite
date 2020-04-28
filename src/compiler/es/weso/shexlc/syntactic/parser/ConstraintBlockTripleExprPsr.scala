@@ -24,7 +24,7 @@ package es.weso.shexlc.syntactic.parser
 
 import es.weso.shexlc.ast.expr.{ConstraintBlockTripleExpr, Expression}
 import org.antlr.v4.runtime.misc.Interval
-import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
+import es.weso.shexlc.syntactic.Syn01ASTBuilderStage
 import es.weso.shexlc.syntactic.generated.Shexl2Parser
 
 import scala.collection.JavaConverters._
@@ -38,7 +38,7 @@ import scala.collection.JavaConverters._
  * @param visitor to propagate any action.
  */
 class ConstraintBlockTripleExprPsr(ctx: Shexl2Parser.Constraint_block_triple_exprContext,
-                                   visitor: Syn01ASTBuilderVisitor) extends Parser[ConstraintBlockTripleExpr] {
+                                   visitor: Syn01ASTBuilderStage) extends Parser[ConstraintBlockTripleExpr] {
 
   override def getParseResult: ConstraintBlockTripleExpr = {
     val line = ctx.start.getLine

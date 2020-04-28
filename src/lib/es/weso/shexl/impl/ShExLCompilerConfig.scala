@@ -20,22 +20,22 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexl.impl
 
-import es.weso.shexlc.ast.Schema
-import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
+import es.weso.shexl.ShExLCompilerTargetLanguage
 
-class ShExLCompileResult(schema: Either[String, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
+trait ShExLCompilerConfig {
+  def generateWarnings: Boolean = true
+  def generateCode: Boolean = true
+  def getTargetGenerationLanguages: Set[ShExLCompilerTargetLanguage] = Set(ShExLCompilerTargetLanguage.Java)
+}
 
-  def hasErrors: Boolean = compilerMsgsHandler.hasErrorMsgs
+private[shexl] object DefaultShExLCompilerConfig extends ShExLCompilerConfig {
+  override def generateCode: Boolean = false
+  override def getTargetGenerationLanguages: Set[ShExLCompilerTargetLanguage] = Set.empty
+}
 
-  def hasWarnings: Boolean = compilerMsgsHandler.hasWarningMsgs
-
-  def isCorrect: Boolean = !hasErrors && !hasErrors
-
-  def getErrors: List[CompilerMsg] = compilerMsgsHandler.getErrorMsgs
-
-  def getWarnings: List[CompilerMsg] = compilerMsgsHandler.getWarningMsgs
-
-  def getResult: Either[String, Schema] = schema
+private[shexl] object NoWarningsShExLCompilerConfig extends ShExLCompilerConfig {
+  override def generateWarnings: Boolean = false
+  override def getTargetGenerationLanguages: Set[ShExLCompilerTargetLanguage] = Set.empty
 }

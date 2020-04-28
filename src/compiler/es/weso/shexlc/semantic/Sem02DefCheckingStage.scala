@@ -24,6 +24,8 @@ package es.weso.shexlc.semantic
 
 import java.util.Objects
 
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerIndividualResult, ShExLCompilerStage}
+import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.stmt._
 import es.weso.shexlc.ast.visitor._
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
@@ -31,8 +33,20 @@ import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, DefaultCompilerMsg
 import es.weso.shexlc.internal.symboltable.SymbolTable
 import org.antlr.v4.runtime.misc.Interval
 
-class Sem02DefCheckingVisitor(symbolTable: SymbolTable, msgsHandler: CompilerMsgsHandler)
-  extends DefaultShExLiteVisitor[Unit] {
+class Sem02DefCheckingStage
+  extends DefaultShExLiteVisitor[Unit] with ShExLCompilerStage {
+
+  private[this] var symbolTable: SymbolTable = null
+  private[this] var msgsHandler: CompilerMsgsHandler = null
+
+  override def getPriority: Int = 2
+
+  override def execute(compiler: ShExLCompiler, ast: Schema, individualResult: ShExLCompilerIndividualResult): Unit = {
+    this.symbolTable = compiler.getCompilerSymbolTable
+    this.msgsHandler = compiler.getCompilerMsgsHandler
+    this.visit(ast, ())
+    individualResult.setGeneratedSchema(Option(ast))
+  }
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     val existingSTValue = symbolTable.getBase.expression.asLiteralIRIValueExpr.value

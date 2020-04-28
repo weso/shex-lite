@@ -20,20 +20,22 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexl
+package es.weso.shexl.impl
 
-import es.weso.shexlc.syntactic.generated.{Shexl2Lexer, Shexl2Parser}
-import org.antlr.v4.runtime.{CharStream, CharStreams, CommonTokenStream}
+import es.weso.shexlc.ast.Schema
+import es.weso.shexlc.internal.io.{CompilerMsg, CompilerMsgsHandler}
 
-private[shexl] class ParseTreeGenerator(filepath: String) {
+class ShExLCompileResult(schema: Either[String, Schema], compilerMsgsHandler: CompilerMsgsHandler) {
 
-  var inputCharStream: CharStream = null
+  def hasErrors: Boolean = compilerMsgsHandler.hasErrorMsgs
 
-  def generateParseTree(): Shexl2Parser = {
-    inputCharStream = CharStreams.fromFileName(filepath)
-    val caseInsensitiveCharStream = new CaseChangingCharStream(inputCharStream, false)
-    val lexer = new Shexl2Lexer(caseInsensitiveCharStream)
-    val tokens = new CommonTokenStream(lexer)
-    new Shexl2Parser(tokens)
-  }
+  def hasWarnings: Boolean = compilerMsgsHandler.hasWarningMsgs
+
+  def isCorrect: Boolean = !hasErrors && !hasErrors
+
+  def getErrors: List[CompilerMsg] = compilerMsgsHandler.getErrorMsgs
+
+  def getWarnings: List[CompilerMsg] = compilerMsgsHandler.getWarningMsgs
+
+  def getResult: Either[String, Schema] = schema
 }

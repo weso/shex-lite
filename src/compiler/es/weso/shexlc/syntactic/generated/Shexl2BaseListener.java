@@ -1,4 +1,4 @@
-// Generated from C:/Users/Willy/Documents/github/weso/shex-lite/src/compiler/es/weso/shexlc/grammar\Shexl2.g4 by ANTLR 4.8
+// Generated from C:/Users/Willy/Documents/github/thewilly/shex-lite/src/compiler/es/weso/shexlc/grammar\Shexl2.g4 by ANTLR 4.8
 package es.weso.shexlc.syntactic.generated;
 
 import org.antlr.v4.runtime.ParserRuleContext;

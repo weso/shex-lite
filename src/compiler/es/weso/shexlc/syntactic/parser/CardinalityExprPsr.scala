@@ -24,7 +24,7 @@ package es.weso.shexlc.syntactic.parser
 
 import es.weso.shexlc.ast.expr.CardinalityExpr
 import org.antlr.v4.runtime.misc.Interval
-import es.weso.shexlc.syntactic.Syn01ASTBuilderVisitor
+import es.weso.shexlc.syntactic.Syn01ASTBuilderStage
 import es.weso.shexlc.syntactic.generated.Shexl2Parser
 
 /**
@@ -34,7 +34,7 @@ import es.weso.shexlc.syntactic.generated.Shexl2Parser
  * @param ctx     of the parser.
  * @param visitor that will propagate any needed call.
  */
-class CardinalityExprPsr(ctx: Shexl2Parser.Cardinality_exprContext, visitor: Syn01ASTBuilderVisitor)
+class CardinalityExprPsr(ctx: Shexl2Parser.Cardinality_exprContext, visitor: Syn01ASTBuilderStage)
   extends Parser[CardinalityExpr] {
 
   override def getParseResult: CardinalityExpr = {

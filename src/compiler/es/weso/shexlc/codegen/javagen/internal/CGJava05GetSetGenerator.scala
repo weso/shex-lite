@@ -20,44 +20,53 @@
  * The ShEx Lite Project includes packages written by third parties.
  */
 
-package es.weso.shexlc.codegen.javagen
+package es.weso.shexlc.codegen.javagen.internal
 
 import java.io.PrintWriter
 
+import es.weso.shexl.{ShExLCompiler, ShExLCompilerStage, ShExLCompilerTargetLanguage}
+import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr.{CallPrefixExpr, CallShapeExpr, ConstraintBlockTripleExpr}
 import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
+import es.weso.shexlc.internal.symboltable.SymbolTable
 
-class CGJava05GetSetGeneratorVisitor(msgsHandler: CompilerMsgsHandler, writer: PrintWriter)
+class CGJava05GetSetGenerator(msgsHandler: CompilerMsgsHandler, stringBuilder: StringBuilder)
   extends DefaultShExLiteVisitor[String] {
 
   override def visit(expr: ConstraintBlockTripleExpr, param: String): Unit = {
 
     for(field <- expr.body) {
       // Getter
-      writer.print(s"\tpublic ")
+      stringBuilder.append(s"\tpublic ")
       field.asConstraintTripleExpr.constraint.accept(this, field.asConstraintTripleExpr.cardinality.asCardinalityExpr.max.toString)
-      writer.println(s"get${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase.capitalize}() {")
-      writer.println(s"\t\treturn this.${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase};")
-      writer.println("\t}")
-      writer.println()
+      stringBuilder.append(s"get${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase.capitalize}() {")
+      stringBuilder.append("\n")
+      stringBuilder.append(s"\t\treturn this.${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase};")
+      stringBuilder.append("\n")
+      stringBuilder.append("\t}")
+      stringBuilder.append("\n")
+      stringBuilder.append("\n")
 
       // Setter
-      writer.print(s"\tpublic void set${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase.capitalize}(")
+      stringBuilder.append(s"\tpublic void set${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase.capitalize}(")
       field.asConstraintTripleExpr.constraint.accept(this, field.asConstraintTripleExpr.cardinality.asCardinalityExpr.max.toString)
-      writer.println(s"${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase}) {")
-      writer.println(s"\t\tthis.${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase} = " +
+      stringBuilder.append(s"${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase}) {")
+      stringBuilder.append("\n")
+      stringBuilder.append(s"\t\tthis.${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase} = " +
         s"${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase};")
-      writer.println("\t}")
-      writer.println()
+      stringBuilder.append("\n")
+      stringBuilder.append("\t}")
+      stringBuilder.append("\n")
+      stringBuilder.append("\n")
     }
   }
 
   override def visit(expr: CallPrefixExpr, isList: String): Unit = {
     expr.argument match {
-      case "string" => if(isList > "1") writer.print("List<String> ") else writer.print("String ")
-      case "integer" => if(isList > "1") writer.print("List<int> ") else writer.print("int ")
-      case "date" => if(isList > "1") writer.print("List<Date> ") else writer.print("Date ")
+      case "string" => if(isList > "1") stringBuilder.append("List<String> ") else stringBuilder.append("String ")
+      case "integer" => if(isList > "1") stringBuilder.append("List<int> ") else stringBuilder.append("int ")
+      case "date" => if(isList > "1") stringBuilder.append("List<Date> ") else stringBuilder.append("Date ")
       case _ =>
     }
   }
@@ -66,15 +75,15 @@ class CGJava05GetSetGeneratorVisitor(msgsHandler: CompilerMsgsHandler, writer: P
     if(expr.label.isCallPrefixExpr) {
       val prefixCall = expr.label.asCallPrefixExpr
       if(isList > "1")
-        writer.print(s"List<${prefixCall.argument.toLowerCase.capitalize}> ")
+        stringBuilder.append(s"List<${prefixCall.argument.toLowerCase.capitalize}> ")
       else
-        writer.print(s"${prefixCall.argument.toLowerCase.capitalize} ")
+        stringBuilder.append(s"${prefixCall.argument.toLowerCase.capitalize} ")
     } else {
       val baseCall = expr.label.asCallBaseExpr
       if(isList > "1")
-        writer.print(s"List<${baseCall.argument.toLowerCase.capitalize}> ")
+        stringBuilder.append(s"List<${baseCall.argument.toLowerCase.capitalize}> ")
       else
-        writer.print(s"${baseCall.argument.toLowerCase.capitalize} ")
+        stringBuilder.append(s"${baseCall.argument.toLowerCase.capitalize} ")
     }
   }
 }
