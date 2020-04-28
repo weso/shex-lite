@@ -9,7 +9,7 @@ class ShExLCompilerResultImpl extends ShExLCompilerResult {
 
   private[this] var _hasErrors = false
   private[this] var _hasWarnings = false
-  private[this] val individualResults = new ListBuffer[ShExLCompilerIndividualResult].empty
+  private[this] val individualResults = new ListBuffer[ShExLCompilerIndividualResult]()
 
   /**
    * Indicates if any of the sources compiled contains an error.
