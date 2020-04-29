@@ -27,7 +27,7 @@ import es.weso.shexlc.internal.io.CompilerMsgType
 class CompilerMsgWarningType(code: String, description: String) extends CompilerMsgType {
   override def getCode: String = code
   override def getDescription: String = description
-  override def getSuperType:String = Console.YELLOW + s"warning($getCode): $getDescription" + Console.RESET
+  override def getSuperType:String = Console.YELLOW + s"warning[$getCode]: $getDescription" + Console.RESET
 }
 
 object CompilerMsgWarningType {
