@@ -10,5 +10,5 @@ prefix xsd: <schema.org>
 
 : Car {
     :plateNumber    xsd:string  ;
-    :owner          @:User
+    :owner          @:User?
 }

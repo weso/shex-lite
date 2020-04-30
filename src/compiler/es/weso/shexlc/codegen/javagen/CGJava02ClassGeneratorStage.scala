@@ -30,7 +30,7 @@ import es.weso.shexlc.ast.Schema
 import es.weso.shexlc.ast.expr.{CallBaseExpr, CallPrefixExpr}
 import es.weso.shexlc.ast.stmt.ShapeDefStmt
 import es.weso.shexlc.ast.visitor.DefaultShExLiteVisitor
-import es.weso.shexlc.codegen.javagen.internal.{CGJava03FieldsGenerator, CGJava04ConstructorGenerator, CGJava05GetSetGenerator}
+import es.weso.shexlc.codegen.javagen.internal.{CGJava021ImportGenerator, CGJava03FieldsGenerator, CGJava04ConstructorGenerator, CGJava05GetSetGenerator}
 import es.weso.shexlc.internal.io.CompilerMsgsHandler
 import es.weso.shexlc.internal.symboltable.SymbolTable
 
@@ -67,6 +67,9 @@ class CGJava02ClassGeneratorStage extends DefaultShExLiteVisitor[String] with Sh
     val fieldsGen = new CGJava03FieldsGenerator(msgsHandler, stringBuilder)
     val constructorGen = new CGJava04ConstructorGenerator(msgsHandler, stringBuilder)
     val getSetGen = new CGJava05GetSetGenerator(msgsHandler, stringBuilder)
+
+    // Imports generator
+    stmt.accept(new CGJava021ImportGenerator(msgsHandler, stringBuilder), null)
 
     stringBuilder.append(s"public class $className {")
     stringBuilder.append("\n")
