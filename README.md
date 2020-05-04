@@ -1,4 +1,4 @@
-<img src="https://github.com/weso/shex-lite/raw/thewilly-update-readme/doc/shex-lite-full-logo.png" alt="Shex-lite logo" height="70">
+<img src="https://github.com/weso/shex-lite/raw/master/doc/shex-lite-full-logo.png" alt="Shex-lite logo" height="70">
 
 # Shape Expression Lite Language
 
