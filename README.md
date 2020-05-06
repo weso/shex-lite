@@ -71,7 +71,7 @@ Once complete, you can build the ShEx Lite documentation by changing directory i
 Many of the docs are out of date, but you can see some historical design
 documents in the `doc` directory.
 
-## Authors & Collaborations
+## Authors
 
 - **Guillermo Facundo Colunga** - *Initial work* - [thewilly](https://github.com/thewilly)
 - **Alejandro González Hevia** - *Core Proposals Reviewer* - [alejgh](https://github.com/alejgh)
@@ -79,6 +79,16 @@ documents in the `doc` directory.
 - **Daniel Fernández Álvarez** - *Core Proposals Reviewer* - [danifdezalvarez](https://github.com/DaniFdezAlvarez)
 
 See also the list of [contributors](https://github.com/weso/shex-lite/graphs/contributors) who participated in this project.
+
+## Collaborations
+The project is completely open source and therefore they accept collaborations from different projects from all over the world including:
+
+### [Hércules - ASIO (University of Murcia)](https://www.um.es/web/hercules/)
+<img src="https://github.com/weso/shex-lite/raw/master/doc/logos_feder.jpg" alt="Shex-lite logo" height="150">
+The Hercules ASIO project focuses on creating an ontological infrastructure and a semantic architecture to manage the administration of research in the environment of Spanish research centers and universities.
+
+_The HERCULES-Semantics of University Research Data project has a budget of Five Million Four Hundred Sixty Two Thousand Six Hundred Euros with an ERDF co-financing of 80%, therefore the European Regional Development Fund (ERDF), through the then Ministry of Economy, Industry and Competitiveness (currently the Ministry of Science and Innovation) as the Intermediate Body of the ERDF Smart Growth Operational Program - POCint (now the Multi-regional Operational Program of Spain - POPE) makes a contribution of Four Million Three Hundred Seventy Thousand Eighty euros._
+
 
 ## License
 
