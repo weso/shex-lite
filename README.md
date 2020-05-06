@@ -22,8 +22,11 @@ To be a truly great community, [shex-lite.org](https://shex-lite.org/) needs to 
 
 To give clarity of what is expected of our members, ShEx Lite has adopted the code of conduct defined by the Contributor Covenant. This document is used across many open source communities, and we think it articulates our values well. For more, see the [Code of Conduct](https://shex-lite.org/community/#code-of-conduct).
 
-### Proposals
-In order to keep track of the evolution of ShEx Lite we use a [proposals system](http://weso.github.com/shex-lite-evolution) that allows anyone to submit a proposal or see the evolution of ShEx Lite. For more information about this, please go to its [repository](https://github.com/weso/shex-lite-evolution).
+#### Proposals
+In order to keep track of the evolution of ShEx Lite we use a [proposals system](https://github.com/weso/shex-lite/issues) that allows anyone to submit a proposal or see the evolution of ShEx Lite.
+
+### Roadmap
+Shex-lite is a project that always maintains a minimum view of one year onwards, in this way we can anticipate different demands from users. Currently our roadmap is hold here [[SLI-0090] 🚀 Long Term Roadmap (LTR)](https://github.com/weso/shex-lite/issues/90).
 
 ## Getting Started
 These instructions give the most direct path to a working ShEx Lite development environment. To build from source you will need about 2Gb of disk space for sources. Depending on your machine, a clean build can take a few minutes. Naturally, incremental builds are much faster.
