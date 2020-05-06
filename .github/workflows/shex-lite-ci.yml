@@ -1,17 +1,6 @@
 name: ShEx-Lite CI
 
-on:
-  # On pushes will ignore all doc files and all markdown files.
-  push:
-    paths-ignore: 
-      - '**.md'
-      - 'doc/**'
-  
-  # On pull requests will ignore all doc files and all markdown files.
-  pull_request:
-    paths-ignore: 
-      - '**.md'
-      - 'doc/**'
+on: [push, pull_request]
   
 
 jobs:
