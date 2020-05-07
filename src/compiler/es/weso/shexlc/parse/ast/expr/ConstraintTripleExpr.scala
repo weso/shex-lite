@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: ConstraintTripleExpr.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.expr
 
@@ -31,29 +31,36 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * A constraint triple expression represents the conjunction of a property, a constraint and a cardinality. All three
- * elements are expressions and it is a task of the es.weso.shexlc.semantic validator to check that all of them conform to the
- * appropriate type.
- *
- * @author Guillermo Facundo Colunga
- * @param line        in the source code where the token that generates de Base Definition Statement is located.
- * @param column      in the source code where the token that generates de Base Definition Statement is located.
- * @param property    that will conform to the given constraint and cardinality.
- * @param constraint  that will be applied over the given property.
- * @param cardinality that will be applied over the given constraint and property.
- */
-class ConstraintTripleExpr(line: Int, column: Int, interval: Interval, content: String, val property: Expression, val constraint: Expression,
-                           val cardinality: Expression) extends ConstraintExpr {
+  * A constraint triple expression represents the conjunction of a property, a constraint and a cardinality. All three
+  * elements are expressions and it is a task of the es.weso.shexlc.semantic validator to check that all of them conform to the
+  * appropriate type.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param line        in the source code where the token that generates de Base Definition Statement is located.
+  * @param column      in the source code where the token that generates de Base Definition Statement is located.
+  * @param property    that will conform to the given constraint and cardinality.
+  * @param constraint  that will be applied over the given property.
+  * @param cardinality that will be applied over the given constraint and property.
+  */
+class ConstraintTripleExpr(
+  line: Int,
+  column: Int,
+  interval: Interval,
+  content: String,
+  val property: Expression,
+  val constraint: Expression,
+  val cardinality: Expression
+) extends ConstraintExpr {
   override def getPosition: Position = Position.pos(line, column)
 
   override def getRange: Interval = interval
 
-/**
-   * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
-   * would be 'a = 3'.
-   *
-   * @return the content of the node as a String.
-   */
+  /**
+    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * would be 'a = 3'.
+    *
+    * @return the content of the node as a String.
+    */
   override def getContent: String = content
 
   // Override default methods to indicate that this is a Constraint Triple Expression.
@@ -61,9 +68,11 @@ class ConstraintTripleExpr(line: Int, column: Int, interval: Interval, content: 
 
   override def asConstraintTripleExpr: ConstraintTripleExpr = this
 
-  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
+  override def accept[TP, TR](
+    visitor: ASTGenericWalker[TP, TR],
+    param: TP
+  ): TR = {
     visitor.visit(this, param)
   }
-
 
 }

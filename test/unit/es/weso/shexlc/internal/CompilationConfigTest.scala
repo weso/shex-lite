@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: CompilationConfigTest.scala
 //
 // Short version for non-lawyers:
@@ -22,11 +22,10 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.internal
 
-import es.weso.shexl.ShExLCompilerTargetLanguage
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -34,10 +33,10 @@ class CompilationConfigTest extends AnyFunSuite with BeforeAndAfter {
 
   // Testing that the default compilation configuration is correct.
   test("Default compilation config is correct") {
-    val defaultWarn = true
-    val defaultGenIR = false
+    val defaultWarn   = true
+    val defaultGenIR  = false
     val defaultIRList = Set.empty[ShExLCompilerTargetLanguage]
-    val cc = CompilationConfigBuilder().build
+    val cc            = CompilationConfigBuilder().build
 
     assert(cc.generateWarnings == defaultWarn)
     assert(cc.generateIR == defaultGenIR)
@@ -62,9 +61,13 @@ class CompilationConfigTest extends AnyFunSuite with BeforeAndAfter {
 
   // Testing to change the value of the ir list generation.
   test("Test that the value of the ir list generation can be changed") {
-    val cc = CompilationConfigBuilder().withTIR(List(CompilerTargetLanguage.Java)).build
+    val cc = CompilationConfigBuilder()
+      .withTIR(List(CompilerTargetLanguage.Java))
+      .build
     assert(cc.getTIR.size == 1)
-    val cc = CompilationConfigBuilder().withTIR(List(CompilerTargetLanguage.Java, CompilerTargetLanguage.Python)).build
+    val cc = CompilationConfigBuilder()
+      .withTIR(List(CompilerTargetLanguage.Java, CompilerTargetLanguage.Python))
+      .build
     assert(cc.getTIR.size == 1)
   }
 }

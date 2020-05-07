@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: SyntaxTree.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -30,46 +30,47 @@ import es.weso.shexlc.internal.CompilationContext
 import org.antlr.v4.runtime.tree
 
 /**
- * The syntax tree object acts a wrapper to the antlr implementation to add the compilation context. In the compilation
- * context there is a field that stores the input char stream in case it is needed in the future.
- */
+  * The syntax tree object acts a wrapper to the antlr implementation to add the compilation context. In the compilation
+  * context there is a field that stores the input char stream in case it is needed in the future.
+  */
 trait SyntaxTree {
 
   /**
-   * Gets the compilation context.
-   *
-   * @return the compilation context.
-   */
+    * Gets the compilation context.
+    *
+    * @return the compilation context.
+    */
   def getCompilationContext: CompilationContext
 
   /**
-   * Gets the tree antlr implementation. In case you want to visit you will need to implement the ShexLiteParserVisitor.
-   *
-   * @return the tree antlr implementation.
-   */
+    * Gets the tree antlr implementation. In case you want to visit you will need to implement the ShexLiteParserVisitor.
+    *
+    * @return the tree antlr implementation.
+    */
   def getTree: tree.SyntaxTree
 }
 
 /**
- * The syntax tree object acts a wrapper to the antlr implementation to add the compilation context. In the compilation
- * context there is a field that stores the input char stream in case it is needed in the future.
- */
+  * The syntax tree object acts a wrapper to the antlr implementation to add the compilation context. In the compilation
+  * context there is a field that stores the input char stream in case it is needed in the future.
+  */
 private[shexlc] object SyntaxTree {
 
-  def create(ccontext: CompilationContext, ttree: tree.SyntaxTree): SyntaxTree = new SyntaxTree {
+  def create(ccontext: CompilationContext, ttree: tree.SyntaxTree): SyntaxTree =
+    new SyntaxTree {
 
-    /**
-     * Gets the compilation context.
-     *
-     * @return the compilation context.
-     */
-    override def getCompilationContext: CompilationContext = ccontext
+      /**
+        * Gets the compilation context.
+        *
+        * @return the compilation context.
+        */
+      override def getCompilationContext: CompilationContext = ccontext
 
-    /**
-     * Gets the tree antlr implementation. In case you want to visit you will need to implement the ShexLiteParserVisitor.
-     *
-     * @return the tree antlr implementation.
-     */
-    override def getTree: org.antlr.v4.runtime.tree.SyntaxTree = ttree
-  }
+      /**
+        * Gets the tree antlr implementation. In case you want to visit you will need to implement the ShexLiteParserVisitor.
+        *
+        * @return the tree antlr implementation.
+        */
+      override def getTree: org.antlr.v4.runtime.tree.SyntaxTree = ttree
+    }
 }

@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: SchemaPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseSchema.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -34,19 +34,26 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import scala.collection.JavaConverters._
 
 /**
- * The schema sub-parser generates an schema from the parser context. For that delegates all sub-parsing to sub-parsers
- * that are implemented on each rule.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseSchema(ctx: ShexLiteParser.SchemaContext, visitor: ASTBuilderParser, ccontext: CompilationContext)
-  extends HasParseResult[Schema] {
+  * The schema sub-parser generates an schema from the parser context. For that delegates all sub-parsing to sub-parsers
+  * that are implemented on each rule.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseSchema(
+  ctx: ShexLiteParser.SchemaContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[Schema] {
 
   override def getParseResult: Schema = {
-    val statements: List[Statement] = ctx.statement().asScala
-      .map(stmt => stmt.accept(visitor)).toList.asInstanceOf[List[Statement]]
+    val statements: List[Statement] = ctx
+      .statement()
+      .asScala
+      .map(stmt => stmt.accept(visitor))
+      .toList
+      .asInstanceOf[List[Statement]]
 
     val content = ccontext.getInputContext.getText(ctx.getSourceInterval)
     new Schema(statements, content)

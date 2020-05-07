@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: ConstraintValueSetExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseConstraintValueSetExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -34,25 +34,32 @@ import org.antlr.v4.runtime.misc.Interval
 import scala.collection.JavaConverters._
 
 /**
- * The constraint value set expression sub-parser generates a constraint value set expression from the parser context.
- * It delegates the action of creating the value set to each one of the value sets included to their own sub-parsers.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseConstraintValueSetExpr(ctx: ShexLiteParser.Constraint_value_set_exprContext, visitor: ASTBuilderParser, ccontext: CompilationContext)
-  extends HasParseResult[ConstraintValueSetExpr] {
+  * The constraint value set expression sub-parser generates a constraint value set expression from the parser context.
+  * It delegates the action of creating the value set to each one of the value sets included to their own sub-parsers.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseConstraintValueSetExpr(
+  ctx: ShexLiteParser.Constraint_value_set_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[ConstraintValueSetExpr] {
 
   override def getParseResult: ConstraintValueSetExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     // Would be nice to remove the as instance of from here but as antlr generates java...
-    val valueSet = ctx.constraint_valid_value_set_type().asScala
-      .map(ex => ex.accept(visitor)).toList.asInstanceOf[List[Expression]]
+    val valueSet = ctx
+      .constraint_valid_value_set_type()
+      .asScala
+      .map(ex => ex.accept(visitor))
+      .toList
+      .asInstanceOf[List[Expression]]
 
     new ConstraintValueSetExpr(line, column, interval, content, valueSet)
   }

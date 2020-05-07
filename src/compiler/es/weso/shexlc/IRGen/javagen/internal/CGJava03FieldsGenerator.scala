@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: CGJava03FieldsGenerator.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.IRGen.javagen.internal
 
@@ -30,45 +30,63 @@ import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class CGJava03FieldsGenerator(ccontext: CompilationContext, stringBuilder: StringBuilder)
-  extends ASTDefaultVisitor[String] {
+class CGJava03FieldsGenerator(
+  ccontext: CompilationContext,
+  stringBuilder: StringBuilder
+) extends ASTDefaultVisitor[String] {
 
   override def visit(expr: ConstraintTripleExpr, param: String): Unit = {
-    val property = expr.property
-    val constraint = expr.constraint
+    val property    = expr.property
+    val constraint  = expr.constraint
     val cardinality = expr.cardinality
 
     // Field type.
     constraint.accept(this, cardinality.asCardinalityExpr.max.toString)
 
     // Field name.
-    stringBuilder.append(s"${property.asCallPrefixExpr.argument.toLowerCase()};")
+    stringBuilder.append(
+      s"${property.asCallPrefixExpr.argument.toLowerCase()};"
+    )
     stringBuilder.append("\n")
   }
 
   override def visit(expr: CallPrefixExpr, isList: String): Unit = {
     stringBuilder.append("\tprivate ")
     expr.argument match {
-      case "string" => if(isList > "1") stringBuilder.append("List<String> ") else stringBuilder.append("String ")
-      case "integer" => if(isList > "1") stringBuilder.append("List<int> ") else stringBuilder.append("int ")
-      case "date" => if(isList > "1") stringBuilder.append("List<Date> ") else stringBuilder.append("Date ")
+      case "string" =>
+        if (isList > "1") stringBuilder.append("List<String> ")
+        else stringBuilder.append("String ")
+      case "integer" =>
+        if (isList > "1") stringBuilder.append("List<int> ")
+        else stringBuilder.append("int ")
+      case "date" =>
+        if (isList > "1") stringBuilder.append("List<Date> ")
+        else stringBuilder.append("Date ")
       case _ =>
     }
   }
 
   override def visit(expr: CallShapeExpr, isList: String): Unit = {
-    if(expr.label.isCallPrefixExpr) {
+    if (expr.label.isCallPrefixExpr) {
       val prefixCall = expr.label.asCallPrefixExpr
-      if(isList > "1")
-        stringBuilder.append(s"\tprivate List<${prefixCall.argument.toLowerCase.capitalize}> ")
+      if (isList > "1")
+        stringBuilder.append(
+          s"\tprivate List<${prefixCall.argument.toLowerCase.capitalize}> "
+        )
       else
-        stringBuilder.append(s"\tprivate ${prefixCall.argument.toLowerCase.capitalize} ")
+        stringBuilder.append(
+          s"\tprivate ${prefixCall.argument.toLowerCase.capitalize} "
+        )
     } else {
       val baseCall = expr.label.asCallBaseExpr
-      if(isList > "1")
-        stringBuilder.append(s"\tprivate List<${baseCall.argument.toLowerCase.capitalize}> ")
+      if (isList > "1")
+        stringBuilder.append(
+          s"\tprivate List<${baseCall.argument.toLowerCase.capitalize}> "
+        )
       else
-        stringBuilder.append(s"\tprivate ${baseCall.argument.toLowerCase.capitalize} ")
+        stringBuilder.append(
+          s"\tprivate ${baseCall.argument.toLowerCase.capitalize} "
+        )
     }
   }
 }

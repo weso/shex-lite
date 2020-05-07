@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: CompilationIndividualResult.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.internal
 
@@ -34,92 +34,92 @@ import org.antlr.v4.runtime.CharStream
 import scala.collection.mutable.HashMap
 
 /**
- * Represents the abstraction of the result of compiling a single source file. It contains the information about the
- * path to the source file that was compiled. Whether the compilation generated errors/warnings, and if so the
- * collection that contains them. The generated schema if the compilation was succeed. And the generated sources.
- *
- * @author Guillermo Facundo Colunga
- */
+  * Represents the abstraction of the result of compiling a single source file. It contains the information about the
+  * path to the source file that was compiled. Whether the compilation generated errors/warnings, and if so the
+  * collection that contains them. The generated schema if the compilation was succeed. And the generated sources.
+  *
+  * @author Guillermo Facundo Colunga
+  */
 trait CompilationIndividualResult {
 
   /**
-   * Gets the path of the source that generated this individual compiler result.
-   *
-   * @return the path of the source that generated this individual compiler result.
-   */
+    * Gets the path of the source that generated this individual compiler result.
+    *
+    * @return the path of the source that generated this individual compiler result.
+    */
   def getSource: String
 
   /**
-   * Gets the input stream corresponding to the source file that generated this individual result.
-   *
-   * @return the input stream corresponding to the source file that generated this individual result.
-   */
+    * Gets the input stream corresponding to the source file that generated this individual result.
+    *
+    * @return the input stream corresponding to the source file that generated this individual result.
+    */
   def getInputStream: CharStream
 
   /**
-   * Indicates if the source compiled contains an error.
-   *
-   * @return true if the compiled source generated an error, false otherwise.
-   */
+    * Indicates if the source compiled contains an error.
+    *
+    * @return true if the compiled source generated an error, false otherwise.
+    */
   def hasErrors: Boolean
 
   /**
-   * Indicates if the source compiled contains a warning.
-   *
-   * @return true if the compiled source generated a warning, false otherwise.
-   */
+    * Indicates if the source compiled contains a warning.
+    *
+    * @return true if the compiled source generated a warning, false otherwise.
+    */
   def hasWarnings: Boolean
 
   /**
-   * Gets the list of errors that generated the compilation of the source attached to this result.
-   *
-   * @return the list of errors that generated the compilation of the source attached to this result.
-   */
+    * Gets the list of errors that generated the compilation of the source attached to this result.
+    *
+    * @return the list of errors that generated the compilation of the source attached to this result.
+    */
   def getErrors: List[Err]
 
   /**
-   * Gets the list of warnings that generated the compilation of the source attached to this result.
-   *
-   * @return the list of warnings that generated the compilation of the source attached to this result.
-   */
+    * Gets the list of warnings that generated the compilation of the source attached to this result.
+    *
+    * @return the list of warnings that generated the compilation of the source attached to this result.
+    */
   def getWarnings: List[Warn]
 
   /**
-   * Gets the generated schema as an option object. If the option is empty means that the compiler was not able to
-   * generate an schema for the attached source. You should check the generated errors. Else the option object will
-   * contain the generated schema.
-   *
-   * @return an option object that may contain the schema if no error was generated during the compilation.
-   */
+    * Gets the generated schema as an option object. If the option is empty means that the compiler was not able to
+    * generate an schema for the attached source. You should check the generated errors. Else the option object will
+    * contain the generated schema.
+    *
+    * @return an option object that may contain the schema if no error was generated during the compilation.
+    */
   def getGeneratedSchema: Option[Schema]
 
   /**
-   * Sets the value for the generated schema. If the option is empty means that the compiler was not able to
-   * * generate an schema for the attached source. You should check the generated errors. Else the option object will
-   * * contain the generated schema.
-   *
-   * @param schema that has been generated by the compiler if any.
-   */
+    * Sets the value for the generated schema. If the option is empty means that the compiler was not able to
+    * * generate an schema for the attached source. You should check the generated errors. Else the option object will
+    * * contain the generated schema.
+    *
+    * @param schema that has been generated by the compiler if any.
+    */
   def setGeneratedSchema(schema: Option[Schema])
 
   /**
-   * Gets the all the generated sources for the current source fle. It is important to know that a single file can
-   * generate multiple sources. And also a single file can be the origin of the code generation in to multiple target
-   * languages. For this reason this method returns a map where the key is the target language and for each key it
-   * contains a collection of all the generated sources.
-   *
-   * @return a map where the key is the target language and for each key it contains a collection of all the generated
-   *         sources.
-   */
+    * Gets the all the generated sources for the current source fle. It is important to know that a single file can
+    * generate multiple sources. And also a single file can be the origin of the code generation in to multiple target
+    * languages. For this reason this method returns a map where the key is the target language and for each key it
+    * contains a collection of all the generated sources.
+    *
+    * @return a map where the key is the target language and for each key it contains a collection of all the generated
+    *         sources.
+    */
   def getGeneratedSources: HashMap[TargetIR, Seq[(String, String)]]
 
   /**
-   * Prints the errors formatted, if any.
-   */
+    * Prints the errors formatted, if any.
+    */
   def printErrors
 
   /**
-   * Prints the warnings formatted, if any.
-   */
+    * Prints the warnings formatted, if any.
+    */
   def printWarnings
 }

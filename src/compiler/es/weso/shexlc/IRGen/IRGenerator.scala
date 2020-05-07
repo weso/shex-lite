@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: IRGen.scala
+//------------------------------------------------------------------------------
+// File: IRGenerator.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,21 +22,21 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.IRGen
 
 /**
- * This trait must be implemented by all the different generators that generate intermediate representations.
- *
- * @author Guillermo Facundo Colunga
- */
+  * This trait must be implemented by all the different generators that generate intermediate representations.
+  *
+  * @author Guillermo Facundo Colunga
+  */
 trait IRGenerator {
 
   /**
-   * Gets the generated sources from the generator.
-   *
-   * @return a list of generated sources where the first element is the name and the second the source itself.
-   */
+    * Gets the generated sources from the generator.
+    *
+    * @return a list of generated sources where the first element is the name and the second the source itself.
+    */
   def getGeneratedSources: List[(String, String)]
 }

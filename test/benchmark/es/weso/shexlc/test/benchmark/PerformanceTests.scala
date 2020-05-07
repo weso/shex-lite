@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: PerformanceTests.scala
 //
 // Short version for non-lawyers:
@@ -22,31 +22,32 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.test.benchmark
 
-import es.weso.shexl.impl.ShExLCompilerConfig
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
 class PerformanceTests extends AnyFunSuite with BeforeAndAfter {
 
   private[this] val iterations = 10000
-  private[this] var compiler = new ShExLCompilerImpl()
-  private[this] val correct_file = "test/assets/correct_schema_big_schema_2.shexl"
+  private[this] val correct_file =
+    "test/assets/correct_schema_big_schema_2.shexl"
   private[this] val config_1 = new ShExLCompilerConfig {
     override def generateWarnings: Boolean = true
     //override def getTargetGenerationLanguage: String = targetLanguage
     override def generateCode: Boolean = false
   }
-
-  var i = 0
-  var startTime = System.nanoTime()
-  var time = System.nanoTime()
-  var meanTime = 0L;
+  var i                      = 0
+  var startTime              = System.nanoTime()
+  var time                   = System.nanoTime()
+  var meanTime               = 0L;
+  private[this] var compiler = new ShExLCompilerImpl()
   while (i < iterations) {
-    test(s"Compiling correct file at $i time should end in less thant 1000000000ns.") {
+    test(
+      s"Compiling correct file at $i time should end in less thant 1000000000ns."
+    ) {
       compiler = new ShExLCompilerImpl()
       compiler.setConfiguration(config_1)
       compiler.addSource(correct_file)

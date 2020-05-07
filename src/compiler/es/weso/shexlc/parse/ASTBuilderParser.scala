@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: ASTBuilderParser.scala
 //
 // Short version for non-lawyers:
@@ -22,23 +22,28 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.{NodeWithPosition, Schema}
-import es.weso.shexlc.parse.generated.{ShexLiteParser, ShexLiteParserBaseVisitor}
+import es.weso.shexlc.parse.generated.{
+  ShexLiteParser,
+  ShexLiteParserBaseVisitor
+}
 
-class ASTBuilderParser(ccontext: CompilationContext) extends ShexLiteParserBaseVisitor[NodeWithPosition] with HasParseResult[Schema] {
+class ASTBuilderParser(ccontext: CompilationContext)
+    extends ShexLiteParserBaseVisitor[NodeWithPosition]
+    with HasParseResult[Schema] {
 
   private var astRoot: Option[Schema] = Option.empty[Schema]
 
   /**
-   * Gets the result of parsing.
-   *
-   * @return the result of parsing the parse tree
-   */
+    * Gets the result of parsing.
+    *
+    * @return the result of parsing the parse tree
+    */
   override def getParseResult: Schema = astRoot.get
 
   override def visitSchema(ctx: ShexLiteParser.SchemaContext): Schema = {
@@ -46,84 +51,117 @@ class ASTBuilderParser(ccontext: CompilationContext) extends ShexLiteParserBaseV
     astRoot.get
   }
 
-  override def visitImport_stmt(ctx: ShexLiteParser.Import_stmtContext): NodeWithPosition = {
+  override def visitImport_stmt(
+    ctx: ShexLiteParser.Import_stmtContext
+  ): NodeWithPosition = {
     new ParseImportStmt(ctx, this, ccontext).getParseResult
   }
 
-  override def visitBase_def_stmt(ctx: ShexLiteParser.Base_def_stmtContext): NodeWithPosition = {
+  override def visitBase_def_stmt(
+    ctx: ShexLiteParser.Base_def_stmtContext
+  ): NodeWithPosition = {
     new ParseBaseDefStmt(ctx, this, ccontext).getParseResult
   }
 
-  override def visitStart_def_stmt(ctx: ShexLiteParser.Start_def_stmtContext): NodeWithPosition = {
+  override def visitStart_def_stmt(
+    ctx: ShexLiteParser.Start_def_stmtContext
+  ): NodeWithPosition = {
     new ParseStartDefStmt(ctx, this, ccontext).getParseResult
   }
 
-  override def visitPrefix_def_stmt(ctx: ShexLiteParser.Prefix_def_stmtContext): NodeWithPosition = {
+  override def visitPrefix_def_stmt(
+    ctx: ShexLiteParser.Prefix_def_stmtContext
+  ): NodeWithPosition = {
     new ParsePrefixDefStmt(ctx, this, ccontext).getParseResult
   }
 
-  override def visitShape_def_stmt(ctx: ShexLiteParser.Shape_def_stmtContext): NodeWithPosition = {
+  override def visitShape_def_stmt(
+    ctx: ShexLiteParser.Shape_def_stmtContext
+  ): NodeWithPosition = {
     new ParseShapeDefStmt(ctx, this, ccontext).getParseResult
   }
 
-  override def visitLiteral_real_value_expr(ctx: ShexLiteParser.Literal_real_value_exprContext): NodeWithPosition = {
+  override def visitLiteral_real_value_expr(
+    ctx: ShexLiteParser.Literal_real_value_exprContext
+  ): NodeWithPosition = {
     new ParseLiteralRealValueExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitLiteral_string_value_expr(ctx: ShexLiteParser.Literal_string_value_exprContext): NodeWithPosition = {
+  override def visitLiteral_string_value_expr(
+    ctx: ShexLiteParser.Literal_string_value_exprContext
+  ): NodeWithPosition = {
     new ParseLiteralStringValueExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitLiteral_iri_value_expr(ctx: ShexLiteParser.Literal_iri_value_exprContext): NodeWithPosition = {
+  override def visitLiteral_iri_value_expr(
+    ctx: ShexLiteParser.Literal_iri_value_exprContext
+  ): NodeWithPosition = {
     new ParseLiteralIRIValueExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitCardinality_expr(ctx: ShexLiteParser.Cardinality_exprContext): NodeWithPosition = {
+  override def visitCardinality_expr(
+    ctx: ShexLiteParser.Cardinality_exprContext
+  ): NodeWithPosition = {
     new ParseCardinalityExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitConstraint_block_triple_expr(ctx: ShexLiteParser.Constraint_block_triple_exprContext):
-  NodeWithPosition = {
+  override def visitConstraint_block_triple_expr(
+    ctx: ShexLiteParser.Constraint_block_triple_exprContext
+  ): NodeWithPosition = {
     new ParseConstraintBlockTripleExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitConstraint_triple_expr(ctx: ShexLiteParser.Constraint_triple_exprContext): NodeWithPosition = {
+  override def visitConstraint_triple_expr(
+    ctx: ShexLiteParser.Constraint_triple_exprContext
+  ): NodeWithPosition = {
     new ParseConstraintTripleExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitConstraint_node_iri_expr(ctx: ShexLiteParser.Constraint_node_iri_exprContext): NodeWithPosition = {
+  override def visitConstraint_node_iri_expr(
+    ctx: ShexLiteParser.Constraint_node_iri_exprContext
+  ): NodeWithPosition = {
     new ParseConstraintNodeIRIExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitConstraint_node_any_type_expr(ctx: ShexLiteParser.Constraint_node_any_type_exprContext):
-  NodeWithPosition = {
+  override def visitConstraint_node_any_type_expr(
+    ctx: ShexLiteParser.Constraint_node_any_type_exprContext
+  ): NodeWithPosition = {
     new ParseConstraintNodeAnyTypeExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitConstraint_node_non_literal_expr(ctx: ShexLiteParser.Constraint_node_non_literal_exprContext):
-  NodeWithPosition = {
+  override def visitConstraint_node_non_literal_expr(
+    ctx: ShexLiteParser.Constraint_node_non_literal_exprContext
+  ): NodeWithPosition = {
     new ParseConstraintNodeNonLiteralExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitConstraint_value_set_expr(ctx: ShexLiteParser.Constraint_value_set_exprContext): NodeWithPosition = {
+  override def visitConstraint_value_set_expr(
+    ctx: ShexLiteParser.Constraint_value_set_exprContext
+  ): NodeWithPosition = {
     new ParseConstraintValueSetExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitConstraint_node_bnode_expr(ctx: ShexLiteParser.Constraint_node_bnode_exprContext):
-  NodeWithPosition = {
+  override def visitConstraint_node_bnode_expr(
+    ctx: ShexLiteParser.Constraint_node_bnode_exprContext
+  ): NodeWithPosition = {
     new ParseConstraintNodeBNodeExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitConstraint_node_literal_expr(ctx: ShexLiteParser.Constraint_node_literal_exprContext):
-  NodeWithPosition = {
+  override def visitConstraint_node_literal_expr(
+    ctx: ShexLiteParser.Constraint_node_literal_exprContext
+  ): NodeWithPosition = {
     new ParseConstraintNodeLiteralExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitCall_prefix_expr(ctx: ShexLiteParser.Call_prefix_exprContext): NodeWithPosition = {
+  override def visitCall_prefix_expr(
+    ctx: ShexLiteParser.Call_prefix_exprContext
+  ): NodeWithPosition = {
     new ParseCallPrefixExpr(ctx, this, ccontext).getParseResult
   }
 
-  override def visitCall_shape_expr(ctx: ShexLiteParser.Call_shape_exprContext): NodeWithPosition = {
+  override def visitCall_shape_expr(
+    ctx: ShexLiteParser.Call_shape_exprContext
+  ): NodeWithPosition = {
     new ParseCallShapeExpr(ctx, this, ccontext).getParseResult
   }
 }

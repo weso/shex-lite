@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: LiteralRealValueExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseLiteralRealValueExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -32,21 +32,24 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The literal real value expression sub-parser generates a literal of real type with the value provided in the context
- * of the parser.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseLiteralRealValueExpr(ctx: ShexLiteParser.Literal_real_value_exprContext, visitor: ASTBuilderParser, ccontext: CompilationContext)
-  extends HasParseResult[LiteralRealValueExpr] {
+  * The literal real value expression sub-parser generates a literal of real type with the value provided in the context
+  * of the parser.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseLiteralRealValueExpr(
+  ctx: ShexLiteParser.Literal_real_value_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[LiteralRealValueExpr] {
 
   override def getParseResult: LiteralRealValueExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     val value: Double = ctx.DECIMAL_LITERAL().getText.toDouble
 

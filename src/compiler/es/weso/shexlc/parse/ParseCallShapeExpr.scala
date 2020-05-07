@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: CallShapeExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseCallShapeExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,42 +22,56 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
-import es.weso.shexlc.parse.ast.expr.{CallBaseExpr, CallPrefixExpr, CallShapeExpr, Expression}
+import es.weso.shexlc.parse.ast.expr.{
+  CallBaseExpr,
+  CallPrefixExpr,
+  CallShapeExpr,
+  Expression
+}
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The call shape expression parser generates a call shape expression  from the parser context.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseCallShapeExpr(ctx: ShexLiteParser.Call_shape_exprContext, visitor: ASTBuilderParser, ccontext: CompilationContext)
-  extends HasParseResult[CallShapeExpr] {
+  * The call shape expression parser generates a call shape expression  from the parser context.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseCallShapeExpr(
+  ctx: ShexLiteParser.Call_shape_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[CallShapeExpr] {
 
   override def getParseResult: CallShapeExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     ctx.base_relative_lbl match {
       case null => {
         val prefix = if (ctx.prefix_lbl == null) "" else ctx.prefix_lbl.getText
-        val shape = ctx.shape_lbl.getText
-        val prefixCall = new CallPrefixExpr(line, column, interval, prefix, shape)
+        val shape  = ctx.shape_lbl.getText
+        val prefixCall =
+          new CallPrefixExpr(line, column, interval, prefix, shape)
 
         new CallShapeExpr(line, column, interval, content, prefixCall)
       }
       case _ => {
-        val shape = ctx.base_relative_lbl.accept(visitor).asInstanceOf[Expression].asLiteralIRIValueExpr.value
-        val prefixCall = new CallBaseExpr(line, column, interval, content, shape)
+        val shape = ctx.base_relative_lbl
+          .accept(visitor)
+          .asInstanceOf[Expression]
+          .asLiteralIRIValueExpr
+          .value
+        val prefixCall =
+          new CallBaseExpr(line, column, interval, content, shape)
 
         new CallShapeExpr(line, column, interval, content, prefixCall)
       }

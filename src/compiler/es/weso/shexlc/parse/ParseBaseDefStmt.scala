@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: BaseDefStmtPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseBaseDefStmt.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -33,21 +33,24 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The base definition statement sub-parser creates a new base definition statement from the parser context. It
- * delegates the creation of the iri literal to its corresponding sub-parser.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseBaseDefStmt(ctx: ShexLiteParser.Base_def_stmtContext, visitor: ASTBuilderParser, ccontext: CompilationContext)
-  extends HasParseResult[BaseDefStmt] {
+  * The base definition statement sub-parser creates a new base definition statement from the parser context. It
+  * delegates the creation of the iri literal to its corresponding sub-parser.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseBaseDefStmt(
+  ctx: ShexLiteParser.Base_def_stmtContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[BaseDefStmt] {
 
   override def getParseResult: BaseDefStmt = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
-    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val line            = ctx.start.getLine
+    val column          = ctx.start.getCharPositionInLine
+    val interval        = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content         = ccontext.getInputContext.getText(interval)
     val iri: Expression = ctx.iri.accept(visitor).asExpression()
 
     new BaseDefStmt(line, column, interval, content, iri)

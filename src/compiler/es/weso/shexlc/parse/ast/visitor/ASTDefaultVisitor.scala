@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: DefaultShExLiteVisitor.scala
+//------------------------------------------------------------------------------
+// File: ASTDefaultVisitor.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.visitor
 import es.weso.shexlc.parse.ast.Schema

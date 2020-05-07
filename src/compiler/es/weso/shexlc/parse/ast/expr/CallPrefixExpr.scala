@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: CallPrefixExpr.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.expr
 
@@ -32,49 +32,58 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * A call prefix expression is a call to a prefix definition.
- *
- * @author Guillermo Facundo Colunga
- */
-class CallPrefixExpr(position: Position, tokenRange: Interval, content: String, val label: String, val argument: String,
-                     var definition: Statement = null) extends CallExpr(position, tokenRange, content) {
+  * A call prefix expression is a call to a prefix definition.
+  *
+  * @author Guillermo Facundo Colunga
+  */
+class CallPrefixExpr(
+  position: Position,
+  tokenRange: Interval,
+  content: String,
+  val label: String,
+  val argument: String,
+  var definition: Statement = null
+) extends CallExpr(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Call Prefix Expression.
-  override def isCallPrefixExpr: Boolean = true
+  override def isCallPrefixExpr: Boolean        = true
   override def asCallPrefixExpr: CallPrefixExpr = this
 
   /**
-   * Gets the position object that points to the source file.
-   *
-   * @return a position object containing the position in the source file.
-   */
+    * Gets the position object that points to the source file.
+    *
+    * @return a position object containing the position in the source file.
+    */
   override def getPosition: Position = position
 
   /**
-   * Gets the range of tokens from the source on which the node was generated.
-   *
-   * @return the range of tokens from the source on which the node was generated.
-   */
+    * Gets the range of tokens from the source on which the node was generated.
+    *
+    * @return the range of tokens from the source on which the node was generated.
+    */
   override def getRange: Interval = tokenRange
 
   /**
-   * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
-   * would be 'a = 3'.
-   *
-   * @return the content of the node as a String.
-   */
+    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * would be 'a = 3'.
+    *
+    * @return the content of the node as a String.
+    */
   override def getContent: String = content
 
   /**
-   * Accept method for visitor support.
-   *
-   * @param visitor the visitor implementation.
-   * @param param   is the parameter passed to the visitor (of type A).
-   * @tparam TP is the type the user parameter passed to the visitor.
-   * @tparam TR is the type of the return value of the visitor.
-   * @return the result of the visit (of type TR).
-   */
-  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
+    * Accept method for visitor support.
+    *
+    * @param visitor the visitor implementation.
+    * @param param   is the parameter passed to the visitor (of type A).
+    * @tparam TP is the type the user parameter passed to the visitor.
+    * @tparam TR is the type of the return value of the visitor.
+    * @return the result of the visit (of type TR).
+    */
+  override def accept[TP, TR](
+    visitor: ASTGenericWalker[TP, TR],
+    param: TP
+  ): TR = {
     visitor.visit(this, param)
   }
 }

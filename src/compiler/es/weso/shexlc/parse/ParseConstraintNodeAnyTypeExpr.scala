@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: ConstraintNodeAnyTypeExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseConstraintNodeAnyTypeExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -32,21 +32,24 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The constraint node any type expression sub-parser generates a constraint node of any type expression from the
- * context of the parser.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to delegate any action.
- */
-class ParseConstraintNodeAnyTypeExpr(ctx: ShexLiteParser.Constraint_node_any_type_exprContext, visitor: ASTBuilderParser,
-                                     ccontext: CompilationContext) extends HasParseResult[ConstraintNodeAnyTypeExpr] {
+  * The constraint node any type expression sub-parser generates a constraint node of any type expression from the
+  * context of the parser.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to delegate any action.
+  */
+class ParseConstraintNodeAnyTypeExpr(
+  ctx: ShexLiteParser.Constraint_node_any_type_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[ConstraintNodeAnyTypeExpr] {
 
   override def getParseResult: ConstraintNodeAnyTypeExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     new ConstraintNodeAnyTypeExpr(line, column, interval, content)
   }

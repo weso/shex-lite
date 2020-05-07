@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: LiteralStringValueExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseLiteralStringValueExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -32,21 +32,24 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The literal string value expression sub-parser creates a literal of string type with the value provided by the
- * context of the parser.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseLiteralStringValueExpr(ctx: ShexLiteParser.Literal_string_value_exprContext, visitor: ASTBuilderParser,
-                                  ccontext: CompilationContext) extends HasParseResult[LiteralStringValueExpr] {
+  * The literal string value expression sub-parser creates a literal of string type with the value provided by the
+  * context of the parser.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseLiteralStringValueExpr(
+  ctx: ShexLiteParser.Literal_string_value_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[LiteralStringValueExpr] {
 
   override def getParseResult: LiteralStringValueExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     val value: String = ctx.STRING_LITERAL().getText
 

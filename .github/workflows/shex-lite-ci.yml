@@ -3,85 +3,85 @@ name: ShEx-Lite CI
 on: [push, pull_request]
 
 jobs:
-  
+
   # Test run on linux platform
   ubuntu-test:
-    
+
     # Job name
     name: Test Linux Platform
-    
+
     # This jobs runs on linux
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 12
-      uses: actions/setup-java@v1
-      with:
-        java-version: 12
-        architecture: x64
-    - name: Run tests
-      run: sbt ++2.13.1! clean test
-    
+      - uses: actions/checkout@v2
+      - name: Set up JDK 12
+        uses: actions/setup-java@v1
+        with:
+          java-version: 12
+          architecture: x64
+      - name: Run tests
+        run: sbt ++2.13.1! clean test
+
   # Test run on linux platform
   windows-test:
-    
+
     # Job name
     name: Test Windows Platform
-    
+
     # This jobs runs on linux
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 12
-      uses: actions/setup-java@v1
-      with:
-        java-version: 12
-        architecture: x64
-    - name: Run tests
-      run: sbt ++2.13.1! clean test
-      
+      - uses: actions/checkout@v2
+      - name: Set up JDK 12
+        uses: actions/setup-java@v1
+        with:
+          java-version: 12
+          architecture: x64
+      - name: Run tests
+        run: sbt ++2.13.1! clean test
+
   # Test run on linux platform
   macos-test:
-    
+
     # Job name
     name: Test OS X Platform
-    
+
     # This jobs runs on linux
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 12
-      uses: actions/setup-java@v1
-      with:
-        java-version: 12
-        architecture: x64
-    - name: Install sbt
-      run: brew install sbt
-    - name: Run tests
-      run: sbt ++2.13.1! clean test
+      - uses: actions/checkout@v2
+      - name: Set up JDK 12
+        uses: actions/setup-java@v1
+        with:
+          java-version: 12
+          architecture: x64
+      - name: Install sbt
+        run: brew install sbt
+      - name: Run tests
+        run: sbt ++2.13.1! clean test
 
   # Test run on linux platform
   coverage-report:
-    
+
     # Job name
     name: Coverage Report
-    
+
     # This jobs runs on linux
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 12
-      uses: actions/setup-java@v1
-      with:
-        java-version: 12
-        architecture: x64
-    - name: Run tests with coverage
-      run: sbt ++2.12.10! clean coverage test coverageReport
-    - name: Upload coverage report to codecov
-      uses: codecov/codecov-action@v1
-      with:
-        fail_ci_if_error: true
+      - uses: actions/checkout@v2
+      - name: Set up JDK 12
+        uses: actions/setup-java@v1
+        with:
+          java-version: 12
+          architecture: x64
+      - name: Run tests with coverage
+        run: sbt ++2.12.10! clean coverage test coverageReport
+      - name: Upload coverage report to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true

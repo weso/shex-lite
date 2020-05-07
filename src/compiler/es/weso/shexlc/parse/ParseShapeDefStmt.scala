@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: ShapeDefStmtPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseShapeDefStmt.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -33,23 +33,26 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The shape definition statement sub-parser generates a shape definition statement from the context of the parser.
- * It delegates the creation of the label and the expression to its own sub-parsers.
- *
- * @override Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseShapeDefStmt(ctx: ShexLiteParser.Shape_def_stmtContext, visitor: ASTBuilderParser, ccontext: CompilationContext)
-  extends HasParseResult[ShapeDefStmt] {
+  * The shape definition statement sub-parser generates a shape definition statement from the context of the parser.
+  * It delegates the creation of the label and the expression to its own sub-parsers.
+  *
+  * @override Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseShapeDefStmt(
+  ctx: ShexLiteParser.Shape_def_stmtContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[ShapeDefStmt] {
 
   override def getParseResult: ShapeDefStmt = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
-    val label: Expression = ctx.label.accept(visitor).asExpression()
+    val label: Expression      = ctx.label.accept(visitor).asExpression()
     val expression: Expression = ctx.expr.accept(visitor).asExpression()
 
     new ShapeDefStmt(line, column, interval, content, label, expression)

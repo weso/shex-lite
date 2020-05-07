@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: CompilationTest.scala
 //
 // Short version for non-lawyers:
@@ -22,43 +22,45 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc
 
 import java.io.File
 
-import es.weso.shexl.impl.ShExLCompilerConfig
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
 class CompilationTest extends AnyFunSuite with BeforeAndAfter {
 
-  val compiler = new ShExLCompilerImpl().setConfiguration(new ShExLCompilerConfig {
-    override def generateWarnings: Boolean = true
-    override def generateCode: Boolean = false
-  })
+  val compiler =
+    new ShExLCompilerImpl().setConfiguration(new ShExLCompilerConfig {
+      override def generateWarnings: Boolean = true
+      override def generateCode: Boolean     = false
+    })
 
   generateTestCases()
 
-  private[this] def generateTestCases():Unit = {
-    val correctFiles = getListOfFiles("test/assets", "correct_schema")
+  private[this] def generateTestCases(): Unit = {
+    val correctFiles   = getListOfFiles("test/assets", "correct_schema")
     val incorrectFiles = getListOfFiles("test/assets", "incorrect_schema")
 
     // Individual file compiling
-    for(file <- correctFiles) {
+    for (file <- correctFiles) {
       test(s"Compiling file $file should pass without errors") {
         // Parsing a sample file that contains a base redefinition.
-        val compilationResult = compiler.addSource(file).compile.getCompilationResult
+        val compilationResult =
+          compiler.addSource(file).compile.getCompilationResult
         assert(!compilationResult.hasErrors)
         compilationResult.getIndividualResults.last.printErrors
         compilationResult.getIndividualResults.last.printWarnings
       }
     }
 
-    for(file <- incorrectFiles) {
+    for (file <- incorrectFiles) {
       test(s"Compiling file $file should generate errors") {
-        val compilationResult = compiler.addSource(file).compile.getCompilationResult
+        val compilationResult =
+          compiler.addSource(file).compile.getCompilationResult
         println(compilationResult.getIndividualResults.head.getErrors.size)
         assert(compilationResult.hasErrors)
         compilationResult.getIndividualResults.last.printErrors
@@ -67,24 +69,28 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
     }
 
     // Multiple file compiling
-    test(s"Compiling multiple correct files at the same time should pass without errors") {
-      for(file <- correctFiles) {
+    test(
+      s"Compiling multiple correct files at the same time should pass without errors"
+    ) {
+      for (file <- correctFiles) {
         compiler.addSource(file)
       }
       val results = compiler.compile.getCompilationResult.getIndividualResults
-      for(result <- results) {
+      for (result <- results) {
         assert(!result.hasErrors)
         result.printErrors
         result.printWarnings
       }
     }
 
-    test(s"Compiling multiple incorrect files at the same time should pass with errors") {
-      for(file <- incorrectFiles) {
+    test(
+      s"Compiling multiple incorrect files at the same time should pass with errors"
+    ) {
+      for (file <- incorrectFiles) {
         compiler.addSource(file)
       }
       val results = compiler.compile.getCompilationResult.getIndividualResults
-      for(result <- results) {
+      for (result <- results) {
         assert(result.hasErrors)
         result.printErrors
         result.printWarnings
@@ -93,10 +99,15 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
 
   }
 
-  private[this] def getListOfFiles(dir: String, startsWith: String): List[String] = {
+  private[this] def getListOfFiles(
+    dir: String,
+    startsWith: String
+  ): List[String] = {
     val file = new File(dir)
-    file.listFiles.filter(_.isFile)
+    file.listFiles
+      .filter(_.isFile)
       .filter(_.getName.startsWith(startsWith))
-      .map(_.getPath).toList
+      .map(_.getPath)
+      .toList
   }
 }

@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: ConstraintNodeExpr.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.expr
 
@@ -30,14 +30,17 @@ import es.weso.shexlc.parse.ast.Position
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * A base class for all the Constraint Nodes Expressions.
- *
- * @author Guillermo Facundo Colunga
- */
-abstract class ConstraintNodeExpr(position: Position, tokenRange: Interval, content: String)
-  extends ConstraintExpr(position, tokenRange, content) {
+  * A base class for all the Constraint Nodes Expressions.
+  *
+  * @author Guillermo Facundo Colunga
+  */
+abstract class ConstraintNodeExpr(
+  position: Position,
+  tokenRange: Interval,
+  content: String
+) extends ConstraintExpr(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Constraint Node Expression.
-  override def isConstraintNodeExpr: Boolean = true
+  override def isConstraintNodeExpr: Boolean            = true
   override def asConstraintNodeExpr: ConstraintNodeExpr = this
 }

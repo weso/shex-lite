@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: CompilationConfigBuilder.scala
 //
 // Short version for non-lawyers:
@@ -22,18 +22,18 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.internal
 
 import es.weso.shexlc.IRGen.TargetIR
 
 /**
- * The compilation configuration is a basic configuration that is passed to through the compilation context to all the
- * different tasks that take place and are the individual tasks who decide if they need to be executed or not.
- *
- * @author Guillermo Facundo Colunga
- */
+  * The compilation configuration is a basic configuration that is passed to through the compilation context to all the
+  * different tasks that take place and are the individual tasks who decide if they need to be executed or not.
+  *
+  * @author Guillermo Facundo Colunga
+  */
 case class CompilationConfigBuilder() {
 
   // Should warnings be generated?
@@ -46,54 +46,54 @@ case class CompilationConfigBuilder() {
   private var TIR = Set.empty[TargetIR]
 
   /**
-   * Sets whether or not the warnings should be generated. By default warnings generation is set to true.
-   *
-   * @param generate true to generate warnings, false otherwise.
-   */
+    * Sets whether or not the warnings should be generated. By default warnings generation is set to true.
+    *
+    * @param generate true to generate warnings, false otherwise.
+    */
   def generateWarnings(generate: Boolean): CompilationConfigBuilder = {
     warnings = generate
     this
   }
 
   /**
-   * Sets whether or not the IR should be generated. By default IR generation is set to false.
-   *
-   * @param generate true to generate IR, false otherwise.
-   */
+    * Sets whether or not the IR should be generated. By default IR generation is set to false.
+    *
+    * @param generate true to generate IR, false otherwise.
+    */
   def generateIR(generate: Boolean): CompilationConfigBuilder = {
     generateIR = generate
     this
   }
 
   /**
-   * Sets the target intermediate representation languages to use.
-   *
-   * @param tir is the list that contains the intermediate representation target languages.
-   */
+    * Sets the target intermediate representation languages to use.
+    *
+    * @param tir is the list that contains the intermediate representation target languages.
+    */
   def withTIR(tir: List[TargetIR]): CompilationConfigBuilder = {
     TIR = Set.from(tir)
     this
   }
 
   /**
-   * Builds a new compilation config object with the previous set values.
-   *
-   * @return the compilation configuration build with the defined values.
-   */
+    * Builds a new compilation config object with the previous set values.
+    *
+    * @return the compilation configuration build with the defined values.
+    */
   def build: CompilationConfig = {
 
     // Store a copy of the return value. It has to be computed this way to be able to reset the values of the object
     // to the default value.
     val returnValue = new CompilationConfig() {
       override def generateWarnings: Boolean = warnings
-      override def generateIR: Boolean = generateIR
-      override def getTIR: Set[TargetIR] = TIR
+      override def generateIR: Boolean       = generateIR
+      override def getTIR: Set[TargetIR]     = TIR
     }
 
     // Reset internal object values to default.
     this.generateIR = false
-    this.warnings = true
-    this.TIR = Set.empty
+    this.warnings   = true
+    this.TIR        = Set.empty
 
     // return the previous created object.
     returnValue

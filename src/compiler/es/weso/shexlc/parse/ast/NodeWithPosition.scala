@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: NodeWithPosition.scala
 //
 // Short version for non-lawyers:
@@ -22,49 +22,50 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast
 
 import es.weso.shexlc.parse.ast.expr.Expression
 import es.weso.shexlc.parse.ast.stmt.Statement
-import es.weso.shexlc.parse.ast.visitor.Visitable
 
 /**
- * Base class for all nodes of the abstract syntax tree.
- *
- * @author Guillermo Facundo Colunga
- */
+  * Base class for all nodes of the abstract syntax tree.
+  *
+  * @author Guillermo Facundo Colunga
+  */
 trait NodeWithPosition {
 
   /**
-   * Gets the position object that points to the source file.
-   *
-   * @return a position object containing the position in the source file.
-   */
+    * Gets the position object that points to the source file.
+    *
+    * @return a position object containing the position in the source file.
+    */
   def getPosition: Position
 
   /**
-   * Gets the line in the source file where the node is located.
-   *
-   * @return the line in the source file where the node is located.
-   */
+    * Gets the line in the source file where the node is located.
+    *
+    * @return the line in the source file where the node is located.
+    */
   def getLine: Int = getPosition.line
 
   /**
-   * Gets the column in the source file where the node is located.
-   *
-   * @return the column in the source file where the node is located.
-   */
+    * Gets the column in the source file where the node is located.
+    *
+    * @return the column in the source file where the node is located.
+    */
   def getColumn: Int = getPosition.column
 
   // Expression
   def isExpression(): Boolean = false
 
-  def asExpression(): Expression = throw new IllegalStateException(s"$this is not an Expression")
+  def asExpression(): Expression =
+    throw new IllegalStateException(s"$this is not an Expression")
 
   // Statement
   def isStatement(): Boolean = false
 
-  def asStatement(): Statement = throw new IllegalStateException(s"$this is not an Statement")
+  def asStatement(): Statement =
+    throw new IllegalStateException(s"$this is not an Statement")
 }

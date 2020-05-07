@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: Expression.scala
 //
 // Short version for non-lawyers:
@@ -22,23 +22,26 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.expr
 
-import es.weso.shexlc.parse.ast.{AbstractASTNode, NodeWithParent, NodeWithPosition, Position}
+import es.weso.shexlc.parse.ast.{AbstractASTNode, Position}
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * A base class for all the expression.
- *
- * When an expression is added to the es.weso.shexlc.parse.ast it is mandatory to add its is and as methods, that way it is much
- * simple and faster to check if the es.weso.shexlc.parse.ast is semantically correct or not and also to access fields.
- *
- * @author Guillermo Facundo Colunga
- */
-abstract class Expression(position: Position, tokenRange: Interval, content: String)
-  extends AbstractASTNode(position, tokenRange, content) {
+  * A base class for all the expression.
+  *
+  * When an expression is added to the es.weso.shexlc.parse.ast it is mandatory to add its is and as methods, that way it is much
+  * simple and faster to check if the es.weso.shexlc.parse.ast is semantically correct or not and also to access fields.
+  *
+  * @author Guillermo Facundo Colunga
+  */
+abstract class Expression(
+  position: Position,
+  tokenRange: Interval,
+  content: String
+) extends AbstractASTNode(position, tokenRange, content) {
 
   // Override default values from node with position.
   override def isExpression(): Boolean = true
@@ -79,7 +82,9 @@ abstract class Expression(position: Position, tokenRange: Interval, content: Str
   def isConstraintBlockTripleExpr: Boolean = false
 
   def asConstraintBlockTripleExpr: ConstraintBlockTripleExpr =
-    throw new IllegalStateException(s"$this is not an asConstraintBlockTripleExpr")
+    throw new IllegalStateException(
+      s"$this is not an asConstraintBlockTripleExpr"
+    )
 
   // Constraint Triple Expression.
   def isConstraintTripleExpr: Boolean = false
@@ -103,7 +108,9 @@ abstract class Expression(position: Position, tokenRange: Interval, content: Str
   def isConstraintNodeLiteralExpr: Boolean = false
 
   def asConstraintNodeLiteralExpr: ConstraintNodeLiteralExpr =
-    throw new IllegalStateException(s"$this is not an ConstraintNodeLiteralExpr")
+    throw new IllegalStateException(
+      s"$this is not an ConstraintNodeLiteralExpr"
+    )
 
   // Constraint Node IRI Expression.
   def isConstraintNodeIRIExpr: Boolean = false
@@ -115,7 +122,9 @@ abstract class Expression(position: Position, tokenRange: Interval, content: Str
   def isConstraintNodeAnyTypeExpr: Boolean = false
 
   def asConstraintNodeAnyTypeExpr: ConstraintNodeAnyTypeExpr =
-    throw new IllegalStateException(s"$this is not an ConstraintNodeAnyTypeExpr")
+    throw new IllegalStateException(
+      s"$this is not an ConstraintNodeAnyTypeExpr"
+    )
 
   // Constraint Node BNode Expression.
   def isConstraintNodeBNodeExpr: Boolean = false
@@ -127,13 +136,17 @@ abstract class Expression(position: Position, tokenRange: Interval, content: Str
   def isConstraintNodeNonLiteralExpr: Boolean = false
 
   def asConstraintNodeNonLiteralExpr: ConstraintNodeNonLiteralExpr =
-    throw new IllegalStateException(s"$this is not an ConstraintNodeNonLiteralExpr")
+    throw new IllegalStateException(
+      s"$this is not an ConstraintNodeNonLiteralExpr"
+    )
 
   // Constraint Valid Value Set Expression
   def isConstraintValidValueSetExpr: Boolean = false
 
   def asConstraintValidValueSetExpr: ConstraintValidValueSetExpr =
-    throw new IllegalStateException(s"$this is not an ConstraintValidValueSetExpr")
+    throw new IllegalStateException(
+      s"$this is not an ConstraintValidValueSetExpr"
+    )
 
   // Constraint Value Set Expression.
   def isConstraintValueSetExpr: Boolean = false

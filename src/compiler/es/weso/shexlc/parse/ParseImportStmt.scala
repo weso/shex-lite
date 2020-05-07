@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: ImportStmtPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseImportStmt.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -33,21 +33,24 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The import statement sub-parser generates an import statement from the parser context. It is an experimental feature
- * yet. It delegates the creation of the iri to its own sub-parser.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseImportStmt(ctx: ShexLiteParser.Import_stmtContext, visitor: ASTBuilderParser, ccontext: CompilationContext)
-  extends HasParseResult[ImportStmt] {
+  * The import statement sub-parser generates an import statement from the parser context. It is an experimental feature
+  * yet. It delegates the creation of the iri to its own sub-parser.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseImportStmt(
+  ctx: ShexLiteParser.Import_stmtContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[ImportStmt] {
 
   override def getParseResult: ImportStmt = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     val iri: Expression = ctx.iri.accept(visitor).asExpression()
 

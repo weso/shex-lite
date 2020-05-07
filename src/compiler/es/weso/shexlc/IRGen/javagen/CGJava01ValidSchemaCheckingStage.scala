@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: CGJava01ValidSchemaCheckingStage.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.IRGen.javagen
 
@@ -32,10 +32,10 @@ import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
+class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
+    extends ASTDefaultVisitor[Unit] {
 
   private[this] var msgsHandler: ErrorHandler = ccontext.getErrorHandler
-
 
   override def visit(stmt: ImportStmt, param: Unit): Unit = {
     msgsHandler.addEvent(
@@ -110,8 +110,8 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext) extends AST
   }
 
   override def visit(expr: ConstraintBlockTripleExpr, param: Unit): Unit = {
-    for(constraint <- expr.body) {
-      if(constraint.isConstraintTripleExpr) {
+    for (constraint <- expr.body) {
+      if (constraint.isConstraintTripleExpr) {
         constraint.accept(this, param)
       } else {
         msgsHandler.addEvent(
@@ -126,11 +126,12 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext) extends AST
   }
 
   override def visit(expr: ConstraintTripleExpr, param: Unit): Unit = {
-    val constraint = expr.constraint
+    val constraint  = expr.constraint
     val cardinality = expr.cardinality
     val isCallShape = expr.constraint.isCallShapeExpr
 
-    if(constraint.isCallPrefixExpr && !constraint.asCallPrefixExpr.label.equals("xsd")) {
+    if (constraint.isCallPrefixExpr && !constraint.asCallPrefixExpr.label
+          .equals("xsd")) {
       msgsHandler.addEvent(
         new Err(
           constraint,
@@ -140,7 +141,7 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext) extends AST
       )
     }
 
-    if(cardinality.asCardinalityExpr.isEmptyCardinality) {
+    if (cardinality.asCardinalityExpr.isEmptyCardinality) {
       msgsHandler.addEvent(
         new Err(
           cardinality,

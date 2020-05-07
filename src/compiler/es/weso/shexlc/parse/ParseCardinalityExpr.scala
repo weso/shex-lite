@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: CardinalityExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseCardinalityExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -32,39 +32,77 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * This parser extracts a cardinality expression from the parser cardinality context.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor that will propagate any needed call.
- */
-class ParseCardinalityExpr(ctx: ShexLiteParser.Cardinality_exprContext, visitor: ASTBuilderParser, ccontext: CompilationContext)
-  extends HasParseResult[CardinalityExpr] {
+  * This parser extracts a cardinality expression from the parser cardinality context.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor that will propagate any needed call.
+  */
+class ParseCardinalityExpr(
+  ctx: ShexLiteParser.Cardinality_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[CardinalityExpr] {
 
   override def getParseResult: CardinalityExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     if (ctx.min == null) {
       // If there is no min value is because it is a built in cardinality.
       ctx.getText match {
-        case "*" => new CardinalityExpr(line, column, interval, content, CardinalityExpr.MinValue,
-          CardinalityExpr.MaxValue)
-        case "+" => new CardinalityExpr(line, column, interval, content, CardinalityExpr.MinValue + 1,
-          CardinalityExpr.MaxValue)
+        case "*" =>
+          new CardinalityExpr(
+            line,
+            column,
+            interval,
+            content,
+            CardinalityExpr.MinValue,
+            CardinalityExpr.MaxValue
+          )
+        case "+" =>
+          new CardinalityExpr(
+            line,
+            column,
+            interval,
+            content,
+            CardinalityExpr.MinValue + 1,
+            CardinalityExpr.MaxValue
+          )
         case "?" => new CardinalityExpr(line, column, interval, content, 0, 1)
       }
     } else {
       // If it is not a built in cardinality thn we have to check which case of the allowed ones is.
       if (ctx.max != null) {
-        new CardinalityExpr(line, column, interval, content, Integer.parseInt(ctx.min.getText), Integer.parseInt(ctx.max.getText))
+        new CardinalityExpr(
+          line,
+          column,
+          interval,
+          content,
+          Integer.parseInt(ctx.min.getText),
+          Integer.parseInt(ctx.max.getText)
+        )
       } else {
         if (ctx.getText.contains(",")) {
-          new CardinalityExpr(line, column, interval, content, Integer.parseInt(ctx.min.getText), Int.MaxValue)
+          new CardinalityExpr(
+            line,
+            column,
+            interval,
+            content,
+            Integer.parseInt(ctx.min.getText),
+            Int.MaxValue
+          )
         } else {
-          new CardinalityExpr(line, column, interval, content, Integer.parseInt(ctx.min.getText), Integer.parseInt(ctx.min.getText))
+          new CardinalityExpr(
+            line,
+            column,
+            interval,
+            content,
+            Integer.parseInt(ctx.min.getText),
+            Integer.parseInt(ctx.min.getText)
+          )
         }
       }
     }

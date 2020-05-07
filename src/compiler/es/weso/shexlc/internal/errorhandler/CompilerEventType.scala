@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: CompilerEventType.scala
 //
 // Short version for non-lawyers:
@@ -22,29 +22,29 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.internal.errorhandler
 
 /**
- * To standardize the different types of events that can occur in the compiler, this contract is created so that all of
- * them start from this same source.
- *
- * @author Guillermo Facundo Colunga
- */
+  * To standardize the different types of events that can occur in the compiler, this contract is created so that all of
+  * them start from this same source.
+  *
+  * @author Guillermo Facundo Colunga
+  */
 trait CompilerEventType {
 
   /**
-   * Gets the code of the compiler event type, the code should be unique.
-   *
-   * @return the code of the compiler event type.
-   */
+    * Gets the code of the compiler event type, the code should be unique.
+    *
+    * @return the code of the compiler event type.
+    */
   def getCode: String
 
   /**
-   * Gets the description of the event.
-   *
-   * @return the description of the event.
-   */
+    * Gets the description of the event.
+    *
+    * @return the description of the event.
+    */
   def getDescription: String
 }

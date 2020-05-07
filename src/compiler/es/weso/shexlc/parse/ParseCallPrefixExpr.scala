@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: CallPrefixExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseCallPrefixExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,41 +22,53 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
-import es.weso.shexlc.parse.ast.expr.{CallBaseExpr, CallExpr, CallPrefixExpr, Expression}
+import es.weso.shexlc.parse.ast.expr.{
+  CallBaseExpr,
+  CallExpr,
+  CallPrefixExpr,
+  Expression
+}
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The call prefix expression parser creates a call prefix expression from the parser context.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor top propagate any action.
- */
-class ParseCallPrefixExpr(ctx: ShexLiteParser.Call_prefix_exprContext, visitor: ASTBuilderParser, ccontext: CompilationContext)
-  extends HasParseResult[CallExpr] {
+  * The call prefix expression parser creates a call prefix expression from the parser context.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor top propagate any action.
+  */
+class ParseCallPrefixExpr(
+  ctx: ShexLiteParser.Call_prefix_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[CallExpr] {
 
   override def getParseResult: CallExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     ctx.base_relative_lbl match {
       case null => {
         val label = if (ctx.pref_lbl == null) "" else ctx.pref_lbl.getText
-        val arg = ctx.shape_lbl.getText
+        val arg   = ctx.shape_lbl.getText
 
         new CallPrefixExpr(line, column, interval, content, label, arg)
       }
       case _ => {
         val label = "base"
-        val arg = ctx.base_relative_lbl.accept(visitor).asInstanceOf[Expression].asLiteralIRIValueExpr.value
+        val arg = ctx.base_relative_lbl
+          .accept(visitor)
+          .asInstanceOf[Expression]
+          .asLiteralIRIValueExpr
+          .value
 
         new CallBaseExpr(line, column, interval, content, arg)
       }

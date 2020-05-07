@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: PrettyPrintASTVisitor.scala
+//------------------------------------------------------------------------------
+// File: ASTPrinter.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.visitor
 
@@ -31,12 +31,12 @@ import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.stmt._
 
 /**
- * The ast printer prints the content of the ast after the execution of the semantic validation and therefore should
- * only be applied to SIL. That is because it tries to print definitions.
- */
+  * The ast printer prints the content of the ast after the execution of the semantic validation and therefore should
+  * only be applied to SIL. That is because it tries to print definitions.
+  */
 class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
 
-  final val NL = "\n"
+  final val NL  = "\n"
   final val TAB = "\t"
 
   override def visit(schema: Schema, param: StringBuilder): String = {
@@ -51,7 +51,7 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
   }
 
   override def visit(stmt: BaseDefStmt, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+    val sb   = new StringBuilder()
     val expr = stmt.expression.accept(this, param)
     sb.append(s"--BaseDefStmt:")
     sb.append(NL + TAB + "|" + TAB + "|")
@@ -60,7 +60,7 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
   }
 
   override def visit(stmt: ImportStmt, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+    val sb   = new StringBuilder()
     val expr = stmt.expression.accept(this, param)
     sb.append(s"--ImportStmt:")
     sb.append(NL + TAB + "|" + TAB + "|")
@@ -69,8 +69,8 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
   }
 
   override def visit(stmt: PrefixDefStmt, param: StringBuilder): String = {
-    val sb = new StringBuilder()
-    val lbl = stmt.label
+    val sb         = new StringBuilder()
+    val lbl        = stmt.label
     val expression = stmt.expression.asLiteralIRIValueExpr.accept(this, param)
     sb.append(s"--PrefixDefStmt:")
     sb.append(NL + TAB + "|" + TAB + "|")
@@ -81,8 +81,8 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
   }
 
   override def visit(stmt: ShapeDefStmt, param: StringBuilder): String = {
-    val sb = new StringBuilder()
-    val lbl = stmt.label.accept(this, param)
+    val sb   = new StringBuilder()
+    val lbl  = stmt.label.accept(this, param)
     val expr = stmt.expression.accept(this, param)
     sb.append(s"--ShapeDefStmt:")
     sb.append(NL + TAB + "|" + TAB + "|")
@@ -93,7 +93,7 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
   }
 
   override def visit(stmt: StartDefStmt, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+    val sb   = new StringBuilder()
     val expr = stmt.expression.accept(this, param)
     sb.append(s"--StartDefStmt:")
     sb.append(NL + TAB + "|" + TAB + "|")
@@ -102,7 +102,7 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
   }
 
   override def visit(expr: CallPrefixExpr, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+    val sb  = new StringBuilder()
     val lbl = expr.label
     val arg = expr.argument
     sb.append(s"CallPrefixExpr: $lbl:$arg")
@@ -110,28 +110,31 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
   }
 
   override def visit(expr: CallShapeExpr, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+    val sb  = new StringBuilder()
     val lbl = expr.label.accept(this, param)
     sb.append(s"CallShapeExpr: $lbl")
     sb.toString()
   }
 
   override def visit(expr: CallBaseExpr, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+    val sb  = new StringBuilder()
     val arg = expr.argument
     sb.append(s"BaseCall:$arg")
     sb.toString()
   }
 
   override def visit(expr: CardinalityExpr, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+    val sb  = new StringBuilder()
     val min = expr.min
     val max = expr.max
     sb.append(s"CardinalityExpr: [$min, $max]")
     sb.toString()
   }
 
-  override def visit(expr: ConstraintBlockTripleExpr, param: StringBuilder): String = {
+  override def visit(
+    expr: ConstraintBlockTripleExpr,
+    param: StringBuilder
+  ): String = {
     val sb = new StringBuilder()
     sb.append(NL + TAB + "|" + TAB + "|" + TAB + "|")
     sb.append(s"--ConstraintBlockTripleExpr:")
@@ -143,38 +146,56 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
     sb.toString()
   }
 
-  override def visit(expr: ConstraintNodeAnyTypeExpr, param: StringBuilder): String = {
+  override def visit(
+    expr: ConstraintNodeAnyTypeExpr,
+    param: StringBuilder
+  ): String = {
     val sb = new StringBuilder()
     sb.append(s"ConstraintNodeAnyTypeExpr")
     sb.toString()
   }
 
-  override def visit(expr: ConstraintNodeBNodeExpr, param: StringBuilder): String = {
+  override def visit(
+    expr: ConstraintNodeBNodeExpr,
+    param: StringBuilder
+  ): String = {
     val sb = new StringBuilder()
     sb.append(s"ConstraintNodeBNodeExpr")
     sb.toString()
   }
 
-  override def visit(expr: ConstraintNodeIRIExpr, param: StringBuilder): String = {
+  override def visit(
+    expr: ConstraintNodeIRIExpr,
+    param: StringBuilder
+  ): String = {
     val sb = new StringBuilder()
     sb.append(s"ConstraintNodeIRIExpr")
     sb.toString()
   }
 
-  override def visit(expr: ConstraintNodeLiteralExpr, param: StringBuilder): String = {
+  override def visit(
+    expr: ConstraintNodeLiteralExpr,
+    param: StringBuilder
+  ): String = {
     val sb = new StringBuilder()
     sb.append(s"ConstraintNodeLiteralExpr")
     sb.toString()
   }
 
-  override def visit(expr: ConstraintNodeNonLiteralExpr, param: StringBuilder): String = {
+  override def visit(
+    expr: ConstraintNodeNonLiteralExpr,
+    param: StringBuilder
+  ): String = {
     val sb = new StringBuilder()
     sb.append(s"ConstraintNodeNonLiteralExpr")
     sb.toString()
   }
 
-  override def visit(expr: ConstraintTripleExpr, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+  override def visit(
+    expr: ConstraintTripleExpr,
+    param: StringBuilder
+  ): String = {
+    val sb   = new StringBuilder()
     val prop = expr.property.accept(this, param)
     val cons = expr.constraint.accept(this, param)
     val card = expr.cardinality.accept(this, param)
@@ -182,7 +203,10 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
     sb.toString()
   }
 
-  override def visit(expr: ConstraintValueSetExpr, param: StringBuilder): String = {
+  override def visit(
+    expr: ConstraintValueSetExpr,
+    param: StringBuilder
+  ): String = {
     val sb = new StringBuilder()
     sb.append(s"ConstraintValueSetExpr: ")
 
@@ -193,22 +217,31 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
     sb.toString()
   }
 
-  override def visit(expr: LiteralIRIValueExpr, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+  override def visit(
+    expr: LiteralIRIValueExpr,
+    param: StringBuilder
+  ): String = {
+    val sb    = new StringBuilder()
     val value = expr.value
     sb.append(s"LiteralIRIValueExpr: $value")
     sb.toString()
   }
 
-  override def visit(expr: LiteralRealValueExpr, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+  override def visit(
+    expr: LiteralRealValueExpr,
+    param: StringBuilder
+  ): String = {
+    val sb    = new StringBuilder()
     val value = expr.value
     sb.append(s"LiteralRealValueExpr: $value")
     sb.toString()
   }
 
-  override def visit(expr: LiteralStringValueExpr, param: StringBuilder): String = {
-    val sb = new StringBuilder()
+  override def visit(
+    expr: LiteralStringValueExpr,
+    param: StringBuilder
+  ): String = {
+    val sb    = new StringBuilder()
     val value = expr.value
     sb.append(s"LiteralStringValueExpr: $value")
     sb.toString()

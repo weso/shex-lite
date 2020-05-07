@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: ShExLiteGenericVisitor.scala
+//------------------------------------------------------------------------------
+// File: ASTGenericWalker.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.visitor
 
@@ -31,207 +31,207 @@ import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.stmt._
 
 /**
- * This generic walker defines all the visit methods for each node of the ast.
- *
- * @author Guillermo Facundo Colunga
- *
- * @tparam TP is the type of the parameter.
- * @tparam TR is the type of the return type.
- */
+  * This generic walker defines all the visit methods for each node of the ast.
+  *
+  * @author Guillermo Facundo Colunga
+  *
+  * @tparam TP is the type of the parameter.
+  * @tparam TR is the type of the return type.
+  */
 trait ASTGenericWalker[TP, TR] {
 
   // - Schema ---------------------------------------------
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param schema is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param schema is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(schema: Schema, param: TP): TR
 
   // - Statements -----------------------------------------
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param stmt is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param stmt is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(stmt: BaseDefStmt, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param stmt is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param stmt is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(stmt: ImportStmt, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param stmt is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param stmt is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(stmt: PrefixDefStmt, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param stmt is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param stmt is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(stmt: ShapeDefStmt, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param stmt is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param stmt is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(stmt: StartDefStmt, param: TP): TR
 
   // - Expressions ----------------------------------------
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: CallPrefixExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: CallShapeExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: CallBaseExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: CardinalityExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: ConstraintBlockTripleExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: ConstraintNodeAnyTypeExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: ConstraintNodeBNodeExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: ConstraintNodeIRIExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: ConstraintNodeLiteralExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: ConstraintNodeNonLiteralExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: ConstraintTripleExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: ConstraintValueSetExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: LiteralIRIValueExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: LiteralRealValueExpr, param: TP): TR
 
   /**
-   * Executes the corresponding action.
-   *
-   * @param expr is the node being visited.
-   * @param param that comes from previous visit actions.
-   * @return the computed value, if any.
-   */
+    * Executes the corresponding action.
+    *
+    * @param expr is the node being visited.
+    * @param param that comes from previous visit actions.
+    * @return the computed value, if any.
+    */
   def visit(expr: LiteralStringValueExpr, param: TP): TR
 }

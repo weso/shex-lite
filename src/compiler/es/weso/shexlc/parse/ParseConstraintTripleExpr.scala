@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: ConstraintTripleExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseConstraintTripleExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,36 +22,35 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
-import java.util.Objects
-
 import es.weso.shexlc.internal.CompilationContext
-import es.weso.shexlc.internal.io.impl.{CompilerMsgWarningType, DefaultCompilerMsg}
-import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * This parser extracts a triple constraint expression from the parser triple constraint context.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser
- * @param visitor that will propagate any needed call.
- */
-class ParseConstraintTripleExpr(ctx: ShexLiteParser.Constraint_triple_exprContext, visitor: ASTBuilderParser,
-                                ccontext: CompilationContext) extends HasParseResult[ConstraintTripleExpr] {
+  * This parser extracts a triple constraint expression from the parser triple constraint context.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser
+  * @param visitor that will propagate any needed call.
+  */
+class ParseConstraintTripleExpr(
+  ctx: ShexLiteParser.Constraint_triple_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[ConstraintTripleExpr] {
 
   override def getParseResult: ConstraintTripleExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
-    val property: Expression = ctx.property.accept(visitor).asExpression()
+    val property: Expression   = ctx.property.accept(visitor).asExpression()
     val constraint: Expression = ctx.constraint.accept(visitor).asExpression()
     val cardinality: Expression =
       if (ctx.cardinality == null)
@@ -59,6 +58,14 @@ class ParseConstraintTripleExpr(ctx: ShexLiteParser.Constraint_triple_exprContex
       else
         ctx.cardinality.accept(visitor).asExpression()
 
-    new ConstraintTripleExpr(line, column, interval, content, property, constraint, cardinality)
+    new ConstraintTripleExpr(
+      line,
+      column,
+      interval,
+      content,
+      property,
+      constraint,
+      cardinality
+    )
   }
 }

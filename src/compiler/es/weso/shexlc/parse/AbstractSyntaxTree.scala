@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: AbstractSyntaxTree.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -31,66 +31,72 @@ import es.weso.shexlc.parse.ast.AbstractASTNode
 import es.weso.shexlc.parse.generated.ShexLiteParser
 
 /**
- * Defines the AST base class. And packs together the tree root (contains the full tree by means of references). And
- * the compilation context that was generated in the previous stage (lexing -> parsing).
- *
- * @author Guillermo Facundo Colunga
- */
+  * Defines the AST base class. And packs together the tree root (contains the full tree by means of references). And
+  * the compilation context that was generated in the previous stage (lexing -> parsing).
+  *
+  * @author Guillermo Facundo Colunga
+  */
 trait AbstractSyntaxTree {
 
   /**
-   * Gets the root of the tree.
-   *
-   * @return the root of the tree.
-   */
+    * Gets the root of the tree.
+    *
+    * @return the root of the tree.
+    */
   def getRoot: AbstractASTNode
 
   /**
-   * Gets the compilation context.
-   *
-   * @return the compilation context.
-   */
+    * Gets the compilation context.
+    *
+    * @return the compilation context.
+    */
   def getCompilationContext: CompilationContext
 }
 
 /**
- * Defines the AST base class. And packs together the tree root (contains the full tree by means of references). And
- * the compilation context that was generated in the previous stage (lexing -> parsing).
- *
- * @author Guillermo Facundo Colunga
- */
+  * Defines the AST base class. And packs together the tree root (contains the full tree by means of references). And
+  * the compilation context that was generated in the previous stage (lexing -> parsing).
+  *
+  * @author Guillermo Facundo Colunga
+  */
 object AbstractSyntaxTree {
 
   /**
-   * Gets the AST (Abstract Syntax Tree) for a given Syntax Tree.
-   *
-   * @param syntaxTree is the input from where the ast will be generated.
-   * @return the abstract syntax tree generated.
-   */
-  def getAST(syntaxTree: SyntaxTree): AbstractSyntaxTree = new AbstractSyntaxTree {
+    * Gets the AST (Abstract Syntax Tree) for a given Syntax Tree.
+    *
+    * @param syntaxTree is the input from where the ast will be generated.
+    * @return the abstract syntax tree generated.
+    */
+  def getAST(syntaxTree: SyntaxTree): AbstractSyntaxTree =
+    new AbstractSyntaxTree {
 
-    private var root = Option.empty[AbstractASTNode]
+      private var root = Option.empty[AbstractASTNode]
 
-    new ASTBuilderParser(syntaxTree.getCompilationContext)
+      new ASTBuilderParser(syntaxTree.getCompilationContext)
 
-    /**
-     * Gets the root of the tree.
-     *
-     * @return the root of the tree.
-     */
-    override def getRoot: AbstractASTNode = {
-      root = Option(syntaxTree.getTree
-        .asInstanceOf[ShexLiteParser.SchemaContext] // It must be always a SchemaContext
-        .accept(new ASTBuilderParser(syntaxTree.getCompilationContext)))
+      /**
+        * Gets the root of the tree.
+        *
+        * @return the root of the tree.
+        */
+      override def getRoot: AbstractASTNode = {
+        root = Option(
+          syntaxTree.getTree
+            .asInstanceOf[
+              ShexLiteParser.SchemaContext
+            ] // It must be always a SchemaContext
+            .accept(new ASTBuilderParser(syntaxTree.getCompilationContext))
+        )
 
-      root.get // If not present will throw an exception. Should we deal only with options?
+        root.get // If not present will throw an exception. Should we deal only with options?
+      }
+
+      /**
+        * Gets the compilation context.
+        *
+        * @return the compilation context.
+        */
+      override def getCompilationContext: CompilationContext =
+        syntaxTree.getCompilationContext
     }
-
-    /**
-     * Gets the compilation context.
-     *
-     * @return the compilation context.
-     */
-    override def getCompilationContext: CompilationContext = syntaxTree.getCompilationContext
-  }
 }

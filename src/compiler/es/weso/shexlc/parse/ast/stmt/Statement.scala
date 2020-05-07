@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: Statement.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.stmt
 
@@ -30,45 +30,53 @@ import es.weso.shexlc.parse.ast.{AbstractASTNode, Position}
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * A base class for all the statements.
- *
- * When an statement is added to the es.weso.shexlc.parse.ast it is mandatory to add its is and as methods, that way it is much
- * simple and faster to check if the es.weso.shexlc.parse.ast is semantically correct or not and also to access fields.
- *
- * @author Guillermo Facundo Colunga.
- */
-abstract class Statement(position: Position, tokenRange: Interval, content: String)
-  extends AbstractASTNode(position, tokenRange, content) {
+  * A base class for all the statements.
+  *
+  * When an statement is added to the es.weso.shexlc.parse.ast it is mandatory to add its is and as methods, that way it is much
+  * simple and faster to check if the es.weso.shexlc.parse.ast is semantically correct or not and also to access fields.
+  *
+  * @author Guillermo Facundo Colunga.
+  */
+abstract class Statement(
+  position: Position,
+  tokenRange: Interval,
+  content: String
+) extends AbstractASTNode(position, tokenRange, content) {
 
   // Override default values from node with position.
-  override def isStatement(): Boolean = true
+  override def isStatement(): Boolean   = true
   override def asStatement(): Statement = this
 
   // Definition Statement.
   def isDefinitionStmt: Boolean = false
-  def asDefinitionStmt: DefinitionStmt = throw new IllegalStateException(s"$this is not a DefinitionStmt")
+  def asDefinitionStmt: DefinitionStmt =
+    throw new IllegalStateException(s"$this is not a DefinitionStmt")
 
   // Prefix Definition Statement.
   def isPrefixDefStmt: Boolean = false
-  def asPrefixDefStmt: PrefixDefStmt = throw new IllegalStateException(s"$this is not a PrefixDefStmt")
+  def asPrefixDefStmt: PrefixDefStmt =
+    throw new IllegalStateException(s"$this is not a PrefixDefStmt")
 
   // Shape Definition Statement.
   def isShapeDefStmt: Boolean = false
-  def asShapeDefStmt: ShapeDefStmt = throw new IllegalStateException(s"$this is not a ShapeDefStmt")
+  def asShapeDefStmt: ShapeDefStmt =
+    throw new IllegalStateException(s"$this is not a ShapeDefStmt")
 
   // Base Definition Statement.
   def isBaseDefStmt: Boolean = false
-  def asBaseDefStmt: BaseDefStmt = throw new IllegalStateException(s"$this is not a BaseDefStmt")
+  def asBaseDefStmt: BaseDefStmt =
+    throw new IllegalStateException(s"$this is not a BaseDefStmt")
 
   // Start Definition Statement.
   def isStartDefStmt: Boolean = false
-  def asStartDefStmt: StartDefStmt = throw new IllegalStateException(s"$this is not a StartDefStmt")
-
+  def asStartDefStmt: StartDefStmt =
+    throw new IllegalStateException(s"$this is not a StartDefStmt")
 
   // --- Experimental ---
   // Experimental features are not fully tested and therefore any critical application should not rely on them.
 
   // Import Statement.
   def isImportStmt: Boolean = false
-  def asImportStmt: ImportStmt = throw new IllegalStateException(s"$this is not an ImportStmt")
+  def asImportStmt: ImportStmt =
+    throw new IllegalStateException(s"$this is not an ImportStmt")
 }

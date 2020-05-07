@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: LiteralRealValueExpr.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.expr
 
@@ -31,25 +31,32 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * A Literal Real Value Expression is a literal that contains a real value. It is used to store real numbers that appear
- * in the source code.
- *
- * @author Guillermo Facundo Colunga
- * @param line   in the source code where the token that generates de Base Definition Statement is located.
- * @param column in the source code where the token that generates de Base Definition Statement is located.
- * @param value  of the real number.
- */
-class LiteralRealValueExpr(line: Int, column: Int, interval: Interval, content: String, val value: Double) extends LiteralExpr with ConstraintValidValueSetExpr {
+  * A Literal Real Value Expression is a literal that contains a real value. It is used to store real numbers that appear
+  * in the source code.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param line   in the source code where the token that generates de Base Definition Statement is located.
+  * @param column in the source code where the token that generates de Base Definition Statement is located.
+  * @param value  of the real number.
+  */
+class LiteralRealValueExpr(
+  line: Int,
+  column: Int,
+  interval: Interval,
+  content: String,
+  val value: Double
+) extends LiteralExpr
+    with ConstraintValidValueSetExpr {
   override def getPosition: Position = Position.pos(line, column)
 
   override def getRange: Interval = interval
 
-/**
-   * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
-   * would be 'a = 3'.
-   *
-   * @return the content of the node as a String.
-   */
+  /**
+    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * would be 'a = 3'.
+    *
+    * @return the content of the node as a String.
+    */
   override def getContent: String = content
 
   // Override default methods to indicate that this is a Literal Real Value Expression.
@@ -57,9 +64,11 @@ class LiteralRealValueExpr(line: Int, column: Int, interval: Interval, content: 
 
   override def asLiteralRealValueExpr: LiteralRealValueExpr = this
 
-  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
+  override def accept[TP, TR](
+    visitor: ASTGenericWalker[TP, TR],
+    param: TP
+  ): TR = {
     visitor.visit(this, param)
   }
-
 
 }

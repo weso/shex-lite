@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: Sem01TypeCheckingStage.scala
+//------------------------------------------------------------------------------
+// File: TypeCheck.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.sema
 
@@ -34,17 +34,17 @@ import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor._
 
 /**
- * The identification walker is the tool that travels the AST just to identify possible definitions an add the
- * information found to the symbol table.
- *
- */
+  * The identification walker is the tool that travels the AST just to identify possible definitions an add the
+  * information found to the symbol table.
+  *
+  */
 class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
 
   private[this] val errorHandler: ErrorHandler = ccontex.getErrorHandler
 
   override def visit(schema: Schema, param: Unit): Unit = {
-    for(stmt <- schema.stmts) {
-      if(!stmt.isStatement()) {
+    for (stmt <- schema.stmts) {
+      if (!stmt.isStatement()) {
         errorHandler.addEvent(
           new Err(
             stmt,
@@ -58,7 +58,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   }
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
-    if(!stmt.expression.isLiteralIRIValueExpr) {
+    if (!stmt.expression.isLiteralIRIValueExpr) {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
@@ -71,7 +71,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   }
 
   override def visit(stmt: ImportStmt, param: Unit): Unit = {
-    if(!stmt.expression.isLiteralIRIValueExpr) {
+    if (!stmt.expression.isLiteralIRIValueExpr) {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
@@ -84,7 +84,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   }
 
   override def visit(stmt: PrefixDefStmt, param: Unit): Unit = {
-    if(!stmt.expression.isLiteralIRIValueExpr) {
+    if (!stmt.expression.isLiteralIRIValueExpr) {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
@@ -97,7 +97,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   }
 
   override def visit(stmt: ShapeDefStmt, param: Unit): Unit = {
-    if(!(stmt.label.isCallPrefixExpr || stmt.label.isCallBaseExpr)) {
+    if (!(stmt.label.isCallPrefixExpr || stmt.label.isCallBaseExpr)) {
       errorHandler.addEvent(
         new Err(
           stmt.label,
@@ -107,7 +107,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       )
     }
     stmt.label.accept(this, param)
-    if(!stmt.expression.isExpression) {
+    if (!stmt.expression.isExpression) {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
@@ -120,7 +120,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   }
 
   override def visit(stmt: StartDefStmt, param: Unit): Unit = {
-    if(!stmt.expression.isCallShapeExpr) {
+    if (!stmt.expression.isCallShapeExpr) {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
@@ -133,7 +133,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   }
 
   override def visit(expr: CallShapeExpr, param: Unit): Unit = {
-    if(!(expr.label.isCallPrefixExpr || expr.label.isCallBaseExpr)) {
+    if (!(expr.label.isCallPrefixExpr || expr.label.isCallBaseExpr)) {
       errorHandler.addEvent(
         new Err(
           expr.label,
@@ -146,8 +146,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   }
 
   override def visit(expr: ConstraintBlockTripleExpr, param: Unit): Unit = {
-    for(tripleExpr <- expr.body) {
-      if(!tripleExpr.isConstraintTripleExpr) {
+    for (tripleExpr <- expr.body) {
+      if (!tripleExpr.isConstraintTripleExpr) {
         errorHandler.addEvent(
           new Err(
             tripleExpr,
@@ -161,7 +161,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   }
 
   override def visit(expr: ConstraintTripleExpr, param: Unit): Unit = {
-    if(!expr.property.isCallPrefixExpr) {
+    if (!expr.property.isCallPrefixExpr) {
       errorHandler.addEvent(
         new Err(
           expr.property,
@@ -172,7 +172,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
     }
     expr.property.accept(this, param)
 
-    if(!expr.constraint.isExpression()) {
+    if (!expr.constraint.isExpression()) {
       errorHandler.addEvent(
         new Err(
           expr.constraint,
@@ -183,7 +183,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
     }
     expr.constraint.accept(this, param)
 
-    if(!expr.cardinality.isCardinalityExpr) {
+    if (!expr.cardinality.isCardinalityExpr) {
       errorHandler.addEvent(
         new Err(
           expr.cardinality,
@@ -196,8 +196,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   }
 
   override def visit(expr: ConstraintValueSetExpr, param: Unit): Unit = {
-    for(value <- expr.values) {
-      if(!value.isConstraintValidValueSetExpr) {
+    for (value <- expr.values) {
+      if (!value.isConstraintValidValueSetExpr) {
         errorHandler.addEvent(
           new Err(
             value,

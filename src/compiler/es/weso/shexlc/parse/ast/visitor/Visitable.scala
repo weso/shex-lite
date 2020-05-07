@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: Visitable.scala
 //
 // Short version for non-lawyers:
@@ -22,28 +22,28 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.visitor
 
 /**
- * Defines a common trait for all nodes that can be visited.
- *
- * This file is a modification of the original java parser, found here:
- * https://github.com/javaparser/javaparser/blob/master/javaparser-core/src/main/java/com/github/javaparser/es.weso.shexlc.parse.ast/visitor/Visitable.java
- *
- * @author Guillermo Facundo Colunga
- */
+  * Defines a common trait for all nodes that can be visited.
+  *
+  * This file is a modification of the original java parser, found here:
+  * https://github.com/javaparser/javaparser/blob/master/javaparser-core/src/main/java/com/github/javaparser/es.weso.shexlc.parse.ast/visitor/Visitable.java
+  *
+  * @author Guillermo Facundo Colunga
+  */
 trait Visitable {
 
   /**
-   * Accept method for visitor support.
-   *
-   * @param visitor the visitor implementation.
-   * @param param   is the parameter passed to the visitor (of type A).
-   * @tparam TP is the type the user parameter passed to the visitor.
-   * @tparam TR is the type of the return value of the visitor.
-   * @return the result of the visit (of type TR).
-   */
+    * Accept method for visitor support.
+    *
+    * @param visitor the visitor implementation.
+    * @param param   is the parameter passed to the visitor (of type A).
+    * @tparam TP is the type the user parameter passed to the visitor.
+    * @tparam TR is the type of the return value of the visitor.
+    * @return the result of the visit (of type TR).
+    */
   def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR
 }

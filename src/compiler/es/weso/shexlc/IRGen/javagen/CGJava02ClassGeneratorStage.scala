@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: CGJava02ClassGeneratorStage.scala
 //
 // Short version for non-lawyers:
@@ -22,22 +22,23 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.IRGen.javagen
 
+import es.weso.shexlc.IRGen.javagen.internal._
+import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.{CallBaseExpr, CallPrefixExpr}
 import es.weso.shexlc.parse.ast.stmt.ShapeDefStmt
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
-import es.weso.shexlc.IRGen.javagen.internal._
-import es.weso.shexlc.internal.{CompilationContext}
-import es.weso.shexlc.internal.errorhandler.ErrorHandler
 
 import scala.collection.mutable.ListBuffer
 
-class CGJava02ClassGeneratorStage(ccontex: CompilationContext) extends ASTDefaultVisitor[String] {
+class CGJava02ClassGeneratorStage(ccontex: CompilationContext)
+    extends ASTDefaultVisitor[String] {
 
-  private[this] var stringBuilder = new StringBuilder() // This string builder will contain the generated sources.
+  private[this] var stringBuilder =
+    new StringBuilder() // This string builder will contain the generated sources.
   private[shexlc] var generatedSources = new ListBuffer[(String, String)].empty
 
   private[this] var className: String = ""
@@ -52,7 +53,8 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext) extends ASTDefaul
 
     // Generate the fields, the constructor and the getter and the setter.
     val fieldsGen = new CGJava03FieldsGenerator(ccontex, stringBuilder)
-    val constructorGen = new CGJava04ConstructorGenerator(ccontex, stringBuilder)
+    val constructorGen =
+      new CGJava04ConstructorGenerator(ccontex, stringBuilder)
     val getSetGen = new CGJava05GetSetGenerator(ccontex, stringBuilder)
 
     // Imports generator
@@ -61,11 +63,20 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext) extends ASTDefaul
     // Write all the class static code.
     stringBuilder.append(s"public class $className {")
     stringBuilder.append("\n")
-    stmt.expression.accept(fieldsGen, param) // Propagate the action to generate the fields.
+    stmt.expression
+      .accept(fieldsGen, param) // Propagate the action to generate the fields.
     stringBuilder.append("\n")
-    stmt.expression.accept(constructorGen, className) // Propagate the action to generate the constructor.
+    stmt.expression
+      .accept(
+        constructorGen,
+        className
+      ) // Propagate the action to generate the constructor.
     stringBuilder.append("\n")
-    stmt.expression.accept(getSetGen, param) // Propagate the action to generate the getters and the setters.
+    stmt.expression
+      .accept(
+        getSetGen,
+        param
+      ) // Propagate the action to generate the getters and the setters.
     stringBuilder.append(s"}")
     stringBuilder.append("\n")
 

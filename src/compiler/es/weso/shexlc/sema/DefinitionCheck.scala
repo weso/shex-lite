@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: Sem02DefCheckingStage.scala
+//------------------------------------------------------------------------------
+// File: DefinitionCheck.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.sema
 
@@ -30,19 +30,21 @@ import java.util.Objects
 
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.internal.errorhandler.{Err, ErrorHandler}
+import es.weso.shexlc.internal.symboltable.SymbolTable
 import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor._
-import es.weso.shexlc.internal.symboltable.SymbolTable
 
-class DefinitionCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
+class DefinitionCheck(ccontext: CompilationContext)
+    extends ASTDefaultVisitor[Unit] {
 
-  private[this] var symbolTable: SymbolTable = ccontext.getSymbolTable
   private[this] val errorHandler: ErrorHandler = ccontext.getErrorHandler
+  private[this] var symbolTable: SymbolTable   = ccontext.getSymbolTable
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
-    val existingSTValue = symbolTable.getBase.expression.asLiteralIRIValueExpr.value
+    val existingSTValue =
+      symbolTable.getBase.expression.asLiteralIRIValueExpr.value
     // 1. Is the base the default one?
-    if(existingSTValue.equals(symbolTable.DEFAULT_BASE)) {
+    if (existingSTValue.equals(symbolTable.DEFAULT_BASE)) {
       // If it is we allow to change the base once.
       symbolTable.setBase(stmt)
     } else {
@@ -50,8 +52,8 @@ class DefinitionCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Un
         new Err(
           stmt,
           s"this base definition overrides the previous one " +
-            s"(${symbolTable.getBase.getLine}:${symbolTable.getBase.getColumn})" +
-            s" with value $existingSTValue",
+          s"(${symbolTable.getBase.getLine}:${symbolTable.getBase.getColumn})" +
+          s" with value $existingSTValue",
           Err.BaseOverride
         )
       )
@@ -62,13 +64,13 @@ class DefinitionCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Un
   override def visit(stmt: PrefixDefStmt, param: Unit): Unit = {
     val existingSTValue = symbolTable.getPrefix(stmt.label)
     // 1. Does the prefix exists in the symbol table?
-    if(Objects.nonNull(symbolTable.getPrefix(stmt.label))) {
+    if (Objects.nonNull(symbolTable.getPrefix(stmt.label))) {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
           s"this prefix definition overrides the previous one " +
-            s"(${existingSTValue.getLine}:${existingSTValue.getColumn}) with value " +
-            s"${existingSTValue.expression.asLiteralIRIValueExpr.value}",
+          s"(${existingSTValue.getLine}:${existingSTValue.getColumn}) with value " +
+          s"${existingSTValue.expression.asLiteralIRIValueExpr.value}",
           Err.PrefixOverride
         )
       )
@@ -80,22 +82,28 @@ class DefinitionCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Un
   }
 
   override def visit(stmt: ShapeDefStmt, param: Unit): Unit = {
-    val isRelativeShape = stmt.label.isCallBaseExpr
+    val isRelativeShape               = stmt.label.isCallBaseExpr
     var existingSTValue: ShapeDefStmt = null
 
-    if(isRelativeShape) {
-      existingSTValue = symbolTable.getShape(symbolTable.DEFAULT_BASE, stmt.label.asCallBaseExpr.argument)
+    if (isRelativeShape) {
+      existingSTValue = symbolTable.getShape(
+        symbolTable.DEFAULT_BASE,
+        stmt.label.asCallBaseExpr.argument
+      )
     } else {
-      existingSTValue = symbolTable.getShape(stmt.label.asCallPrefixExpr.label, stmt.label.asCallPrefixExpr.argument)
+      existingSTValue = symbolTable.getShape(
+        stmt.label.asCallPrefixExpr.label,
+        stmt.label.asCallPrefixExpr.argument
+      )
     }
 
     // 1. Does the symbol table contains the shape?
-    if(Objects.nonNull(existingSTValue)) {
+    if (Objects.nonNull(existingSTValue)) {
       errorHandler.addEvent(
         new Err(
           stmt.label,
           s"this shape definition overrides the previous one " +
-            s"(${existingSTValue.getLine}:${existingSTValue.getColumn})",
+          s"(${existingSTValue.getLine}:${existingSTValue.getColumn})",
           Err.ShapeOverride
         )
       )
@@ -109,12 +117,12 @@ class DefinitionCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Un
 
   override def visit(stmt: StartDefStmt, param: Unit): Unit = {
     val existingSTValue = symbolTable.getStart
-    var cause: String = ""
+    var cause: String   = ""
 
     // Has been already set?
-    if(Objects.nonNull(existingSTValue)) {
+    if (Objects.nonNull(existingSTValue)) {
 
-      if(stmt.expression.asCallShapeExpr.label.isCallBaseExpr) {
+      if (stmt.expression.asCallShapeExpr.label.isCallBaseExpr) {
         cause = s"this start definition overrides the previous one " +
           s"(${existingSTValue.getLine}:${existingSTValue.getColumn})" +
           s" with value " +

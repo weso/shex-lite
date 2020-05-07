@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: Sem50UnusedPrefixFinderStage.scala
+//------------------------------------------------------------------------------
+// File: LookUnusedPrefixCheck.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,27 +22,30 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.sema
 
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.internal.errorhandler.{ErrorHandler, Warn}
+import es.weso.shexlc.internal.symboltable.SymbolTable
 import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
-import es.weso.shexlc.internal.symboltable.SymbolTable
 
-class LookUnusedPrefixCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
+class LookUnusedPrefixCheck(ccontext: CompilationContext)
+    extends ASTDefaultVisitor[Unit] {
 
-  private[this] val symbolTable: SymbolTable = ccontext.getSymbolTable
+  private[this] val symbolTable: SymbolTable   = ccontext.getSymbolTable
   private[this] val errorHandler: ErrorHandler = ccontext.getErrorHandler
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     stmt.expression.accept(this, param)
 
-    if(symbolTable.getNumberOfCallsForBase == 0
-      && !stmt.expression.asLiteralIRIValueExpr.equals(symbolTable.DEFAULT_BASE)
-      && ccontext.getConfiguration.generateWarnings) {
+    if (symbolTable.getNumberOfCallsForBase == 0
+        && !stmt.expression.asLiteralIRIValueExpr.equals(
+          symbolTable.DEFAULT_BASE
+        )
+        && ccontext.getConfiguration.generateWarnings) {
 
       errorHandler.addEvent(
         new Warn(
@@ -57,7 +60,9 @@ class LookUnusedPrefixCheck(ccontext: CompilationContext) extends ASTDefaultVisi
   override def visit(stmt: PrefixDefStmt, param: Unit): Unit = {
     stmt.expression.accept(this, param)
 
-    if(symbolTable.getNumberOfCallsForPrefix(stmt.label) == 0 && ccontext.getConfiguration.generateWarnings) {
+    if (symbolTable.getNumberOfCallsForPrefix(
+          stmt.label
+        ) == 0 && ccontext.getConfiguration.generateWarnings) {
 
       errorHandler.addEvent(
         new Warn(

@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: ConstraintNodeAnyTypeExpr.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.expr
 
@@ -31,24 +31,29 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * A Constraint Node Any Tye Expression indicated that a node constraint is of type Any Type. Does not add more
- * functionality than the classification of the node constraint type.
- *
- * @author Guillermo Facundo Colunga
- * @param line   in the source code where the token that generates de Base Definition Statement is located.
- * @param column in the source code where the token that generates de Base Definition Statement is located.
- */
-class ConstraintNodeAnyTypeExpr(line: Int, column: Int, interval: Interval, content: String) extends ConstraintNodeExpr {
+  * A Constraint Node Any Tye Expression indicated that a node constraint is of type Any Type. Does not add more
+  * functionality than the classification of the node constraint type.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param line   in the source code where the token that generates de Base Definition Statement is located.
+  * @param column in the source code where the token that generates de Base Definition Statement is located.
+  */
+class ConstraintNodeAnyTypeExpr(
+  line: Int,
+  column: Int,
+  interval: Interval,
+  content: String
+) extends ConstraintNodeExpr {
   override def getPosition: Position = Position.pos(line, column)
 
   override def getRange: Interval = interval
 
-/**
-   * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
-   * would be 'a = 3'.
-   *
-   * @return the content of the node as a String.
-   */
+  /**
+    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * would be 'a = 3'.
+    *
+    * @return the content of the node as a String.
+    */
   override def getContent: String = content
 
   // Override default methods to indicate that this is a Constraint Node Any Type Expression.
@@ -56,9 +61,11 @@ class ConstraintNodeAnyTypeExpr(line: Int, column: Int, interval: Interval, cont
 
   override def asConstraintNodeAnyTypeExpr: ConstraintNodeAnyTypeExpr = this
 
-  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
+  override def accept[TP, TR](
+    visitor: ASTGenericWalker[TP, TR],
+    param: TP
+  ): TR = {
     visitor.visit(this, param)
   }
-
 
 }

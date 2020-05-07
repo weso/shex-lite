@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: PrefixDefStmtPsr.scala
+//------------------------------------------------------------------------------
+// File: ParsePrefixDefStmt.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -33,23 +33,26 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The prefix definition statement sub-parser generates a prefix definition statement from the context of the parser.
- * It delegates the creation of the iri literal expression to its own sub-parser.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParsePrefixDefStmt(ctx: ShexLiteParser.Prefix_def_stmtContext, visitor: ASTBuilderParser,
-                         ccontext: CompilationContext) extends HasParseResult[PrefixDefStmt] {
+  * The prefix definition statement sub-parser generates a prefix definition statement from the context of the parser.
+  * It delegates the creation of the iri literal expression to its own sub-parser.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParsePrefixDefStmt(
+  ctx: ShexLiteParser.Prefix_def_stmtContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[PrefixDefStmt] {
 
   override def getParseResult: PrefixDefStmt = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
-    val label = if (ctx.IDENTIFIER() == null) "" else ctx.IDENTIFIER().getText
+    val label           = if (ctx.IDENTIFIER() == null) "" else ctx.IDENTIFIER().getText
     val iri: Expression = ctx.iri.accept(visitor).asExpression()
 
     new PrefixDefStmt(line, column, interval, content, label, iri)

@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: ConstraintNodeLiteralExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseConstraintNodeLiteralExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -32,20 +32,23 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The constraint node literal expression parser generates a constraint node literal from the parser context.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseConstraintNodeLiteralExpr(ctx: ShexLiteParser.Constraint_node_literal_exprContext, visitor: ASTBuilderParser,
-                                     ccontext: CompilationContext) extends HasParseResult[ConstraintNodeLiteralExpr] {
+  * The constraint node literal expression parser generates a constraint node literal from the parser context.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseConstraintNodeLiteralExpr(
+  ctx: ShexLiteParser.Constraint_node_literal_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[ConstraintNodeLiteralExpr] {
 
   override def getParseResult: ConstraintNodeLiteralExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     new ConstraintNodeLiteralExpr(line, column, interval, content)
   }

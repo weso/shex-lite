@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: ConstraintBlockTripleExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseConstraintBlockTripleExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -34,25 +34,32 @@ import org.antlr.v4.runtime.misc.Interval
 import scala.collection.JavaConverters._
 
 /**
- * The constraint block triple expression sub-parser generates a new block of triple expression constraints from the
- * parser context.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseConstraintBlockTripleExpr(ctx: ShexLiteParser.Constraint_block_triple_exprContext, visitor: ASTBuilderParser,
-                                     ccontext: CompilationContext) extends HasParseResult[ConstraintBlockTripleExpr] {
+  * The constraint block triple expression sub-parser generates a new block of triple expression constraints from the
+  * parser context.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseConstraintBlockTripleExpr(
+  ctx: ShexLiteParser.Constraint_block_triple_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[ConstraintBlockTripleExpr] {
 
   override def getParseResult: ConstraintBlockTripleExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     // Would be nice to avoid the as Instance Of here...
-    val expressions: List[Expression] = ctx.constraint_triple_expr().asScala
-      .map(expr => expr.accept(visitor)).toList.asInstanceOf[List[Expression]]
+    val expressions: List[Expression] = ctx
+      .constraint_triple_expr()
+      .asScala
+      .map(expr => expr.accept(visitor))
+      .toList
+      .asInstanceOf[List[Expression]]
 
     new ConstraintBlockTripleExpr(line, column, interval, content, expressions)
   }

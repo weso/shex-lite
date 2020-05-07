@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: SIL.scala
 //
 // Short version for non-lawyers:
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.sema
 
@@ -31,71 +31,81 @@ import es.weso.shexlc.parse.AbstractSyntaxTree
 import es.weso.shexlc.parse.ast.AbstractASTNode
 
 /**
- * The shex lite intermediate language is nothing else than the type-checked, attributed graph in which is transformed
- * the AST after all semantic operations.
- *
- * @author Guillermo Facundo Colunga
- */
+  * The shex lite intermediate language is nothing else than the type-checked, attributed graph in which is transformed
+  * the AST after all semantic operations.
+  *
+  * @author Guillermo Facundo Colunga
+  */
 trait SIL {
 
   /**
-   * Gets the compilation context.
-   *
-   * @return the compilation context.
-   */
+    * Gets the compilation context.
+    *
+    * @return the compilation context.
+    */
   def getCompilationContext: CompilationContext
 
   /**
-   * Gets the entry point for the graph that represents the shex-lite intermediate language.
-   *
-   * @return the abstract ast node that represents the entry point of the graph. Will be an schema always.
-   */
+    * Gets the entry point for the graph that represents the shex-lite intermediate language.
+    *
+    * @return the abstract ast node that represents the entry point of the graph. Will be an schema always.
+    */
   def getGraphEntryPoint: AbstractASTNode
 }
 
 /**
- * The shex lite intermediate language is nothing else than the type-checked, attributed graph in which is transformed
- * the AST after all semantic operations.
- *
- * @author Guillermo Facundo Colunga
- */
+  * The shex lite intermediate language is nothing else than the type-checked, attributed graph in which is transformed
+  * the AST after all semantic operations.
+  *
+  * @author Guillermo Facundo Colunga
+  */
 object SIL {
 
   /**
-   * Gets the Shex Lite Intermediate Language representation for a given AST.
-   *
-   * @param abstractSyntaxTree for which the SIL will be generated.
-   * @return the generated SIL.
-   */
-  def getSIL(abstractSyntaxTree: AbstractSyntaxTree): SIL = new SIL {
+    * Gets the Shex Lite Intermediate Language representation for a given AST.
+    *
+    * @param abstractSyntaxTree for which the SIL will be generated.
+    * @return the generated SIL.
+    */
+  def getSIL(abstractSyntaxTree: AbstractSyntaxTree): SIL =
+    new SIL {
 
-    /**
-     * Gets the compilation context.
-     *
-     * @return the compilation context.
-     */
-    override def getCompilationContext: CompilationContext = abstractSyntaxTree.getCompilationContext
+      /**
+        * Gets the compilation context.
+        *
+        * @return the compilation context.
+        */
+      override def getCompilationContext: CompilationContext =
+        abstractSyntaxTree.getCompilationContext
 
-    /**
-     * Gets the entry point for the graph that represents the shex-lite intermediate language.
-     *
-     * @return the abstract ast node that represents the entry point of the graph. Will be an schema always.
-     */
-    override def getGraphEntryPoint: AbstractASTNode = {
-      // First the type checking of the AST
-      abstractSyntaxTree.getRoot.accept(new TypeCheck(abstractSyntaxTree.getCompilationContext), ())
+      /**
+        * Gets the entry point for the graph that represents the shex-lite intermediate language.
+        *
+        * @return the abstract ast node that represents the entry point of the graph. Will be an schema always.
+        */
+      override def getGraphEntryPoint: AbstractASTNode = {
+        // First the type checking of the AST
+        abstractSyntaxTree.getRoot
+          .accept(new TypeCheck(abstractSyntaxTree.getCompilationContext), ())
 
-      // Then add definitions to the symbol table and look for duplicates.
-      abstractSyntaxTree.getRoot.accept(new DefinitionCheck(abstractSyntaxTree.getCompilationContext), ())
+        // Then add definitions to the symbol table and look for duplicates.
+        abstractSyntaxTree.getRoot.accept(
+          new DefinitionCheck(abstractSyntaxTree.getCompilationContext),
+          ()
+        )
 
-      // Then check that all calls have a definition and assign it.
-      abstractSyntaxTree.getRoot.accept(new CallCheck(abstractSyntaxTree.getCompilationContext), ())
+        // Then check that all calls have a definition and assign it.
+        abstractSyntaxTree.getRoot
+          .accept(new CallCheck(abstractSyntaxTree.getCompilationContext), ())
 
-      // Finally look for un-used prefixes to throw warnings.
-      abstractSyntaxTree.getRoot.accept(new LookUnusedPrefixCheck(abstractSyntaxTree.getCompilationContext), ())
+        // Finally look for un-used prefixes to throw warnings.
+        abstractSyntaxTree.getRoot.accept(
+          new LookUnusedPrefixCheck(abstractSyntaxTree.getCompilationContext),
+          ()
+        )
 
-      // Return the graph entry point.
-      abstractSyntaxTree.getRoot
+        // Return the graph entry point.
+        abstractSyntaxTree.getRoot
+      }
     }
-  }
 }

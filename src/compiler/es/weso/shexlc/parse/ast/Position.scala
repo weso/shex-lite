@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: Position.scala
 //
 // Short version for non-lawyers:
@@ -22,22 +22,24 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast
 
 /**
- * A position in a source file. Lines and columns start counting at 1.
- *
- * @author Guillermo Facundo Colunga
- */
-class Position(val filename: String, val line: Int, val column: Int) extends Comparable[Position] {
+  * A position in a source file. Lines and columns start counting at 1.
+  *
+  * @author Guillermo Facundo Colunga
+  */
+class Position(val filename: String, val line: Int, val column: Int)
+    extends Comparable[Position] {
 
   /**
-   * Check if the position is usable. Does not know what it is pointing at, so it can't check if the position is after
-   * the end of the source.
-   */
-  def isValid: Boolean = line >= Position.HOME.line && column > Position.HOME.line
+    * Check if the position is usable. Does not know what it is pointing at, so it can't check if the position is after
+    * the end of the source.
+    */
+  def isValid: Boolean =
+    line >= Position.HOME.line && column > Position.HOME.line
 
   override def compareTo(position: Position): Int = {
     if (this.line < position.line) return -1
@@ -49,19 +51,20 @@ class Position(val filename: String, val line: Int, val column: Int) extends Com
 }
 
 /**
- * A position in a source file. Lines and columns start counting at 1.
- *
- * @author Guillermo Facundo Colunga
- */
+  * A position in a source file. Lines and columns start counting at 1.
+  *
+  * @author Guillermo Facundo Colunga
+  */
 object Position {
 
   /**
-   * The first position in the file
-   */
+    * The first position in the file
+    */
   final val HOME = new Position("", 1, 1)
 
   /**
-   * Convenient factory method.
-   */
-  def pos(filename: String, line: Int, column: Int): Position = new Position(filename, line, column)
+    * Convenient factory method.
+    */
+  def pos(filename: String, line: Int, column: Int): Position =
+    new Position(filename, line, column)
 }

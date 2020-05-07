@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // File: DefinitionStmt.scala
 //
 // Short version for non-lawyers:
@@ -22,27 +22,29 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.stmt
 
 import es.weso.shexlc.parse.ast.Position
 import org.antlr.v4.runtime.misc.Interval
 
-
 /**
- * A base class for all the definitions.
- *
- * This definition trait is just used as a mean to know if an statement is a definition, any definition. For that it
- * overrides the super is and as methods but let other definitions is's and as's to its children. Not need to implement
- * here any more methods except those that will be mandatory for all definitions.
- *
- * @author Guillermo Facundo Colunga
- */
-abstract class DefinitionStmt(position: Position, tokenRange: Interval, content: String)
-  extends Statement(position, tokenRange, content) {
+  * A base class for all the definitions.
+  *
+  * This definition trait is just used as a mean to know if an statement is a definition, any definition. For that it
+  * overrides the super is and as methods but let other definitions is's and as's to its children. Not need to implement
+  * here any more methods except those that will be mandatory for all definitions.
+  *
+  * @author Guillermo Facundo Colunga
+  */
+abstract class DefinitionStmt(
+  position: Position,
+  tokenRange: Interval,
+  content: String
+) extends Statement(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Definition Statement.
-  override def isDefinitionStmt: Boolean = true
+  override def isDefinitionStmt: Boolean        = true
   override def asDefinitionStmt: DefinitionStmt = this
 }

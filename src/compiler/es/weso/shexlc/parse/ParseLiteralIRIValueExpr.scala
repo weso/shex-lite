@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------------------------------------
-// File: LiteralIRIValueExprPsr.scala
+//------------------------------------------------------------------------------
+// File: ParseLiteralIRIValueExpr.scala
 //
 // Short version for non-lawyers:
 //
@@ -22,7 +22,7 @@
 // applied.
 //
 // The ShEx Lite Project includes packages written by third parties.
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse
 
@@ -32,20 +32,23 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
- * The Literal IRI Value Expression sub-parser creates a literal with iri value from the parser context.
- *
- * @author Guillermo Facundo Colunga
- * @param ctx     of the parser.
- * @param visitor to propagate any action.
- */
-class ParseLiteralIRIValueExpr(ctx: ShexLiteParser.Literal_iri_value_exprContext, visitor: ASTBuilderParser, ccontext: CompilationContext)
-  extends HasParseResult[LiteralIRIValueExpr] {
+  * The Literal IRI Value Expression sub-parser creates a literal with iri value from the parser context.
+  *
+  * @author Guillermo Facundo Colunga
+  * @param ctx     of the parser.
+  * @param visitor to propagate any action.
+  */
+class ParseLiteralIRIValueExpr(
+  ctx: ShexLiteParser.Literal_iri_value_exprContext,
+  visitor: ASTBuilderParser,
+  ccontext: CompilationContext
+) extends HasParseResult[LiteralIRIValueExpr] {
 
   override def getParseResult: LiteralIRIValueExpr = {
-    val line = ctx.start.getLine
-    val column = ctx.start.getCharPositionInLine
+    val line     = ctx.start.getLine
+    val column   = ctx.start.getCharPositionInLine
     val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(interval)
+    val content  = ccontext.getInputContext.getText(interval)
 
     val value = ctx.IRI_LITERAL().getText
 
