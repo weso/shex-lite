@@ -27,23 +27,42 @@
 package es.weso.shexlc.parse.ast
 
 import es.weso.shexlc.internal.errorhandler.{CompilationEvent, Err, Warn}
+import es.weso.shexlc.parse.ast.visitor.Visitable
 import org.antlr.v4.runtime.misc.Interval
 
 import scala.collection.mutable.ListBuffer
 
+/**
+ * An abstract ast node is a node from the abstract syntax tree. It contains information about the position, the
+ * token range and the content of it as a String.
+ *
+ * The position represents the line and the column in the source file, notice that the column starts at index 0
+ * meanwhile the line starts at index 1.
+ *
+ * The token range is a range defined as (start, stop) that indicates the start token and the stop token that matched
+ * the rule applied to create this node.
+ *
+ * The content is a string the contains the range of source code that contains this node. For that reason the nodes
+ * from the ast that are not leafs contain also the content of the child nodes.
+ *
+ * @param position is the line and column from the input files where the rule that created the node was located.
+ * @param tokenRange is the range as (start, end) of tokens that the rule contain.
+ * @param content is a string that contains all the source code from the input files that match the rule.
+ */
 abstract class AbstractASTNode(position: Position, tokenRange: Interval, content: String) extends NodeWithPosition
                                                                                   with NodeWithTokenRange
                                                                                   with NodeWithParent
                                                                                   with NodeWithErrors
-                                                                                  with NodeWithWarnings {
+                                                                                  with NodeWithWarnings
+                                                                                  with Visitable {
 
   // The parent of this node, null if it is the root.
   private[this] var parent: Option[NodeWithParent] = Option.empty
 
+  // The compiler events from this node.
   private[this] var compilerEvents = new ListBuffer[CompilationEvent].empty
   private[this] var _hasErrors = false
   private[this] var _hasWarnings = false
-
 
   /**
    * Gets the position object that points to the source file.

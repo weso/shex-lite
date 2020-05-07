@@ -26,116 +26,85 @@
 
 package es.weso.shexlc.IRGen.javagen
 
-import es.weso.shexl.ShExLCompilerTargetLanguage
-import es.weso.shexlc.parse.ast.Schema
+import es.weso.shexlc.internal.CompilationContext
+import es.weso.shexlc.internal.errorhandler.{Err, ErrorHandler, Warn}
 import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.stmt._
-import es.weso.shexlc.parse.ast.visitor.DefaultShExLiteVisitor
-import es.weso.shexlc.internal.io.CompilerMsgsHandler
-import es.weso.shexlc.internal.io.impl.{CompilerMsgErrorType, CompilerMsgWarningType, DefaultCompilerMsg}
-import es.weso.shexlc.internal.symboltable.SymbolTable
+import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class CGJava01ValidSchemaCheckingStage extends DefaultShExLiteVisitor[Unit] with ShExLCompilerStage {
+class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
 
-  private[this] var symbolTable: SymbolTable = null
-  private[this] var msgsHandler: CompilerMsgsHandler = null
-
-  override def getPriority: Int = 20
-
-  override def execute(compiler: ShExLCompiler, ast: Schema, individualResult: ShExLCompilerIndividualResult): Unit = {
-    this.symbolTable = compiler.getCompilerSymbolTable
-    this.msgsHandler = compiler.getCompilerMsgsHandler
-    if(compiler.getConfiguration.generateCode
-      && compiler.getConfiguration.getTargetGenerationLanguages.contains(ShExLCompilerTargetLanguage.Java)) {
-      this.visit(ast, ())
-    }
-
-    individualResult.setGeneratedSchema(Option(ast))
-  }
+  private[this] var msgsHandler: ErrorHandler = ccontext.getErrorHandler
 
 
   override def visit(stmt: ImportStmt, param: Unit): Unit = {
-    msgsHandler.addMsg(
-      new DefaultCompilerMsg(
-        stmt.expression.getPosition,
-        stmt.getRange,
-        stmt.expression.getRange,
+    msgsHandler.addEvent(
+      new Err(
+        stmt,
         "import statements are not valid for java code generation",
-        CompilerMsgErrorType.FeatureNotAvailable
+        Warn.FeatureIgnored
       )
     )
     //stmt.expression.accept(this, param)
   }
 
   override def visit(stmt: StartDefStmt, param: Unit): Unit = {
-    msgsHandler.addMsg(
-      new DefaultCompilerMsg(
-        stmt.expression.getPosition,
-        stmt.getRange,
-        stmt.expression.getRange,
+    msgsHandler.addEvent(
+      new Err(
+        stmt,
         "the start statement will be ignored for java code generation",
-        CompilerMsgWarningType.FeatureIgnored
+        Warn.FeatureIgnored
       )
     )
     //stmt.expression.accept(this, param)
   }
 
   override def visit(expr: ConstraintNodeAnyTypeExpr, param: Unit): Unit = {
-    msgsHandler.addMsg(
-      new DefaultCompilerMsg(
-        expr.getPosition,
-        expr.getRange,
-        expr.getRange,
+    msgsHandler.addEvent(
+      new Err(
+        expr,
         "this constraint will be substituted by the Object java class",
-        CompilerMsgWarningType.SchemaWithoutDirectMapping
+        Warn.FeatureIgnored
       )
     )
   }
 
   override def visit(expr: ConstraintNodeBNodeExpr, param: Unit): Unit = {
-    msgsHandler.addMsg(
-      new DefaultCompilerMsg(
-        expr.getPosition,
-        expr.getRange,
-        expr.getRange,
+    msgsHandler.addEvent(
+      new Err(
+        expr,
         "this constraint cannot be represented in java",
-        CompilerMsgErrorType.FeatureNotAvailable
+        Err.FeatureNotAvailable
       )
     )
   }
 
   override def visit(expr: ConstraintNodeIRIExpr, param: Unit): Unit = {
-    msgsHandler.addMsg(
-      new DefaultCompilerMsg(
-        expr.getPosition,
-        expr.getRange,
-        expr.getRange,
+    msgsHandler.addEvent(
+      new Err(
+        expr,
         "this constraint cannot be represented in java",
-        CompilerMsgErrorType.FeatureNotAvailable
+        Err.FeatureNotAvailable
       )
     )
   }
 
   override def visit(expr: ConstraintNodeLiteralExpr, param: Unit): Unit = {
-    msgsHandler.addMsg(
-      new DefaultCompilerMsg(
-        expr.getPosition,
-        expr.getRange,
-        expr.getRange,
+    msgsHandler.addEvent(
+      new Err(
+        expr,
         "this constraint cannot be represented in java",
-        CompilerMsgErrorType.FeatureNotAvailable
+        Err.FeatureNotAvailable
       )
     )
   }
 
   override def visit(expr: ConstraintNodeNonLiteralExpr, param: Unit): Unit = {
-    msgsHandler.addMsg(
-      new DefaultCompilerMsg(
-        expr.getPosition,
-        expr.getRange,
-        expr.getRange,
+    msgsHandler.addEvent(
+      new Err(
+        expr,
         "this constraint cannot be represented in java",
-        CompilerMsgErrorType.FeatureNotAvailable
+        Err.FeatureNotAvailable
       )
     )
   }
@@ -145,12 +114,12 @@ class CGJava01ValidSchemaCheckingStage extends DefaultShExLiteVisitor[Unit] with
       if(constraint.isConstraintTripleExpr) {
         constraint.accept(this, param)
       } else {
-        new DefaultCompilerMsg(
-          constraint.getPosition,
-          expr.getRange,
-          constraint.getRange,
-          "this constraint cannot be represented in java",
-          CompilerMsgErrorType.FeatureNotAvailable
+        msgsHandler.addEvent(
+          new Err(
+            constraint,
+            "this constraint cannot be represented in java",
+            Err.FeatureNotAvailable
+          )
         )
       }
     }
@@ -162,25 +131,21 @@ class CGJava01ValidSchemaCheckingStage extends DefaultShExLiteVisitor[Unit] with
     val isCallShape = expr.constraint.isCallShapeExpr
 
     if(constraint.isCallPrefixExpr && !constraint.asCallPrefixExpr.label.equals("xsd")) {
-      msgsHandler.addMsg(
-        new DefaultCompilerMsg(
-          expr.getPosition,
-          expr.getRange,
-          expr.constraint.getRange,
+      msgsHandler.addEvent(
+        new Err(
+          constraint,
           "this prefix has no mapping in java",
-          CompilerMsgErrorType.FeatureNotAvailable
+          Err.FeatureNotAvailable
         )
       )
     }
 
     if(cardinality.asCardinalityExpr.isEmptyCardinality) {
-      msgsHandler.addMsg(
-        new DefaultCompilerMsg(
-          expr.getPosition,
-          expr.getRange,
-          expr.getRange,
-          "this cardinality cannot be represented in java",
-          CompilerMsgErrorType.FeatureNotAvailable
+      msgsHandler.addEvent(
+        new Err(
+          cardinality,
+          "this cardinality has no mapping in java",
+          Err.FeatureNotAvailable
         )
       )
     }
@@ -191,13 +156,11 @@ class CGJava01ValidSchemaCheckingStage extends DefaultShExLiteVisitor[Unit] with
   }
 
   override def visit(expr: ConstraintValueSetExpr, param: Unit): Unit = {
-    msgsHandler.addMsg(
-      new DefaultCompilerMsg(
-        expr.getPosition,
-        expr.getRange,
-        expr.getRange,
+    msgsHandler.addEvent(
+      new Err(
+        expr,
         "this constraint cannot be represented in java",
-        CompilerMsgErrorType.FeatureNotAvailable
+        Err.FeatureNotAvailable
       )
     )
     expr.values.foreach(value => value.accept(this, param))

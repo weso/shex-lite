@@ -26,6 +26,9 @@
 
 package es.weso.shexlc.parse.ast.expr
 
+import es.weso.shexlc.parse.ast.{AbstractASTNode, Position}
+import org.antlr.v4.runtime.misc.Interval
+
 /**
  * A base class for all the constraints.
  *
@@ -35,10 +38,10 @@ package es.weso.shexlc.parse.ast.expr
  *
  * @author Guillermo Facundo Colunga
  */
-trait ConstraintExpr extends Expression {
+abstract class ConstraintExpr(position: Position, tokenRange: Interval, content: String)
+  extends Expression(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Constraint Expression.
   override def isConstraintExpr: Boolean = true
-
   override def asConstraintExpr: ConstraintExpr = this
 }

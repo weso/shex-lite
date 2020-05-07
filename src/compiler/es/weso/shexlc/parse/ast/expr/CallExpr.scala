@@ -26,6 +26,9 @@
 
 package es.weso.shexlc.parse.ast.expr
 
+import es.weso.shexlc.parse.ast.Position
+import org.antlr.v4.runtime.misc.Interval
+
 /**
  * A base class for all the call expressions of the es.weso.shexlc.parse.ast.
  *
@@ -35,10 +38,10 @@ package es.weso.shexlc.parse.ast.expr
  *
  * @author Guillermo Facundo Colunga
  */
-trait CallExpr extends ConstraintNodeExpr with ConstraintValidValueSetExpr {
+abstract class CallExpr(position: Position, tokenRange: Interval, content: String)
+  extends ConstraintNodeExpr(position, tokenRange, content) with ConstraintValidValueSetExpr {
 
   // Override default methods to indicate that this is a Call Expression.
   override def isCallExpr: Boolean = true
-
   override def asCallExpr: CallExpr = this
 }

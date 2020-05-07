@@ -77,20 +77,6 @@ trait CompilationContext {
    * @return the error handler for this compilation.
    */
   def getErrorHandler: ErrorHandler
-
-  /**
-   * Gets the compilation result.
-   *
-   * @return the compilation result.
-   */
-  def getCompilationResult: CompilationResult
-
-  /**
-   * Sets the compilation result.
-   *
-   * @param compilationResult the compilation result.
-   */
-  def setCompilationResult(compilationResult: CompilationResult)
 }
 
 object CompilationContext {
@@ -100,7 +86,6 @@ object CompilationContext {
     private var input = Option.empty[CharStream]
     private val symbolTable = new SymbolHashTable()
     private val errorHandler: ErrorHandler = ErrorHandler.empty
-    private var compilationResult: CompilationResult = CompilationResult.empty
 
     /**
      * Gets the configuration fo the compiler. The configuration will affect different stages. But only those stages know
@@ -124,22 +109,6 @@ object CompilationContext {
      * @return the error handler for this compilation.
      */
     override def getErrorHandler: ErrorHandler = errorHandler
-
-    /**
-     * Gets the compilation result.
-     *
-     * @return the compilation result.
-     */
-    override def getCompilationResult: CompilationResult = compilationResult
-
-    /**
-     * Sets the compilation result.
-     *
-     * @param compilationResult the compilation result.
-     */
-    override def setCompilationResult(compilationResult: CompilationResult): Unit = {
-      this.compilationResult = compilationResult
-    }
 
     /**
      * Gets the input file as a char stream. This is needed to add the context information to its node of the ast. That

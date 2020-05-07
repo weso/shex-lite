@@ -28,23 +28,36 @@ package es.weso.shexlc.parse.ast.expr
 
 import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.ast.stmt.Statement
-import es.weso.shexlc.parse.ast.visitor.ShExLiteGenericVisitor
+import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A call shape expression is a call to a shape definition.
  *
- * @param line       in the source code where the token that generates de Base Definition Statement is located.
- * @param column     in the source code where the token that generates de Base Definition Statement is located.
- * @param label      of the shape to call.
- * @param definition of the called shape.
+ * @author Guillermo Facundo Colunga
  */
-class CallShapeExpr(line: Int, column: Int, interval: Interval, content: String, val label: Expression, var definition: Statement = null) extends CallExpr {
-  override def getPosition: Position = Position.pos(line, column)
+class CallShapeExpr(position: Position, tokenRange: Interval, content: String, val label: Expression,
+                    var definition: Statement = null) extends CallExpr(position, tokenRange, content) {
 
-  override def getRange: Interval = interval
+  // Override default methods to indicate that this is a Call Shape Expression.
+  override def isCallShapeExpr: Boolean = true
+  override def asCallShapeExpr: CallShapeExpr = this
 
-/**
+  /**
+   * Gets the position object that points to the source file.
+   *
+   * @return a position object containing the position in the source file.
+   */
+  override def getPosition: Position = position
+
+  /**
+   * Gets the range of tokens from the source on which the node was generated.
+   *
+   * @return the range of tokens from the source on which the node was generated.
+   */
+  override def getRange: Interval = tokenRange
+
+  /**
    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
    * would be 'a = 3'.
    *
@@ -52,14 +65,16 @@ class CallShapeExpr(line: Int, column: Int, interval: Interval, content: String,
    */
   override def getContent: String = content
 
-  // Override default methods to indicate that this is a Call Shape Expression.
-  override def isCallShapeExpr: Boolean = true
-
-  override def asCallShapeExpr: CallShapeExpr = this
-
-  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+  /**
+   * Accept method for visitor support.
+   *
+   * @param visitor the visitor implementation.
+   * @param param   is the parameter passed to the visitor (of type A).
+   * @tparam TP is the type the user parameter passed to the visitor.
+   * @tparam TR is the type of the return value of the visitor.
+   * @return the result of the visit (of type TR).
+   */
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
-
-
 }

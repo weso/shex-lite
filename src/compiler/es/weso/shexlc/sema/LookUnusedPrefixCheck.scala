@@ -29,10 +29,10 @@ package es.weso.shexlc.sema
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.internal.errorhandler.{ErrorHandler, Warn}
 import es.weso.shexlc.parse.ast.stmt._
-import es.weso.shexlc.parse.ast.visitor.DefaultShExLiteVisitor
+import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 import es.weso.shexlc.internal.symboltable.SymbolTable
 
-class LookUnusedPrefixCheck(ccontext: CompilationContext) extends DefaultShExLiteVisitor[Unit] {
+class LookUnusedPrefixCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
 
   private[this] val symbolTable: SymbolTable = ccontext.getSymbolTable
   private[this] val errorHandler: ErrorHandler = ccontext.getErrorHandler

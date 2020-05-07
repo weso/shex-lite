@@ -26,11 +26,12 @@
 
 package es.weso.shexlc.IRGen.javagen.internal
 
+import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr._
-import es.weso.shexlc.parse.ast.visitor.DefaultShExLiteVisitor
-import es.weso.shexlc.internal.io.CompilerMsgsHandler
+import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class CGJava03FieldsGenerator(msgsHandler: CompilerMsgsHandler, stringBuilder: StringBuilder) extends DefaultShExLiteVisitor[String] {
+class CGJava03FieldsGenerator(ccontext: CompilationContext, stringBuilder: StringBuilder)
+  extends ASTDefaultVisitor[String] {
 
   override def visit(expr: ConstraintTripleExpr, param: String): Unit = {
     val property = expr.property

@@ -26,6 +26,17 @@
 
 package es.weso.shexlc.IRGen
 
-trait IRGen {
+/**
+ * This trait must be implemented by all the different generators that generate intermediate representations.
+ *
+ * @author Guillermo Facundo Colunga
+ */
+trait IRGenerator {
 
+  /**
+   * Gets the generated sources from the generator.
+   *
+   * @return a list of generated sources where the first element is the name and the second the source itself.
+   */
+  def getGeneratedSources: List[(String, String)]
 }

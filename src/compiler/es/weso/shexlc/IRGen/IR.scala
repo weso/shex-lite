@@ -26,7 +26,11 @@
 
 package es.weso.shexlc.IRGen
 
-import es.weso.shexlc.internal.errorhandler.{CompilationEvent, Err, Warn}
+import es.weso.shexlc.IRGen.javagen.IRJavaGen
+import es.weso.shexlc.internal.CompilationContext
+import es.weso.shexlc.sema.SIL
+
+import scala.collection.mutable.HashMap
 
 /**
  * The intermediate representation is the result of the code generation for the shex-lite compiler. It contains
@@ -38,48 +42,47 @@ import es.weso.shexlc.internal.errorhandler.{CompilationEvent, Err, Warn}
 trait IR {
 
   /**
-   * Gets all the generated sources for a target language. For example for java will get all the objects generated from
-   * a shex-lite file or some of them.
+   * Gets the compilation context.
    *
-   * @param targetIR is the target language for which the sources will be retrieved.
+   * @return the compilation context.
+   */
+  def getCompilationContext: CompilationContext
+
+  /**
+   * Gets all the generated sources indexed by the target intermediate representation.
+   *
    * @return a list of tuples, each one represents a source file and the first value is the source file name, the second
    *         is its content.
    */
-  def getSources(targetIR: TargetIR): List[(String, String)]
+  def getSources: Map[TargetIR, List[(String, String)]]
+}
 
-  /**
-   * Gets whether the intermediate representation generated errors or not.
-   *
-   * @return true if has errors, false otherwise.
-   */
-  def hasErrors: Boolean
+object IR {
 
-  /**
-   * Gets the list of errors generated during the generation of thr IR.
-   *
-   * @return the list of errors generated during the generation of thr IR.
-   */
-  def getErrors: List[Err]
+  def getIR(sil: SIL): IR = new IR {
 
-  /**
-   * Gets whether the intermediate representation generated warnings or not.
-   *
-   * @return true if has warnings, false otherwise.
-   */
-  def hasWarnings: Boolean
+    private[this] val sources = HashMap.empty[TargetIR, List[(String, String)]]
 
-  /**
-   * Gets the list of warnings generated during the generation of thr IR.
-   *
-   * @return the list of warnings generated during the generation of thr IR.
-   */
-  def getWarnings: List[Warn]
+    // Java code generation.
+    val javaGen = IRJavaGen.getIR(sil)
 
-  /**
-   * Adds a single compilation event (warning or error) to the IR. This is not intended to be used from outside this
-   * package.
-   *
-   * @param compilationEvent to add to the IR object.
-   */
-  private[IRGen] def addCompilationEvent(compilationEvent: CompilationEvent)
+    // Add the sources from the java generation to the list of sources.
+    sources.put(TargetIR.Java, javaGen.getGeneratedSources)
+
+    /**
+     * Gets all the generated sources for a target language. For example for java will get all the objects generated from
+     * a shex-lite file or some of them.
+     *
+     * @return a list of tuples, each one represents a source file and the first value is the source file name, the second
+     *         is its content.
+     */
+    override def getSources: Map[TargetIR, List[(String, String)]] = sources.toMap
+
+    /**
+     * Gets the compilation context.
+     *
+     * @return the compilation context.
+     */
+    override def getCompilationContext: CompilationContext = sil.getCompilationContext
+  }
 }

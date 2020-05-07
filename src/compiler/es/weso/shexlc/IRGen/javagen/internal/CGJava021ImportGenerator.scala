@@ -26,15 +26,17 @@
 
 package es.weso.shexlc.IRGen.javagen.internal
 
+import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.CardinalityExpr
-import es.weso.shexlc.parse.ast.visitor.DefaultShExLiteVisitor
-import es.weso.shexlc.internal.io.CompilerMsgsHandler
+import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class CGJava021ImportGenerator(msgsHandler: CompilerMsgsHandler, stringBuilder: StringBuilder)
-  extends DefaultShExLiteVisitor[String] {
+class CGJava021ImportGenerator(ccontext: CompilationContext, stringBuilder: StringBuilder)
+  extends ASTDefaultVisitor[String] {
 
+  // If any of the cardinality is greater than 1 then the import for the
+  // java.util.List will be generated.
   override def visit(expr: CardinalityExpr, param: String): Unit = {
-    if(expr.max>1) {
+    if(expr.max > 1) {
       stringBuilder.append("import java.util.List;")
       stringBuilder.append("\n")
       stringBuilder.append("\n")

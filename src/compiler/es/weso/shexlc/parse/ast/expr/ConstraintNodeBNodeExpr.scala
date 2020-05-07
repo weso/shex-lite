@@ -27,7 +27,7 @@
 package es.weso.shexlc.parse.ast.expr
 
 import es.weso.shexlc.parse.ast.Position
-import es.weso.shexlc.parse.ast.visitor.ShExLiteGenericVisitor
+import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
@@ -46,7 +46,7 @@ class ConstraintNodeBNodeExpr(line: Int, column: Int, interval: Interval, conten
 
   override def asConstraintNodeBNodeExpr: ConstraintNodeBNodeExpr = this
 
-  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
 

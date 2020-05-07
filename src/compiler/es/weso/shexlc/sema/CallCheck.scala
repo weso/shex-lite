@@ -32,11 +32,11 @@ import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.internal.errorhandler.{Err, ErrorHandler}
 import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.stmt._
-import es.weso.shexlc.parse.ast.visitor.DefaultShExLiteVisitor
+import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 import es.weso.shexlc.internal.symboltable.SymbolTable
 import org.antlr.v4.runtime.misc.Interval
 
-class CallCheck(ccontext: CompilationContext) extends DefaultShExLiteVisitor[Unit] {
+class CallCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
 
   private[this] val symbolTable: SymbolTable = ccontext.getSymbolTable
   private[this] val errorHandler: ErrorHandler = ccontext.getErrorHandler

@@ -28,6 +28,11 @@ package es.weso.shexlc.parse.ast
 
 import es.weso.shexlc.internal.errorhandler.Err
 
+/**
+ * A node with errors is a node that might have errors and therefore contains a list of errors.
+ *
+ * @author Guillermo Facundo Colunga
+ */
 trait NodeWithErrors {
 
   /**

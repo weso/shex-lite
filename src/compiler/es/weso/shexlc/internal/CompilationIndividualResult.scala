@@ -111,7 +111,7 @@ trait CompilationIndividualResult {
    * @return a map where the key is the target language and for each key it contains a collection of all the generated
    *         sources.
    */
-  def getGeneratedSources: HashMap[TargetIR, Seq[ShExLCompilerGeneratedSource]]
+  def getGeneratedSources: HashMap[TargetIR, Seq[(String, String)]]
 
   /**
    * Prints the errors formatted, if any.

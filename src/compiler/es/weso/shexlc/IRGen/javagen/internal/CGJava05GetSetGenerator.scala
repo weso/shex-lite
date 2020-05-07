@@ -26,21 +26,17 @@
 
 package es.weso.shexlc.IRGen.javagen.internal
 
-import java.io.PrintWriter
-
-import es.weso.shexl.ShExLCompilerTargetLanguage
-import es.weso.shexlc.parse.ast.Schema
+import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.{CallPrefixExpr, CallShapeExpr, ConstraintBlockTripleExpr}
-import es.weso.shexlc.parse.ast.visitor.DefaultShExLiteVisitor
-import es.weso.shexlc.internal.io.CompilerMsgsHandler
-import es.weso.shexlc.internal.symboltable.SymbolTable
+import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class CGJava05GetSetGenerator(msgsHandler: CompilerMsgsHandler, stringBuilder: StringBuilder)
-  extends DefaultShExLiteVisitor[String] {
+class CGJava05GetSetGenerator(ccontext: CompilationContext, stringBuilder: StringBuilder)
+  extends ASTDefaultVisitor[String] {
 
   override def visit(expr: ConstraintBlockTripleExpr, param: String): Unit = {
 
     for(field <- expr.body) {
+
       // Getter
       stringBuilder.append(s"\tpublic ")
       field.asConstraintTripleExpr.constraint.accept(this, field.asConstraintTripleExpr.cardinality.asCardinalityExpr.max.toString)

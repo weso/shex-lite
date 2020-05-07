@@ -75,7 +75,7 @@ object CompilationResult {
 
     private[this] var _hasErrors = false
     private[this] var _hasWarnings = false
-    private[this] var generatedResults = new ListBuffer[CompilationIndividualResult].empty
+    private[this] var individualResults = new ListBuffer[CompilationIndividualResult].empty
 
     /**
      * Indicates if any of the sources compiled contains an error.
@@ -96,7 +96,7 @@ object CompilationResult {
      *
      * @return the generated sources.
      */
-    override def getCompilationIndividualResults: List[CompilationIndividualResult] = generatedResults.toList
+    override def getCompilationIndividualResults: List[CompilationIndividualResult] = individualResults.toList
 
     /**
      * Adds a single generated source to the list of generated sources.
@@ -104,7 +104,7 @@ object CompilationResult {
      * @param result to be added to the list of generated sources.
      */
     override def addCompilationIndividualResult(result: CompilationIndividualResult): Unit = {
-      generatedResults += result
+      individualResults += result
       if(result.hasErrors) this._hasErrors = true
       if(result.hasWarnings) this._hasWarnings = true
     }

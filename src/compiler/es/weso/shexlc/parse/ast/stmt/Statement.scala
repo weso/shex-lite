@@ -26,7 +26,8 @@
 
 package es.weso.shexlc.parse.ast.stmt
 
-import es.weso.shexlc.parse.ast.NodeWithPosition
+import es.weso.shexlc.parse.ast.{AbstractASTNode, Position}
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A base class for all the statements.
@@ -36,36 +37,31 @@ import es.weso.shexlc.parse.ast.NodeWithPosition
  *
  * @author Guillermo Facundo Colunga.
  */
-trait Statement extends NodeWithPosition {
+abstract class Statement(position: Position, tokenRange: Interval, content: String)
+  extends AbstractASTNode(position, tokenRange, content) {
 
   // Override default values from node with position.
   override def isStatement(): Boolean = true
-
   override def asStatement(): Statement = this
 
   // Definition Statement.
   def isDefinitionStmt: Boolean = false
-
   def asDefinitionStmt: DefinitionStmt = throw new IllegalStateException(s"$this is not a DefinitionStmt")
 
   // Prefix Definition Statement.
   def isPrefixDefStmt: Boolean = false
-
   def asPrefixDefStmt: PrefixDefStmt = throw new IllegalStateException(s"$this is not a PrefixDefStmt")
 
   // Shape Definition Statement.
   def isShapeDefStmt: Boolean = false
-
   def asShapeDefStmt: ShapeDefStmt = throw new IllegalStateException(s"$this is not a ShapeDefStmt")
 
   // Base Definition Statement.
   def isBaseDefStmt: Boolean = false
-
   def asBaseDefStmt: BaseDefStmt = throw new IllegalStateException(s"$this is not a BaseDefStmt")
 
   // Start Definition Statement.
   def isStartDefStmt: Boolean = false
-
   def asStartDefStmt: StartDefStmt = throw new IllegalStateException(s"$this is not a StartDefStmt")
 
 
@@ -74,6 +70,5 @@ trait Statement extends NodeWithPosition {
 
   // Import Statement.
   def isImportStmt: Boolean = false
-
   def asImportStmt: ImportStmt = throw new IllegalStateException(s"$this is not an ImportStmt")
 }

@@ -38,7 +38,7 @@ import es.weso.shexlc.parse.ast.visitor._
  * information found to the symbol table.
  *
  */
-class TypeCheck(ccontex: CompilationContext) extends DefaultShExLiteVisitor[Unit] {
+class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
 
   private[this] val errorHandler: ErrorHandler = ccontex.getErrorHandler
 

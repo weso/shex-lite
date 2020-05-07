@@ -29,6 +29,8 @@ package es.weso.shexlc.parse.ast
 /**
  * A node with parent is a node that has been created after another an therefore has a parent. If the parent of a node
  * is null is that it is the root of a tree.
+ *
+ * @author Guillermo Facundo Colunga
  */
 trait NodeWithParent {
 

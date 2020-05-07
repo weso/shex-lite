@@ -27,23 +27,36 @@
 package es.weso.shexlc.parse.ast.expr
 
 import es.weso.shexlc.parse.ast.Position
-import es.weso.shexlc.parse.ast.visitor.ShExLiteGenericVisitor
+import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A Constraint Block Triple Expression represents a constraint composed of multiple expressions.
  *
  * @author Guillermo Facundo Colunga
- * @param line   in the source code where the token that generates de Base Definition Statement is located.
- * @param column in the source code where the token that generates de Base Definition Statement is located.
- * @param body   of the block that contains the expressions.
  */
-class ConstraintBlockTripleExpr(line: Int, column: Int, interval: Interval, content: String, val body: List[Expression]) extends ConstraintExpr {
-  override def getPosition: Position = Position.pos(line, column)
+class ConstraintBlockTripleExpr(position: Position, tokenRange: Interval, content: String, val body: List[Expression])
+  extends ConstraintExpr(position, tokenRange, content) {
 
-  override def getRange: Interval = interval
+  // Override default methods to indicate that this is a Constraint Block Triple Expression.
+  override def isConstraintBlockTripleExpr: Boolean = true
+  override def asConstraintBlockTripleExpr: ConstraintBlockTripleExpr = this
 
-/**
+  /**
+   * Gets the position object that points to the source file.
+   *
+   * @return a position object containing the position in the source file.
+   */
+  override def getPosition: Position = position
+
+  /**
+   * Gets the range of tokens from the source on which the node was generated.
+   *
+   * @return the range of tokens from the source on which the node was generated.
+   */
+  override def getRange: Interval = tokenRange
+
+  /**
    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
    * would be 'a = 3'.
    *
@@ -51,14 +64,16 @@ class ConstraintBlockTripleExpr(line: Int, column: Int, interval: Interval, cont
    */
   override def getContent: String = content
 
-  // Override default methods to indicate that this is a Constraint Block Triple Expression.
-  override def isConstraintBlockTripleExpr: Boolean = true
-
-  override def asConstraintBlockTripleExpr: ConstraintBlockTripleExpr = this
-
-  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+  /**
+   * Accept method for visitor support.
+   *
+   * @param visitor the visitor implementation.
+   * @param param   is the parameter passed to the visitor (of type A).
+   * @tparam TP is the type the user parameter passed to the visitor.
+   * @tparam TR is the type of the return value of the visitor.
+   * @return the result of the visit (of type TR).
+   */
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
-
-
 }

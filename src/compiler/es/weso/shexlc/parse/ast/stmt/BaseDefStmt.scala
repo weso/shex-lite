@@ -28,7 +28,7 @@ package es.weso.shexlc.parse.ast.stmt
 
 import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.ast.expr.Expression
-import es.weso.shexlc.parse.ast.visitor.ShExLiteGenericVisitor
+import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
@@ -38,16 +38,31 @@ import org.antlr.v4.runtime.misc.Interval
  * can be associated to a base value.
  *
  * @author Guillermo Facundo Colunga.
- * @param line       in the source code where the token that generates de Base Definition Statement is located.
- * @param column     in the source code where the token that generates de Base Definition Statement is located.
+ *
  * @param expression that is assigned to the Base Definition Statement.
  */
-class BaseDefStmt(line: Int, column: Int, interval: Interval, content: String, val expression: Expression) extends DefinitionStmt {
-  override def getPosition: Position = Position.pos(line, column)
+class BaseDefStmt(position: Position, tokenRange: Interval, content: String, val expression: Expression)
+  extends DefinitionStmt(position, tokenRange, content) {
 
-  override def getRange: Interval = interval
+  // Override default methods to indicate that this is a Base Definition Statement.
+  override def isBaseDefStmt: Boolean = true
+  override def asBaseDefStmt: BaseDefStmt = this
 
-/**
+  /**
+   * Gets the position object that points to the source file.
+   *
+   * @return a position object containing the position in the source file.
+   */
+  override def getPosition: Position = position
+
+  /**
+   * Gets the range of tokens from the source on which the node was generated.
+   *
+   * @return the range of tokens from the source on which the node was generated.
+   */
+  override def getRange: Interval = tokenRange
+
+  /**
    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
    * would be 'a = 3'.
    *
@@ -55,14 +70,16 @@ class BaseDefStmt(line: Int, column: Int, interval: Interval, content: String, v
    */
   override def getContent: String = content
 
-  // Override default methods to indicate that this is a Base Definition Statement.
-  override def isBaseDefStmt: Boolean = true
-
-  override def asBaseDefStmt: BaseDefStmt = this
-
-  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+  /**
+   * Accept method for visitor support.
+   *
+   * @param visitor the visitor implementation.
+   * @param param   is the parameter passed to the visitor (of type A).
+   * @tparam TP is the type the user parameter passed to the visitor.
+   * @tparam TR is the type of the return value of the visitor.
+   * @return the result of the visit (of type TR).
+   */
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
-
-
 }

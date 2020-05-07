@@ -28,7 +28,7 @@ package es.weso.shexlc.parse.ast.stmt
 
 import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.ast.expr.Expression
-import es.weso.shexlc.parse.ast.visitor.ShExLiteGenericVisitor
+import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
@@ -37,17 +37,29 @@ import org.antlr.v4.runtime.misc.Interval
  * without modifying this class.
  *
  * @author Guillermo Facundo Colunga.
- * @param line       in the source code where the token that generates de Base Definition Statement is located.
- * @param column     in the source code where the token that generates de Base Definition Statement is located.
- * @param label      that identifies the Prefix Definition Statement.
- * @param expression that will be associated to the label of the Prefix Definition Statement.
  */
-class PrefixDefStmt(line: Int, column: Int, interval: Interval, content: String, val label: String, val expression: Expression) extends DefinitionStmt {
-  override def getPosition: Position = Position.pos(line, column)
+class PrefixDefStmt(position: Position, tokenRange: Interval, content: String, val label: String, val expression: Expression)
+  extends DefinitionStmt(position, tokenRange, content) {
 
-  override def getRange: Interval = interval
+  // Override default methods to indicate that this is a Prefix Definition Statement.
+  override def isPrefixDefStmt: Boolean = true
+  override def asPrefixDefStmt: PrefixDefStmt = this
 
-/**
+  /**
+   * Gets the position object that points to the source file.
+   *
+   * @return a position object containing the position in the source file.
+   */
+  override def getPosition: Position = position
+
+  /**
+   * Gets the range of tokens from the source on which the node was generated.
+   *
+   * @return the range of tokens from the source on which the node was generated.
+   */
+  override def getRange: Interval = tokenRange
+
+  /**
    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
    * would be 'a = 3'.
    *
@@ -55,14 +67,16 @@ class PrefixDefStmt(line: Int, column: Int, interval: Interval, content: String,
    */
   override def getContent: String = content
 
-  // Override default methods to indicate that this is a Prefix Definition Statement.
-  override def isPrefixDefStmt: Boolean = true
-
-  override def asPrefixDefStmt: PrefixDefStmt = this
-
-  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+  /**
+   * Accept method for visitor support.
+   *
+   * @param visitor the visitor implementation.
+   * @param param   is the parameter passed to the visitor (of type A).
+   * @tparam TP is the type the user parameter passed to the visitor.
+   * @tparam TR is the type of the return value of the visitor.
+   * @return the result of the visit (of type TR).
+   */
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
-
-
 }

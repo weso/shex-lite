@@ -26,16 +26,12 @@
 
 package es.weso.shexlc.IRGen.javagen.internal
 
-import java.io.PrintWriter
-
-import es.weso.shexl.ShExLCompilerTargetLanguage
-import es.weso.shexlc.parse.ast.Schema
+import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.{CallPrefixExpr, CallShapeExpr, ConstraintBlockTripleExpr}
-import es.weso.shexlc.parse.ast.visitor.DefaultShExLiteVisitor
-import es.weso.shexlc.internal.io.CompilerMsgsHandler
-import es.weso.shexlc.internal.symboltable.SymbolTable
+import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class CGJava04ConstructorGenerator(msgsHandler: CompilerMsgsHandler, stringBuilder: StringBuilder) extends DefaultShExLiteVisitor[String] {
+class CGJava04ConstructorGenerator(ccontext: CompilationContext, stringBuilder: StringBuilder)
+  extends ASTDefaultVisitor[String] {
 
   override def visit(expr: ConstraintBlockTripleExpr, className: String): Unit = {
     stringBuilder.append(s"\tpublic ${className.toLowerCase.capitalize}(")

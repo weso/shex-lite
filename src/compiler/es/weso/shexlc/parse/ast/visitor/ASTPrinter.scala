@@ -30,7 +30,11 @@ import es.weso.shexlc.parse.ast.Schema
 import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.stmt._
 
-class PrettyPrintASTVisitor extends ShExLiteGenericVisitor[StringBuilder, String] {
+/**
+ * The ast printer prints the content of the ast after the execution of the semantic validation and therefore should
+ * only be applied to SIL. That is because it tries to print definitions.
+ */
+class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
 
   final val NL = "\n"
   final val TAB = "\t"

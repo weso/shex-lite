@@ -26,6 +26,10 @@
 
 package es.weso.shexlc.parse.ast.stmt
 
+import es.weso.shexlc.parse.ast.Position
+import org.antlr.v4.runtime.misc.Interval
+
+
 /**
  * A base class for all the definitions.
  *
@@ -35,10 +39,10 @@ package es.weso.shexlc.parse.ast.stmt
  *
  * @author Guillermo Facundo Colunga
  */
-trait DefinitionStmt extends Statement {
+abstract class DefinitionStmt(position: Position, tokenRange: Interval, content: String)
+  extends Statement(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Definition Statement.
   override def isDefinitionStmt: Boolean = true
-
   override def asDefinitionStmt: DefinitionStmt = this
 }

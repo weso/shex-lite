@@ -32,8 +32,10 @@ import es.weso.shexlc.parse.ast.visitor.Visitable
 
 /**
  * Base class for all nodes of the abstract syntax tree.
+ *
+ * @author Guillermo Facundo Colunga
  */
-trait NodeWithPosition extends NodeWithTokenRange with Visitable {
+trait NodeWithPosition {
 
   /**
    * Gets the position object that points to the source file.

@@ -34,7 +34,7 @@ import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor._
 import es.weso.shexlc.internal.symboltable.SymbolTable
 
-class DefinitionCheck(ccontext: CompilationContext) extends DefaultShExLiteVisitor[Unit] {
+class DefinitionCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
 
   private[this] var symbolTable: SymbolTable = ccontext.getSymbolTable
   private[this] val errorHandler: ErrorHandler = ccontext.getErrorHandler

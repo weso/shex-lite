@@ -26,7 +26,8 @@
 
 package es.weso.shexlc.parse.ast.expr
 
-import es.weso.shexlc.parse.ast.{NodeWithParent, NodeWithPosition}
+import es.weso.shexlc.parse.ast.{AbstractASTNode, NodeWithParent, NodeWithPosition, Position}
+import org.antlr.v4.runtime.misc.Interval
 
 /**
  * A base class for all the expression.
@@ -36,7 +37,8 @@ import es.weso.shexlc.parse.ast.{NodeWithParent, NodeWithPosition}
  *
  * @author Guillermo Facundo Colunga
  */
-trait Expression extends NodeWithPosition with NodeWithParent {
+abstract class Expression(position: Position, tokenRange: Interval, content: String)
+  extends AbstractASTNode(position, tokenRange, content) {
 
   // Override default values from node with position.
   override def isExpression(): Boolean = true

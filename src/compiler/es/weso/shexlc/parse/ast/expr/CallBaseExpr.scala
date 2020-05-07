@@ -28,25 +28,36 @@ package es.weso.shexlc.parse.ast.expr
 
 import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.ast.stmt.Statement
-import es.weso.shexlc.parse.ast.visitor.ShExLiteGenericVisitor
+import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
+ * The call base expression represents a call to the base prefix.
  *
- * @param line
- * @param column
- * @param interval
- * @param argument
- * @param definition
+ * @author Guillermo Facundo Colunga
  */
-class CallBaseExpr(line: Int, column: Int, interval: Interval, content: String, val argument: String,
-                   var definition: Statement = null) extends CallExpr {
+class CallBaseExpr(position: Position, tokenRange: Interval, content: String, val argument: String,
+                   var definition: Statement = null) extends CallExpr(position, tokenRange, content) {
 
-  override def getPosition: Position = Position.pos(line, column)
+  // Override default methods to indicate that this is a Call Prefix Expression.
+  override def isCallBaseExpr: Boolean = true
+  override def asCallBaseExpr: CallBaseExpr = this
 
+  /**
+   * Gets the position object that points to the source file.
+   *
+   * @return a position object containing the position in the source file.
+   */
+  override def getPosition: Position = position
+
+  /**
+   * Gets the range of tokens from the source on which the node was generated.
+   *
+   * @return the range of tokens from the source on which the node was generated.
+   */
   override def getRange: Interval = interval
 
-/**
+  /**
    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
    * would be 'a = 3'.
    *
@@ -54,12 +65,16 @@ class CallBaseExpr(line: Int, column: Int, interval: Interval, content: String, 
    */
   override def getContent: String = content
 
-  // Override default methods to indicate that this is a Call Prefix Expression.
-  override def isCallBaseExpr: Boolean = true
-
-  override def asCallBaseExpr: CallBaseExpr = this
-
-  override def accept[TP, TR](visitor: ShExLiteGenericVisitor[TP, TR], param: TP): TR = {
+  /**
+   * Accept method for visitor support.
+   *
+   * @param visitor the visitor implementation.
+   * @param param   is the parameter passed to the visitor (of type A).
+   * @tparam TP is the type the user parameter passed to the visitor.
+   * @tparam TR is the type of the return value of the visitor.
+   * @return the result of the visit (of type TR).
+   */
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
 }

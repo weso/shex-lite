@@ -28,6 +28,8 @@ package es.weso.shexlc.parse.ast
 
 /**
  * A position in a source file. Lines and columns start counting at 1.
+ *
+ * @author Guillermo Facundo Colunga
  */
 class Position(val filename: String, val line: Int, val column: Int) extends Comparable[Position] {
 
@@ -46,6 +48,11 @@ class Position(val filename: String, val line: Int, val column: Int) extends Com
   }
 }
 
+/**
+ * A position in a source file. Lines and columns start counting at 1.
+ *
+ * @author Guillermo Facundo Colunga
+ */
 object Position {
 
   /**
