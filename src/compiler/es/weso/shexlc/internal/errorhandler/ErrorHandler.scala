@@ -99,7 +99,13 @@ object ErrorHandler {
         * @return the list of errors that the event handler contains.
         */
       override def getErrors: List[Err] =
-        events.filter(event => event.isError).asInstanceOf
+        events
+          .filter(event => event.isError)
+          .map(event =>
+            event
+              .asInstanceOf[Err]
+          )
+          .toList
 
       /**
         * Gets whether the compiler messages handler has warnings or not.

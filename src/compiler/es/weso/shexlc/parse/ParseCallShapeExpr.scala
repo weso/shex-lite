@@ -33,6 +33,7 @@ import es.weso.shexlc.parse.ast.expr.{
   CallShapeExpr,
   Expression
 }
+import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
@@ -50,19 +51,22 @@ class ParseCallShapeExpr(
 ) extends HasParseResult[CallShapeExpr] {
 
   override def getParseResult: CallShapeExpr = {
-    val line     = ctx.start.getLine
-    val column   = ctx.start.getCharPositionInLine
-    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content  = ccontext.getInputContext.getText(interval)
+    val sourceName = ccontext.getInputContext.getSourceName
+    val line       = ctx.start.getLine
+    val column     = ctx.start.getCharPositionInLine
+    val pos        = Position.pos(sourceName, line, column)
+    val tokenRange =
+      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content = ccontext.getInputContext.getText(tokenRange)
 
     ctx.base_relative_lbl match {
       case null => {
         val prefix = if (ctx.prefix_lbl == null) "" else ctx.prefix_lbl.getText
         val shape  = ctx.shape_lbl.getText
         val prefixCall =
-          new CallPrefixExpr(line, column, interval, prefix, shape)
+          new CallPrefixExpr(pos, tokenRange, content, prefix, shape)
 
-        new CallShapeExpr(line, column, interval, content, prefixCall)
+        new CallShapeExpr(pos, tokenRange, content, prefixCall)
       }
       case _ => {
         val shape = ctx.base_relative_lbl
@@ -71,9 +75,9 @@ class ParseCallShapeExpr(
           .asLiteralIRIValueExpr
           .value
         val prefixCall =
-          new CallBaseExpr(line, column, interval, content, shape)
+          new CallBaseExpr(pos, tokenRange, content, shape)
 
-        new CallShapeExpr(line, column, interval, content, prefixCall)
+        new CallShapeExpr(pos, tokenRange, content, prefixCall)
       }
     }
   }

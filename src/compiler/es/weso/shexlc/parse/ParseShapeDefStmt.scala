@@ -29,6 +29,7 @@ package es.weso.shexlc.parse
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.Expression
 import es.weso.shexlc.parse.ast.stmt.ShapeDefStmt
+import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
@@ -47,14 +48,17 @@ class ParseShapeDefStmt(
 ) extends HasParseResult[ShapeDefStmt] {
 
   override def getParseResult: ShapeDefStmt = {
-    val line     = ctx.start.getLine
-    val column   = ctx.start.getCharPositionInLine
-    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content  = ccontext.getInputContext.getText(interval)
+    val sourceName = ccontext.getInputContext.getSourceName
+    val line       = ctx.start.getLine
+    val column     = ctx.start.getCharPositionInLine
+    val pos        = Position.pos(sourceName, line, column)
+    val tokenRange =
+      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content = ccontext.getInputContext.getText(tokenRange)
 
     val label: Expression      = ctx.label.accept(visitor).asExpression()
     val expression: Expression = ctx.expr.accept(visitor).asExpression()
 
-    new ShapeDefStmt(line, column, interval, content, label, expression)
+    new ShapeDefStmt(pos, tokenRange, content, label, expression)
   }
 }

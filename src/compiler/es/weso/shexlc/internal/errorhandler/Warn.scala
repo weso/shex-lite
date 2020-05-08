@@ -26,7 +26,7 @@
 
 package es.weso.shexlc.internal.errorhandler
 
-import es.weso.shexlc.parse.ast.{NodeWithPosition, Position}
+import es.weso.shexlc.parse.ast.{AbstractASTNode, Position}
 
 /**
   * Represents a warning event that occurred during the compilation process. A warning contains the position in the
@@ -39,7 +39,7 @@ import es.weso.shexlc.parse.ast.{NodeWithPosition, Position}
   * @param ttype of the warning indicating why the error occurred
   */
 case class Warn(
-  node: NodeWithPosition,
+  node: AbstractASTNode,
   message: String,
   ttype: CompilerEventType
 ) extends CompilationEvent {
@@ -95,7 +95,10 @@ case class Warn(
     sb.append(s"${node.getContent}")
     sb.append(s"\n\t${Console.CYAN}|${Console.RESET} ")
 
-    val spaces = node.getRange
+    val spaces = node.getRange.a - node.getParent.get
+        .asInstanceOf[AbstractASTNode]
+        .getRange
+        .a
 
     for (i <- 0 to spaces - 1) {
       sb.append(" ")

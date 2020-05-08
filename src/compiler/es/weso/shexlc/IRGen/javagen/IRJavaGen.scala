@@ -80,7 +80,7 @@ object IRJavaGen {
 
           // 2. If during the validation any error was generated then generate the target code.
           if (!sil.getCompilationContext.getErrorHandler.hasErrorMsgs) {
-            sil.getGraphEntryPoint.accept(javaClassGenerator, ())
+            sil.getGraphEntryPoint.accept(javaClassGenerator, "")
             javaClassGenerator.generatedSources.toList
           } else {
             List.empty[(String, String)] // An empty list.

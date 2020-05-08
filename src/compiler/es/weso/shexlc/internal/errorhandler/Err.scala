@@ -26,7 +26,7 @@
 
 package es.weso.shexlc.internal.errorhandler
 
-import es.weso.shexlc.parse.ast.{NodeWithPosition, Position}
+import es.weso.shexlc.parse.ast.{AbstractASTNode, NodeWithPosition, Position}
 
 /**
   * Represents an error event that occurred during the compilation process. An error contains the position in the source
@@ -39,7 +39,7 @@ import es.weso.shexlc.parse.ast.{NodeWithPosition, Position}
   * @param ttype of the error indicating why the error occurred
   */
 case class Err(
-  node: NodeWithPosition,
+  node: AbstractASTNode,
   message: String,
   ttype: CompilerEventType
 ) extends CompilationEvent {
@@ -92,10 +92,17 @@ case class Err(
     )
     sb.append(s"\n\t${Console.CYAN}|${Console.RESET} ")
     sb.append(s"\n${Console.CYAN}${node.getPosition.line}\t|${Console.RESET} ")
-    sb.append(s"${node.getContent}")
+    sb.append(s"${node.getParent.get.asInstanceOf[AbstractASTNode].getContent}")
     sb.append(s"\n\t${Console.CYAN}|${Console.RESET} ")
 
-    val spaces = node.getRange
+    var absolute = 0
+    if (node.getParent.isDefined)
+      absolute = node.getParent.get
+        .asInstanceOf[AbstractASTNode]
+        .getRange
+        .a
+
+    val spaces = node.getRange.a - absolute
 
     for (i <- 0 to (spaces - 1)) {
       sb.append(" ")

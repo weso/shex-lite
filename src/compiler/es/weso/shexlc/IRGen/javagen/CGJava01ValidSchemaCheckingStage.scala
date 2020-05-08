@@ -35,7 +35,7 @@ import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
     extends ASTDefaultVisitor[Unit] {
 
-  private[this] var msgsHandler: ErrorHandler = ccontext.getErrorHandler
+  private[this] val msgsHandler: ErrorHandler = ccontext.getErrorHandler
 
   override def visit(stmt: ImportStmt, param: Unit): Unit = {
     msgsHandler.addEvent(

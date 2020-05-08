@@ -35,18 +35,30 @@ import org.antlr.v4.runtime.misc.Interval
   * functionality than the classification of the node constraint type.
   *
   * @author Guillermo Facundo Colunga
-  * @param line   in the source code where the token that generates de Base Definition Statement is located.
-  * @param column in the source code where the token that generates de Base Definition Statement is located.
   */
 class ConstraintNodeAnyTypeExpr(
-  line: Int,
-  column: Int,
-  interval: Interval,
+  position: Position,
+  tokenRange: Interval,
   content: String
-) extends ConstraintNodeExpr {
-  override def getPosition: Position = Position.pos(line, column)
+) extends ConstraintNodeExpr(position, tokenRange, content) {
 
-  override def getRange: Interval = interval
+  // Override default methods to indicate that this is a Constraint Node Any Type Expression.
+  override def isConstraintNodeAnyTypeExpr: Boolean                   = true
+  override def asConstraintNodeAnyTypeExpr: ConstraintNodeAnyTypeExpr = this
+
+  /**
+    * Gets the position object that points to the source file.
+    *
+    * @return a position object containing the position in the source file.
+    */
+  override def getPosition: Position = position
+
+  /**
+    * Gets the range of tokens from the source on which the node was generated.
+    *
+    * @return the range of tokens from the source on which the node was generated.
+    */
+  override def getRange: Interval = tokenRange
 
   /**
     * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
@@ -56,16 +68,19 @@ class ConstraintNodeAnyTypeExpr(
     */
   override def getContent: String = content
 
-  // Override default methods to indicate that this is a Constraint Node Any Type Expression.
-  override def isConstraintNodeAnyTypeExpr: Boolean = true
-
-  override def asConstraintNodeAnyTypeExpr: ConstraintNodeAnyTypeExpr = this
-
+  /**
+    * Accept method for visitor support.
+    *
+    * @param visitor the visitor implementation.
+    * @param param   is the parameter passed to the visitor (of type A).
+    * @tparam TP is the type the user parameter passed to the visitor.
+    * @tparam TR is the type of the return value of the visitor.
+    * @return the result of the visit (of type TR).
+    */
   override def accept[TP, TR](
     visitor: ASTGenericWalker[TP, TR],
     param: TP
   ): TR = {
     visitor.visit(this, param)
   }
-
 }

@@ -28,16 +28,23 @@ package es.weso.shexlc
 
 import java.io.File
 
+import es.weso.shexlc.internal.{CompilationConfig, CompilationContext}
+import es.weso.shexlc.parse.{AbstractSyntaxTree, Parser}
+import es.weso.shexlc.IRGen.IR
+import es.weso.shexlc.parse.ast.Schema
+import es.weso.shexlc.parse.ast.visitor.ASTPrinter
+import es.weso.shexlc.sema.SIL
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
 class CompilationTest extends AnyFunSuite with BeforeAndAfter {
 
-  val compiler =
-    new ShExLCompilerImpl().setConfiguration(new ShExLCompilerConfig {
-      override def generateWarnings: Boolean = true
-      override def generateCode: Boolean     = false
-    })
+  val cconfig = new CompilationConfig {
+    override def generateIR: Boolean       = false
+    override def generateWarnings: Boolean = true
+  }
+
+  var ccontext = CompilationContext.withConfig(cconfig)
 
   generateTestCases()
 
@@ -48,55 +55,74 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
     // Individual file compiling
     for (file <- correctFiles) {
       test(s"Compiling file $file should pass without errors") {
-        // Parsing a sample file that contains a base redefinition.
-        val compilationResult =
-          compiler.addSource(file).compile.getCompilationResult
-        assert(!compilationResult.hasErrors)
-        compilationResult.getIndividualResults.last.printErrors
-        compilationResult.getIndividualResults.last.printWarnings
+
+        ccontext = CompilationContext.withConfig(cconfig)
+
+        // 1. Parse the vile and get the syntax tree.
+        val syntaxTree = Parser.parseFile(file, ccontext)
+
+        // 2. Get the AST.
+        val ast = AbstractSyntaxTree.getAST(syntaxTree)
+
+        // 3. Get SIL.
+        val sil = SIL.getSIL(ast)
+
+        // 4. Dispatch the IRGen. This step it is not mandatory as we are not
+        // generating code...
+        val ir = IR.getIR(sil)
+
+        // If any error during compilation print them.
+        //for (error <- ccontext.getErrorHandler.getErrors) {
+        //  println(error.toPrintableString)
+        //}
+
+        // If any warning print them.
+        //for (warning <- ccontext.getErrorHandler.getWarnings) {
+        //  println(warning.toPrintableString)
+        //}
+
+        assert(!ccontext.getErrorHandler.hasErrorMsgs)
       }
     }
 
     for (file <- incorrectFiles) {
       test(s"Compiling file $file should generate errors") {
-        val compilationResult =
-          compiler.addSource(file).compile.getCompilationResult
-        println(compilationResult.getIndividualResults.head.getErrors.size)
-        assert(compilationResult.hasErrors)
-        compilationResult.getIndividualResults.last.printErrors
-        compilationResult.getIndividualResults.last.printWarnings
+
+        ccontext = CompilationContext.withConfig(cconfig)
+
+        // 1. Parse the vile and get the syntax tree.
+        val syntaxTree = Parser.parseFile(file, ccontext)
+
+        // 2. Get the AST.
+        val ast = AbstractSyntaxTree.getAST(syntaxTree)
+
+        // Print the AST.
+        println(
+          ast.getRoot
+            .asInstanceOf[Schema]
+            .accept(new ASTPrinter(), new StringBuilder())
+        )
+
+        // 3. Get SIL.
+        val sil = SIL.getSIL(ast)
+
+        // 4. Dispatch the IRGen. This step it is not mandatory as we are not
+        // generating code...
+        val ir = IR.getIR(sil)
+
+        // If any error during compilation print them.
+        //for (error <- ccontext.getErrorHandler.getErrors) {
+        //  println(error.toPrintableString)
+        //}
+
+        // If any warning print them.
+        //for (warning <- ccontext.getErrorHandler.getWarnings) {
+        //  println(warning.toPrintableString)
+        //}
+
+        assert(ccontext.getErrorHandler.hasErrorMsgs)
       }
     }
-
-    // Multiple file compiling
-    test(
-      s"Compiling multiple correct files at the same time should pass without errors"
-    ) {
-      for (file <- correctFiles) {
-        compiler.addSource(file)
-      }
-      val results = compiler.compile.getCompilationResult.getIndividualResults
-      for (result <- results) {
-        assert(!result.hasErrors)
-        result.printErrors
-        result.printWarnings
-      }
-    }
-
-    test(
-      s"Compiling multiple incorrect files at the same time should pass with errors"
-    ) {
-      for (file <- incorrectFiles) {
-        compiler.addSource(file)
-      }
-      val results = compiler.compile.getCompilationResult.getIndividualResults
-      for (result <- results) {
-        assert(result.hasErrors)
-        result.printErrors
-        result.printWarnings
-      }
-    }
-
   }
 
   private[this] def getListOfFiles(

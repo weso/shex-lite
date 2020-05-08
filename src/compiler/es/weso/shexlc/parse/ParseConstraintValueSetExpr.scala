@@ -28,6 +28,7 @@ package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.{ConstraintValueSetExpr, Expression}
+import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
@@ -48,10 +49,14 @@ class ParseConstraintValueSetExpr(
 ) extends HasParseResult[ConstraintValueSetExpr] {
 
   override def getParseResult: ConstraintValueSetExpr = {
-    val line     = ctx.start.getLine
-    val column   = ctx.start.getCharPositionInLine
-    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content  = ccontext.getInputContext.getText(interval)
+
+    val sourceName = ccontext.getInputContext.getSourceName
+    val line       = ctx.start.getLine
+    val column     = ctx.start.getCharPositionInLine
+    val pos        = Position.pos(sourceName, line, column)
+    val tokenRange =
+      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content = ccontext.getInputContext.getText(tokenRange)
 
     // Would be nice to remove the as instance of from here but as antlr generates java...
     val valueSet = ctx
@@ -61,6 +66,6 @@ class ParseConstraintValueSetExpr(
       .toList
       .asInstanceOf[List[Expression]]
 
-    new ConstraintValueSetExpr(line, column, interval, content, valueSet)
+    new ConstraintValueSetExpr(pos, tokenRange, content, valueSet)
   }
 }

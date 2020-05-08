@@ -27,9 +27,10 @@
 package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
-import es.weso.shexlc.parse.ast.Schema
+import es.weso.shexlc.parse.ast.{Position, Schema}
 import es.weso.shexlc.parse.ast.stmt.Statement
 import es.weso.shexlc.parse.generated.ShexLiteParser
+import org.antlr.v4.runtime.misc.Interval
 
 import scala.collection.JavaConverters._
 
@@ -47,7 +48,16 @@ class ParseSchema(
   ccontext: CompilationContext
 ) extends HasParseResult[Schema] {
 
+  val sourceName = ccontext.getInputContext.getSourceName
+  val line       = ctx.start.getLine
+  val column     = ctx.start.getCharPositionInLine
+  val pos        = Position.pos(sourceName, line, column)
+  val tokenRange =
+    new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+  val content = ccontext.getInputContext.getText(tokenRange)
+
   override def getParseResult: Schema = {
+
     val statements: List[Statement] = ctx
       .statement()
       .asScala
@@ -56,6 +66,6 @@ class ParseSchema(
       .asInstanceOf[List[Statement]]
 
     val content = ccontext.getInputContext.getText(ctx.getSourceInterval)
-    new Schema(statements, content)
+    new Schema(pos, tokenRange, content, statements)
   }
 }

@@ -28,6 +28,7 @@ package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr._
+import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
@@ -45,23 +46,26 @@ class ParseConstraintTripleExpr(
 ) extends HasParseResult[ConstraintTripleExpr] {
 
   override def getParseResult: ConstraintTripleExpr = {
-    val line     = ctx.start.getLine
-    val column   = ctx.start.getCharPositionInLine
-    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content  = ccontext.getInputContext.getText(interval)
+
+    val sourceName = ccontext.getInputContext.getSourceName
+    val line       = ctx.start.getLine
+    val column     = ctx.start.getCharPositionInLine
+    val pos        = Position.pos(sourceName, line, column)
+    val tokenRange =
+      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content = ccontext.getInputContext.getText(tokenRange)
 
     val property: Expression   = ctx.property.accept(visitor).asExpression()
     val constraint: Expression = ctx.constraint.accept(visitor).asExpression()
     val cardinality: Expression =
       if (ctx.cardinality == null)
-        new CardinalityExpr(line, column, interval, content, 0, 1)
+        new CardinalityExpr(pos, tokenRange, content, 0, 1)
       else
         ctx.cardinality.accept(visitor).asExpression()
 
     new ConstraintTripleExpr(
-      line,
-      column,
-      interval,
+      pos,
+      tokenRange,
       content,
       property,
       constraint,

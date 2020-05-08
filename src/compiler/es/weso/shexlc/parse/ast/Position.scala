@@ -48,6 +48,8 @@ class Position(val filename: String, val line: Int, val column: Int)
     if (this.column > position.column) return +1
     0
   }
+
+  override def toString: String = s"$filename:$line:${column + 1}"
 }
 
 /**

@@ -30,29 +30,27 @@ import java.util.Objects
 
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.internal.errorhandler.{Err, ErrorHandler}
-import es.weso.shexlc.internal.symboltable.SymbolTable
 import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor._
 
 class DefinitionCheck(ccontext: CompilationContext)
     extends ASTDefaultVisitor[Unit] {
 
-  private[this] val errorHandler: ErrorHandler = ccontext.getErrorHandler
-  private[this] var symbolTable: SymbolTable   = ccontext.getSymbolTable
+  //private[this] val ccontext.getErrorHandler: ErrorHandler = ccontext.getErrorHandler
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     val existingSTValue =
-      symbolTable.getBase.expression.asLiteralIRIValueExpr.value
+      ccontext.getSymbolTable.getBase.expression.asLiteralIRIValueExpr.value
     // 1. Is the base the default one?
-    if (existingSTValue.equals(symbolTable.DEFAULT_BASE)) {
+    if (existingSTValue.equals(ccontext.getSymbolTable.DEFAULT_BASE)) {
       // If it is we allow to change the base once.
-      symbolTable.setBase(stmt)
+      ccontext.getSymbolTable.setBase(stmt)
     } else {
-      errorHandler.addEvent(
+      ccontext.getErrorHandler.addEvent(
         new Err(
           stmt,
           s"this base definition overrides the previous one " +
-          s"(${symbolTable.getBase.getLine}:${symbolTable.getBase.getColumn})" +
+          s"(${ccontext.getSymbolTable.getBase.getLine}:${ccontext.getSymbolTable.getBase.getColumn})" +
           s" with value $existingSTValue",
           Err.BaseOverride
         )
@@ -62,10 +60,10 @@ class DefinitionCheck(ccontext: CompilationContext)
   }
 
   override def visit(stmt: PrefixDefStmt, param: Unit): Unit = {
-    val existingSTValue = symbolTable.getPrefix(stmt.label)
+    val existingSTValue = ccontext.getSymbolTable.getPrefix(stmt.label)
     // 1. Does the prefix exists in the symbol table?
-    if (Objects.nonNull(symbolTable.getPrefix(stmt.label))) {
-      errorHandler.addEvent(
+    if (Objects.nonNull(ccontext.getSymbolTable.getPrefix(stmt.label))) {
+      ccontext.getErrorHandler.addEvent(
         new Err(
           stmt.expression,
           s"this prefix definition overrides the previous one " +
@@ -75,7 +73,7 @@ class DefinitionCheck(ccontext: CompilationContext)
         )
       )
     } else {
-      symbolTable += stmt
+      ccontext.getSymbolTable += stmt
     }
 
     stmt.expression.accept(this, param)
@@ -86,12 +84,12 @@ class DefinitionCheck(ccontext: CompilationContext)
     var existingSTValue: ShapeDefStmt = null
 
     if (isRelativeShape) {
-      existingSTValue = symbolTable.getShape(
-        symbolTable.DEFAULT_BASE,
+      existingSTValue = ccontext.getSymbolTable.getShape(
+        ccontext.getSymbolTable.DEFAULT_BASE,
         stmt.label.asCallBaseExpr.argument
       )
     } else {
-      existingSTValue = symbolTable.getShape(
+      existingSTValue = ccontext.getSymbolTable.getShape(
         stmt.label.asCallPrefixExpr.label,
         stmt.label.asCallPrefixExpr.argument
       )
@@ -99,7 +97,7 @@ class DefinitionCheck(ccontext: CompilationContext)
 
     // 1. Does the symbol table contains the shape?
     if (Objects.nonNull(existingSTValue)) {
-      errorHandler.addEvent(
+      ccontext.getErrorHandler.addEvent(
         new Err(
           stmt.label,
           s"this shape definition overrides the previous one " +
@@ -108,7 +106,7 @@ class DefinitionCheck(ccontext: CompilationContext)
         )
       )
     } else {
-      symbolTable += stmt
+      ccontext.getSymbolTable += stmt
     }
 
     stmt.label.accept(this, param)
@@ -116,7 +114,7 @@ class DefinitionCheck(ccontext: CompilationContext)
   }
 
   override def visit(stmt: StartDefStmt, param: Unit): Unit = {
-    val existingSTValue = symbolTable.getStart
+    val existingSTValue = ccontext.getSymbolTable.getStart
     var cause: String   = ""
 
     // Has been already set?
@@ -135,7 +133,7 @@ class DefinitionCheck(ccontext: CompilationContext)
           s"${existingSTValue.expression.asCallShapeExpr.label.asCallPrefixExpr.argument}"
       }
 
-      errorHandler.addEvent(
+      ccontext.getErrorHandler.addEvent(
         new Err(
           stmt,
           cause,
@@ -143,7 +141,7 @@ class DefinitionCheck(ccontext: CompilationContext)
         )
       )
     } else {
-      symbolTable.setStart(stmt)
+      ccontext.getSymbolTable.setStart(stmt)
     }
     stmt.expression.accept(this, param)
   }

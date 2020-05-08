@@ -28,6 +28,7 @@ package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.LiteralStringValueExpr
+import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
@@ -46,13 +47,16 @@ class ParseLiteralStringValueExpr(
 ) extends HasParseResult[LiteralStringValueExpr] {
 
   override def getParseResult: LiteralStringValueExpr = {
-    val line     = ctx.start.getLine
-    val column   = ctx.start.getCharPositionInLine
-    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content  = ccontext.getInputContext.getText(interval)
+    val sourceName = ccontext.getInputContext.getSourceName
+    val line       = ctx.start.getLine
+    val column     = ctx.start.getCharPositionInLine
+    val pos        = Position.pos(sourceName, line, column)
+    val tokenRange =
+      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content = ccontext.getInputContext.getText(tokenRange)
 
     val value: String = ctx.STRING_LITERAL().getText
 
-    new LiteralStringValueExpr(line, column, interval, content, value)
+    new LiteralStringValueExpr(pos, tokenRange, content, value)
   }
 }

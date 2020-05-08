@@ -26,6 +26,7 @@
 
 package es.weso.shexlc.internal
 
+import es.weso.shexlc.IRGen.TargetIR
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -35,7 +36,7 @@ class CompilationConfigTest extends AnyFunSuite with BeforeAndAfter {
   test("Default compilation config is correct") {
     val defaultWarn   = true
     val defaultGenIR  = false
-    val defaultIRList = Set.empty[ShExLCompilerTargetLanguage]
+    val defaultIRList = Set.empty[TargetIR]
     val cc            = CompilationConfigBuilder().build
 
     assert(cc.generateWarnings == defaultWarn)
@@ -45,28 +46,28 @@ class CompilationConfigTest extends AnyFunSuite with BeforeAndAfter {
 
   // Testing to change the value of the warning generation.
   test("Test that the value of the warnings generation can be changed") {
-    val cc = CompilationConfigBuilder().generateWarnings(false).build
+    var cc = CompilationConfigBuilder().generateWarnings(false).build
     assert(cc.generateWarnings == false)
-    val cc = CompilationConfigBuilder().generateWarnings(true).build
+    cc = CompilationConfigBuilder().generateWarnings(true).build
     assert(cc.generateWarnings == true)
   }
 
   // Testing to change the value of the ir generation.
   test("Test that the value of the ir generation can be changed") {
-    val cc = CompilationConfigBuilder().generateIR(true).build
+    var cc = CompilationConfigBuilder().generateIR(true).build
     assert(cc.generateWarnings == true)
-    val cc = CompilationConfigBuilder().generateIR(false).build
+    cc = CompilationConfigBuilder().generateIR(false).build
     assert(cc.generateWarnings == false)
   }
 
   // Testing to change the value of the ir list generation.
   test("Test that the value of the ir list generation can be changed") {
-    val cc = CompilationConfigBuilder()
-      .withTIR(List(CompilerTargetLanguage.Java))
+    var cc = CompilationConfigBuilder()
+      .withTIR(List(TargetIR.Java))
       .build
     assert(cc.getTIR.size == 1)
-    val cc = CompilationConfigBuilder()
-      .withTIR(List(CompilerTargetLanguage.Java, CompilerTargetLanguage.Python))
+    cc = CompilationConfigBuilder()
+      .withTIR(List(TargetIR.Java, TargetIR.Python))
       .build
     assert(cc.getTIR.size == 1)
   }

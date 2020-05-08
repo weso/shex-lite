@@ -33,6 +33,7 @@ import es.weso.shexlc.parse.ast.expr.{
   CallPrefixExpr,
   Expression
 }
+import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
@@ -50,17 +51,21 @@ class ParseCallPrefixExpr(
 ) extends HasParseResult[CallExpr] {
 
   override def getParseResult: CallExpr = {
-    val line     = ctx.start.getLine
-    val column   = ctx.start.getCharPositionInLine
-    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content  = ccontext.getInputContext.getText(interval)
+
+    val sourceName = ccontext.getInputContext.getSourceName
+    val line       = ctx.start.getLine
+    val column     = ctx.start.getCharPositionInLine
+    val pos        = Position.pos(sourceName, line, column)
+    val tokenRange =
+      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content = ccontext.getInputContext.getText(tokenRange)
 
     ctx.base_relative_lbl match {
       case null => {
         val label = if (ctx.pref_lbl == null) "" else ctx.pref_lbl.getText
         val arg   = ctx.shape_lbl.getText
 
-        new CallPrefixExpr(line, column, interval, content, label, arg)
+        new CallPrefixExpr(pos, tokenRange, content, label, arg)
       }
       case _ => {
         val label = "base"
@@ -70,7 +75,7 @@ class ParseCallPrefixExpr(
           .asLiteralIRIValueExpr
           .value
 
-        new CallBaseExpr(line, column, interval, content, arg)
+        new CallBaseExpr(pos, tokenRange, content, arg)
       }
     }
   }

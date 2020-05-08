@@ -26,56 +26,90 @@
 
 package es.weso.shexlc
 
+import es.weso.shexlc.parse.{AbstractSyntaxTree, Parser}
+import es.weso.shexlc.IRGen.{IR, TargetIR}
+import es.weso.shexlc.internal.{CompilationConfig, CompilationContext}
+import es.weso.shexlc.parse.ast.Schema
+import es.weso.shexlc.parse.ast.visitor.ASTPrinter
+import es.weso.shexlc.sema.SIL
 import org.scalatest.funsuite.AnyFunSuite
 
 class SchemaTest extends AnyFunSuite {
 
-  test("individual file compilation") {
+  val cconfig = new CompilationConfig {
+    override def generateIR: Boolean       = true
+    override def getTIR: Set[TargetIR]     = List(TargetIR.Java).toSet
+    override def generateWarnings: Boolean = true
+  }
 
-    val compiler =
-      new ShExLCompilerImpl().setConfiguration(new ShExLCompilerConfig {
-        override def generateWarnings: Boolean = true
-        override def generateCode: Boolean     = true
-      })
+  var ccontext = CompilationContext.withConfig(cconfig)
 
-    var compileResult =
-      compiler
-        .addSource("test/assets/input_correct_java_schema_user_car_1.shexl")
-        .compile
-        .getCompilationResult
+  test("positive individual file compilation") {
+    val shexl =
+      s"""prefix : <http://www.google.es>
+         |prefix xsd: <http://www.schema.org/>
+         |prefix xsd: <sdafasdf>
+         |base <http://thebase.com/>
+         |start = @:User
+         |:User {
+         |  :name  xsd:string  ;
+         |  :surname . ;
+         |}
+         |""".stripMargin
 
-    assert(!compileResult.hasErrors)
-    compileResult.getIndividualResults.foreach(result =>
-      result.getGeneratedSources
-        .get(ShExLCompilerTargetLanguage.Java)
-        .get
-        .foreach(source => println(source.getSource))
+    ccontext = CompilationContext.withConfig(cconfig)
+
+    // 1. Parse the vile and get the syntax tree.
+    val syntaxTree = Parser.parseText(shexl, ccontext)
+    /*val syntaxTree = Parser.parseFile(
+      "test/assets/correct_schema_big_schema_2.shexl",
+      ccontext
+    )*/
+
+    // No errors should be generated
+    assert(!ccontext.getErrorHandler.hasErrorMsgs)
+
+    // 2. Get the AST.
+    val ast = AbstractSyntaxTree.getAST(syntaxTree)
+
+    // No errors should be generated
+    assert(!ccontext.getErrorHandler.hasErrorMsgs)
+
+    // Print the AST.
+    println(
+      ast.getRoot
+        .asInstanceOf[Schema]
+        .accept(new ASTPrinter(), new StringBuilder())
     )
-    val expected =
-      "import java.util.List;\n\npublic class User {\n\tprivate String name;\n\tprivate String surname;\n\tprivate int age;\n\tprivate List<User> knows;\n\n\tpublic User(String name, String surname, int age, List<User> knows) {\n\t\tthis.name = name;\n\t\tthis.surname = surname;\n\t\tthis.age = age;\n\t\tthis.knows = knows;\n\t}\n\n\tpublic String getName() {\n\t\treturn this.name;\n\t}\n\n\tpublic void setName(String name) {\n\t\tthis.name = name;\n\t}\n\n\tpublic String getSurname() {\n\t\treturn this.surname;\n\t}\n\n\tpublic void setSurname(String surname) {\n\t\tthis.surname = surname;\n\t}\n\n\tpublic int getAge() {\n\t\treturn this.age;\n\t}\n\n\tpublic void setAge(int age) {\n\t\tthis.age = age;\n\t}\n\n\tpublic List<User> getKnows() {\n\t\treturn this.knows;\n\t}\n\n\tpublic void setKnows(List<User> knows) {\n\t\tthis.knows = knows;\n\t}\n\n}\npublic class Car {\n\tprivate String platenumber;\n\tprivate User owner;\n\n\tpublic Car(String platenumber, User owner) {\n\t\tthis.platenumber = platenumber;\n\t\tthis.owner = owner;\n\t}\n\n\tpublic String getPlatenumber() {\n\t\treturn this.platenumber;\n\t}\n\n\tpublic void setPlatenumber(String platenumber) {\n\t\tthis.platenumber = platenumber;\n\t}\n\n\tpublic User getOwner() {\n\t\treturn this.owner;\n\t}\n\n\tpublic void setOwner(User owner) {\n\t\tthis.owner = owner;\n\t}\n\n}\n"
-    val results = compileResult.getIndividualResults.head.getGeneratedSources
-      .get(ShExLCompilerTargetLanguage.Java)
-      .get
-    val res_1 = results.toList(0).getSource
-    val res_2 = results.toList(1).getSource
 
-    assert((res_1 + res_2).equals(expected))
+    // 3. Get SIL.
+    val sil = SIL.getSIL(ast)
 
-    compileResult = compiler
-      .addSource("test/assets/incorrect_schema_big_schema_2.shexl")
-      .compile
-      .getCompilationResult
+    // Errors should be generated
+    assert(ccontext.getErrorHandler.hasErrorMsgs)
 
-    assert(compileResult.hasErrors)
+    // 4. Dispatch the IRGen. This step it is not mandatory as we are not
+    // generating code...
+    val ir = IR.getIR(sil)
 
-    if (compileResult.hasErrors) {
-      //compileResult.getIndividualResults.foreach(result => result.getErrors.foreach(err => println(err.getMessage)))
-    } else {
-      assert(!compileResult.hasErrors)
-      //compileResult.getIndividualResults.foreach(result => result.getGeneratedSchema.head.accept(new PrettyPrintASTVisitor(), new StringBuilder()))
-    }
+    // If any error during compilation print them.
+    //for (error <- ccontext.getErrorHandler.getErrors) {
+    //  println(error.toPrintableString)
+    //}
 
-    //compileResult.getIndividualResults.foreach(result => result.getGeneratedSources.get(ShExLCompilerTargetLanguage.Java).get.foreach(source => println(source.getSource)))
+    // No errors should be generated
+    assert(ccontext.getErrorHandler.hasErrorMsgs)
+
+    // If any warning print them.
+    //for (warning <- ccontext.getErrorHandler.getWarnings) {
+    //  println(warning.toPrintableString)
+    //}
+
+    // Check that no errors where generated.
+    //assert(!ccontext.getErrorHandler.hasErrorMsgs)
+
+    // Print the result
+    //println(ir.getSources.get(TargetIR.Java).get(0)._2)
   }
 
 }

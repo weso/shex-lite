@@ -35,21 +35,33 @@ import org.antlr.v4.runtime.misc.Interval
   * in the source code.
   *
   * @author Guillermo Facundo Colunga
-  * @param line   in the source code where the token that generates de Base Definition Statement is located.
-  * @param column in the source code where the token that generates de Base Definition Statement is located.
-  * @param value  of the real number.
   */
 class LiteralRealValueExpr(
-  line: Int,
-  column: Int,
-  interval: Interval,
+  position: Position,
+  tokenRange: Interval,
   content: String,
   val value: Double
-) extends LiteralExpr
+) extends LiteralExpr(position, tokenRange, content)
     with ConstraintValidValueSetExpr {
-  override def getPosition: Position = Position.pos(line, column)
 
-  override def getRange: Interval = interval
+  // Override default methods to indicate that this is a Literal Real Value Expression.
+  override def isLiteralRealValueExpr: Boolean              = true
+  override def asLiteralRealValueExpr: LiteralRealValueExpr = this
+
+  /**
+    * Gets the position object that points to the source file.
+    *
+    * @return a position object containing the position in the source file.
+    */
+  override def getPosition: Position = position
+
+  /**
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content would be 'a = 3'.
+    *
+    * @return the content of the node as a String.
+    */
+  override def getRange: Interval = tokenRange
 
   /**
     * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
@@ -59,16 +71,19 @@ class LiteralRealValueExpr(
     */
   override def getContent: String = content
 
-  // Override default methods to indicate that this is a Literal Real Value Expression.
-  override def isLiteralRealValueExpr: Boolean = true
-
-  override def asLiteralRealValueExpr: LiteralRealValueExpr = this
-
+  /**
+    * Accept method for visitor support.
+    *
+    * @param visitor the visitor implementation.
+    * @param param   is the parameter passed to the visitor (of type A).
+    * @tparam TP is the type the user parameter passed to the visitor.
+    * @tparam TR is the type of the return value of the visitor.
+    * @return the result of the visit (of type TR).
+    */
   override def accept[TP, TR](
     visitor: ASTGenericWalker[TP, TR],
     param: TP
   ): TR = {
     visitor.visit(this, param)
   }
-
 }

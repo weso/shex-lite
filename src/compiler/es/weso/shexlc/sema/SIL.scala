@@ -70,20 +70,7 @@ object SIL {
   def getSIL(abstractSyntaxTree: AbstractSyntaxTree): SIL =
     new SIL {
 
-      /**
-        * Gets the compilation context.
-        *
-        * @return the compilation context.
-        */
-      override def getCompilationContext: CompilationContext =
-        abstractSyntaxTree.getCompilationContext
-
-      /**
-        * Gets the entry point for the graph that represents the shex-lite intermediate language.
-        *
-        * @return the abstract ast node that represents the entry point of the graph. Will be an schema always.
-        */
-      override def getGraphEntryPoint: AbstractASTNode = {
+      val graphEntryPoint = {
         // First the type checking of the AST
         abstractSyntaxTree.getRoot
           .accept(new TypeCheck(abstractSyntaxTree.getCompilationContext), ())
@@ -107,5 +94,20 @@ object SIL {
         // Return the graph entry point.
         abstractSyntaxTree.getRoot
       }
+
+      /**
+        * Gets the compilation context.
+        *
+        * @return the compilation context.
+        */
+      override def getCompilationContext: CompilationContext =
+        abstractSyntaxTree.getCompilationContext
+
+      /**
+        * Gets the entry point for the graph that represents the shex-lite intermediate language.
+        *
+        * @return the abstract ast node that represents the entry point of the graph. Will be an schema always.
+        */
+      override def getGraphEntryPoint: AbstractASTNode = graphEntryPoint
     }
 }

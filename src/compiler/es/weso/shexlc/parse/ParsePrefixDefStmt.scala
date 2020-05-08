@@ -29,6 +29,7 @@ package es.weso.shexlc.parse
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.Expression
 import es.weso.shexlc.parse.ast.stmt.PrefixDefStmt
+import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
@@ -47,14 +48,17 @@ class ParsePrefixDefStmt(
 ) extends HasParseResult[PrefixDefStmt] {
 
   override def getParseResult: PrefixDefStmt = {
-    val line     = ctx.start.getLine
-    val column   = ctx.start.getCharPositionInLine
-    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content  = ccontext.getInputContext.getText(interval)
+    val sourceName = ccontext.getInputContext.getSourceName
+    val line       = ctx.start.getLine
+    val column     = ctx.start.getCharPositionInLine
+    val pos        = Position.pos(sourceName, line, column)
+    val tokenRange =
+      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content = ccontext.getInputContext.getText(tokenRange)
 
     val label           = if (ctx.IDENTIFIER() == null) "" else ctx.IDENTIFIER().getText
     val iri: Expression = ctx.iri.accept(visitor).asExpression()
 
-    new PrefixDefStmt(line, column, interval, content, label, iri)
+    new PrefixDefStmt(pos, tokenRange, content, label, iri)
   }
 }

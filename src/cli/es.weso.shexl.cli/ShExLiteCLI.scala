@@ -26,6 +26,10 @@
 
 package es.weso.shexl.cli
 
+import es.weso.shexlc.internal.{CompilationConfig, CompilationContext}
+import es.weso.shexlc.parse.{AbstractSyntaxTree, Parser}
+import es.weso.shexlc.sema.SIL
+import es.weso.shexlc.IRGen.IR
 import org.backuity.clist.{args, opt, CliMain}
 
 object ShExLiteCLI
@@ -43,30 +47,41 @@ object ShExLiteCLI
     abbrev      = "gd",
     description = "if present will generate domain object models"
   )
-  // var targetLanguage              = opt[String](default = "none", description = "sets the target language [java, scala, yml, ...]")
+
   var files = args[Seq[String]](description = "ShEx-Lite sources to compile")
 
   def run: Unit = {
-    // Create the compiler.
-    val compiler = new ShExLCompilerImpl()
 
-    // Set the configuration.
-    compiler.setConfiguration(new ShExLCompilerConfig {
+    // Create the compiler config from the received config.
+    val cconfig = new CompilationConfig {
+      override def generateIR: Boolean       = generateDomainModelObjects
       override def generateWarnings: Boolean = !hideWarnings
-      override def generateCode: Boolean     = generateDomainModelObjects
-    })
+    }
 
-    // Add the files to compile.
-    compiler.addSources(files.toList)
+    val ccontext = CompilationContext.withConfig(cconfig)
 
-    // Finally compile them.
-    compiler.compile
+    for (file <- files) {
+      // 1. Parse the vile and get the syntax tree.
+      val syntaxTree = Parser.parseFile(file, ccontext)
 
-    compiler.getCompilationResult.getIndividualResults.foreach(res =>
-      res.printErrors
-    )
-    compiler.getCompilationResult.getIndividualResults.foreach(res =>
-      res.printWarnings
-    )
+      // 2. Get the AST.
+      val ast = AbstractSyntaxTree.getAST(syntaxTree)
+
+      // 3. Get SIL.
+      val sil = SIL.getSIL(ast)
+
+      // 4. Dispatch the IRGen.
+      val ir = IR.getIR(sil)
+    }
+
+    // If any error during compilation print them.
+    for (error <- ccontext.getErrorHandler.getErrors) {
+      println(error.toPrintableString)
+    }
+
+    // If any warning print them.
+    for (warning <- ccontext.getErrorHandler.getWarnings) {
+      println(warning.toPrintableString)
+    }
   }
 }

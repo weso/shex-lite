@@ -28,6 +28,7 @@ package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.{ConstraintBlockTripleExpr, Expression}
+import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
@@ -48,10 +49,14 @@ class ParseConstraintBlockTripleExpr(
 ) extends HasParseResult[ConstraintBlockTripleExpr] {
 
   override def getParseResult: ConstraintBlockTripleExpr = {
-    val line     = ctx.start.getLine
-    val column   = ctx.start.getCharPositionInLine
-    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content  = ccontext.getInputContext.getText(interval)
+
+    val sourceName = ccontext.getInputContext.getSourceName
+    val line       = ctx.start.getLine
+    val column     = ctx.start.getCharPositionInLine
+    val pos        = Position.pos(sourceName, line, column)
+    val tokenRange =
+      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content = ccontext.getInputContext.getText(tokenRange)
 
     // Would be nice to avoid the as Instance Of here...
     val expressions: List[Expression] = ctx
@@ -61,6 +66,6 @@ class ParseConstraintBlockTripleExpr(
       .toList
       .asInstanceOf[List[Expression]]
 
-    new ConstraintBlockTripleExpr(line, column, interval, content, expressions)
+    new ConstraintBlockTripleExpr(pos, tokenRange, content, expressions)
   }
 }

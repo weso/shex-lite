@@ -27,7 +27,7 @@
 package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
-import es.weso.shexlc.parse.ast.AbstractASTNode
+import es.weso.shexlc.parse.ast.{AbstractASTNode, Schema}
 import es.weso.shexlc.parse.generated.ShexLiteParser
 
 /**
@@ -87,6 +87,8 @@ object AbstractSyntaxTree {
             ] // It must be always a SchemaContext
             .accept(new ASTBuilderParser(syntaxTree.getCompilationContext))
         )
+
+        root.get.asInstanceOf[Schema].accept(new SyntaxTreeParentBuilder(), ())
 
         root.get // If not present will throw an exception. Should we deal only with options?
       }

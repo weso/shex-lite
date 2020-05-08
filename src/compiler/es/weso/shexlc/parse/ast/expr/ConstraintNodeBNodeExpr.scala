@@ -35,28 +35,30 @@ import org.antlr.v4.runtime.misc.Interval
   * than the classification of the node constraint type.
   *
   * @author Guillermo Facundo Colunga
-  * @param line   in the source code where the token that generates de Base Definition Statement is located.
-  * @param column in the source code where the token that generates de Base Definition Statement is located.
   */
 class ConstraintNodeBNodeExpr(
-  line: Int,
-  column: Int,
-  interval: Interval,
+  position: Position,
+  tokenRange: Interval,
   content: String
-) extends ConstraintNodeExpr {
-  override def getPosition: Position = Position.pos(line, column)
+) extends ConstraintNodeExpr(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Constraint Node BNode Expression.
-  override def isConstraintNodeBNodeExpr: Boolean = true
-
+  override def isConstraintNodeBNodeExpr: Boolean                 = true
   override def asConstraintNodeBNodeExpr: ConstraintNodeBNodeExpr = this
 
-  override def accept[TP, TR](
-    visitor: ASTGenericWalker[TP, TR],
-    param: TP
-  ): TR = {
-    visitor.visit(this, param)
-  }
+  /**
+    * Gets the position object that points to the source file.
+    *
+    * @return a position object containing the position in the source file.
+    */
+  override def getPosition: Position = position
+
+  /**
+    * Gets the range of tokens from the source on which the node was generated.
+    *
+    * @return the range of tokens from the source on which the node was generated.
+    */
+  override def getRange: Interval = tokenRange
 
   /**
     * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
@@ -67,9 +69,18 @@ class ConstraintNodeBNodeExpr(
   override def getContent: String = content
 
   /**
-    * Gets the range of tokens from the source on which the node was generated.
+    * Accept method for visitor support.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @param visitor the visitor implementation.
+    * @param param   is the parameter passed to the visitor (of type A).
+    * @tparam TP is the type the user parameter passed to the visitor.
+    * @tparam TR is the type of the return value of the visitor.
+    * @return the result of the visit (of type TR).
     */
-  override def getRange: Interval = interval
+  override def accept[TP, TR](
+    visitor: ASTGenericWalker[TP, TR],
+    param: TP
+  ): TR = {
+    visitor.visit(this, param)
+  }
 }

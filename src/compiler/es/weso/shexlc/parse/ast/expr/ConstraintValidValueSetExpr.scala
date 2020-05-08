@@ -38,7 +38,6 @@ package es.weso.shexlc.parse.ast.expr
 trait ConstraintValidValueSetExpr extends ConstraintNodeExpr {
 
   // Override default methods to indicate that this is a Constraint Node Valid Value Set Expression.
-  override def isConstraintValidValueSetExpr: Boolean = true
-
+  override def isConstraintValidValueSetExpr: Boolean                     = true
   override def asConstraintValidValueSetExpr: ConstraintValidValueSetExpr = this
 }

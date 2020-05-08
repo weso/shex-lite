@@ -31,6 +31,7 @@ import java.util.Objects
 import com.typesafe.scalalogging.Logger
 import es.weso.shexlc.parse.ast.expr.LiteralIRIValueExpr
 import es.weso.shexlc.parse.ast.stmt._
+import es.weso.shexlc.parse.ast.Position
 import org.antlr.v4.runtime.misc.Interval
 
 import scala.collection.mutable.HashMap
@@ -48,10 +49,15 @@ class SymbolHashTable extends SymbolTable {
   // Initial base and start definitions.
   private var _base = new DefaultSymbolTableEntry[BaseDefStmt](
     new BaseDefStmt(
-      0,
-      0,
-      null,
-      new LiteralIRIValueExpr(0, 0, null, DEFAULT_BASE)
+      Position.HOME,
+      new Interval(0, 0),
+      "base = <es.weso.shexlc.internal://base>",
+      new LiteralIRIValueExpr(
+        Position.HOME,
+        new Interval(0, 0),
+        "<es.weso.shexlc.internal://base>",
+        DEFAULT_BASE
+      )
     )
   )
 
@@ -131,10 +137,15 @@ class SymbolHashTable extends SymbolTable {
   def restore(): Unit = {
     _base = new DefaultSymbolTableEntry[BaseDefStmt](
       new BaseDefStmt(
-        0,
-        0,
+        Position.HOME,
         new Interval(0, 0),
-        new LiteralIRIValueExpr(0, 0, new Interval(0, 0), DEFAULT_BASE)
+        "base = <es.weso.shexlc.internal://base>",
+        new LiteralIRIValueExpr(
+          Position.HOME,
+          new Interval(0, 0),
+          "<es.weso.shexlc.internal://base>",
+          DEFAULT_BASE
+        )
       )
     )
     _start = null

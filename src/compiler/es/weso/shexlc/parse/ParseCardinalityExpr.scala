@@ -28,6 +28,7 @@ package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.CardinalityExpr
+import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
@@ -45,41 +46,42 @@ class ParseCardinalityExpr(
 ) extends HasParseResult[CardinalityExpr] {
 
   override def getParseResult: CardinalityExpr = {
-    val line     = ctx.start.getLine
-    val column   = ctx.start.getCharPositionInLine
-    val interval = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content  = ccontext.getInputContext.getText(interval)
+
+    val sourceName = ccontext.getInputContext.getSourceName
+    val line       = ctx.start.getLine
+    val column     = ctx.start.getCharPositionInLine
+    val pos        = Position.pos(sourceName, line, column)
+    val tokenRange =
+      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content = ccontext.getInputContext.getText(tokenRange)
 
     if (ctx.min == null) {
       // If there is no min value is because it is a built in cardinality.
       ctx.getText match {
         case "*" =>
           new CardinalityExpr(
-            line,
-            column,
-            interval,
+            pos,
+            tokenRange,
             content,
             CardinalityExpr.MinValue,
             CardinalityExpr.MaxValue
           )
         case "+" =>
           new CardinalityExpr(
-            line,
-            column,
-            interval,
+            pos,
+            tokenRange,
             content,
             CardinalityExpr.MinValue + 1,
             CardinalityExpr.MaxValue
           )
-        case "?" => new CardinalityExpr(line, column, interval, content, 0, 1)
+        case "?" => new CardinalityExpr(pos, tokenRange, content, 0, 1)
       }
     } else {
       // If it is not a built in cardinality thn we have to check which case of the allowed ones is.
       if (ctx.max != null) {
         new CardinalityExpr(
-          line,
-          column,
-          interval,
+          pos,
+          tokenRange,
           content,
           Integer.parseInt(ctx.min.getText),
           Integer.parseInt(ctx.max.getText)
@@ -87,18 +89,16 @@ class ParseCardinalityExpr(
       } else {
         if (ctx.getText.contains(",")) {
           new CardinalityExpr(
-            line,
-            column,
-            interval,
+            pos,
+            tokenRange,
             content,
             Integer.parseInt(ctx.min.getText),
             Int.MaxValue
           )
         } else {
           new CardinalityExpr(
-            line,
-            column,
-            interval,
+            pos,
+            tokenRange,
             content,
             Integer.parseInt(ctx.min.getText),
             Integer.parseInt(ctx.min.getText)
