@@ -48,11 +48,10 @@ class SchemaTest extends AnyFunSuite {
     val shexl =
       s"""prefix : <http://www.google.es>
          |prefix xsd: <http://www.schema.org/>
-         |prefix xsd: <sdafasdf>
          |base <http://thebase.com/>
          |start = @:User
          |:User {
-         |  :name  xsd:string  ;
+         |  :name  xsds:string  ;
          |  :surname . ;
          |}
          |""".stripMargin
@@ -93,9 +92,9 @@ class SchemaTest extends AnyFunSuite {
     val ir = IR.getIR(sil)
 
     // If any error during compilation print them.
-    //for (error <- ccontext.getErrorHandler.getErrors) {
-    //  println(error.toPrintableString)
-    //}
+    for (error <- ccontext.getErrorHandler.getErrors) {
+      println(error.toPrintableString)
+    }
 
     // No errors should be generated
     assert(ccontext.getErrorHandler.hasErrorMsgs)
