@@ -80,6 +80,24 @@ ShEx-Lite uses SBT and scala. So build the project is as easy as go to the root 
 sbt assembly
 ```
 
+### Using the CLI tool
+After building the `.jar` this tool can be used be means of the following instruction-set.
+```
+Usage
+
+ shexlc [options] <files> ... : Compile and generate target domain model objects
+
+Options
+
+   -hw, --hide-warn  : If present will hide the warnings
+   --java-pkg=STRING : If present will generate java domain object models with the given package
+   --out-dir=STRING  : Sets the out directory where the sources will be generated
+
+Arguments
+
+   <files> : ShEx-Lite sources to compile
+```
+
 ## Testing ShEx Lite
 We encourage you to add as much tests as possible and then run the previous existing ones with your new tests. As more tests we can do more confident about its behaviour that we will be. In the folder `test` you will find all resources that might be need.
 
