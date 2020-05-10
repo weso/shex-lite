@@ -39,7 +39,7 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext)
 
   private[this] var stringBuilder =
     new StringBuilder() // This string builder will contain the generated sources.
-  private[shexlc] var generatedSources = new ListBuffer[(String, String)].empty
+  private[shexlc] var generatedSources = ListBuffer.empty[(String, String)]
 
   private[this] var className: String = ""
 

@@ -82,7 +82,7 @@ object ErrorHandler {
   def empty: ErrorHandler =
     new ErrorHandler {
 
-      private[this] var events      = new ListBuffer[CompilationEvent].empty
+      private[this] var events      = ListBuffer.empty[CompilationEvent]
       private[this] var hasErrors   = false;
       private[this] var hasWarnings = false;
 

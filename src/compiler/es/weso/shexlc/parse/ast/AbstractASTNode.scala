@@ -64,7 +64,7 @@ abstract class AbstractASTNode(
   private[this] var parent: Option[NodeWithParent] = Option.empty
 
   // The compiler events from this node.
-  private[this] var compilerEvents = new ListBuffer[CompilationEvent].empty
+  private[this] var compilerEvents = ListBuffer.empty[CompilationEvent]
   private[this] var _hasErrors     = false
   private[this] var _hasWarnings   = false
 

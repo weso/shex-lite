@@ -77,7 +77,7 @@ object CompilationResult {
       private[this] var _hasErrors   = false
       private[this] var _hasWarnings = false
       private[this] var individualResults =
-        new ListBuffer[CompilationIndividualResult].empty
+        ListBuffer.empty[CompilationIndividualResult]
 
       /**
         * Indicates if any of the sources compiled contains an error.
