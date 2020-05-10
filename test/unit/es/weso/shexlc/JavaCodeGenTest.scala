@@ -147,7 +147,8 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
          |""".stripMargin
 
     val result =
-      "public class User {\n\tprivate String name;\n\n\tpublic " +
+      "package generated;\npublic class User {\n\tprivate String name;" +
+      "\n\n\tpublic " +
       "User(String name) {\n\t\tthis.name = name;\n\t}\n\n\tpublic String " +
       "getName() {\n\t\treturn this.name;\n\t}\n\n\tpublic void " +
       "setName(String name) {\n\t\tthis.name = name;\n\t}\n\n}\n"

@@ -27,10 +27,15 @@
 package es.weso.shexl.cli
 
 import es.weso.shexlc.internal.{CompilationConfig, CompilationContext}
-import es.weso.shexlc.parse.{AbstractSyntaxTree, Parser}
 import es.weso.shexlc.sema.SIL
-import es.weso.shexlc.IRGen.IR
+import es.weso.shexlc.IRGen.{IR, TargetIR}
+import es.weso.shexlc.parse.{AbstractSyntaxTree, Parser}
 import org.backuity.clist.{args, opt, CliMain}
+
+import scala.collection.mutable
+
+import java.io.File
+import java.io.PrintWriter
 
 object ShExLiteCLI
     extends CliMain[Unit](
@@ -38,14 +43,20 @@ object ShExLiteCLI
       description = "compile and generate target domain model objects"
     ) {
 
-  var hideWarnings = opt[Boolean](
+  var hideWarn = opt[Boolean](
     abbrev      = "hw",
     description = "if present will hide the warnings"
   )
-  var generateDomainModelObjects = opt[Boolean](
-    default     = false,
-    abbrev      = "gd",
-    description = "if present will generate domain object models"
+
+  var javaPkg = opt[String](
+    default = "",
+    description = "If present will generate java domain object models with " +
+      "the given package"
+  )
+
+  var outDir = opt[String](
+    default     = "out",
+    description = "Sets the out directory where the sources will be generated"
   )
 
   var files = args[Seq[String]](description = "ShEx-Lite sources to compile")
@@ -54,8 +65,25 @@ object ShExLiteCLI
 
     // Create the compiler config from the received config.
     val cconfig = new CompilationConfig {
-      override def generateIR: Boolean       = generateDomainModelObjects
-      override def generateWarnings: Boolean = !hideWarnings
+
+      val prop = mutable.HashMap.empty[String, String]
+
+      override def generateIR: Boolean =
+        if (!javaPkg.isEmpty)
+          true
+        else false
+
+      override def getProperties: mutable.HashMap[String, String] = {
+        prop.put("java-package", javaPkg)
+        prop
+      }
+
+      override def generateWarnings: Boolean = !hideWarn
+
+      override def getTIR: Set[TargetIR] =
+        if (!javaPkg.isEmpty)
+          List(TargetIR.Java).toSet
+        else Set.empty
     }
 
     val ccontext = CompilationContext.withConfig(cconfig)
@@ -72,6 +100,19 @@ object ShExLiteCLI
 
       // 4. Dispatch the IRGen.
       val ir = IR.getIR(sil)
+
+      // 5. Write the generated files.
+      if (cconfig.generateIR) {
+        ir.getSources
+          .get(TargetIR.Java)
+          .get
+          .foreach(source => {
+            val file         = new File(s"$outDir/${source._1}.java")
+            val print_Writer = new PrintWriter(file)
+            print_Writer.write(source._2)
+            print_Writer.close()
+          })
+      }
     }
 
     // If any error during compilation print them.
