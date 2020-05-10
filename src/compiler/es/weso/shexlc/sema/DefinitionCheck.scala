@@ -65,7 +65,7 @@ class DefinitionCheck(ccontext: CompilationContext)
     if (Objects.nonNull(ccontext.getSymbolTable.getPrefix(stmt.label))) {
       ccontext.getErrorHandler.addEvent(
         new Err(
-          stmt.expression,
+          stmt,
           s"this prefix definition overrides the previous one " +
           s"(${existingSTValue.getLine}:${existingSTValue.getColumn}) with value " +
           s"${existingSTValue.expression.asLiteralIRIValueExpr.value}",

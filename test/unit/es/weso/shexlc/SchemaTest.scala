@@ -48,6 +48,7 @@ class SchemaTest extends AnyFunSuite {
     val shexl =
       s"""prefix : <http://www.google.es>
          |prefix xsd: <http://www.schema.org/>
+         |prefix xsd: <http://www.schema.org/>
          |base <http://thebase.com/>
          |start = @:User
          |:User {
@@ -59,17 +60,41 @@ class SchemaTest extends AnyFunSuite {
     ccontext = CompilationContext.withConfig(cconfig)
 
     // 1. Parse the vile and get the syntax tree.
-    val syntaxTree = Parser.parseText(shexl, ccontext)
-    /*val syntaxTree = Parser.parseFile(
-      "test/assets/correct_schema_big_schema_2.shexl",
+    //val syntaxTree = Parser.parseText(shexl, ccontext)
+    val syntaxTree = Parser.parseFile(
+      "test/assets/incorrect_schema_big_schema_2.shexl",
       ccontext
-    )*/
+    )
+
+    println("--- SYNTAX TREE PARSED ---")
+
+    // If any error during compilation print them.
+    for (error <- ccontext.getErrorHandler.getErrors) {
+      println(error.toPrintableString)
+    }
+
+    // If any warning print them.
+    for (warning <- ccontext.getErrorHandler.getWarnings) {
+      println(warning.toPrintableString)
+    }
 
     // No errors should be generated
     assert(!ccontext.getErrorHandler.hasErrorMsgs)
 
     // 2. Get the AST.
     val ast = AbstractSyntaxTree.getAST(syntaxTree)
+
+    println("--- ABSTRACT SYNTAX TREE PARSED ---")
+
+    // If any error during compilation print them.
+    for (error <- ccontext.getErrorHandler.getErrors) {
+      println(error.toPrintableString)
+    }
+
+    // If any warning print them.
+    for (warning <- ccontext.getErrorHandler.getWarnings) {
+      println(warning.toPrintableString)
+    }
 
     // No errors should be generated
     assert(!ccontext.getErrorHandler.hasErrorMsgs)
@@ -84,12 +109,26 @@ class SchemaTest extends AnyFunSuite {
     // 3. Get SIL.
     val sil = SIL.getSIL(ast)
 
+    println("--- SIL GENERATED ---")
+
+    // If any error during compilation print them.
+    for (error <- ccontext.getErrorHandler.getErrors) {
+      println(error.toPrintableString)
+    }
+
+    // If any warning print them.
+    for (warning <- ccontext.getErrorHandler.getWarnings) {
+      println(warning.toPrintableString)
+    }
+
     // Errors should be generated
     assert(ccontext.getErrorHandler.hasErrorMsgs)
 
     // 4. Dispatch the IRGen. This step it is not mandatory as we are not
     // generating code...
     val ir = IR.getIR(sil)
+
+    println("--- IR GENERATED ---")
 
     // If any error during compilation print them.
     for (error <- ccontext.getErrorHandler.getErrors) {
@@ -100,9 +139,9 @@ class SchemaTest extends AnyFunSuite {
     assert(ccontext.getErrorHandler.hasErrorMsgs)
 
     // If any warning print them.
-    //for (warning <- ccontext.getErrorHandler.getWarnings) {
-    //  println(warning.toPrintableString)
-    //}
+    for (warning <- ccontext.getErrorHandler.getWarnings) {
+      println(warning.toPrintableString)
+    }
 
     // Check that no errors where generated.
     //assert(!ccontext.getErrorHandler.hasErrorMsgs)

@@ -42,6 +42,7 @@ class SyntaxTreeParentBuilder extends ASTGenericWalker[Unit, Unit] {
     */
   override def visit(schema: Schema, param: Unit): Unit = {
     schema.stmts.foreach(stmt => schema.setAsParentOf(stmt))
+    schema.stmts.foreach(stmt => stmt.accept(this, param))
   }
 
   /**
@@ -53,6 +54,7 @@ class SyntaxTreeParentBuilder extends ASTGenericWalker[Unit, Unit] {
     */
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     stmt.setAsParentOf(stmt.expression)
+    stmt.expression.accept(this, param)
   }
 
   /**
@@ -64,6 +66,7 @@ class SyntaxTreeParentBuilder extends ASTGenericWalker[Unit, Unit] {
     */
   override def visit(stmt: ImportStmt, param: Unit): Unit = {
     stmt.setAsParentOf(stmt.expression)
+    stmt.expression.accept(this, param)
   }
 
   /**
@@ -75,6 +78,7 @@ class SyntaxTreeParentBuilder extends ASTGenericWalker[Unit, Unit] {
     */
   override def visit(stmt: PrefixDefStmt, param: Unit): Unit = {
     stmt.setAsParentOf(stmt.expression)
+    stmt.expression.accept(this, param)
   }
 
   /**
@@ -87,6 +91,8 @@ class SyntaxTreeParentBuilder extends ASTGenericWalker[Unit, Unit] {
   override def visit(stmt: ShapeDefStmt, param: Unit): Unit = {
     stmt.setAsParentOf(stmt.label)
     stmt.setAsParentOf(stmt.expression)
+    stmt.label.accept(this, param)
+    stmt.expression.accept(this, param)
   }
 
   /**
@@ -98,6 +104,7 @@ class SyntaxTreeParentBuilder extends ASTGenericWalker[Unit, Unit] {
     */
   override def visit(stmt: StartDefStmt, param: Unit): Unit = {
     stmt.setAsParentOf(stmt.expression)
+    stmt.expression.accept(this, param)
   }
 
   /**
@@ -118,6 +125,7 @@ class SyntaxTreeParentBuilder extends ASTGenericWalker[Unit, Unit] {
     */
   override def visit(expr: CallShapeExpr, param: Unit): Unit = {
     expr.setAsParentOf(expr.label)
+    expr.label.accept(this, param)
   }
 
   /**
@@ -147,6 +155,7 @@ class SyntaxTreeParentBuilder extends ASTGenericWalker[Unit, Unit] {
     */
   override def visit(expr: ConstraintBlockTripleExpr, param: Unit): Unit = {
     expr.body.foreach(tex => expr.setAsParentOf(tex))
+    expr.body.foreach(tex => tex.accept(this, param))
   }
 
   /**
@@ -205,6 +214,10 @@ class SyntaxTreeParentBuilder extends ASTGenericWalker[Unit, Unit] {
     expr.setAsParentOf(expr.property)
     expr.setAsParentOf(expr.constraint)
     expr.setAsParentOf(expr.cardinality)
+
+    expr.property.accept(this, param)
+    expr.constraint.accept(this, param)
+    expr.cardinality.accept(this, param)
   }
 
   /**
@@ -216,6 +229,7 @@ class SyntaxTreeParentBuilder extends ASTGenericWalker[Unit, Unit] {
     */
   override def visit(expr: ConstraintValueSetExpr, param: Unit): Unit = {
     expr.values.foreach(value => expr.setAsParentOf(value))
+    expr.values.foreach(value => value.accept(this, param))
   }
 
   /**

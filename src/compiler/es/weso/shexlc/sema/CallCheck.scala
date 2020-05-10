@@ -93,7 +93,7 @@ class CallCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
         new Err(
           expr.label,
           cause,
-          Err.BaseNotFound
+          Err.ShapeNotFound
         )
       )
     } else {

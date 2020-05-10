@@ -71,7 +71,8 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
   override def visit(stmt: PrefixDefStmt, param: StringBuilder): String = {
     val sb = new StringBuilder()
     sb.append(
-      s"(prefix_def label='${stmt.label}' iri='${stmt.expression.accept(this, param)}')"
+      s"(prefix_def label='${stmt.label}' iri='${stmt.expression
+        .accept(this, param)}' content='${stmt.getContent}')"
     )
     sb.toString()
   }

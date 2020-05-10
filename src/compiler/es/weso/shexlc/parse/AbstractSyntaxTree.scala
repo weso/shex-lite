@@ -70,28 +70,23 @@ object AbstractSyntaxTree {
   def getAST(syntaxTree: SyntaxTree): AbstractSyntaxTree =
     new AbstractSyntaxTree {
 
-      private var root = Option.empty[AbstractASTNode]
+      private val root = syntaxTree.getTree
+        .asInstanceOf[
+          ShexLiteParser.SchemaContext
+        ] // It must be always a SchemaContext
+        .accept(new ASTBuilderParser(syntaxTree.getCompilationContext))
 
-      new ASTBuilderParser(syntaxTree.getCompilationContext)
+      // Execute the tree parent builder to add all corresponding parents.
+      root
+        .asInstanceOf[Schema]
+        .accept(new SyntaxTreeParentBuilder(), ())
 
       /**
         * Gets the root of the tree.
         *
         * @return the root of the tree.
         */
-      override def getRoot: AbstractASTNode = {
-        root = Option(
-          syntaxTree.getTree
-            .asInstanceOf[
-              ShexLiteParser.SchemaContext
-            ] // It must be always a SchemaContext
-            .accept(new ASTBuilderParser(syntaxTree.getCompilationContext))
-        )
-
-        root.get.asInstanceOf[Schema].accept(new SyntaxTreeParentBuilder(), ())
-
-        root.get // If not present will throw an exception. Should we deal only with options?
-      }
+      override def getRoot: AbstractASTNode = root
 
       /**
         * Gets the compilation context.

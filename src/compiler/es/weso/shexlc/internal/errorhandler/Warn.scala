@@ -26,7 +26,7 @@
 
 package es.weso.shexlc.internal.errorhandler
 
-import es.weso.shexlc.parse.ast.{AbstractASTNode, Position}
+import es.weso.shexlc.parse.ast.{AbstractASTNode, Position, Schema}
 
 /**
   * Represents a warning event that occurred during the compilation process. A warning contains the position in the
@@ -82,25 +82,58 @@ case class Warn(
     * @return the event as a printable string.
     */
   override def toPrintableString: String = {
-    val sb = new StringBuilder()
-    sb.append(
+
+    val errTitle =
       s"${Console.YELLOW}error[${ttype.getCode}]: ${Console.RESET}${ttype.getDescription}"
-    )
-    sb.append("\n")
-    sb.append(
+
+    val errPos =
       s"--> ${node.getPosition.filename}:${node.getPosition.line}:${node.getPosition.column}"
-    )
+
+    var errContext = ""
+
+    node.getParent match {
+      case Some(parent) => {
+        if (parent.isInstanceOf[Schema]) {
+          errContext = node.getContent
+        } else {
+          errContext = parent
+            .asInstanceOf[AbstractASTNode]
+            .getContent
+        }
+      }
+      case None => errContext = node.getContent
+    }
+
+    val sb = new StringBuilder()
+    sb.append(errTitle)
+    sb.append("\n")
+    sb.append(errPos)
     sb.append(s"\n\t${Console.CYAN}|${Console.RESET} ")
     sb.append(s"\n${Console.CYAN}${node.getPosition.line}\t|${Console.RESET} ")
-    sb.append(s"${node.getContent}")
+    sb.append(errContext)
     sb.append(s"\n\t${Console.CYAN}|${Console.RESET} ")
 
-    val spaces = node.getRange.a - node.getParent.get
+    var absolute = 0
+    if (node.getParent.isDefined)
+      absolute = node.getParent.get
         .asInstanceOf[AbstractASTNode]
         .getRange
         .a
 
-    for (i <- 0 to spaces - 1) {
+    var spaces = node.getRange.a - absolute
+
+    node.getParent match {
+      case Some(parent) => {
+        if (parent.isInstanceOf[Schema]) {
+          spaces = 0
+        } else {
+          spaces = node.getRange.a - absolute
+        }
+      }
+      case None => spaces = 0
+    }
+
+    for (i <- 0 to (spaces - 1)) {
       sb.append(" ")
     }
 

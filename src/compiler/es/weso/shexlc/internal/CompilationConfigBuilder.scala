@@ -37,7 +37,7 @@ import es.weso.shexlc.IRGen.TargetIR
 case class CompilationConfigBuilder() {
 
   // Should warnings be generated?
-  private var warnings = false
+  private var warnings = true
 
   // Should warnings be generated?
   private var generateIR = false
@@ -91,9 +91,9 @@ case class CompilationConfigBuilder() {
     }
 
     // Reset internal object values to default.
-    this.generateIR = false
-    this.warnings   = true
-    this.TIR        = Set.empty
+    //this.generateIR = false
+    //this.warnings   = true
+    //this.TIR        = Set.empty
 
     // return the previous created object.
     returnValue

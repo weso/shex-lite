@@ -120,7 +120,13 @@ object ErrorHandler {
         * @return the list warnings that the event handler contains.
         */
       override def getWarnings: List[Warn] =
-        events.filter(event => event.isWarning).asInstanceOf
+        events
+          .filter(event => event.isWarning)
+          .map(event =>
+            event
+              .asInstanceOf[Warn]
+          )
+          .toList
 
       /**
         * Adds a single compiler event.
