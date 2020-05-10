@@ -43,6 +43,10 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext)
 
   private[this] var className: String = ""
 
+  private[this] val ppackage: String = ccontex.getConfiguration.getProperties
+    .get("java-package")
+    .getOrElse("generated")
+
   override def visit(stmt: ShapeDefStmt, param: String): Unit = {
 
     // Clean the string builder where the class will be generated.
@@ -56,6 +60,10 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext)
     val constructorGen =
       new CGJava04ConstructorGenerator(ccontex, stringBuilder)
     val getSetGen = new CGJava05GetSetGenerator(ccontex, stringBuilder)
+
+    // Package declaration
+    stringBuilder.append(s"package $ppackage;")
+    stringBuilder.append("\n")
 
     // Imports generator
     stmt.accept(new CGJava021ImportGenerator(ccontex, stringBuilder), null)

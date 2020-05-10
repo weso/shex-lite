@@ -28,6 +28,8 @@ package es.weso.shexlc.internal
 
 import es.weso.shexlc.IRGen.TargetIR
 
+import scala.collection.mutable.HashMap
+
 /**
   * The compilation configuration is a basic configuration that is passed to through the compilation context to all the
   * different tasks that take place and are the individual tasks who decide if they need to be executed or not.
@@ -37,7 +39,8 @@ import es.weso.shexlc.IRGen.TargetIR
   * @author Guillermo Facundo Colunga
   */
 trait CompilationConfig {
-  def generateWarnings: Boolean = true
-  def generateIR: Boolean       = false
-  def getTIR: Set[TargetIR]     = Set.empty[TargetIR]
+  def generateWarnings: Boolean              = true
+  def generateIR: Boolean                    = false
+  def getTIR: Set[TargetIR]                  = Set.empty[TargetIR]
+  def getProperties: HashMap[String, String] = HashMap.empty[String, String]
 }
