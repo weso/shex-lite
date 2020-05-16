@@ -89,7 +89,7 @@ case class Warn(
   override def toPrintableString: String = {
 
     val errTitle =
-      s"${Console.YELLOW}error[${ttype.getCode}]: ${Console.RESET}${ttype.getDescription}"
+      s"${Console.YELLOW}warning[${ttype.getCode}]: ${Console.RESET}${ttype.getDescription}"
 
     val errPos =
       s"--> ${node.getPosition.filename}:${node.getPosition.line}:${node.getPosition.column}"
