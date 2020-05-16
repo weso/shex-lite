@@ -36,6 +36,7 @@ import es.weso.shexlc.parse.generated.{
   ShexLiteParser,
   ShexLiteParserBaseVisitor
 }
+import org.antlr.v4.runtime.misc.Interval
 
 /**
   * This class checks that the input shape expressions are compatible with
@@ -44,7 +45,6 @@ import es.weso.shexlc.parse.generated.{
   * example of wat users can implement to check for oder syntax constraints.
   *
   * @author Guillermo Facundo Colunga
-  *
   * @param ccontext is the compiler context.
   */
 class CheckSyntaxTreeShexCompatibility(ccontext: CompilationContext)
@@ -66,11 +66,15 @@ class CheckSyntaxTreeShexCompatibility(ccontext: CompilationContext)
     // generate warnings flag from the configuration of the context is set to
     // true. Else will be skip.
     if (Objects.isNull(ctx.SEMI()) && ccontext.getConfiguration.generateWarnings) {
-
       val node = new AbstractASTNode(
-        new Position("", ctx.stop.getLine, ctx.stop.getCharPositionInLine),
+        new Position(
+          ccontext.getInputContext.getSourceName,
+          ctx.stop.getLine,
+          ctx.stop.getCharPositionInLine
+        ),
         ctx.getSourceInterval,
-        ""
+        ccontext.getInputContext
+          .getText(new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex))
       ) {
 
         // Need to override this visitor from the AbstractASTNode.
@@ -85,9 +89,10 @@ class CheckSyntaxTreeShexCompatibility(ccontext: CompilationContext)
       ccontext.getErrorHandler.addEvent(
         Warn(
           node,
-          "semicolons are not compulsory in ShEx Lite, but its usage its " +
-          "encouraged as otherwise your code wont be following shape " +
-          "expressions specification.",
+          "semicolons are not " +
+          "compulsory in ShEx Lite, but its usage its " + "encouraged as " +
+          "otherwise your code wont be following shape " + "expressions " +
+          "specification.",
           Warn.MissingSemicolon
         )
       )

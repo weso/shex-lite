@@ -26,22 +26,26 @@
 
 package es.weso.shexl.cli
 
+import java.io.{File, PrintWriter}
+
 import es.weso.shexlc.internal.{CompilationConfig, CompilationContext}
 import es.weso.shexlc.sema.SIL
 import es.weso.shexlc.IRGen.{IR, TargetIR}
+import es.weso.shexlc.internal.log.CustomLogFormatter
 import es.weso.shexlc.parse.{AbstractSyntaxTree, Parser}
 import org.backuity.clist.{args, opt, CliMain}
+import wvlet.log.{LogSupport, Logger}
 
 import scala.collection.mutable
-
-import java.io.File
-import java.io.PrintWriter
 
 object ShExLiteCLI
     extends CliMain[Unit](
       name        = "shexlc",
       description = "compile and generate target domain model objects"
-    ) {
+    )
+    with LogSupport {
+
+  Logger.setDefaultFormatter(CustomLogFormatter)
 
   var hideWarn = opt[Boolean](
     abbrev      = "hw",
@@ -62,6 +66,8 @@ object ShExLiteCLI
   var files = args[Seq[String]](description = "ShEx-Lite sources to compile")
 
   def run: Unit = {
+
+    info("compilation started")
 
     // Create the compiler config from the received config.
     val cconfig = new CompilationConfig {
@@ -89,20 +95,27 @@ object ShExLiteCLI
     val ccontext = CompilationContext.withConfig(cconfig)
 
     for (file <- files) {
+      info(s"compiling file $file")
+
       // 1. Parse the vile and get the syntax tree.
+      info(s"parsing file $file")
       val syntaxTree = Parser.parseFile(file, ccontext)
 
       // 2. Get the AST.
+      info(s"generating ast for file $file")
       val ast = AbstractSyntaxTree.getAST(syntaxTree)
 
       // 3. Get SIL.
+      info(s"generating sil for file $file")
       val sil = SIL.getSIL(ast)
 
       // 4. Dispatch the IRGen.
+      info(s"generating ir for file $file")
       val ir = IR.getIR(sil)
 
       // 5. Write the generated files.
       if (cconfig.generateIR) {
+        info(s"writing generated sources for file $file")
         ir.getSources
           .get(TargetIR.Java)
           .get
@@ -123,6 +136,12 @@ object ShExLiteCLI
     // If any warning print them.
     for (warning <- ccontext.getErrorHandler.getWarnings) {
       println(warning.toPrintableString)
+    }
+
+    if (ccontext.getErrorHandler.hasErrorMsgs) {
+      error("compilation finished with errors")
+    } else {
+      info("compilation finished without errors")
     }
   }
 }

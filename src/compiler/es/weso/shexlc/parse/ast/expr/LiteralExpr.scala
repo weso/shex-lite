@@ -31,7 +31,7 @@ import org.antlr.v4.runtime.misc.Interval
 
 /**
   * A base class for all the literal expressions of the es.weso.shexlc.parse
-  *  .ast.
+  * .ast.
   *
   * This literal expression trait is just used as a mean to know if an
   * expression is a literal, any literal. For that it overrides the super is
@@ -48,6 +48,7 @@ abstract class LiteralExpr(
 ) extends ConstraintNodeExpr(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Literal Expression.
-  override def isLiteralExpr: Boolean     = true
+  override def isLiteralExpr: Boolean = true
+
   override def asLiteralExpr: LiteralExpr = this
 }

@@ -52,14 +52,10 @@ class CGJava04ConstructorGenerator(
     for (i <- 0 to fields.size - 1) {
       fields(i).asConstraintTripleExpr.constraint.accept(
         this,
-        fields(
-          i
-        ).asConstraintTripleExpr.cardinality.asCardinalityExpr.max.toString
+        fields(i).asConstraintTripleExpr.cardinality.asCardinalityExpr.max.toString
       )
       stringBuilder.append(
-        fields(
-          i
-        ).asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase
+        fields(i).asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase
       )
       if (i != fields.size - 1) {
         stringBuilder.append(", ")
@@ -84,7 +80,11 @@ class CGJava04ConstructorGenerator(
   override def visit(expr: CallPrefixExpr, isList: String): Unit = {
     expr.argument match {
       case "string" =>
-        if (isList > "1") stringBuilder.append("List<String> ")
+        if (isList > "1")
+          stringBuilder.append(
+            "List<String> " +
+            ""
+          )
         else stringBuilder.append("String ")
       case "integer" =>
         if (isList > "1") stringBuilder.append("List<int> ")
@@ -111,8 +111,7 @@ class CGJava04ConstructorGenerator(
         stringBuilder.append(
           s"List<${baseCall.argument.toLowerCase.capitalize}> "
         )
-      else
-        stringBuilder.append(s"${baseCall.argument.toLowerCase.capitalize} ")
+      else stringBuilder.append(s"${baseCall.argument.toLowerCase.capitalize} ")
     }
   }
 }

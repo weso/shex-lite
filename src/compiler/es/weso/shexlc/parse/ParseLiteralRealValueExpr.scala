@@ -33,7 +33,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The literal real value expression sub-parser generates a literal of real type with the value provided in the context
+  * The literal real value expression sub-parser generates a literal of real
+  * type with the value provided in the context
   * of the parser.
   *
   * @author Guillermo Facundo Colunga

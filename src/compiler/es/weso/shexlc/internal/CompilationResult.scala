@@ -38,14 +38,16 @@ trait CompilationResult {
   /**
     * Indicates if any of the sources compiled contains an error.
     *
-    * @return true if any of the compiled sources contains an error, false otherwise.
+    * @return true if any of the compiled sources contains an error, false
+    *         otherwise.
     */
   def hasErrors: Boolean
 
   /**
     * Indicates if any of the sources compiled contains a warning.
     *
-    * @return true if any of the compiled sources contains a warning, false otherwise.
+    * @return true if any of the compiled sources contains a warning, false
+    *         otherwise.
     */
   def hasWarnings: Boolean
 
@@ -71,47 +73,48 @@ object CompilationResult {
     *
     * @return an empty compiler implementation.
     */
-  def empty: CompilationResult =
-    new CompilationResult {
+  def empty: CompilationResult = new CompilationResult {
 
-      private[this] var _hasErrors   = false
-      private[this] var _hasWarnings = false
-      private[this] var individualResults =
-        ListBuffer.empty[CompilationIndividualResult]
+    private[this] var _hasErrors   = false
+    private[this] var _hasWarnings = false
+    private[this] var individualResults = ListBuffer
+      .empty[CompilationIndividualResult]
 
-      /**
-        * Indicates if any of the sources compiled contains an error.
-        *
-        * @return true if any of the compiled sources contains an error, false otherwise.
-        */
-      override def hasErrors: Boolean = _hasErrors
+    /**
+      * Indicates if any of the sources compiled contains an error.
+      *
+      * @return true if any of the compiled sources contains an error, false
+      *         otherwise.
+      */
+    override def hasErrors: Boolean = _hasErrors
 
-      /**
-        * Indicates if any of the sources compiled contains a warning.
-        *
-        * @return true if any of the compiled sources contains a warning, false otherwise.
-        */
-      override def hasWarnings: Boolean = _hasWarnings
+    /**
+      * Indicates if any of the sources compiled contains a warning.
+      *
+      * @return true if any of the compiled sources contains a warning, false
+      *         otherwise.
+      */
+    override def hasWarnings: Boolean = _hasWarnings
 
-      /**
-        * Gets the generated sources.
-        *
-        * @return the generated sources.
-        */
-      override def getCompilationIndividualResults
-        : List[CompilationIndividualResult] = individualResults.toList
+    /**
+      * Gets the generated sources.
+      *
+      * @return the generated sources.
+      */
+    override def getCompilationIndividualResults
+      : List[CompilationIndividualResult] = individualResults.toList
 
-      /**
-        * Adds a single generated source to the list of generated sources.
-        *
-        * @param result to be added to the list of generated sources.
-        */
-      override def addCompilationIndividualResult(
-        result: CompilationIndividualResult
-      ): Unit = {
-        individualResults += result
-        if (result.hasErrors) this._hasErrors     = true
-        if (result.hasWarnings) this._hasWarnings = true
-      }
+    /**
+      * Adds a single generated source to the list of generated sources.
+      *
+      * @param result to be added to the list of generated sources.
+      */
+    override def addCompilationIndividualResult(
+      result: CompilationIndividualResult
+    ): Unit = {
+      individualResults += result
+      if (result.hasErrors) this._hasErrors     = true
+      if (result.hasWarnings) this._hasWarnings = true
     }
+  }
 }

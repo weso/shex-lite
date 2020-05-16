@@ -27,12 +27,14 @@
 package es.weso.shexlc.internal
 
 import es.weso.shexlc.internal.errorhandler.ErrorHandler
-import es.weso.shexlc.internal.symboltable.{SymbolHashTable, SymbolTable}
+import es.weso.shexlc.internal.symbols.{DefaultSymbolTable, SymbolTable}
 import org.antlr.v4.runtime.CharStream
 
 /**
-  * The compilation contexts defines the universe of the compilation. It contains its configuration, its symbol table,
-  * its error handler, and the compilation result. Only the compilation result can be set, as other fields should be
+  * The compilation contexts defines the universe of the compilation. It
+  * contains its configuration, its symbol table,
+  * its error handler, and the compilation result. Only the compilation
+  * result can be set, as other fields should be
   * read only for the different compiler stages.
   *
   * @author Guillermo Facundo Colunga
@@ -40,18 +42,24 @@ import org.antlr.v4.runtime.CharStream
 trait CompilationContext {
 
   /**
-    * Gets the input file as a char stream. This is needed to add the context information to its node of the ast. That
-    * way we can not only add the line and the column to the error but also display a little of context about it by
-    * writing the line where the error has been produce and the highlight the error in the line.
+    * Gets the input file as a char stream. This is needed to add the context
+    * information to its node of the ast. That
+    * way we can not only add the line and the column to the error but also
+    * display a little of context about it by
+    * writing the line where the error has been produce and the highlight the
+    * error in the line.
     *
     * @return the content of the input file as an stream of character.
     */
   def getInputContext: CharStream
 
   /**
-    * Gets the configuration fo the compiler. The configuration will affect different stages. But only those stages know
-    * how to behave in respond to a given configuration. That means that all stages are dispatched from the compiler
-    * point of view but maybe not all are executed according to the configuration.
+    * Gets the configuration fo the compiler. The configuration will affect
+    * different stages. But only those stages know
+    * how to behave in respond to a given configuration. That means that all
+    * stages are dispatched from the compiler
+    * point of view but maybe not all are executed according to the
+    * configuration.
     *
     * @return the configuration of the compiler.
     */
@@ -85,13 +93,16 @@ object CompilationContext {
     new CompilationContext {
 
       private var input                      = Option.empty[CharStream]
-      private val symbolTable                = new SymbolHashTable()
+      private val symbolTable                = new DefaultSymbolTable()
       private val errorHandler: ErrorHandler = ErrorHandler.empty
 
       /**
-        * Gets the configuration fo the compiler. The configuration will affect different stages. But only those stages know
-        * how to behave in respond to a given configuration. That means that all stages are dispatched from the compiler
-        * point of view but maybe not all are executed according to the configuration.
+        * Gets the configuration fo the compiler. The configuration will affect
+        * different stages. But only those stages know
+        * how to behave in respond to a given configuration. That means that
+        * all stages are dispatched from the compiler
+        * point of view but maybe not all are executed according to the
+        * configuration.
         *
         * @return the configuration of the compiler.
         */
@@ -112,9 +123,12 @@ object CompilationContext {
       override def getErrorHandler: ErrorHandler = errorHandler
 
       /**
-        * Gets the input file as a char stream. This is needed to add the context information to its node of the ast. That
-        * way we can not only add the line and the column to the error but also display a little of context about it by
-        * writing the line where the error has been produce and the highlight the error in the line.
+        * Gets the input file as a char stream. This is needed to add the
+        * context information to its node of the ast. That
+        * way we can not only add the line and the column to the error but also
+        * display a little of context about it by
+        * writing the line where the error has been produce and the highlight
+        * the error in the line.
         *
         * @return the content of the input file as an stream of character.
         */

@@ -24,7 +24,7 @@
 // The ShEx Lite Project includes packages written by third parties.
 //------------------------------------------------------------------------------
 
-package es.weso.shexlc.internal.symboltable
+package es.weso.shexlc.internal.symbols
 
 import java.util.Objects
 
@@ -36,22 +36,32 @@ import org.antlr.v4.runtime.misc.Interval
 
 import scala.collection.mutable.HashMap
 
-class SymbolHashTable extends SymbolTable {
+/**
+  * Represents the data structure that holds the data used by the compiler
+  * during the validation process. By default and
+  * after https://github.com/weso/shex-lite-evolution/pull/16 the default
+  * behaviour for all declarations is that no
+  * redefinition is allowed. That way the language will be kept clean.
+  *
+  * @author Guillermo Facundo Colunga
+  */
+class DefaultSymbolTable extends SymbolTable {
 
   // Default logger
-  final val logger = Logger[SymbolHashTable]
+  final val logger = Logger[DefaultSymbolTable]
 
   // Auxiliary data structures used to store prefixes and shapes.
   final val _prefixesTable =
-    new HashMap[String, SymbolTableEntry[PrefixDefStmt]]()
-  final val _shapesTable = new HashMap[String, SymbolTableEntry[ShapeDefStmt]]()
+    new HashMap[String, Symbol[PrefixDefStmt]]()
+  final val _shapesTable = new HashMap[String, Symbol[ShapeDefStmt]]()
 
   // Initial base and start definitions.
-  private var _base = new DefaultSymbolTableEntry[BaseDefStmt](
+  private var _base = new DefaultSymbol[BaseDefStmt](
     new BaseDefStmt(
       Position.HOME,
       new Interval(0, 0),
-      "base = <es.weso.shexlc.internal://base>",
+      "base = <es.weso.shexlc" +
+      ".internal://base>",
       new LiteralIRIValueExpr(
         Position.HOME,
         new Interval(0, 0),
@@ -61,16 +71,15 @@ class SymbolHashTable extends SymbolTable {
     )
   )
 
-  private var _start: DefaultSymbolTableEntry[StartDefStmt] =
-    _ // The start declaration initially has no value.
-
+  private var _start: DefaultSymbol[StartDefStmt] = _ // The start
+  // declaration initially has no value.
   override def getBase: BaseDefStmt = {
     _base.addOneCall()
     _base.content
   }
 
   override def setBase(base: BaseDefStmt): Unit =
-    _base = new DefaultSymbolTableEntry[BaseDefStmt](base)
+    _base = new DefaultSymbol[BaseDefStmt](base)
 
   override def getNumberOfCallsForBase: Int = _base.getNumberOfCalls
 
@@ -84,12 +93,12 @@ class SymbolHashTable extends SymbolTable {
   }
 
   override def setStart(start: StartDefStmt): Unit =
-    _start = new DefaultSymbolTableEntry[StartDefStmt](start)
+    _start = new DefaultSymbol[StartDefStmt](start)
 
   override def +=(prefixDef: PrefixDefStmt): Unit =
     _prefixesTable.put(
       prefixDef.label,
-      new DefaultSymbolTableEntry[PrefixDefStmt](prefixDef)
+      new DefaultSymbol[PrefixDefStmt](prefixDef)
     )
 
   override def +=(shapeDef: ShapeDefStmt): Unit = {
@@ -97,18 +106,19 @@ class SymbolHashTable extends SymbolTable {
     if (isRelativeShape) {
       _shapesTable.put(
         s"$DEFAULT_BASE:${shapeDef.label.asCallBaseExpr.argument}",
-        new DefaultSymbolTableEntry[ShapeDefStmt](shapeDef)
+        new DefaultSymbol[ShapeDefStmt](shapeDef)
       )
     } else {
       _shapesTable.put(
         s"${shapeDef.label.asCallPrefixExpr.label}:${shapeDef.label.asCallPrefixExpr.argument}",
-        new DefaultSymbolTableEntry[ShapeDefStmt](shapeDef)
+        new DefaultSymbol[ShapeDefStmt](shapeDef)
       )
     }
   }
 
   override def getPrefix(prefixLbl: String): PrefixDefStmt =
-    _prefixesTable.get(prefixLbl) match {
+    _prefixesTable
+      .get(prefixLbl) match {
       case None => null
       case Some(element) => {
         element.addOneCall()
@@ -120,7 +130,8 @@ class SymbolHashTable extends SymbolTable {
     _prefixesTable.get(prefixLbl) match {
       case None =>
         throw new IllegalStateException(
-          s"the prefix label $prefixLbl is not in the symbol table"
+          s"the prefix label " +
+          s"$prefixLbl is not in the symbol table"
         )
       case Some(element) => element.getNumberOfCalls
     }
@@ -135,7 +146,7 @@ class SymbolHashTable extends SymbolTable {
     }
 
   def restore(): Unit = {
-    _base = new DefaultSymbolTableEntry[BaseDefStmt](
+    _base = new DefaultSymbol[BaseDefStmt](
       new BaseDefStmt(
         Position.HOME,
         new Interval(0, 0),
@@ -143,7 +154,8 @@ class SymbolHashTable extends SymbolTable {
         new LiteralIRIValueExpr(
           Position.HOME,
           new Interval(0, 0),
-          "<es.weso.shexlc.internal://base>",
+          "<es.weso" +
+          ".shexlc.internal://base>",
           DEFAULT_BASE
         )
       )

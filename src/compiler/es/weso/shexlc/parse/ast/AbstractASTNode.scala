@@ -33,21 +33,28 @@ import org.antlr.v4.runtime.misc.Interval
 import scala.collection.mutable.ListBuffer
 
 /**
-  * An abstract ast node is a node from the abstract syntax tree. It contains information about the position, the
+  * An abstract ast node is a node from the abstract syntax tree. It contains
+  * information about the position, the
   * token range and the content of it as a String.
   *
-  * The position represents the line and the column in the source file, notice that the column starts at index 0
+  * The position represents the line and the column in the source file,
+  * notice that the column starts at index 0
   * meanwhile the line starts at index 1.
   *
-  * The token range is a range defined as (start, stop) that indicates the start token and the stop token that matched
+  * The token range is a range defined as (start, stop) that indicates the
+  * start token and the stop token that matched
   * the rule applied to create this node.
   *
-  * The content is a string the contains the range of source code that contains this node. For that reason the nodes
+  * The content is a string the contains the range of source code that
+  * contains this node. For that reason the nodes
   * from the ast that are not leafs contain also the content of the child nodes.
   *
-  * @param position is the line and column from the input files where the rule that created the node was located.
-  * @param tokenRange is the range as (start, end) of tokens that the rule contain.
-  * @param content is a string that contains all the source code from the input files that match the rule.
+  * @param position   is the line and column from the input files where the
+  *                   rule that created the node was located.
+  * @param tokenRange is the range as (start, end) of tokens that the rule
+  *                   contain.
+  * @param content    is a string that contains all the source code from the
+  *                   input files that match the rule.
   */
 abstract class AbstractASTNode(
   position: Position,
@@ -78,12 +85,14 @@ abstract class AbstractASTNode(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

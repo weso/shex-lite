@@ -32,9 +32,12 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * A Start Definition Statement assigns an expression to the start value of the schema. In an schema must only be one
-  * start definition, but this will be checked by the es.weso.shexlc.semantic analyzer later. At the same time the expression represents
-  * the value that will be pointed by the start, and should be a shape reference even though this will be also checked
+  * A Start Definition Statement assigns an expression to the start value of
+  * the schema. In an schema must only be one
+  * start definition, but this will be checked by the es.weso.shexlc.semantic
+  * analyzer later. At the same time the expression represents
+  * the value that will be pointed by the start, and should be a shape
+  * reference even though this will be also checked
   * later by the es.weso.shexlc.semantic analyzer.
   *
   * @author Guillermo Facundo Colunga.
@@ -46,8 +49,10 @@ class StartDefStmt(
   val expression: Expression
 ) extends DefinitionStmt(position, tokenRange, content) {
 
-  // Override default methods to indicate that this is as Start Definition Statement.
-  override def isStartDefStmt: Boolean      = true
+  // Override default methods to indicate that this is as Start Definition
+  // Statement.
+  override def isStartDefStmt: Boolean = true
+
   override def asStartDefStmt: StartDefStmt = this
 
   /**
@@ -60,12 +65,14 @@ class StartDefStmt(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

@@ -34,7 +34,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The import statement sub-parser generates an import statement from the parser context. It is an experimental feature
+  * The import statement sub-parser generates an import statement from the
+  * parser context. It is an experimental feature
   * yet. It delegates the creation of the iri to its own sub-parser.
   *
   * @author Guillermo Facundo Colunga

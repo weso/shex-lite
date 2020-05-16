@@ -31,7 +31,8 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * A Literal Real Value Expression is a literal that contains a real value. It is used to store real numbers that appear
+  * A Literal Real Value Expression is a literal that contains a real value.
+  * It is used to store real numbers that appear
   * in the source code.
   *
   * @author Guillermo Facundo Colunga
@@ -44,8 +45,10 @@ class LiteralRealValueExpr(
 ) extends LiteralExpr(position, tokenRange, content)
     with ConstraintValidValueSetExpr {
 
-  // Override default methods to indicate that this is a Literal Real Value Expression.
-  override def isLiteralRealValueExpr: Boolean              = true
+  // Override default methods to indicate that this is a Literal Real Value
+  // Expression.
+  override def isLiteralRealValueExpr: Boolean = true
+
   override def asLiteralRealValueExpr: LiteralRealValueExpr = this
 
   /**
@@ -64,7 +67,8 @@ class LiteralRealValueExpr(
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

@@ -29,14 +29,14 @@ package es.weso.shexlc.internal.errorhandler
 import es.weso.shexlc.parse.ast.{AbstractASTNode, Position, Schema}
 
 /**
-  * Represents a warning event that occurred during the compilation process. A warning contains the position in the
+  * Represents a warning event that occurred during the compilation process.
+  * A warning contains the position in the
   * source where it was raised, the message/cause and the type of warnings.
   *
   * @author Guillermo Facundo Colunga
-  *
-  * @param node where the warning was generated
+  * @param node    where the warning was generated
   * @param message indicating the description of the cause of the warning
-  * @param ttype of the warning indicating why the error occurred
+  * @param ttype   of the warning indicating why the error occurred
   */
 case class Warn(
   node: AbstractASTNode,
@@ -59,9 +59,12 @@ case class Warn(
   override def getEventPosition: Position = node.getPosition
 
   /**
-    * Gets the context of the event. The context is the content of the parent node. So if for example we have int a = 'c'
-    * as a is an integer and 'c' is a char we cannot assign its value an event will be raised, there the error will be
-    * 'c' that is the node that raises the error as it should be an integer. And the context would be a = c that is the
+    * Gets the context of the event. The context is the content of the parent
+    * node. So if for example we have int a = 'c'
+    * as a is an integer and 'c' is a char we cannot assign its value an
+    * event will be raised, there the error will be
+    * 'c' that is the node that raises the error as it should be an integer.
+    * And the context would be a = c that is the
     * parent node.
     *
     * @return the context of the event.
@@ -69,8 +72,10 @@ case class Warn(
   override def getEventContext: String = node.getContent
 
   /**
-    * Gets the event type. The event type contains the error code and the description of the type of errors. An error
-    * type can be for example -> BaseNotFoundError(code = E001, "base not found")
+    * Gets the event type. The event type contains the error code and the
+    * description of the type of errors. An error
+    * type can be for example -> BaseNotFoundError(code = E001, "base not
+    * found")
     *
     * @return the event type.
     */
@@ -84,7 +89,7 @@ case class Warn(
   override def toPrintableString: String = {
 
     val errTitle =
-      s"${Console.YELLOW}error[${ttype.getCode}]: ${Console.RESET}${ttype.getDescription}"
+      s"${Console.YELLOW}warning[${ttype.getCode}]: ${Console.RESET}${ttype.getDescription}"
 
     val errPos =
       s"--> ${node.getPosition.filename}:${node.getPosition.line}:${node.getPosition.column}"
@@ -96,9 +101,7 @@ case class Warn(
         if (parent.isInstanceOf[Schema]) {
           errContext = node.getContent
         } else {
-          errContext = parent
-            .asInstanceOf[AbstractASTNode]
-            .getContent
+          errContext = parent.asInstanceOf[AbstractASTNode].getContent
         }
       }
       case None => errContext = node.getContent
@@ -149,28 +152,34 @@ case class Warn(
 object Warn {
 
   val PrefixNotUsed = new CompilerEventType {
-    override def getCode: String        = "W001"
+    override def getCode: String = "W001"
+
     override def getDescription: String = "prefix definition not used"
   }
 
   val BaseSetButNotUsed = new CompilerEventType {
-    override def getCode: String        = "W002"
+    override def getCode: String = "W002"
+
     override def getDescription: String = "base has been set but not used"
   }
 
   val FeatureIgnored = new CompilerEventType {
-    override def getCode: String        = "W003"
+    override def getCode: String = "W003"
+
     override def getDescription: String = "feature ignored"
   }
 
   val SchemaWithoutDirectMapping = new CompilerEventType {
     override def getCode: String = "W004"
+
     override def getDescription: String =
-      "schema includes constraints without a direct mapping to target language"
+      "schema includes constraints " +
+      "without a direct mapping to target language"
   }
 
   val MissingSemicolon = new CompilerEventType {
-    override def getCode: String        = "W005"
+    override def getCode: String = "W005"
+
     override def getDescription: String = "missing semicolon"
   }
 }

@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// File: SymbolTableEntry.scala
+// File: DefaultSymbolTableEntry.scala
 //
 // Short version for non-lawyers:
 //
@@ -24,17 +24,19 @@
 // The ShEx Lite Project includes packages written by third parties.
 //------------------------------------------------------------------------------
 
-package es.weso.shexlc.internal.symboltable
+package es.weso.shexlc.internal.symbols
 
-trait SymbolTableEntry[T] {
+class DefaultSymbol[T](var content: T) extends Symbol[T] {
 
-  def getContent: T
+  private var nOfCalls = 0
 
-  def setContent(content: T)
+  override def getContent: T = content
 
-  def getNumberOfCalls: Int
+  override def setContent(content: T): Unit = this.content = content
 
-  def addOneCall(): Unit
+  override def getNumberOfCalls: Int = nOfCalls
 
-  def addNCalls(n: Int): Unit
+  override def addOneCall(): Unit = nOfCalls += 1
+
+  override def addNCalls(n: Int): Unit = nOfCalls += n
 }

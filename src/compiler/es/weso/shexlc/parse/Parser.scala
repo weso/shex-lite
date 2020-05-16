@@ -32,9 +32,12 @@ import es.weso.shexlc.parse.generated.{ShexLiteLexer, ShexLiteParser}
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
 /**
-  * The parser gets the input file an transform it in to a syntax tree. A syntax tree is the antlr implementation that
-  * includes all the tokens and set of rules. The point of doing this step and not generate the AST (Abstract Syntax
-  * Tree) directly is that providing the SyntaxTree users can implement their own linters and other tools to improve the
+  * The parser gets the input file an transform it in to a syntax tree. A
+  * syntax tree is the antlr implementation that
+  * includes all the tokens and set of rules. The point of doing this step
+  * and not generate the AST (Abstract Syntax
+  * Tree) directly is that providing the SyntaxTree users can implement their
+  * own linters and other tools to improve the
   * look and feel of the language.
   *
   * @author Guillermo Facundo Colunga
@@ -42,7 +45,8 @@ import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 trait Parser {
 
   /**
-    * Parses the text from the lexemes, then the tokens and finally the syntax tree.
+    * Parses the text from the lexemes, then the tokens and finally the
+    * syntax tree.
     *
     * @param text to be parsed.
     * @return the antlr generated syntax tree.
@@ -50,7 +54,8 @@ trait Parser {
   def parseText(text: String, ccontext: CompilationContext): SyntaxTree
 
   /**
-    * arses the text from the lexemes, then the tokens and finally the syntax tree.
+    * arses the text from the lexemes, then the tokens and finally the syntax
+    * tree.
     *
     * @param filePath to be parsed.
     * @return the antlr generated syntax tree.
@@ -59,9 +64,12 @@ trait Parser {
 }
 
 /**
-  * The parser gets the input file an transform it in to a syntax tree. A syntax tree is the antlr implementation that
-  * includes all the tokens and set of rules. The point of doing this step and not generate the AST (Abstract Syntax
-  * Tree) directly is that providing the SyntaxTree users can implement their own linters and other tools to improve the
+  * The parser gets the input file an transform it in to a syntax tree. A
+  * syntax tree is the antlr implementation that
+  * includes all the tokens and set of rules. The point of doing this step
+  * and not generate the AST (Abstract Syntax
+  * Tree) directly is that providing the SyntaxTree users can implement their
+  * own linters and other tools to improve the
   * look and feel of the language.
   *
   * @author Guillermo Facundo Colunga
@@ -69,7 +77,8 @@ trait Parser {
 object Parser extends Parser {
 
   /**
-    * Parses the text from the lexemes, then the tokens and finally the syntax tree.
+    * Parses the text from the lexemes, then the tokens and finally the
+    * syntax tree.
     *
     * @param text to be parsed.
     * @return the antlr generated syntax tree.
@@ -86,7 +95,8 @@ object Parser extends Parser {
   }
 
   /**
-    * arses the text from the lexemes, then the tokens and finally the syntax tree.
+    * arses the text from the lexemes, then the tokens and finally the syntax
+    * tree.
     *
     * @param filePath to be parsed.
     * @return the antlr generated syntax tree.
@@ -115,11 +125,10 @@ object Parser extends Parser {
     val antlrTreeRoot = new ShexLiteParser(tokens).schema()
 
     // Dispatch needed syntax checks.
-    antlrTreeRoot.accept(
-      new CheckSyntaxTreeShexCompatibility(ccontext)
-    ) // Check for missing semicolons.
-
-    // Creating the wrapper syntax tree that contains both the context and the antlr syntax tree.
+    antlrTreeRoot.accept(new CheckSyntaxTreeShexCompatibility(ccontext)) //
+    // Check for missing semicolons.
+    // Creating the wrapper syntax tree that contains both the context and
+    // the antlr syntax tree.
     SyntaxTree.create(ccontext, antlrTreeRoot)
   }
 }

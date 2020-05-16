@@ -31,7 +31,8 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * A Constraint Node IRI Expression indicated that a node constraint is of type IRI. Does not add more functionality
+  * A Constraint Node IRI Expression indicated that a node constraint is of
+  * type IRI. Does not add more functionality
   * than the classification of the node constraint type.
   *
   * @author Guillermo Facundo Colunga
@@ -42,8 +43,10 @@ class ConstraintNodeIRIExpr(
   content: String
 ) extends ConstraintNodeExpr(position, tokenRange, content) {
 
-  // Override default methods to indicate that this is a Constraint Node IRI Expression.
-  override def isConstraintNodeIRIExpr: Boolean               = true
+  // Override default methods to indicate that this is a Constraint Node IRI
+  // Expression.
+  override def isConstraintNodeIRIExpr: Boolean = true
+
   override def asConstraintNodeIRIExpr: ConstraintNodeIRIExpr = this
 
   /**
@@ -56,12 +59,14 @@ class ConstraintNodeIRIExpr(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

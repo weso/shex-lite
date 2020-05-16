@@ -33,7 +33,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The constraint node non literal expression parser generates a constraint non literal expression from the parser
+  * The constraint node non literal expression parser generates a constraint
+  * non literal expression from the parser
   * context.
   *
   * @override Guillermo Facundo Colunga

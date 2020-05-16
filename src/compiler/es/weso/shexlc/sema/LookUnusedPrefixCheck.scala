@@ -28,7 +28,7 @@ package es.weso.shexlc.sema
 
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.internal.errorhandler.{ErrorHandler, Warn}
-import es.weso.shexlc.internal.symboltable.SymbolTable
+import es.weso.shexlc.internal.symbols.SymbolTable
 import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
@@ -41,16 +41,14 @@ class LookUnusedPrefixCheck(ccontext: CompilationContext)
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     stmt.expression.accept(this, param)
 
-    if (symbolTable.getNumberOfCallsForBase == 0
-        && !stmt.expression.asLiteralIRIValueExpr.equals(
-          symbolTable.DEFAULT_BASE
-        )
-        && ccontext.getConfiguration.generateWarnings) {
-
+    if (symbolTable.getNumberOfCallsForBase == 0 && !stmt.expression.asLiteralIRIValueExpr
+          .equals(symbolTable.DEFAULT_BASE) && ccontext.getConfiguration.generateWarnings) {
       errorHandler.addEvent(
         new Warn(
           stmt.expression,
-          s"the base `${stmt.expression.asLiteralIRIValueExpr.value}` definition is set but not used",
+          s"the base `${stmt.expression.asLiteralIRIValueExpr.value}` " +
+          s"definition is set but not " +
+          s"used",
           Warn.BaseSetButNotUsed
         )
       )
@@ -60,10 +58,7 @@ class LookUnusedPrefixCheck(ccontext: CompilationContext)
   override def visit(stmt: PrefixDefStmt, param: Unit): Unit = {
     stmt.expression.accept(this, param)
 
-    if (symbolTable.getNumberOfCallsForPrefix(
-          stmt.label
-        ) == 0 && ccontext.getConfiguration.generateWarnings) {
-
+    if (symbolTable.getNumberOfCallsForPrefix(stmt.label) == 0 && ccontext.getConfiguration.generateWarnings) {
       errorHandler.addEvent(
         new Warn(
           stmt.expression,

@@ -33,7 +33,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The constraint node bnode expression parser generates a constraint node of type bnode from the parser context.
+  * The constraint node bnode expression parser generates a constraint node
+  * of type bnode from the parser context.
   *
   * @author Guillermo Facundo Colunga
   * @param ctx     of the parser.

@@ -29,7 +29,8 @@ package es.weso.shexlc.internal.errorhandler
 import es.weso.shexlc.parse.ast.Position
 
 /**
-  * A build event is something that occurs during the course of the build that either prevents the build from continuing,
+  * A build event is something that occurs during the course of the build
+  * that either prevents the build from continuing,
   * an error. Or it is relevant enough to be notified to the user.
   *
   * @author Guillermo Facundo Colunga
@@ -44,9 +45,12 @@ trait CompilationEvent {
   def getEventPosition: Position
 
   /**
-    * Gets the context of the event. The context is the content of the parent node. So if for example we have int a = 'c'
-    * as a is an integer and 'c' is a char we cannot assign its value an event will be raised, there the error will be
-    * 'c' that is the node that raises the error as it should be an integer. And the context would be a = c that is the
+    * Gets the context of the event. The context is the content of the parent
+    * node. So if for example we have int a = 'c'
+    * as a is an integer and 'c' is a char we cannot assign its value an
+    * event will be raised, there the error will be
+    * 'c' that is the node that raises the error as it should be an integer.
+    * And the context would be a = c that is the
     * parent node.
     *
     * @return the context of the event.
@@ -54,8 +58,10 @@ trait CompilationEvent {
   def getEventContext: String
 
   /**
-    * Gets the event type. The event type contains the error code and the description of the type of errors. An error
-    * type can be for example -> BaseNotFoundError(code = E001, "base not found")
+    * Gets the event type. The event type contains the error code and the
+    * description of the type of errors. An error
+    * type can be for example -> BaseNotFoundError(code = E001, "base not
+    * found")
     *
     * @return the event type.
     */
@@ -68,8 +74,8 @@ trait CompilationEvent {
     */
   def toPrintableString: String
 
-  // For avoiding casts. If more types of events are added add here its isXXX method.
-
+  // For avoiding casts. If more types of events are added add here its isXXX
+  // method.
   /**
     * Gets whether an event is an error or not.
     *

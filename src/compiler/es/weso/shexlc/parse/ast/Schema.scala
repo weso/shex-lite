@@ -39,7 +39,8 @@ class Schema(
   position: Position,
   tokenRange: Interval,
   content: String,
-  val stmts: List[Statement]
+  val
+  stmts: List[Statement]
 ) extends AbstractASTNode(position, tokenRange, content) {
 
   /**
@@ -52,12 +53,14 @@ class Schema(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

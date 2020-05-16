@@ -35,7 +35,8 @@ import org.antlr.v4.runtime.misc.Interval
 import scala.collection.JavaConverters._
 
 /**
-  * The constraint block triple expression sub-parser generates a new block of triple expression constraints from the
+  * The constraint block triple expression sub-parser generates a new block
+  * of triple expression constraints from the
   * parser context.
   *
   * @author Guillermo Facundo Colunga

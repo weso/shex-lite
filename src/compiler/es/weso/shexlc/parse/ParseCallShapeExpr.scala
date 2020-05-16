@@ -38,7 +38,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The call shape expression parser generates a call shape expression  from the parser context.
+  * The call shape expression parser generates a call shape expression  from
+  * the parser context.
   *
   * @author Guillermo Facundo Colunga
   * @param ctx     of the parser.
@@ -74,8 +75,7 @@ class ParseCallShapeExpr(
           .asInstanceOf[Expression]
           .asLiteralIRIValueExpr
           .value
-        val prefixCall =
-          new CallBaseExpr(pos, tokenRange, content, shape)
+        val prefixCall = new CallBaseExpr(pos, tokenRange, content, shape)
 
         new CallShapeExpr(pos, tokenRange, content, prefixCall)
       }

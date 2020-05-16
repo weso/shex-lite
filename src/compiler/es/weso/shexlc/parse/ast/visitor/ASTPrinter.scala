@@ -31,7 +31,8 @@ import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.stmt._
 
 /**
-  * The ast printer prints the content of the ast after the execution of the semantic validation and therefore should
+  * The ast printer prints the content of the ast after the execution of the
+  * semantic validation and therefore should
   * only be applied to SIL. That is because it tries to print definitions.
   */
 class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
@@ -40,19 +41,14 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
   final val TAB = "  "
 
   override def visit(schema: Schema, param: StringBuilder): String = {
-    param.append(
-      s"(schema location=${schema.getPosition}"
-    )
-    // Open
+    param.append(s"(schema location=${schema.getPosition}") // Open
     // schema.
-
     for (stmt <- schema.stmts) {
       param.append(NL + TAB)
       param.append(stmt.accept(this, param))
     }
 
     param.append(")") // Close schema.
-
     param.toString()
   }
 
@@ -70,19 +66,15 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
 
   override def visit(stmt: PrefixDefStmt, param: StringBuilder): String = {
     val sb = new StringBuilder()
-    sb.append(
-      s"(prefix_def label='${stmt.label}' iri='${stmt.expression
-        .accept(this, param)}' content='${stmt.getContent}')"
-    )
+    sb.append(s"(prefix_def label='${stmt.label}' iri='${stmt.expression
+      .accept(this, param)}' content='${stmt.getContent}')")
     sb.toString()
   }
 
   override def visit(stmt: ShapeDefStmt, param: StringBuilder): String = {
     val sb = new StringBuilder()
-    sb.append(
-      s"(shape_def $NL$TAB$TAB${stmt.label.accept(this, param)}$NL$TAB$TAB${stmt.expression
-        .accept(this, param)})"
-    )
+    sb.append(s"(shape_def $NL$TAB$TAB${stmt.label
+      .accept(this, param)}$NL$TAB$TAB${stmt.expression.accept(this, param)})")
     sb.toString()
   }
 
@@ -186,8 +178,8 @@ class ASTPrinter extends ASTGenericWalker[StringBuilder, String] {
     val cons = expr.constraint.accept(this, param)
     val card = expr.cardinality.accept(this, param)
     sb.append(
-      s"(triple_expr $NL$TAB$TAB$TAB$TAB$prop $NL$TAB$TAB$TAB$TAB$cons " +
-      s"$NL$TAB$TAB$TAB$TAB$card)"
+      s"(triple_expr $NL$TAB$TAB$TAB$TAB$prop " +
+      s"$NL$TAB$TAB$TAB$TAB$cons " + s"$NL$TAB$TAB$TAB$TAB$card)"
     )
     sb.toString()
   }

@@ -31,7 +31,8 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * A Literal String Value Expression is a literal that contains an String value. It is used to store Strings that appear
+  * A Literal String Value Expression is a literal that contains an String
+  * value. It is used to store Strings that appear
   * in the source code.
   *
   * @author Guillermo Facundo Colunga
@@ -46,7 +47,8 @@ class LiteralStringValueExpr(
 
   // Override default methods to indicate that this is a Literal String Value
   // Expression.
-  override def isLiteralStringValueExpr: Boolean                = true
+  override def isLiteralStringValueExpr: Boolean = true
+
   override def asLiteralStringValueExpr: LiteralStringValueExpr = this
 
   /**

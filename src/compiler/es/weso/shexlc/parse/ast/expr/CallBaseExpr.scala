@@ -45,7 +45,8 @@ class CallBaseExpr(
 ) extends CallExpr(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Call Prefix Expression.
-  override def isCallBaseExpr: Boolean      = true
+  override def isCallBaseExpr: Boolean = true
+
   override def asCallBaseExpr: CallBaseExpr = this
 
   /**
@@ -58,12 +59,14 @@ class CallBaseExpr(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content would be 'a = 3'.
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content would be 'a = 3'.
     *
     * @return the content of the node as a String.
     */

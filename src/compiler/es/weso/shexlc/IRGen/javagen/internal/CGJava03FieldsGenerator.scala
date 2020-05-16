@@ -54,7 +54,11 @@ class CGJava03FieldsGenerator(
     stringBuilder.append("\tprivate ")
     expr.argument match {
       case "string" =>
-        if (isList > "1") stringBuilder.append("List<String> ")
+        if (isList > "1")
+          stringBuilder.append(
+            "List<String> " +
+            ""
+          )
         else stringBuilder.append("String ")
       case "integer" =>
         if (isList > "1") stringBuilder.append("List<int> ")

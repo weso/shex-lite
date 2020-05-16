@@ -25,6 +25,7 @@
 //------------------------------------------------------------------------------
 
 package es.weso.shexlc.parse.ast.visitor
+
 import es.weso.shexlc.parse.ast.Schema
 import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.stmt._

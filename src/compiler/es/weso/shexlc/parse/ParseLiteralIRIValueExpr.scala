@@ -33,7 +33,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The Literal IRI Value Expression sub-parser creates a literal with iri value from the parser context.
+  * The Literal IRI Value Expression sub-parser creates a literal with iri
+  * value from the parser context.
   *
   * @author Guillermo Facundo Colunga
   * @param ctx     of the parser.

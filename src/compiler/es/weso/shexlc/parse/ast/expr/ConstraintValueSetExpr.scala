@@ -45,7 +45,8 @@ class ConstraintValueSetExpr(
 
   // Override default methods to indicate that this is a Constraint Value Set
   // Expression.
-  override def isConstraintValueSetExpr: Boolean                = true
+  override def isConstraintValueSetExpr: Boolean = true
+
   override def asConstraintValueSetExpr: ConstraintValueSetExpr = this
 
   /**

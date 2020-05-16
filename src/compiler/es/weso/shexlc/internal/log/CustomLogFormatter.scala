@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// File: DefaultSymbolTableEntry.scala
+// File: CustomLogFormatter.scala
 //
 // Short version for non-lawyers:
 //
@@ -24,19 +24,15 @@
 // The ShEx Lite Project includes packages written by third parties.
 //------------------------------------------------------------------------------
 
-package es.weso.shexlc.internal.symboltable
+package es.weso.shexlc.internal.log
 
-class DefaultSymbolTableEntry[T](var content: T) extends SymbolTableEntry[T] {
+import wvlet.log.{LogFormatter, LogRecord}
+import wvlet.log.LogFormatter._
 
-  private var nOfCalls = 0
-
-  override def getContent: T = content
-
-  override def setContent(content: T): Unit = this.content = content
-
-  override def getNumberOfCalls: Int = nOfCalls
-
-  override def addOneCall(): Unit = nOfCalls += 1
-
-  override def addNCalls(n: Int): Unit = nOfCalls += n
+object CustomLogFormatter extends LogFormatter {
+  override def formatLog(r: LogRecord): String = {
+    val log =
+      s"[${highlightLog(r.level, r.level.name)}] ${highlightLog(r.level, r.getMessage)}"
+    appendStackTrace(log, r)
+  }
 }

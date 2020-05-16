@@ -32,8 +32,10 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The import statement is a directive that allows to import an schema defined in a different file. The file is
-  * represented by the expression. It must conform to a type that at the end points to an schema like an iri, but this
+  * The import statement is a directive that allows to import an schema
+  * defined in a different file. The file is
+  * represented by the expression. It must conform to a type that at the end
+  * points to an schema like an iri, but this
   * will be checked by the es.weso.shexlc.semantic validator later.
   *
   * @author Guillermo Facundo Colunga.
@@ -46,7 +48,8 @@ class ImportStmt(
 ) extends Statement(position, tokenRange, content) {
 
   // Override default methods to indicate that this is an Import Statement.
-  override def isImportStmt: Boolean    = true
+  override def isImportStmt: Boolean = true
+
   override def asImportStmt: ImportStmt = this
 
   /**
@@ -59,12 +62,14 @@ class ImportStmt(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

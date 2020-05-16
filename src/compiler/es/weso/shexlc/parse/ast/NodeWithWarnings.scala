@@ -29,7 +29,8 @@ package es.weso.shexlc.parse.ast
 import es.weso.shexlc.internal.errorhandler.Warn
 
 /**
-  * A node with warnings is a node that might have warnings and therefore contains a list of warnings.
+  * A node with warnings is a node that might have warnings and therefore
+  * contains a list of warnings.
   *
   * @author Guillermo Facundo Colunga
   */

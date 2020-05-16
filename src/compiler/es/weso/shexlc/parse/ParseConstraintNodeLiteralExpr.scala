@@ -33,7 +33,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The constraint node literal expression parser generates a constraint node literal from the parser context.
+  * The constraint node literal expression parser generates a constraint node
+  * literal from the parser context.
   *
   * @author Guillermo Facundo Colunga
   * @param ctx     of the parser.

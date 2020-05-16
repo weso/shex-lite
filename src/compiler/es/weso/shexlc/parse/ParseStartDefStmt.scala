@@ -34,8 +34,10 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The start definition statement sub-parser creates an start definition statement from the context of the parser.
-  * It delegates the creation of the expression that represents the called shape to its own sub-parser.
+  * The start definition statement sub-parser creates an start definition
+  * statement from the context of the parser.
+  * It delegates the creation of the expression that represents the called
+  * shape to its own sub-parser.
   *
   * @author Guillermo Facundo Colunga
   * @param ctx     of the parser.

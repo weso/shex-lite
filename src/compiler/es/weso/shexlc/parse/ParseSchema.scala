@@ -35,7 +35,8 @@ import org.antlr.v4.runtime.misc.Interval
 import scala.collection.JavaConverters._
 
 /**
-  * The schema sub-parser generates an schema from the parser context. For that delegates all sub-parsing to sub-parsers
+  * The schema sub-parser generates an schema from the parser context. For
+  * that delegates all sub-parsing to sub-parsers
   * that are implemented on each rule.
   *
   * @author Guillermo Facundo Colunga
@@ -52,9 +53,8 @@ class ParseSchema(
   val line       = ctx.start.getLine
   val column     = ctx.start.getCharPositionInLine
   val pos        = Position.pos(sourceName, line, column)
-  val tokenRange =
-    new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-  val content = ccontext.getInputContext.getText(tokenRange)
+  val tokenRange = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+  val content    = ccontext.getInputContext.getText(tokenRange)
 
   override def getParseResult: Schema = {
 

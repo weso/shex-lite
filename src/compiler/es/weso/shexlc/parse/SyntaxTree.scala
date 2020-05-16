@@ -30,8 +30,10 @@ import es.weso.shexlc.internal.CompilationContext
 import org.antlr.v4.runtime.tree
 
 /**
-  * The syntax tree object acts a wrapper to the antlr implementation to add the compilation context. In the compilation
-  * context there is a field that stores the input char stream in case it is needed in the future.
+  * The syntax tree object acts a wrapper to the antlr implementation to add
+  * the compilation context. In the compilation
+  * context there is a field that stores the input char stream in case it is
+  * needed in the future.
   */
 trait SyntaxTree {
 
@@ -43,7 +45,8 @@ trait SyntaxTree {
   def getCompilationContext: CompilationContext
 
   /**
-    * Gets the tree antlr implementation. In case you want to visit you will need to implement the ShexLiteParserVisitor.
+    * Gets the tree antlr implementation. In case you want to visit you will
+    * need to implement the ShexLiteParserVisitor.
     *
     * @return the tree antlr implementation.
     */
@@ -51,8 +54,10 @@ trait SyntaxTree {
 }
 
 /**
-  * The syntax tree object acts a wrapper to the antlr implementation to add the compilation context. In the compilation
-  * context there is a field that stores the input char stream in case it is needed in the future.
+  * The syntax tree object acts a wrapper to the antlr implementation to add
+  * the compilation context. In the compilation
+  * context there is a field that stores the input char stream in case it is
+  * needed in the future.
   */
 private[shexlc] object SyntaxTree {
 
@@ -67,7 +72,8 @@ private[shexlc] object SyntaxTree {
       override def getCompilationContext: CompilationContext = ccontext
 
       /**
-        * Gets the tree antlr implementation. In case you want to visit you will need to implement the ShexLiteParserVisitor.
+        * Gets the tree antlr implementation. In case you want to visit you
+        * will need to implement the ShexLiteParserVisitor.
         *
         * @return the tree antlr implementation.
         */

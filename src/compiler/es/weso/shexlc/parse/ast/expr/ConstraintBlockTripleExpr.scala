@@ -31,7 +31,8 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * A Constraint Block Triple Expression represents a constraint composed of multiple expressions.
+  * A Constraint Block Triple Expression represents a constraint composed of
+  * multiple expressions.
   *
   * @author Guillermo Facundo Colunga
   */
@@ -42,8 +43,10 @@ class ConstraintBlockTripleExpr(
   val body: List[Expression]
 ) extends ConstraintExpr(position, tokenRange, content) {
 
-  // Override default methods to indicate that this is a Constraint Block Triple Expression.
-  override def isConstraintBlockTripleExpr: Boolean                   = true
+  // Override default methods to indicate that this is a Constraint Block
+  // Triple Expression.
+  override def isConstraintBlockTripleExpr: Boolean = true
+
   override def asConstraintBlockTripleExpr: ConstraintBlockTripleExpr = this
 
   /**
@@ -56,12 +59,14 @@ class ConstraintBlockTripleExpr(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

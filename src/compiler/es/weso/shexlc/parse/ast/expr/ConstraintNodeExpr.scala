@@ -40,7 +40,9 @@ abstract class ConstraintNodeExpr(
   content: String
 ) extends ConstraintExpr(position, tokenRange, content) {
 
-  // Override default methods to indicate that this is a Constraint Node Expression.
-  override def isConstraintNodeExpr: Boolean            = true
+  // Override default methods to indicate that this is a Constraint Node
+  // Expression.
+  override def isConstraintNodeExpr: Boolean = true
+
   override def asConstraintNodeExpr: ConstraintNodeExpr = this
 }

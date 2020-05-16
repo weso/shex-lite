@@ -49,7 +49,8 @@ class ConstraintTripleExpr(
 
   // Override default methods to indicate that this is a Constraint Triple
   // Expression.
-  override def isConstraintTripleExpr: Boolean              = true
+  override def isConstraintTripleExpr: Boolean = true
+
   override def asConstraintTripleExpr: ConstraintTripleExpr = this
 
   /**
