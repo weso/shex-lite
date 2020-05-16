@@ -35,8 +35,10 @@ import org.antlr.v4.runtime.misc.Interval
 import scala.collection.JavaConverters._
 
 /**
-  * The constraint value set expression sub-parser generates a constraint value set expression from the parser context.
-  * It delegates the action of creating the value set to each one of the value sets included to their own sub-parsers.
+  * The constraint value set expression sub-parser generates a constraint
+  * value set expression from the parser context.
+  * It delegates the action of creating the value set to each one of the
+  * value sets included to their own sub-parsers.
   *
   * @author Guillermo Facundo Colunga
   * @param ctx     of the parser.
@@ -58,7 +60,8 @@ class ParseConstraintValueSetExpr(
       new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val content = ccontext.getInputContext.getText(tokenRange)
 
-    // Would be nice to remove the as instance of from here but as antlr generates java...
+    // Would be nice to remove the as instance of from here but as antlr
+    // generates java...
     val valueSet = ctx
       .constraint_valid_value_set_type()
       .asScala

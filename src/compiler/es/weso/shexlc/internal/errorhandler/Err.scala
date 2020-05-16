@@ -26,28 +26,20 @@
 
 package es.weso.shexlc.internal.errorhandler
 
-import es.weso.shexlc.parse.ast.{
-  AbstractASTNode,
-  NodeWithPosition,
-  Position,
-  Schema
-}
+import es.weso.shexlc.parse.ast.{AbstractASTNode, Position, Schema}
 
 /**
-  * Represents an error event that occurred during the compilation process. An error contains the position in the source
+  * Represents an error event that occurred during the compilation process.
+  * An error contains the position in the source
   * where it was raised, the message/cause and the type of error.
   *
   * @author Guillermo Facundo Colunga
-  *
-  * @param node where the error was generated
+  * @param node    where the error was generated
   * @param message indicating the description of the cause of the error
-  * @param ttype of the error indicating why the error occurred
+  * @param ttype   of the error indicating why the error occurred
   */
-case class Err(
-  node: AbstractASTNode,
-  message: String,
-  ttype: CompilerEventType
-) extends CompilationEvent {
+case class Err(node: AbstractASTNode, message: String, ttype: CompilerEventType)
+    extends CompilationEvent {
 
   /**
     * Gets whether an event is an error or not.
@@ -64,9 +56,12 @@ case class Err(
   override def getEventPosition: Position = node.getPosition
 
   /**
-    * Gets the context of the event. The context is the content of the parent node. So if for example we have int a = 'c'
-    * as a is an integer and 'c' is a char we cannot assign its value an event will be raised, there the error will be
-    * 'c' that is the node that raises the error as it should be an integer. And the context would be a = c that is the
+    * Gets the context of the event. The context is the content of the parent
+    * node. So if for example we have int a = 'c'
+    * as a is an integer and 'c' is a char we cannot assign its value an
+    * event will be raised, there the error will be
+    * 'c' that is the node that raises the error as it should be an integer.
+    * And the context would be a = c that is the
     * parent node.
     *
     * @return the context of the event.
@@ -74,8 +69,10 @@ case class Err(
   override def getEventContext: String = node.getContent
 
   /**
-    * Gets the event type. The event type contains the error code and the description of the type of errors. An error
-    * type can be for example -> BaseNotFoundError(code = E001, "base not found")
+    * Gets the event type. The event type contains the error code and the
+    * description of the type of errors. An error
+    * type can be for example -> BaseNotFoundError(code = E001, "base not
+    * found")
     *
     * @return the event type.
     */
@@ -101,9 +98,7 @@ case class Err(
         if (parent.isInstanceOf[Schema]) {
           errContext = node.getContent
         } else {
-          errContext = parent
-            .asInstanceOf[AbstractASTNode]
-            .getContent
+          errContext = parent.asInstanceOf[AbstractASTNode].getContent
         }
       }
       case None => errContext = node.getContent
@@ -158,58 +153,72 @@ object Err {
     */
   val BaseOverride = new CompilerEventType {
     override def getCode: String = "E001"
+
     override def getDescription: String =
-      "attempt to override a base directive value"
+      "attempt to override a base " +
+      "directive value"
   }
 
   val StartOverride = new CompilerEventType {
     override def getCode: String = "E002"
+
     override def getDescription: String =
-      "attempt to override an start directive value"
+      "attempt to override an start " +
+      "directive value"
   }
 
   val PrefixOverride = new CompilerEventType {
     override def getCode: String = "E003"
+
     override def getDescription: String =
-      "attempt to override an already defined prefix"
+      "attempt to override an already " +
+      "defined prefix"
   }
 
   val ShapeOverride = new CompilerEventType {
     override def getCode: String = "E004"
+
     override def getDescription: String =
-      "attempt to override an already defined shape"
+      "attempt to override an already " +
+      "defined shape"
   }
 
   /**
     * Element Not Found Errors.
     */
   val BaseNotFound = new CompilerEventType {
-    override def getCode: String        = "E005"
+    override def getCode: String = "E005"
+
     override def getDescription: String = "base not defined"
   }
 
   val StartNotFound = new CompilerEventType {
-    override def getCode: String        = "E006"
+    override def getCode: String = "E006"
+
     override def getDescription: String = "start not defined"
   }
 
   val PrefixNotFound = new CompilerEventType {
-    override def getCode: String        = "E007"
+    override def getCode: String = "E007"
+
     override def getDescription: String = "prefix not defined"
   }
 
   val ShapeNotFound = new CompilerEventType {
-    override def getCode: String        = "E008"
+    override def getCode: String = "E008"
+
     override def getDescription: String = "shape not defined"
   }
 
   val NullReference = new CompilerEventType {
-    override def getCode: String        = "E009"
+    override def getCode: String = "E009"
+
     override def getDescription: String = "null reference"
   }
 
   val NonValidAction = new CompilerEventType {
-    override def getCode: String        = "E010"
+    override def getCode: String = "E010"
+
     override def getDescription: String = "non valid action"
   }
 
@@ -218,22 +227,27 @@ object Err {
     */
   val CouldNotCreateSchemaForSource = new CompilerEventType {
     override def getCode: String = "E011"
+
     override def getDescription: String =
-      "couldn't create schema for source file"
+      "couldn't create schema for source " +
+      "file"
   }
 
   val TypeCheckingError = new CompilerEventType {
-    override def getCode: String        = "E012"
+    override def getCode: String = "E012"
+
     override def getDescription: String = "not valid type"
   }
 
   val CodeGeneratorError = new CompilerEventType {
-    override def getCode: String        = "E013"
+    override def getCode: String = "E013"
+
     override def getDescription: String = "code generation error"
   }
 
   val FeatureNotAvailable = new CompilerEventType {
-    override def getCode: String        = "E014"
+    override def getCode: String = "E014"
+
     override def getDescription: String = "feature not available"
   }
 }

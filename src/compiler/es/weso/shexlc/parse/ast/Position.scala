@@ -35,7 +35,8 @@ class Position(val filename: String, val line: Int, val column: Int)
     extends Comparable[Position] {
 
   /**
-    * Check if the position is usable. Does not know what it is pointing at, so it can't check if the position is after
+    * Check if the position is usable. Does not know what it is pointing at,
+    * so it can't check if the position is after
     * the end of the source.
     */
   def isValid: Boolean =

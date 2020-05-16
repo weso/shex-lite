@@ -41,29 +41,32 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
     msgsHandler.addEvent(
       new Err(
         stmt,
-        "import statements are not valid for java code generation",
+        "import statements are not valid for " +
+        "java code generation",
         Warn.FeatureIgnored
       )
-    )
-    //stmt.expression.accept(this, param)
+    ) //stmt.expression.accept
+    // (this, param)
   }
 
   override def visit(stmt: StartDefStmt, param: Unit): Unit = {
     msgsHandler.addEvent(
       new Err(
         stmt,
-        "the start statement will be ignored for java code generation",
+        "the start statement will be ignored " +
+        "for java code generation",
         Warn.FeatureIgnored
       )
-    )
-    //stmt.expression.accept(this, param)
+    ) //stmt.expression
+    // .accept(this, param)
   }
 
   override def visit(expr: ConstraintNodeAnyTypeExpr, param: Unit): Unit = {
     msgsHandler.addEvent(
       new Err(
         expr,
-        "this constraint will be substituted by the Object java class",
+        "this constraint will be substituted " +
+        "by the Object java class",
         Warn.FeatureIgnored
       )
     )
@@ -73,7 +76,8 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
     msgsHandler.addEvent(
       new Err(
         expr,
-        "this constraint cannot be represented in java",
+        "this constraint cannot be represented" +
+        " in java",
         Err.FeatureNotAvailable
       )
     )
@@ -83,7 +87,8 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
     msgsHandler.addEvent(
       new Err(
         expr,
-        "this constraint cannot be represented in java",
+        "this constraint cannot be represented" +
+        " in java",
         Err.FeatureNotAvailable
       )
     )
@@ -93,7 +98,8 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
     msgsHandler.addEvent(
       new Err(
         expr,
-        "this constraint cannot be represented in java",
+        "this constraint cannot be represented" +
+        " in java",
         Err.FeatureNotAvailable
       )
     )
@@ -103,7 +109,8 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
     msgsHandler.addEvent(
       new Err(
         expr,
-        "this constraint cannot be represented in java",
+        "this constraint cannot be represented" +
+        " in java",
         Err.FeatureNotAvailable
       )
     )
@@ -117,7 +124,8 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
         msgsHandler.addEvent(
           new Err(
             constraint,
-            "this constraint cannot be represented in java",
+            "this constraint cannot be " +
+            "represented in java",
             Err.FeatureNotAvailable
           )
         )
@@ -135,7 +143,8 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
       msgsHandler.addEvent(
         new Err(
           constraint,
-          "this prefix has no mapping in java",
+          "this prefix has no mapping in" +
+          " java",
           Err.FeatureNotAvailable
         )
       )
@@ -145,7 +154,8 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
       msgsHandler.addEvent(
         new Err(
           cardinality,
-          "this cardinality has no mapping in java",
+          "this cardinality has no " +
+          "mapping in java",
           Err.FeatureNotAvailable
         )
       )
@@ -160,7 +170,8 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
     msgsHandler.addEvent(
       new Err(
         expr,
-        "this constraint cannot be represented in java",
+        "this constraint cannot be represented" +
+        " in java",
         Err.FeatureNotAvailable
       )
     )

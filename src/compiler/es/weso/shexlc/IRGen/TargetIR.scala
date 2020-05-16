@@ -27,8 +27,10 @@
 package es.weso.shexlc.IRGen
 
 /**
-  * The Shape Expression Lite Target Intermediate Representation represents the standardized abstraction of the possible
-  * target language for the code generation. Each standardized possible target language has a description field that
+  * The Shape Expression Lite Target Intermediate Representation represents
+  * the standardized abstraction of the possible
+  * target language for the code generation. Each standardized possible
+  * target language has a description field that
   * contains the name of the language that ir represents.
   *
   * @author Guillermo Facundo Colunga
@@ -36,7 +38,8 @@ package es.weso.shexlc.IRGen
 trait TargetIR {
 
   /**
-    * Gets the description of a target language, this description will be key used to index the target language.
+    * Gets the description of a target language, this description will be key
+    * used to index the target language.
     *
     * @return the description of a target language.
     */

@@ -53,7 +53,8 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
 
     for (file <- correctFiles) {
       test(
-        s"Compiling file and generating code for file $file should pass without errors"
+        s"Compiling file and generating code for file $file should pass " +
+        s"without errors"
       ) {
 
         ccontext = CompilationContext.withConfig(cconfig)
@@ -94,7 +95,8 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
 
     for (file <- incorrectFiles) {
       test(
-        s"Compiling file and generating code for file $file should pass with errors"
+        s"Compiling file and generating code for file $file should pass with " +
+        s"errors"
       ) {
 
         ccontext = CompilationContext.withConfig(cconfig)
@@ -135,7 +137,8 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
   }
 
   test(
-    "Compile a single file, generate code for it and test that the code is well generated."
+    "Compile a single file, generate code for it and test that the code is " +
+    "well generated."
   ) {
 
     val shexl =

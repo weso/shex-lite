@@ -32,9 +32,12 @@ import org.antlr.v4.runtime.misc.Interval
 /**
   * A base class for all the constraints.
   *
-  * This constraint trait is just used as a mean to know if an expression is a constraint, any constraint. For that it
-  * overrides the super is and as methods but let other constraints is's and as's to its children. Not need to
-  * implement here any more methods except those that will be mandatory for all constraints.
+  * This constraint trait is just used as a mean to know if an expression is
+  * a constraint, any constraint. For that it
+  * overrides the super is and as methods but let other constraints is's and
+  * as's to its children. Not need to
+  * implement here any more methods except those that will be mandatory for
+  * all constraints.
   *
   * @author Guillermo Facundo Colunga
   */
@@ -45,6 +48,7 @@ abstract class ConstraintExpr(
 ) extends Expression(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Constraint Expression.
-  override def isConstraintExpr: Boolean        = true
+  override def isConstraintExpr: Boolean = true
+
   override def asConstraintExpr: ConstraintExpr = this
 }

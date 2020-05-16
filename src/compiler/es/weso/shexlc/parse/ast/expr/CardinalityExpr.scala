@@ -31,7 +31,8 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * A cardinality represents a range. And will be applied to express hop many times a property with a given constraint
+  * A cardinality represents a range. And will be applied to express hop many
+  * times a property with a given constraint
   * can appear in a node.This range can go from MinValue to MaxValue.
   *
   * @author Guillermo Facundo Colunga
@@ -45,7 +46,8 @@ class CardinalityExpr(
 ) extends Expression(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Cardinality Expression.
-  override def isCardinalityExpr: Boolean         = true
+  override def isCardinalityExpr: Boolean = true
+
   override def asCardinalityExpr: CardinalityExpr = this
 
   /**
@@ -58,12 +60,14 @@ class CardinalityExpr(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.
@@ -71,14 +75,16 @@ class CardinalityExpr(
   override def getContent: String = content
 
   /**
-    * If the minimum number of repetitions is zero and the maximum is 1 that means that is an optional cardinality.
+    * If the minimum number of repetitions is zero and the maximum is 1 that
+    * means that is an optional cardinality.
     *
     * @return true if the cardinality represents the optional one.
     */
   def isOptionalCardinality: Boolean = (min == 0) && (max == 1)
 
   /**
-    * If he minimum and the maximum are zero that means that the cardinality is empty.
+    * If he minimum and the maximum are zero that means that the cardinality
+    * is empty.
     *
     * @return true if the min and max are both 0.
     */
@@ -92,16 +98,19 @@ class CardinalityExpr(
   def isUpperBoundOpen: Boolean = max == CardinalityExpr.MaxValue
 
   /**
-    * Is valid if and only if the min is eq or greater than the min possible value, the max is lower or eq the max
+    * Is valid if and only if the min is eq or greater than the min possible
+    * value, the max is lower or eq the max
     * possible value and the mis is less or eq the max value.
     *
     * @return true if the cardinality is valid, false otherwise.
     */
   def isValid: Boolean =
-    (CardinalityExpr.MinValue <= min) && (max <= CardinalityExpr.MaxValue) && (min <= max)
+    (CardinalityExpr.MinValue <= min) && (max <=
+    CardinalityExpr.MaxValue) && (min <= max)
 
   /**
-    * Counts the elements in the range, that is if the min = 0 and tha max = 1 this will return 1. If the min = 1
+    * Counts the elements in the range, that is if the min = 0 and tha max =
+    * 1 this will return 1. If the min = 1
     * and the max = 3 the function will return 2.
     *
     * @return the difference between the max and the min.
@@ -126,7 +135,8 @@ class CardinalityExpr(
 }
 
 /**
-  * Companion object of the cardinality expression to include the min and max standardised values.
+  * Companion object of the cardinality expression to include the min and max
+  * standardised values.
   *
   * @author Guillermo Facundo Colunga
   */

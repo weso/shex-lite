@@ -27,7 +27,8 @@
 package es.weso.shexlc.internal.errorhandler
 
 /**
-  * To standardize the different types of events that can occur in the compiler, this contract is created so that all of
+  * To standardize the different types of events that can occur in the
+  * compiler, this contract is created so that all of
   * them start from this same source.
   *
   * @author Guillermo Facundo Colunga

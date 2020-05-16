@@ -29,7 +29,8 @@ package es.weso.shexlc.parse.ast
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * A node with range is a node that contains an antlr interval, which is the range of tokens that generate the node.
+  * A node with range is a node that contains an antlr interval, which is the
+  * range of tokens that generate the node.
   *
   * @author Guillermo Facundo Colunga
   */
@@ -38,12 +39,14 @@ trait NodeWithTokenRange {
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   def getRange: Interval
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

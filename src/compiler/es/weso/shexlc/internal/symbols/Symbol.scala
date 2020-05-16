@@ -24,9 +24,9 @@
 // The ShEx Lite Project includes packages written by third parties.
 //------------------------------------------------------------------------------
 
-package es.weso.shexlc.internal.symboltable
+package es.weso.shexlc.internal.symbols
 
-trait SymbolTableEntry[T] {
+trait Symbol[T] {
 
   def getContent: T
 

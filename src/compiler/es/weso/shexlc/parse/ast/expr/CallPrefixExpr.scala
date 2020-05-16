@@ -41,12 +41,14 @@ class CallPrefixExpr(
   tokenRange: Interval,
   content: String,
   val label: String,
-  val argument: String,
+  val
+  argument: String,
   var definition: Statement = null
 ) extends CallExpr(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Call Prefix Expression.
-  override def isCallPrefixExpr: Boolean        = true
+  override def isCallPrefixExpr: Boolean = true
+
   override def asCallPrefixExpr: CallPrefixExpr = this
 
   /**
@@ -59,12 +61,14 @@ class CallPrefixExpr(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

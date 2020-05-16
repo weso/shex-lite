@@ -33,7 +33,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * This parser extracts a triple constraint expression from the parser triple constraint context.
+  * This parser extracts a triple constraint expression from the parser
+  * triple constraint context.
   *
   * @author Guillermo Facundo Colunga
   * @param ctx     of the parser
@@ -61,7 +62,9 @@ class ParseConstraintTripleExpr(
       if (ctx.cardinality == null)
         new CardinalityExpr(pos, tokenRange, content, 0, 1)
       else
-        ctx.cardinality.accept(visitor).asExpression()
+        ctx.cardinality
+          .accept(visitor)
+          .asExpression()
 
     new ConstraintTripleExpr(
       pos,

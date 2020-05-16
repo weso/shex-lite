@@ -30,7 +30,9 @@ package es.weso.shexlc.parse.ast.visitor
   * Defines a common trait for all nodes that can be visited.
   *
   * This file is a modification of the original java parser, found here:
-  * https://github.com/javaparser/javaparser/blob/master/javaparser-core/src/main/java/com/github/javaparser/es.weso.shexlc.parse.ast/visitor/Visitable.java
+  * https://github.com/javaparser/javaparser/blob/master/javaparser-core/src
+  * /main/java/com/github/javaparser/es.weso.shexlc.parse
+  * .ast/visitor/Visitable.java
   *
   * @author Guillermo Facundo Colunga
   */

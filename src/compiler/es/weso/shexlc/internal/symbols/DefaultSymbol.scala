@@ -24,9 +24,9 @@
 // The ShEx Lite Project includes packages written by third parties.
 //------------------------------------------------------------------------------
 
-package es.weso.shexlc.internal.symboltable
+package es.weso.shexlc.internal.symbols
 
-class DefaultSymbolTableEntry[T](var content: T) extends SymbolTableEntry[T] {
+class DefaultSymbol[T](var content: T) extends Symbol[T] {
 
   private var nOfCalls = 0
 

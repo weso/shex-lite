@@ -32,8 +32,10 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * A prefix definition associates an expression, presumably an identifier or similar with another expression that also
-  * presumably will be an iri. But this is left to the es.weso.shexlc.semantic checker so we can extend the language in the future
+  * A prefix definition associates an expression, presumably an identifier or
+  * similar with another expression that also
+  * presumably will be an iri. But this is left to the es.weso.shexlc
+  * .semantic checker so we can extend the language in the future
   * without modifying this class.
   *
   * @author Guillermo Facundo Colunga.
@@ -43,11 +45,14 @@ class PrefixDefStmt(
   tokenRange: Interval,
   content: String,
   val label: String,
-  val expression: Expression
+  val
+  expression: Expression
 ) extends DefinitionStmt(position, tokenRange, content) {
 
-  // Override default methods to indicate that this is a Prefix Definition Statement.
-  override def isPrefixDefStmt: Boolean       = true
+  // Override default methods to indicate that this is a Prefix Definition
+  // Statement.
+  override def isPrefixDefStmt: Boolean = true
+
   override def asPrefixDefStmt: PrefixDefStmt = this
 
   /**
@@ -60,12 +65,14 @@ class PrefixDefStmt(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

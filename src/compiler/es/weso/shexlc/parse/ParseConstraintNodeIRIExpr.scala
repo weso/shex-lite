@@ -33,7 +33,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The constraint node iri expression sub-parser generates a constraint node of type iri expression from the context
+  * The constraint node iri expression sub-parser generates a constraint node
+  * of type iri expression from the context
   * of the parser.
   *
   * @author Guillermo Facundo Colunga

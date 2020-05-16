@@ -34,8 +34,10 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The prefix definition statement sub-parser generates a prefix definition statement from the context of the parser.
-  * It delegates the creation of the iri literal expression to its own sub-parser.
+  * The prefix definition statement sub-parser generates a prefix definition
+  * statement from the context of the parser.
+  * It delegates the creation of the iri literal expression to its own
+  * sub-parser.
   *
   * @author Guillermo Facundo Colunga
   * @param ctx     of the parser.
@@ -56,7 +58,12 @@ class ParsePrefixDefStmt(
       new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val content = ccontext.getInputContext.getText(tokenRange)
 
-    val label           = if (ctx.IDENTIFIER() == null) "" else ctx.IDENTIFIER().getText
+    val label =
+      if (ctx.IDENTIFIER() == null) ""
+      else
+        ctx
+          .IDENTIFIER()
+          .getText
     val iri: Expression = ctx.iri.accept(visitor).asExpression()
 
     new PrefixDefStmt(pos, tokenRange, content, label, iri)

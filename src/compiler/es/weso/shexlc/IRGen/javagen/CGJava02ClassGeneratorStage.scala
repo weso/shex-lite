@@ -37,15 +37,13 @@ import scala.collection.mutable.ListBuffer
 class CGJava02ClassGeneratorStage(ccontex: CompilationContext)
     extends ASTDefaultVisitor[String] {
 
-  private[this] var stringBuilder =
-    new StringBuilder() // This string builder will contain the generated sources.
-  private[shexlc] var generatedSources = ListBuffer.empty[(String, String)]
-
-  private[this] var className: String = ""
-
   private[this] val ppackage: String = ccontex.getConfiguration.getProperties
     .get("java-package")
     .getOrElse("generated")
+  private[this] var stringBuilder = new StringBuilder() // This string
+  // builder will contain the generated sources.
+  private[shexlc] var generatedSources = ListBuffer.empty[(String, String)]
+  private[this] var className: String  = ""
 
   override def visit(stmt: ShapeDefStmt, param: String): Unit = {
 
@@ -71,20 +69,14 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext)
     // Write all the class static code.
     stringBuilder.append(s"public class $className {")
     stringBuilder.append("\n")
-    stmt.expression
-      .accept(fieldsGen, param) // Propagate the action to generate the fields.
+    stmt.expression.accept(fieldsGen, param) // Propagate the action to
+    // generate the fields.
     stringBuilder.append("\n")
-    stmt.expression
-      .accept(
-        constructorGen,
-        className
-      ) // Propagate the action to generate the constructor.
+    stmt.expression.accept(constructorGen, className) // Propagate the action
+    // to generate the constructor.
     stringBuilder.append("\n")
-    stmt.expression
-      .accept(
-        getSetGen,
-        param
-      ) // Propagate the action to generate the getters and the setters.
+    stmt.expression.accept(getSetGen, param) // Propagate the action to
+    // generate the getters and the setters.
     stringBuilder.append(s"}")
     stringBuilder.append("\n")
 
@@ -93,16 +85,11 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext)
   }
 
   override def visit(expr: CallBaseExpr, param: String): Unit = {
-    className = expr.argument
-      .replace("<", "")
-      .replace(">", "")
-      .toLowerCase()
-      .capitalize
+    className =
+      expr.argument.replace("<", "").replace(">", "").toLowerCase().capitalize
   }
 
   override def visit(expr: CallPrefixExpr, param: String): Unit = {
-    className = expr.argument
-      .toLowerCase()
-      .capitalize
+    className = expr.argument.toLowerCase().capitalize
   }
 }

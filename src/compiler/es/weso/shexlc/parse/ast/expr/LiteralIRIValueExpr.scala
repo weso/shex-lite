@@ -31,7 +31,8 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * A Literal IRI Value Expression is a literal that contains an IRI value. It is used to store IRIs that appear in the
+  * A Literal IRI Value Expression is a literal that contains an IRI value.
+  * It is used to store IRIs that appear in the
   * source code.
   *
   * @author Guillermo Facundo Colunga
@@ -43,8 +44,10 @@ class LiteralIRIValueExpr(
   val value: String
 ) extends LiteralExpr(position, tokenRange, content) {
 
-  // Override default methods to indicate that this is a Literal IRI Value Expression.
-  override def isLiteralIRIValueExpr: Boolean             = true
+  // Override default methods to indicate that this is a Literal IRI Value
+  // Expression.
+  override def isLiteralIRIValueExpr: Boolean = true
+
   override def asLiteralIRIValueExpr: LiteralIRIValueExpr = this
 
   /**
@@ -63,7 +66,8 @@ class LiteralIRIValueExpr(
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

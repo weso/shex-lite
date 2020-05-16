@@ -31,8 +31,10 @@ import es.weso.shexlc.parse.ast.{AbstractASTNode, Schema}
 import es.weso.shexlc.parse.generated.ShexLiteParser
 
 /**
-  * Defines the AST base class. And packs together the tree root (contains the full tree by means of references). And
-  * the compilation context that was generated in the previous stage (lexing -> parsing).
+  * Defines the AST base class. And packs together the tree root (contains
+  * the full tree by means of references). And
+  * the compilation context that was generated in the previous stage (lexing
+  * -> parsing).
   *
   * @author Guillermo Facundo Colunga
   */
@@ -54,8 +56,10 @@ trait AbstractSyntaxTree {
 }
 
 /**
-  * Defines the AST base class. And packs together the tree root (contains the full tree by means of references). And
-  * the compilation context that was generated in the previous stage (lexing -> parsing).
+  * Defines the AST base class. And packs together the tree root (contains
+  * the full tree by means of references). And
+  * the compilation context that was generated in the previous stage (lexing
+  * -> parsing).
   *
   * @author Guillermo Facundo Colunga
   */
@@ -77,9 +81,7 @@ object AbstractSyntaxTree {
         .accept(new ASTBuilderParser(syntaxTree.getCompilationContext))
 
       // Execute the tree parent builder to add all corresponding parents.
-      root
-        .asInstanceOf[Schema]
-        .accept(new SyntaxTreeParentBuilder(), ())
+      root.asInstanceOf[Schema].accept(new SyntaxTreeParentBuilder(), ())
 
       /**
         * Gets the root of the tree.

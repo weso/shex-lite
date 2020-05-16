@@ -34,7 +34,8 @@ import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor._
 
 /**
-  * The identification walker is the tool that travels the AST just to identify possible definitions an add the
+  * The identification walker is the tool that travels the AST just to
+  * identify possible definitions an add the
   * information found to the symbol table.
   *
   */
@@ -46,11 +47,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
     for (stmt <- schema.stmts) {
       if (!stmt.isStatement()) {
         errorHandler.addEvent(
-          new Err(
-            stmt,
-            s"$stmt is not an statement",
-            Err.TypeCheckingError
-          )
+          new Err(stmt, s"$stmt is not an statement", Err.TypeCheckingError)
         )
       }
       stmt.accept(this, param)
@@ -62,7 +59,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
-          s"${stmt.expression} is not a Literal IRI Value Expression",
+          s"${stmt.expression} is " +
+          s"not a Literal IRI Value Expression",
           Err.TypeCheckingError
         )
       )
@@ -75,7 +73,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
-          s"${stmt.expression} is not a Literal IRI Value Expression",
+          s"${stmt.expression} is " +
+          s"not a Literal IRI Value Expression",
           Err.TypeCheckingError
         )
       )
@@ -88,7 +87,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
-          s"${stmt.expression} is not a Literal IRI Value Expression",
+          s"${stmt.expression} is " +
+          s"not a Literal IRI Value Expression",
           Err.TypeCheckingError
         )
       )
@@ -101,7 +101,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       errorHandler.addEvent(
         new Err(
           stmt.label,
-          s"${stmt.label} is not a Call Prefix or Base Expression",
+          s"${stmt.label} is not a Call" +
+          s" Prefix or Base Expression",
           Err.TypeCheckingError
         )
       )
@@ -111,7 +112,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
-          s"${stmt.expression} is not an Expression",
+          s"${stmt.expression} is " +
+          s"not an Expression",
           Err.TypeCheckingError
         )
       )
@@ -124,7 +126,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       errorHandler.addEvent(
         new Err(
           stmt.expression,
-          s"${stmt.expression} is not a Call Shape Expression",
+          s"${stmt.expression} is " +
+          s"not a Call Shape Expression",
           Err.TypeCheckingError
         )
       )
@@ -137,7 +140,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       errorHandler.addEvent(
         new Err(
           expr.label,
-          s"${expr.label} is not a Call Prefix / Base Expression",
+          s"${expr.label} is not a Call" +
+          s" Prefix / Base Expression",
           Err.TypeCheckingError
         )
       )
@@ -151,7 +155,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
         errorHandler.addEvent(
           new Err(
             tripleExpr,
-            s"$tripleExpr is not a Constraint Triple Expression",
+            s"$tripleExpr is not a " +
+            s"Constraint Triple Expression",
             Err.TypeCheckingError
           )
         )
@@ -165,7 +170,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       errorHandler.addEvent(
         new Err(
           expr.property,
-          s"${expr.property} is not a Call Prefix Expression",
+          s"${expr.property} is not " +
+          s"a Call Prefix Expression",
           Err.TypeCheckingError
         )
       )
@@ -176,7 +182,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       errorHandler.addEvent(
         new Err(
           expr.constraint,
-          s"${expr.constraint} is not an Expression",
+          s"${expr.constraint} is " +
+          s"not an Expression",
           Err.TypeCheckingError
         )
       )
@@ -187,7 +194,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
       errorHandler.addEvent(
         new Err(
           expr.cardinality,
-          s"${expr.cardinality} is not a Cardinality Expression",
+          s"${expr.cardinality} " +
+          s"is not a Cardinality Expression",
           Err.TypeCheckingError
         )
       )
@@ -201,7 +209,8 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
         errorHandler.addEvent(
           new Err(
             value,
-            s"$value is not a Valid Value Type Expression",
+            s"$value is not a Valid Value " +
+            s"Type Expression",
             Err.TypeCheckingError
           )
         )

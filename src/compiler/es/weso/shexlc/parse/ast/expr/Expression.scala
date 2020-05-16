@@ -32,8 +32,10 @@ import org.antlr.v4.runtime.misc.Interval
 /**
   * A base class for all the expression.
   *
-  * When an expression is added to the es.weso.shexlc.parse.ast it is mandatory to add its is and as methods, that way it is much
-  * simple and faster to check if the es.weso.shexlc.parse.ast is semantically correct or not and also to access fields.
+  * When an expression is added to the es.weso.shexlc.parse.ast it is
+  * mandatory to add its is and as methods, that way it is much
+  * simple and faster to check if the es.weso.shexlc.parse.ast is
+  * semantically correct or not and also to access fields.
   *
   * @author Guillermo Facundo Colunga
   */
@@ -44,36 +46,46 @@ abstract class Expression(
 ) extends AbstractASTNode(position, tokenRange, content) {
 
   // Override default values from node with position.
-  override def isExpression(): Boolean    = true
+  override def isExpression(): Boolean = true
+
   override def asExpression(): Expression = this
 
   // Literal Expression.
   def isLiteralExpr: Boolean = false
+
   def asLiteralExpr: LiteralExpr =
-    throw new IllegalStateException(s"$this is not an LiteralExpr")
+    throw new IllegalStateException(
+      s"$this is" +
+      s" not an LiteralExpr"
+    )
 
   // Literal IRI Value Expression.
   def isLiteralIRIValueExpr: Boolean = false
+
   def asLiteralIRIValueExpr: LiteralIRIValueExpr =
     throw new IllegalStateException(s"$this is not an LiteralIRIValueExpr")
 
   // Literal String Value Expression.
   def isLiteralStringValueExpr: Boolean = false
+
   def asLiteralStringValueExpr: LiteralStringValueExpr =
     throw new IllegalStateException(s"$this is not an LiteralStringValueExpr")
 
   // Literal Real Value Expression.
   def isLiteralRealValueExpr: Boolean = false
+
   def asLiteralRealValueExpr: LiteralRealValueExpr =
     throw new IllegalStateException(s"$this is not an LiteralRealValueExpr")
 
   // Constraint Expression.
   def isConstraintExpr: Boolean = false
-  def asConstraintExpr: ConstraintExpr =
-    throw new IllegalStateException(s"$this is not an ConstraintExpr")
+
+  def asConstraintExpr: ConstraintExpr = throw new IllegalStateException
+  (s"$this is not an ConstraintExpr")
 
   // Constraint Block Triple Expression.
   def isConstraintBlockTripleExpr: Boolean = false
+
   def asConstraintBlockTripleExpr: ConstraintBlockTripleExpr =
     throw new IllegalStateException(
       s"$this is not an asConstraintBlockTripleExpr"
@@ -81,21 +93,25 @@ abstract class Expression(
 
   // Constraint Triple Expression.
   def isConstraintTripleExpr: Boolean = false
+
   def asConstraintTripleExpr: ConstraintTripleExpr =
     throw new IllegalStateException(s"$this is not an ConstraintTripleExpr")
 
   // Cardinality Expression.
   def isCardinalityExpr: Boolean = false
-  def asCardinalityExpr: CardinalityExpr =
-    throw new IllegalStateException(s"$this is not an CardinalityExpr")
+
+  def asCardinalityExpr: CardinalityExpr = throw new IllegalStateException
+  (s"$this is not an CardinalityExpr")
 
   // Constraint Node Expression.
   def isConstraintNodeExpr: Boolean = false
+
   def asConstraintNodeExpr: ConstraintNodeExpr =
     throw new IllegalStateException(s"$this is not an ConstraintNodeExpr")
 
   // Constraint Node Literal Expression.
   def isConstraintNodeLiteralExpr: Boolean = false
+
   def asConstraintNodeLiteralExpr: ConstraintNodeLiteralExpr =
     throw new IllegalStateException(
       s"$this is not an ConstraintNodeLiteralExpr"
@@ -103,11 +119,13 @@ abstract class Expression(
 
   // Constraint Node IRI Expression.
   def isConstraintNodeIRIExpr: Boolean = false
+
   def asConstraintNodeIRIExpr: ConstraintNodeIRIExpr =
     throw new IllegalStateException(s"$this is not an ConstraintNodeIRIExpr")
 
   // Constraint Node Any Type Expression.
   def isConstraintNodeAnyTypeExpr: Boolean = false
+
   def asConstraintNodeAnyTypeExpr: ConstraintNodeAnyTypeExpr =
     throw new IllegalStateException(
       s"$this is not an ConstraintNodeAnyTypeExpr"
@@ -115,11 +133,13 @@ abstract class Expression(
 
   // Constraint Node BNode Expression.
   def isConstraintNodeBNodeExpr: Boolean = false
+
   def asConstraintNodeBNodeExpr: ConstraintNodeBNodeExpr =
     throw new IllegalStateException(s"$this is not an ConstraintNodeBNodeExpr")
 
   // Constraint Node Non Literal Expression.
   def isConstraintNodeNonLiteralExpr: Boolean = false
+
   def asConstraintNodeNonLiteralExpr: ConstraintNodeNonLiteralExpr =
     throw new IllegalStateException(
       s"$this is not an ConstraintNodeNonLiteralExpr"
@@ -127,6 +147,7 @@ abstract class Expression(
 
   // Constraint Valid Value Set Expression
   def isConstraintValidValueSetExpr: Boolean = false
+
   def asConstraintValidValueSetExpr: ConstraintValidValueSetExpr =
     throw new IllegalStateException(
       s"$this is not an ConstraintValidValueSetExpr"
@@ -134,26 +155,37 @@ abstract class Expression(
 
   // Constraint Value Set Expression.
   def isConstraintValueSetExpr: Boolean = false
+
   def asConstraintValueSetExpr: ConstraintValueSetExpr =
     throw new IllegalStateException(s"$this is not an ConstraintValueSetExpr")
 
   // Call Expression.
   def isCallExpr: Boolean = false
+
   def asCallExpr: CallExpr =
-    throw new IllegalStateException(s"$this is not an CallExpr")
+    throw new IllegalStateException(
+      s"$this is not " +
+      s"an CallExpr"
+    )
 
   // Call Prefix Expression.
   def isCallPrefixExpr: Boolean = false
-  def asCallPrefixExpr: CallPrefixExpr =
-    throw new IllegalStateException(s"$this is not an CallPrefixExpr")
+
+  def asCallPrefixExpr: CallPrefixExpr = throw new IllegalStateException
+  (s"$this is not an CallPrefixExpr")
 
   // Call Shape Expression.
   def isCallShapeExpr: Boolean = false
-  def asCallShapeExpr: CallShapeExpr =
-    throw new IllegalStateException(s"$this is not an CallShapeExpr")
+
+  def asCallShapeExpr: CallShapeExpr = throw new IllegalStateException
+  (s"$this is not an CallShapeExpr")
 
   // Call Base Expression.
   def isCallBaseExpr = false
+
   def asCallBaseExpr: CallBaseExpr =
-    throw new IllegalStateException(s"$this is not an CallBaseExpr")
+    throw new IllegalStateException(
+      s"$this " +
+      s"is not an CallBaseExpr"
+    )
 }

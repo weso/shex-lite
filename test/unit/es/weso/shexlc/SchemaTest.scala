@@ -37,7 +37,7 @@ import org.scalatest.funsuite.AnyFunSuite
 class SchemaTest extends AnyFunSuite {
 
   val cconfig = new CompilationConfig {
-    override def generateIR: Boolean       = true
+    override def generateIR: Boolean       = false
     override def getTIR: Set[TargetIR]     = List(TargetIR.Java).toSet
     override def generateWarnings: Boolean = true
   }
@@ -53,18 +53,18 @@ class SchemaTest extends AnyFunSuite {
          |start = @:User
          |:User {
          |  :name  xsds:string  ;
-         |  :surname . ;
+         |  :surname . 
          |}
          |""".stripMargin
 
     ccontext = CompilationContext.withConfig(cconfig)
 
     // 1. Parse the vile and get the syntax tree.
-    //val syntaxTree = Parser.parseText(shexl, ccontext)
-    val syntaxTree = Parser.parseFile(
+    val syntaxTree = Parser.parseText(shexl, ccontext)
+    /*val syntaxTree = Parser.parseFile(
       "test/assets/incorrect_schema_big_schema_2.shexl",
       ccontext
-    )
+    )*/
 
     println("--- SYNTAX TREE PARSED ---")
 

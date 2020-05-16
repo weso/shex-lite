@@ -32,7 +32,8 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * A shape definition is the conjunction of an expresion that represents the identifier of the shape and the expression
+  * A shape definition is the conjunction of an expresion that represents the
+  * identifier of the shape and the expression
   * that represents the value assigned to that shape identifier.
   *
   * @author Guillermo Facundo Colunga.
@@ -45,8 +46,10 @@ class ShapeDefStmt(
   val expression: Expression
 ) extends DefinitionStmt(position, tokenRange, content) {
 
-  // Override default methods to indicate that this is a Shape Definition Statement.
-  override def isShapeDefStmt: Boolean      = true
+  // Override default methods to indicate that this is a Shape Definition
+  // Statement.
+  override def isShapeDefStmt: Boolean = true
+
   override def asShapeDefStmt: ShapeDefStmt = this
 
   /**
@@ -59,12 +62,14 @@ class ShapeDefStmt(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

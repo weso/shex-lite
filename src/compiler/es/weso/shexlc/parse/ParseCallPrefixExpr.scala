@@ -38,7 +38,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The call prefix expression parser creates a call prefix expression from the parser context.
+  * The call prefix expression parser creates a call prefix expression from
+  * the parser context.
   *
   * @author Guillermo Facundo Colunga
   * @param ctx     of the parser.

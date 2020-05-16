@@ -42,7 +42,6 @@ class CGJava05GetSetGenerator(
   override def visit(expr: ConstraintBlockTripleExpr, param: String): Unit = {
 
     for (field <- expr.body) {
-
       // Getter
       stringBuilder.append(s"\tpublic ")
       field.asConstraintTripleExpr.constraint.accept(
@@ -74,8 +73,7 @@ class CGJava05GetSetGenerator(
       )
       stringBuilder.append("\n")
       stringBuilder.append(
-        s"\t\tthis.${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase} = " +
-        s"${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase};"
+        s"\t\tthis.${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase} = " + s"${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase};"
       )
       stringBuilder.append("\n")
       stringBuilder.append("\t}")
@@ -87,7 +85,11 @@ class CGJava05GetSetGenerator(
   override def visit(expr: CallPrefixExpr, isList: String): Unit = {
     expr.argument match {
       case "string" =>
-        if (isList > "1") stringBuilder.append("List<String> ")
+        if (isList > "1")
+          stringBuilder.append(
+            "List<String> " +
+            ""
+          )
         else stringBuilder.append("String ")
       case "integer" =>
         if (isList > "1") stringBuilder.append("List<int> ")
@@ -114,8 +116,7 @@ class CGJava05GetSetGenerator(
         stringBuilder.append(
           s"List<${baseCall.argument.toLowerCase.capitalize}> "
         )
-      else
-        stringBuilder.append(s"${baseCall.argument.toLowerCase.capitalize} ")
+      else stringBuilder.append(s"${baseCall.argument.toLowerCase.capitalize} ")
     }
   }
 }

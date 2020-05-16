@@ -33,7 +33,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * This parser extracts a cardinality expression from the parser cardinality context.
+  * This parser extracts a cardinality expression from the parser cardinality
+  * context.
   *
   * @author Guillermo Facundo Colunga
   * @param ctx     of the parser.
@@ -77,7 +78,8 @@ class ParseCardinalityExpr(
         case "?" => new CardinalityExpr(pos, tokenRange, content, 0, 1)
       }
     } else {
-      // If it is not a built in cardinality thn we have to check which case of the allowed ones is.
+      // If it is not a built in cardinality thn we have to check which case
+      // of the allowed ones is.
       if (ctx.max != null) {
         new CardinalityExpr(
           pos,

@@ -32,9 +32,12 @@ import org.antlr.v4.runtime.misc.Interval
 /**
   * A base class for all the call expressions of the es.weso.shexlc.parse.ast.
   *
-  * This call expression trait is just used as a mean to know if an expression is a call, any call. For
-  * that it overrides the super is and as methods but let other calls is's and as's to its children. Not need to
-  * implement here any more methods except those that will be mandatory for all calls.
+  * This call expression trait is just used as a mean to know if an
+  * expression is a call, any call. For
+  * that it overrides the super is and as methods but let other calls is's
+  * and as's to its children. Not need to
+  * implement here any more methods except those that will be mandatory for
+  * all calls.
   *
   * @author Guillermo Facundo Colunga
   */
@@ -46,6 +49,7 @@ abstract class CallExpr(
     with ConstraintValidValueSetExpr {
 
   // Override default methods to indicate that this is a Call Expression.
-  override def isCallExpr: Boolean  = true
+  override def isCallExpr: Boolean = true
+
   override def asCallExpr: CallExpr = this
 }

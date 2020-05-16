@@ -34,8 +34,10 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The shape definition statement sub-parser generates a shape definition statement from the context of the parser.
-  * It delegates the creation of the label and the expression to its own sub-parsers.
+  * The shape definition statement sub-parser generates a shape definition
+  * statement from the context of the parser.
+  * It delegates the creation of the label and the expression to its own
+  * sub-parsers.
   *
   * @override Guillermo Facundo Colunga
   * @param ctx     of the parser.

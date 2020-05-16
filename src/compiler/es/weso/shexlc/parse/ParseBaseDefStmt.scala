@@ -34,7 +34,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The base definition statement sub-parser creates a new base definition statement from the parser context. It
+  * The base definition statement sub-parser creates a new base definition
+  * statement from the parser context. It
   * delegates the creation of the iri literal to its corresponding sub-parser.
   *
   * @author Guillermo Facundo Colunga

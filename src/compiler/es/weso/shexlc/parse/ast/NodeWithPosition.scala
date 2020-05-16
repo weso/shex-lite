@@ -61,11 +61,17 @@ trait NodeWithPosition {
   def isExpression(): Boolean = false
 
   def asExpression(): Expression =
-    throw new IllegalStateException(s"$this is not an Expression")
+    throw new IllegalStateException(
+      s"$this is" +
+      s" not an Expression"
+    )
 
   // Statement
   def isStatement(): Boolean = false
 
   def asStatement(): Statement =
-    throw new IllegalStateException(s"$this is not an Statement")
+    throw new IllegalStateException(
+      s"$this is " +
+      s"not an Statement"
+    )
 }

@@ -32,13 +32,15 @@ import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The base definition statement is the unique association of an expression to the base value of the schema. An
-  * schema must have one unique base, this is checked by the es.weso.shexlc.semantic analyzer. Also the expression must conform to an
-  * iri but that it is also check later in the es.weso.shexlc.semantic. This way it allows future addition of more expressions that
+  * The base definition statement is the unique association of an expression
+  * to the base value of the schema. An
+  * schema must have one unique base, this is checked by the es.weso.shexlc
+  * .semantic analyzer. Also the expression must conform to an
+  * iri but that it is also check later in the es.weso.shexlc.semantic. This
+  * way it allows future addition of more expressions that
   * can be associated to a base value.
   *
   * @author Guillermo Facundo Colunga.
-  *
   * @param expression that is assigned to the Base Definition Statement.
   */
 class BaseDefStmt(
@@ -48,8 +50,10 @@ class BaseDefStmt(
   val expression: Expression
 ) extends DefinitionStmt(position, tokenRange, content) {
 
-  // Override default methods to indicate that this is a Base Definition Statement.
-  override def isBaseDefStmt: Boolean     = true
+  // Override default methods to indicate that this is a Base Definition
+  // Statement.
+  override def isBaseDefStmt: Boolean = true
+
   override def asBaseDefStmt: BaseDefStmt = this
 
   /**
@@ -62,12 +66,14 @@ class BaseDefStmt(
   /**
     * Gets the range of tokens from the source on which the node was generated.
     *
-    * @return the range of tokens from the source on which the node was generated.
+    * @return the range of tokens from the source on which the node was
+    *         generated.
     */
   override def getRange: Interval = tokenRange
 
   /**
-    * Gets the content of the node as a String, for example for a node that contains the assignment of a and 3 the content
+    * Gets the content of the node as a String, for example for a node that
+    * contains the assignment of a and 3 the content
     * would be 'a = 3'.
     *
     * @return the content of the node as a String.

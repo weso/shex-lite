@@ -26,6 +26,8 @@
 
 package es.weso.shexl.cli
 
+import java.io.{File, PrintWriter}
+
 import es.weso.shexlc.internal.{CompilationConfig, CompilationContext}
 import es.weso.shexlc.sema.SIL
 import es.weso.shexlc.IRGen.{IR, TargetIR}
@@ -33,9 +35,6 @@ import es.weso.shexlc.parse.{AbstractSyntaxTree, Parser}
 import org.backuity.clist.{args, opt, CliMain}
 
 import scala.collection.mutable
-
-import java.io.File
-import java.io.PrintWriter
 
 object ShExLiteCLI
     extends CliMain[Unit](

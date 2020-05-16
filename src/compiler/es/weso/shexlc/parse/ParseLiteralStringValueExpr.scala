@@ -33,7 +33,8 @@ import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
 
 /**
-  * The literal string value expression sub-parser creates a literal of string type with the value provided by the
+  * The literal string value expression sub-parser creates a literal of
+  * string type with the value provided by the
   * context of the parser.
   *
   * @author Guillermo Facundo Colunga

@@ -29,15 +29,15 @@ package es.weso.shexlc.sema
 import java.util.Objects
 
 import es.weso.shexlc.internal.CompilationContext
-import es.weso.shexlc.internal.errorhandler.{Err, ErrorHandler}
+import es.weso.shexlc.internal.errorhandler.Err
 import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor._
 
 class DefinitionCheck(ccontext: CompilationContext)
     extends ASTDefaultVisitor[Unit] {
 
-  //private[this] val ccontext.getErrorHandler: ErrorHandler = ccontext.getErrorHandler
-
+  //private[this] val ccontext.getErrorHandler: ErrorHandler = ccontext
+  // .getErrorHandler
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     val existingSTValue =
       ccontext.getSymbolTable.getBase.expression.asLiteralIRIValueExpr.value
@@ -49,9 +49,10 @@ class DefinitionCheck(ccontext: CompilationContext)
       ccontext.getErrorHandler.addEvent(
         new Err(
           stmt,
-          s"this base definition overrides the previous one " +
-          s"(${ccontext.getSymbolTable.getBase.getLine}:${ccontext.getSymbolTable.getBase.getColumn})" +
-          s" with value $existingSTValue",
+          s"this base definition " +
+          s"overrides the previous one " + s"(${ccontext.getSymbolTable.getBase.getLine}:${ccontext.getSymbolTable.getBase.getColumn})"
+          + s" with " +
+          s"value $existingSTValue",
           Err.BaseOverride
         )
       )
@@ -60,14 +61,14 @@ class DefinitionCheck(ccontext: CompilationContext)
   }
 
   override def visit(stmt: PrefixDefStmt, param: Unit): Unit = {
-    val existingSTValue = ccontext.getSymbolTable.getPrefix(stmt.label)
-    // 1. Does the prefix exists in the symbol table?
+    val existingSTValue = ccontext.getSymbolTable.getPrefix(stmt.label) // 1.
+    // Does the prefix exists in the symbol table?
     if (Objects.nonNull(ccontext.getSymbolTable.getPrefix(stmt.label))) {
       ccontext.getErrorHandler.addEvent(
         new Err(
           stmt,
-          s"this prefix definition overrides the previous one " +
-          s"(${existingSTValue.getLine}:${existingSTValue.getColumn}) with value " +
+          s"this prefix " +
+          s"definition overrides the previous one " + s"(${existingSTValue.getLine}:${existingSTValue.getColumn}) with value " +
           s"${existingSTValue.expression.asLiteralIRIValueExpr.value}",
           Err.PrefixOverride
         )
@@ -100,8 +101,8 @@ class DefinitionCheck(ccontext: CompilationContext)
       ccontext.getErrorHandler.addEvent(
         new Err(
           stmt.label,
-          s"this shape definition overrides the previous one " +
-          s"(${existingSTValue.getLine}:${existingSTValue.getColumn})",
+          s"this shape " +
+          s"definition overrides the previous one " + s"(${existingSTValue.getLine}:${existingSTValue.getColumn})",
           Err.ShapeOverride
         )
       )
@@ -119,27 +120,17 @@ class DefinitionCheck(ccontext: CompilationContext)
 
     // Has been already set?
     if (Objects.nonNull(existingSTValue)) {
-
       if (stmt.expression.asCallShapeExpr.label.isCallBaseExpr) {
-        cause = s"this start definition overrides the previous one " +
-          s"(${existingSTValue.getLine}:${existingSTValue.getColumn})" +
-          s" with value " +
-          s"${existingSTValue.expression.asCallShapeExpr.label.asCallBaseExpr.argument}:"
+        cause = s"this start definition overrides the previous one " + s"" +
+          s"(${existingSTValue.getLine}:${existingSTValue.getColumn})" + s" " +
+          s"with value " + s"${existingSTValue.expression.asCallShapeExpr.label.asCallBaseExpr.argument}:"
       } else {
-        cause = s"this start definition overrides the previous one " +
-          s"(${existingSTValue.getLine}:${existingSTValue.getColumn})" +
-          s" with value " +
-          s"${existingSTValue.expression.asCallShapeExpr.label.asCallPrefixExpr.label}:" +
-          s"${existingSTValue.expression.asCallShapeExpr.label.asCallPrefixExpr.argument}"
+        cause = s"this start definition overrides the previous one " + s"" +
+          s"(${existingSTValue.getLine}:${existingSTValue.getColumn})" + s" " +
+          s"with value " + s"${existingSTValue.expression.asCallShapeExpr.label.asCallPrefixExpr.label}:" + s"${existingSTValue.expression.asCallShapeExpr.label.asCallPrefixExpr.argument}"
       }
 
-      ccontext.getErrorHandler.addEvent(
-        new Err(
-          stmt,
-          cause,
-          Err.StartOverride
-        )
-      )
+      ccontext.getErrorHandler.addEvent(new Err(stmt, cause, Err.StartOverride))
     } else {
       ccontext.getSymbolTable.setStart(stmt)
     }

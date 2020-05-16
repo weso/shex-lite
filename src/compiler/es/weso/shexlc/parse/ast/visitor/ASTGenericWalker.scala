@@ -34,29 +34,26 @@ import es.weso.shexlc.parse.ast.stmt._
   * This generic walker defines all the visit methods for each node of the ast.
   *
   * @author Guillermo Facundo Colunga
-  *
   * @tparam TP is the type of the parameter.
   * @tparam TR is the type of the return type.
   */
 trait ASTGenericWalker[TP, TR] {
 
   // - Schema ---------------------------------------------
-
   /**
     * Executes the corresponding action.
     *
     * @param schema is the node being visited.
-    * @param param that comes from previous visit actions.
+    * @param param  that comes from previous visit actions.
     * @return the computed value, if any.
     */
   def visit(schema: Schema, param: TP): TR
 
   // - Statements -----------------------------------------
-
   /**
     * Executes the corresponding action.
     *
-    * @param stmt is the node being visited.
+    * @param stmt  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -65,7 +62,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param stmt is the node being visited.
+    * @param stmt  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -74,7 +71,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param stmt is the node being visited.
+    * @param stmt  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -83,7 +80,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param stmt is the node being visited.
+    * @param stmt  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -92,18 +89,17 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param stmt is the node being visited.
+    * @param stmt  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
   def visit(stmt: StartDefStmt, param: TP): TR
 
   // - Expressions ----------------------------------------
-
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -112,7 +108,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -121,7 +117,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -130,7 +126,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -139,7 +135,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -148,7 +144,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -157,7 +153,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -166,7 +162,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -175,7 +171,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -184,7 +180,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -193,7 +189,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -202,7 +198,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -211,7 +207,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -220,7 +216,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
@@ -229,7 +225,7 @@ trait ASTGenericWalker[TP, TR] {
   /**
     * Executes the corresponding action.
     *
-    * @param expr is the node being visited.
+    * @param expr  is the node being visited.
     * @param param that comes from previous visit actions.
     * @return the computed value, if any.
     */
