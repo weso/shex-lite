@@ -30,10 +30,8 @@ import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr.CardinalityExpr
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class CGJava021ImportGenerator(
-  ccontext: CompilationContext,
-  stringBuilder: StringBuilder
-) extends ASTDefaultVisitor[String] {
+class CGJava021ImportGenerator(ccontext: CompilationContext, stringBuilder: StringBuilder)
+    extends ASTDefaultVisitor[String] {
 
   // If any of the cardinality is greater than 1 then the import for the
   // java.util.List will be generated.

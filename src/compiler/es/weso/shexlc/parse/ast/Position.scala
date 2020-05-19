@@ -31,16 +31,14 @@ package es.weso.shexlc.parse.ast
   *
   * @author Guillermo Facundo Colunga
   */
-class Position(val filename: String, val line: Int, val column: Int)
-    extends Comparable[Position] {
+class Position(val filename: String, val line: Int, val column: Int) extends Comparable[Position] {
 
   /**
     * Check if the position is usable. Does not know what it is pointing at,
     * so it can't check if the position is after
     * the end of the source.
     */
-  def isValid: Boolean =
-    line >= Position.HOME.line && column > Position.HOME.line
+  def isValid: Boolean = line >= Position.HOME.line && column > Position.HOME.line
 
   override def compareTo(position: Position): Int = {
     if (this.line < position.line) return -1
@@ -68,6 +66,5 @@ object Position {
   /**
     * Convenient factory method.
     */
-  def pos(filename: String, line: Int, column: Int): Position =
-    new Position(filename, line, column)
+  def pos(filename: String, line: Int, column: Int): Position = new Position(filename, line, column)
 }

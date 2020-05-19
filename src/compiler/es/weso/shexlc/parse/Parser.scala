@@ -83,10 +83,7 @@ object Parser extends Parser {
     * @param text to be parsed.
     * @return the antlr generated syntax tree.
     */
-  override def parseText(
-    text: String,
-    ccontext: CompilationContext
-  ): SyntaxTree = {
+  override def parseText(text: String, ccontext: CompilationContext): SyntaxTree = {
     // Load the file in to the context.
     ccontext.setInputContext(CharStreams.fromString(text))
 
@@ -94,28 +91,9 @@ object Parser extends Parser {
     buildST(ccontext)
   }
 
-  /**
-    * arses the text from the lexemes, then the tokens and finally the syntax
-    * tree.
-    *
-    * @param filePath to be parsed.
-    * @return the antlr generated syntax tree.
-    */
-  override def parseFile(
-    filePath: String,
-    ccontext: CompilationContext
-  ): SyntaxTree = {
-    // Load the file in to the context.
-    ccontext.setInputContext(CharStreams.fromFileName(filePath))
-
-    // Build the Syntax Tree.
-    buildST(ccontext)
-  }
-
   private[this] def buildST(ccontext: CompilationContext): SyntaxTree = {
     // Insensitive characters.
-    val caseInsensitiveCharStream =
-      new CaseChangingCharStream(ccontext.getInputContext, false)
+    val caseInsensitiveCharStream = new CaseChangingCharStream(ccontext.getInputContext, false)
 
     // Lexing the file in to tokens.
     val lexer  = new ShexLiteLexer(caseInsensitiveCharStream)
@@ -130,5 +108,20 @@ object Parser extends Parser {
     // Creating the wrapper syntax tree that contains both the context and
     // the antlr syntax tree.
     SyntaxTree.create(ccontext, antlrTreeRoot)
+  }
+
+  /**
+    * arses the text from the lexemes, then the tokens and finally the syntax
+    * tree.
+    *
+    * @param filePath to be parsed.
+    * @return the antlr generated syntax tree.
+    */
+  override def parseFile(filePath: String, ccontext: CompilationContext): SyntaxTree = {
+    // Load the file in to the context.
+    ccontext.setInputContext(CharStreams.fromFileName(filePath))
+
+    // Build the Syntax Tree.
+    buildST(ccontext)
   }
 }

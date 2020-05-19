@@ -30,10 +30,8 @@ import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class CGJava03FieldsGenerator(
-  ccontext: CompilationContext,
-  stringBuilder: StringBuilder
-) extends ASTDefaultVisitor[String] {
+class CGJava03FieldsGenerator(ccontext: CompilationContext, stringBuilder: StringBuilder)
+    extends ASTDefaultVisitor[String] {
 
   override def visit(expr: ConstraintTripleExpr, param: String): Unit = {
     val property    = expr.property
@@ -44,9 +42,7 @@ class CGJava03FieldsGenerator(
     constraint.accept(this, cardinality.asCardinalityExpr.max.toString)
 
     // Field name.
-    stringBuilder.append(
-      s"${property.asCallPrefixExpr.argument.toLowerCase()};"
-    )
+    stringBuilder.append(s"${property.asCallPrefixExpr.argument.toLowerCase()};")
     stringBuilder.append("\n")
   }
 
@@ -54,18 +50,12 @@ class CGJava03FieldsGenerator(
     stringBuilder.append("\tprivate ")
     expr.argument match {
       case "string" =>
-        if (isList > "1")
-          stringBuilder.append(
-            "List<String> " +
-            ""
-          )
+        if (isList > "1") stringBuilder.append("List<String> " + "")
         else stringBuilder.append("String ")
       case "integer" =>
-        if (isList > "1") stringBuilder.append("List<int> ")
-        else stringBuilder.append("int ")
+        if (isList > "1") stringBuilder.append("List<int> ") else stringBuilder.append("int ")
       case "date" =>
-        if (isList > "1") stringBuilder.append("List<Date> ")
-        else stringBuilder.append("Date ")
+        if (isList > "1") stringBuilder.append("List<Date> ") else stringBuilder.append("Date ")
       case _ =>
     }
   }
@@ -74,23 +64,13 @@ class CGJava03FieldsGenerator(
     if (expr.label.isCallPrefixExpr) {
       val prefixCall = expr.label.asCallPrefixExpr
       if (isList > "1")
-        stringBuilder.append(
-          s"\tprivate List<${prefixCall.argument.toLowerCase.capitalize}> "
-        )
-      else
-        stringBuilder.append(
-          s"\tprivate ${prefixCall.argument.toLowerCase.capitalize} "
-        )
+        stringBuilder.append(s"\tprivate List<${prefixCall.argument.toLowerCase.capitalize}> ")
+      else stringBuilder.append(s"\tprivate ${prefixCall.argument.toLowerCase.capitalize} ")
     } else {
       val baseCall = expr.label.asCallBaseExpr
       if (isList > "1")
-        stringBuilder.append(
-          s"\tprivate List<${baseCall.argument.toLowerCase.capitalize}> "
-        )
-      else
-        stringBuilder.append(
-          s"\tprivate ${baseCall.argument.toLowerCase.capitalize} "
-        )
+        stringBuilder.append(s"\tprivate List<${baseCall.argument.toLowerCase.capitalize}> ")
+      else stringBuilder.append(s"\tprivate ${baseCall.argument.toLowerCase.capitalize} ")
     }
   }
 }

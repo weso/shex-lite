@@ -52,10 +52,7 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
     val incorrectFiles = getListOfFiles("test/assets", "input_incorrect")
 
     for (file <- correctFiles) {
-      test(
-        s"Compiling file and generating code for file $file should pass " +
-        s"without errors"
-      ) {
+      test(s"Compiling file and generating code for file $file should pass " + s"without errors") {
 
         ccontext = CompilationContext.withConfig(cconfig)
 
@@ -94,10 +91,7 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
     }
 
     for (file <- incorrectFiles) {
-      test(
-        s"Compiling file and generating code for file $file should pass with " +
-        s"errors"
-      ) {
+      test(s"Compiling file and generating code for file $file should pass with " + s"errors") {
 
         ccontext = CompilationContext.withConfig(cconfig)
 
@@ -137,21 +131,18 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
   }
 
   test(
-    "Compile a single file, generate code for it and test that the code is " +
-    "well generated."
+    "Compile a single file, generate code for it and test that the code is " + "well generated."
   ) {
 
-    val shexl =
-      s"""prefix : <http://www.google.es>
-         |prefix xsd: <http://www.schema.org/>
-         |:User {
-         |  :name  xsd:string  ;
-         |}
-         |""".stripMargin
+    val shexl = s"""prefix : <http://www.google.es>
+                   |prefix xsd: <http://www.schema.org/>
+                   |:User {
+                   |  :name  xsd:string  ;
+                   |}
+                   |""".stripMargin
 
     val result =
-      "package generated;\npublic class User {\n\tprivate String name;" +
-      "\n\n\tpublic " +
+      "package generated;\npublic class User {\n\tprivate String name;" + "\n\n\tpublic " +
       "User(String name) {\n\t\tthis.name = name;\n\t}\n\n\tpublic String " +
       "getName() {\n\t\treturn this.name;\n\t}\n\n\tpublic void " +
       "setName(String name) {\n\t\tthis.name = name;\n\t}\n\n}\n"
@@ -190,15 +181,8 @@ class JavaCodeGenTest extends AnyFunSuite with BeforeAndAfter {
     assert(ir.getSources.get(TargetIR.Java).get(0)._2.equals(result))
   }
 
-  private[this] def getListOfFiles(
-    dir: String,
-    startsWith: String
-  ): List[String] = {
+  private[this] def getListOfFiles(dir: String, startsWith: String): List[String] = {
     val file = new File(dir)
-    file.listFiles
-      .filter(_.isFile)
-      .filter(_.getName.startsWith(startsWith))
-      .map(_.getPath)
-      .toList
+    file.listFiles.filter(_.isFile).filter(_.getName.startsWith(startsWith)).map(_.getPath).toList
   }
 }

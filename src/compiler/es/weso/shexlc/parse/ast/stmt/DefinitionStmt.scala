@@ -41,11 +41,8 @@ import org.antlr.v4.runtime.misc.Interval
   *
   * @author Guillermo Facundo Colunga
   */
-abstract class DefinitionStmt(
-  position: Position,
-  tokenRange: Interval,
-  content: String
-) extends Statement(position, tokenRange, content) {
+abstract class DefinitionStmt(position: Position, tokenRange: Interval, content: String)
+    extends Statement(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Definition Statement.
   override def isDefinitionStmt: Boolean = true

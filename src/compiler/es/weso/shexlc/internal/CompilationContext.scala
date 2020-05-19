@@ -27,7 +27,7 @@
 package es.weso.shexlc.internal
 
 import es.weso.shexlc.internal.errorhandler.ErrorHandler
-import es.weso.shexlc.internal.symbols.{DefaultSymbolTable, SymbolTable}
+import es.weso.shexlc.internal.symbols.SymbolTable
 import org.antlr.v4.runtime.CharStream
 
 /**
@@ -93,7 +93,7 @@ object CompilationContext {
     new CompilationContext {
 
       private var input                      = Option.empty[CharStream]
-      private val symbolTable                = new DefaultSymbolTable()
+      private val symbolTable                = SymbolTable.empty
       private val errorHandler: ErrorHandler = ErrorHandler.empty
 
       /**

@@ -27,12 +27,7 @@
 package es.weso.shexlc.parse
 
 import es.weso.shexlc.internal.CompilationContext
-import es.weso.shexlc.parse.ast.expr.{
-  CallBaseExpr,
-  CallExpr,
-  CallPrefixExpr,
-  Expression
-}
+import es.weso.shexlc.parse.ast.expr.{CallBaseExpr, CallExpr, CallPrefixExpr, Expression}
 import es.weso.shexlc.parse.ast.Position
 import es.weso.shexlc.parse.generated.ShexLiteParser
 import org.antlr.v4.runtime.misc.Interval
@@ -57,9 +52,8 @@ class ParseCallPrefixExpr(
     val line       = ctx.start.getLine
     val column     = ctx.start.getCharPositionInLine
     val pos        = Position.pos(sourceName, line, column)
-    val tokenRange =
-      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(tokenRange)
+    val tokenRange = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content    = ccontext.getInputContext.getText(tokenRange)
 
     ctx.base_relative_lbl match {
       case null => {
@@ -70,11 +64,8 @@ class ParseCallPrefixExpr(
       }
       case _ => {
         val label = "base"
-        val arg = ctx.base_relative_lbl
-          .accept(visitor)
-          .asInstanceOf[Expression]
-          .asLiteralIRIValueExpr
-          .value
+        val arg =
+          ctx.base_relative_lbl.accept(visitor).asInstanceOf[Expression].asLiteralIRIValueExpr.value
 
         new CallBaseExpr(pos, tokenRange, content, arg)
       }

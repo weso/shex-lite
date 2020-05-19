@@ -39,11 +39,8 @@ import org.antlr.v4.runtime.misc.Interval
   *
   * @author Guillermo Facundo Colunga.
   */
-abstract class Statement(
-  position: Position,
-  tokenRange: Interval,
-  content: String
-) extends AbstractASTNode(position, tokenRange, content) {
+abstract class Statement(position: Position, tokenRange: Interval, content: String)
+    extends AbstractASTNode(position, tokenRange, content) {
 
   // Override default values from node with position.
   override def isStatement(): Boolean = true
@@ -66,28 +63,19 @@ abstract class Statement(
   def isShapeDefStmt: Boolean = false
 
   def asShapeDefStmt: ShapeDefStmt =
-    throw new IllegalStateException(
-      s"$this " +
-      s"is not a ShapeDefStmt"
-    )
+    throw new IllegalStateException(s"$this " + s"is not a ShapeDefStmt")
 
   // Base Definition Statement.
   def isBaseDefStmt: Boolean = false
 
   def asBaseDefStmt: BaseDefStmt =
-    throw new IllegalStateException(
-      s"$this is" +
-      s" not a BaseDefStmt"
-    )
+    throw new IllegalStateException(s"$this is" + s" not a BaseDefStmt")
 
   // Start Definition Statement.
   def isStartDefStmt: Boolean = false
 
   def asStartDefStmt: StartDefStmt =
-    throw new IllegalStateException(
-      s"$this " +
-      s"is not a StartDefStmt"
-    )
+    throw new IllegalStateException(s"$this " + s"is not a StartDefStmt")
 
   // --- Experimental ---
   // Experimental features are not fully tested and therefore any critical
@@ -96,8 +84,5 @@ abstract class Statement(
   def isImportStmt: Boolean = false
 
   def asImportStmt: ImportStmt =
-    throw new IllegalStateException(
-      s"$this is " +
-      s"not an ImportStmt"
-    )
+    throw new IllegalStateException(s"$this is " + s"not an ImportStmt")
 }

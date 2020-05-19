@@ -54,16 +54,10 @@ class ParsePrefixDefStmt(
     val line       = ctx.start.getLine
     val column     = ctx.start.getCharPositionInLine
     val pos        = Position.pos(sourceName, line, column)
-    val tokenRange =
-      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(tokenRange)
+    val tokenRange = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content    = ccontext.getInputContext.getText(tokenRange)
 
-    val label =
-      if (ctx.IDENTIFIER() == null) ""
-      else
-        ctx
-          .IDENTIFIER()
-          .getText
+    val label           = if (ctx.IDENTIFIER() == null) "" else ctx.IDENTIFIER().getText
     val iri: Expression = ctx.iri.accept(visitor).asExpression()
 
     new PrefixDefStmt(pos, tokenRange, content, label, iri)

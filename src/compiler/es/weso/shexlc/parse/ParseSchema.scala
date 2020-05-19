@@ -58,12 +58,8 @@ class ParseSchema(
 
   override def getParseResult: Schema = {
 
-    val statements: List[Statement] = ctx
-      .statement()
-      .asScala
-      .map(stmt => stmt.accept(visitor))
-      .toList
-      .asInstanceOf[List[Statement]]
+    val statements: List[Statement] =
+      ctx.statement().asScala.map(stmt => stmt.accept(visitor)).toList.asInstanceOf[List[Statement]]
 
     val content = ccontext.getInputContext.getText(ctx.getSourceInterval)
     new Schema(pos, tokenRange, content, statements)

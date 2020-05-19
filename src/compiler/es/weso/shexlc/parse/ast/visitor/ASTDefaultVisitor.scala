@@ -36,32 +36,22 @@ class ASTDefaultVisitor[TP] extends ASTGenericWalker[TP, Unit] {
     schema.stmts.foreach(stmt => stmt.accept(this, param))
   }
 
-  override def visit(stmt: BaseDefStmt, param: TP): Unit = {
-    stmt.expression.accept(this, param)
-  }
+  override def visit(stmt: BaseDefStmt, param: TP): Unit = { stmt.expression.accept(this, param) }
 
-  override def visit(stmt: ImportStmt, param: TP): Unit = {
-    stmt.expression.accept(this, param)
-  }
+  override def visit(stmt: ImportStmt, param: TP): Unit = { stmt.expression.accept(this, param) }
 
-  override def visit(stmt: PrefixDefStmt, param: TP): Unit = {
-    stmt.expression.accept(this, param)
-  }
+  override def visit(stmt: PrefixDefStmt, param: TP): Unit = { stmt.expression.accept(this, param) }
 
   override def visit(stmt: ShapeDefStmt, param: TP): Unit = {
     stmt.label.accept(this, param)
     stmt.expression.accept(this, param)
   }
 
-  override def visit(stmt: StartDefStmt, param: TP): Unit = {
-    stmt.expression.accept(this, param)
-  }
+  override def visit(stmt: StartDefStmt, param: TP): Unit = { stmt.expression.accept(this, param) }
 
   override def visit(expr: CallPrefixExpr, param: TP): Unit = {}
 
-  override def visit(expr: CallShapeExpr, param: TP): Unit = {
-    expr.label.accept(this, param)
-  }
+  override def visit(expr: CallShapeExpr, param: TP): Unit = { expr.label.accept(this, param) }
 
   def visit(expr: CallBaseExpr, param: TP): Unit = {}
 

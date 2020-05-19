@@ -38,11 +38,8 @@ import es.weso.shexlc.parse.ast.{AbstractASTNode, Position, Schema}
   * @param message indicating the description of the cause of the warning
   * @param ttype   of the warning indicating why the error occurred
   */
-case class Warn(
-  node: AbstractASTNode,
-  message: String,
-  ttype: CompilerEventType
-) extends CompilationEvent {
+case class Warn(node: AbstractASTNode, message: String, ttype: CompilerEventType)
+    extends CompilationEvent {
 
   /**
     * Gets whether an event is a warning or not.
@@ -98,11 +95,8 @@ case class Warn(
 
     node.getParent match {
       case Some(parent) => {
-        if (parent.isInstanceOf[Schema]) {
-          errContext = node.getContent
-        } else {
-          errContext = parent.asInstanceOf[AbstractASTNode].getContent
-        }
+        if (parent.isInstanceOf[Schema]) { errContext = node.getContent                                 }
+        else                             { errContext = parent.asInstanceOf[AbstractASTNode].getContent }
       }
       case None => errContext = node.getContent
     }
@@ -118,27 +112,19 @@ case class Warn(
 
     var absolute = 0
     if (node.getParent.isDefined)
-      absolute = node.getParent.get
-        .asInstanceOf[AbstractASTNode]
-        .getRange
-        .a
+      absolute = node.getParent.get.asInstanceOf[AbstractASTNode].getRange.a
 
     var spaces = node.getRange.a - absolute
 
     node.getParent match {
       case Some(parent) => {
-        if (parent.isInstanceOf[Schema]) {
-          spaces = 0
-        } else {
-          spaces = node.getRange.a - absolute
-        }
+        if (parent.isInstanceOf[Schema]) { spaces = 0                          }
+        else                             { spaces = node.getRange.a - absolute }
       }
       case None => spaces = 0
     }
 
-    for (i <- 0 to (spaces - 1)) {
-      sb.append(" ")
-    }
+    for (i <- 0 to (spaces - 1)) { sb.append(" ") }
 
     sb.append(s"^ $message")
     sb.append("\n")
@@ -173,8 +159,7 @@ object Warn {
     override def getCode: String = "W004"
 
     override def getDescription: String =
-      "schema includes constraints " +
-      "without a direct mapping to target language"
+      "schema includes constraints " + "without a direct mapping to target language"
   }
 
   val MissingSemicolon = new CompilerEventType {

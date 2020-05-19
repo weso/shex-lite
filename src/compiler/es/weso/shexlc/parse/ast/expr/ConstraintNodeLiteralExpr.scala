@@ -37,11 +37,8 @@ import org.antlr.v4.runtime.misc.Interval
   *
   * @author Guillermo Facundo Colunga
   */
-class ConstraintNodeLiteralExpr(
-  position: Position,
-  tokenRange: Interval,
-  content: String
-) extends ConstraintNodeExpr(position, tokenRange, content) {
+class ConstraintNodeLiteralExpr(position: Position, tokenRange: Interval, content: String)
+    extends ConstraintNodeExpr(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Constraint Node
   // Literal Expression.
@@ -82,10 +79,7 @@ class ConstraintNodeLiteralExpr(
     * @tparam TR is the type of the return value of the visitor.
     * @return the result of the visit (of type TR).
     */
-  override def accept[TP, TR](
-    visitor: ASTGenericWalker[TP, TR],
-    param: TP
-  ): TR = {
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
 }

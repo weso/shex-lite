@@ -32,10 +32,7 @@ import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.internal.errorhandler.Warn
 import es.weso.shexlc.parse.ast.{AbstractASTNode, Position}
 import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
-import es.weso.shexlc.parse.generated.{
-  ShexLiteParser,
-  ShexLiteParserBaseVisitor
-}
+import es.weso.shexlc.parse.generated.{ShexLiteParser, ShexLiteParserBaseVisitor}
 import org.antlr.v4.runtime.misc.Interval
 
 /**
@@ -78,24 +75,17 @@ class CheckSyntaxTreeShexCompatibility(ccontext: CompilationContext)
       ) {
 
         // Need to override this visitor from the AbstractASTNode.
-        override def accept[TP, TR](
-          visitor: ASTGenericWalker[TP, TR],
-          param: TP
-        ): TR =
+        override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR =
           throw new IllegalStateException("This method should never be called")
       }
 
       // We add the event warning to the error handler
-      ccontext.getErrorHandler.addEvent(
-        Warn(
-          node,
-          "semicolons are not " +
-          "compulsory in ShEx Lite, but its usage its " + "encouraged as " +
-          "otherwise your code wont be following shape " + "expressions " +
-          "specification.",
-          Warn.MissingSemicolon
-        )
-      )
+      ccontext.getErrorHandler.addEvent(Warn(
+        node,
+        "semicolons are not " + "compulsory in ShEx Lite, but its usage its " + "encouraged as " +
+        "otherwise your code wont be following shape " + "expressions " + "specification.",
+        Warn.MissingSemicolon
+      ))
     }
   }
 }

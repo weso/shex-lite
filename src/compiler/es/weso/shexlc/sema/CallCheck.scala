@@ -35,27 +35,22 @@ import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 import org.antlr.v4.runtime.misc.Interval
+import wvlet.log.LogSupport
 
-class CallCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
+class CallCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] with LogSupport {
 
   private[this] val symbolTable: SymbolTable   = ccontext.getSymbolTable
   private[this] val errorHandler: ErrorHandler = ccontext.getErrorHandler
 
   override def visit(expr: CallPrefixExpr, param: Unit): Unit = {
-    val existingSTValue = symbolTable.getPrefix(expr.label) // 1. Is the
-    // prefix defined in the symbol table?
-    if (Objects.isNull(existingSTValue)) {
+    val stPrefix = symbolTable.find(expr.label)
+
+    // 1. Is the prefix defined in the symbol table?
+    if (stPrefix.isEmpty) {
       errorHandler.addEvent(
-        new Err(
-          expr,
-          s"the prefix `${expr.label}` has " +
-          s"not been defined",
-          Err.PrefixNotFound
-        )
+        new Err(expr, s"the prefix `${expr.label}` has " + s"not been defined", Err.PrefixNotFound)
       )
-    } else {
-      expr.definition = existingSTValue
-    }
+    } else { expr.definition = stPrefix.get.getContent.get }
   }
 
   override def visit(expr: CallShapeExpr, param: Unit): Unit = {
@@ -63,23 +58,19 @@ class CallCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
 
     val isRelativeShape = expr.label.isCallBaseExpr
 
-    var existingSTValue: ShapeDefStmt = null
-    var cause: String                 = ""
-    var errorRange: Interval          = null;
+    var existingSTValue      = Option.empty[es.weso.shexlc.internal.symbols.Symbol]
+    var cause: String        = ""
+    var errorRange: Interval = null;
 
     if (isRelativeShape) {
-      existingSTValue = symbolTable.getShape(
-        symbolTable.DEFAULT_BASE,
-        expr.label.asCallBaseExpr.argument
-      )
+      existingSTValue =
+        symbolTable.find(BaseDefStmt.DEFAULT_LABEL + ":" + expr.label.asCallBaseExpr.argument)
       cause = s"the shape `${expr.label.asCallBaseExpr.argument}` " + s"has " +
         s"not been defined in the scope of the prefix the base"
       errorRange = expr.label.asCallBaseExpr.getRange
     } else {
-      existingSTValue = symbolTable.getShape(
-        expr.label.asCallPrefixExpr.label,
-        expr.label.asCallPrefixExpr.argument
-      )
+      existingSTValue = symbolTable
+        .find(expr.label.asCallPrefixExpr.label + ":" + expr.label.asCallPrefixExpr.argument)
       cause = s"the shape `${expr.label.asCallPrefixExpr.argument}` " + s"has" +
         s" not been defined in the scope of the prefix `${expr.label.asCallPrefixExpr.label}`"
       errorRange = new Interval(
@@ -89,10 +80,8 @@ class CallCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
     }
 
     // 1. Is the shape defined in the table?
-    if (Objects.isNull(existingSTValue)) {
+    if (existingSTValue.isEmpty) {
       errorHandler.addEvent(new Err(expr.label, cause, Err.ShapeNotFound))
-    } else {
-      expr.definition = existingSTValue
-    }
+    } else { expr.definition = existingSTValue.get.getContent.get }
   }
 }

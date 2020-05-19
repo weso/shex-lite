@@ -27,27 +27,19 @@
 package es.weso.shexlc.IRGen.javagen.internal
 
 import es.weso.shexlc.internal.CompilationContext
-import es.weso.shexlc.parse.ast.expr.{
-  CallPrefixExpr,
-  CallShapeExpr,
-  ConstraintBlockTripleExpr
-}
+import es.weso.shexlc.parse.ast.expr.{CallPrefixExpr, CallShapeExpr, ConstraintBlockTripleExpr}
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class CGJava05GetSetGenerator(
-  ccontext: CompilationContext,
-  stringBuilder: StringBuilder
-) extends ASTDefaultVisitor[String] {
+class CGJava05GetSetGenerator(ccontext: CompilationContext, stringBuilder: StringBuilder)
+    extends ASTDefaultVisitor[String] {
 
   override def visit(expr: ConstraintBlockTripleExpr, param: String): Unit = {
 
     for (field <- expr.body) {
       // Getter
       stringBuilder.append(s"\tpublic ")
-      field.asConstraintTripleExpr.constraint.accept(
-        this,
-        field.asConstraintTripleExpr.cardinality.asCardinalityExpr.max.toString
-      )
+      field.asConstraintTripleExpr.constraint
+        .accept(this, field.asConstraintTripleExpr.cardinality.asCardinalityExpr.max.toString)
       stringBuilder.append(
         s"get${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase.capitalize}() {"
       )
@@ -64,16 +56,15 @@ class CGJava05GetSetGenerator(
       stringBuilder.append(
         s"\tpublic void set${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase.capitalize}("
       )
-      field.asConstraintTripleExpr.constraint.accept(
-        this,
-        field.asConstraintTripleExpr.cardinality.asCardinalityExpr.max.toString
-      )
+      field.asConstraintTripleExpr.constraint
+        .accept(this, field.asConstraintTripleExpr.cardinality.asCardinalityExpr.max.toString)
       stringBuilder.append(
         s"${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase}) {"
       )
       stringBuilder.append("\n")
       stringBuilder.append(
-        s"\t\tthis.${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase} = " + s"${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase};"
+        s"\t\tthis.${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase}" +
+        s" = " + s"${field.asConstraintTripleExpr.property.asCallPrefixExpr.argument.toLowerCase};"
       )
       stringBuilder.append("\n")
       stringBuilder.append("\t}")
@@ -85,18 +76,12 @@ class CGJava05GetSetGenerator(
   override def visit(expr: CallPrefixExpr, isList: String): Unit = {
     expr.argument match {
       case "string" =>
-        if (isList > "1")
-          stringBuilder.append(
-            "List<String> " +
-            ""
-          )
+        if (isList > "1") stringBuilder.append("List<String> " + "")
         else stringBuilder.append("String ")
       case "integer" =>
-        if (isList > "1") stringBuilder.append("List<int> ")
-        else stringBuilder.append("int ")
+        if (isList > "1") stringBuilder.append("List<int> ") else stringBuilder.append("int ")
       case "date" =>
-        if (isList > "1") stringBuilder.append("List<Date> ")
-        else stringBuilder.append("Date ")
+        if (isList > "1") stringBuilder.append("List<Date> ") else stringBuilder.append("Date ")
       case _ =>
     }
   }
@@ -105,17 +90,11 @@ class CGJava05GetSetGenerator(
     if (expr.label.isCallPrefixExpr) {
       val prefixCall = expr.label.asCallPrefixExpr
       if (isList > "1")
-        stringBuilder.append(
-          s"List<${prefixCall.argument.toLowerCase.capitalize}> "
-        )
-      else
-        stringBuilder.append(s"${prefixCall.argument.toLowerCase.capitalize} ")
+        stringBuilder.append(s"List<${prefixCall.argument.toLowerCase.capitalize}> ")
+      else stringBuilder.append(s"${prefixCall.argument.toLowerCase.capitalize} ")
     } else {
       val baseCall = expr.label.asCallBaseExpr
-      if (isList > "1")
-        stringBuilder.append(
-          s"List<${baseCall.argument.toLowerCase.capitalize}> "
-        )
+      if (isList > "1") stringBuilder.append(s"List<${baseCall.argument.toLowerCase.capitalize}> ")
       else stringBuilder.append(s"${baseCall.argument.toLowerCase.capitalize} ")
     }
   }

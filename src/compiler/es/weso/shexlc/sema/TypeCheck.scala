@@ -46,9 +46,7 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   override def visit(schema: Schema, param: Unit): Unit = {
     for (stmt <- schema.stmts) {
       if (!stmt.isStatement()) {
-        errorHandler.addEvent(
-          new Err(stmt, s"$stmt is not an statement", Err.TypeCheckingError)
-        )
+        errorHandler.addEvent(new Err(stmt, s"$stmt is not an statement", Err.TypeCheckingError))
       }
       stmt.accept(this, param)
     }
@@ -56,95 +54,74 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
 
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     if (!stmt.expression.isLiteralIRIValueExpr) {
-      errorHandler.addEvent(
-        new Err(
-          stmt.expression,
-          s"${stmt.expression} is " +
-          s"not a Literal IRI Value Expression",
-          Err.TypeCheckingError
-        )
-      )
+      errorHandler.addEvent(new Err(
+        stmt.expression,
+        s"${stmt.expression} is " + s"not a Literal IRI Value Expression",
+        Err.TypeCheckingError
+      ))
     }
     stmt.expression.accept(this, param)
   }
 
   override def visit(stmt: ImportStmt, param: Unit): Unit = {
     if (!stmt.expression.isLiteralIRIValueExpr) {
-      errorHandler.addEvent(
-        new Err(
-          stmt.expression,
-          s"${stmt.expression} is " +
-          s"not a Literal IRI Value Expression",
-          Err.TypeCheckingError
-        )
-      )
+      errorHandler.addEvent(new Err(
+        stmt.expression,
+        s"${stmt.expression} is " + s"not a Literal IRI Value Expression",
+        Err.TypeCheckingError
+      ))
     }
     stmt.expression.accept(this, param)
   }
 
   override def visit(stmt: PrefixDefStmt, param: Unit): Unit = {
     if (!stmt.expression.isLiteralIRIValueExpr) {
-      errorHandler.addEvent(
-        new Err(
-          stmt.expression,
-          s"${stmt.expression} is " +
-          s"not a Literal IRI Value Expression",
-          Err.TypeCheckingError
-        )
-      )
+      errorHandler.addEvent(new Err(
+        stmt.expression,
+        s"${stmt.expression} is " + s"not a Literal IRI Value Expression",
+        Err.TypeCheckingError
+      ))
     }
     stmt.expression.accept(this, param)
   }
 
   override def visit(stmt: ShapeDefStmt, param: Unit): Unit = {
     if (!(stmt.label.isCallPrefixExpr || stmt.label.isCallBaseExpr)) {
-      errorHandler.addEvent(
-        new Err(
-          stmt.label,
-          s"${stmt.label} is not a Call" +
-          s" Prefix or Base Expression",
-          Err.TypeCheckingError
-        )
-      )
+      errorHandler.addEvent(new Err(
+        stmt.label,
+        s"${stmt.label} is not a Call" + s" Prefix or Base Expression",
+        Err.TypeCheckingError
+      ))
     }
     stmt.label.accept(this, param)
     if (!stmt.expression.isExpression) {
-      errorHandler.addEvent(
-        new Err(
-          stmt.expression,
-          s"${stmt.expression} is " +
-          s"not an Expression",
-          Err.TypeCheckingError
-        )
-      )
+      errorHandler.addEvent(new Err(
+        stmt.expression,
+        s"${stmt.expression} is " + s"not an Expression",
+        Err.TypeCheckingError
+      ))
     }
     stmt.expression.accept(this, param)
   }
 
   override def visit(stmt: StartDefStmt, param: Unit): Unit = {
     if (!stmt.expression.isCallShapeExpr) {
-      errorHandler.addEvent(
-        new Err(
-          stmt.expression,
-          s"${stmt.expression} is " +
-          s"not a Call Shape Expression",
-          Err.TypeCheckingError
-        )
-      )
+      errorHandler.addEvent(new Err(
+        stmt.expression,
+        s"${stmt.expression} is " + s"not a Call Shape Expression",
+        Err.TypeCheckingError
+      ))
     }
     stmt.expression.accept(this, param)
   }
 
   override def visit(expr: CallShapeExpr, param: Unit): Unit = {
     if (!(expr.label.isCallPrefixExpr || expr.label.isCallBaseExpr)) {
-      errorHandler.addEvent(
-        new Err(
-          expr.label,
-          s"${expr.label} is not a Call" +
-          s" Prefix / Base Expression",
-          Err.TypeCheckingError
-        )
-      )
+      errorHandler.addEvent(new Err(
+        expr.label,
+        s"${expr.label} is not a Call" + s" Prefix / Base Expression",
+        Err.TypeCheckingError
+      ))
     }
     expr.label.accept(this, param)
   }
@@ -152,14 +129,11 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   override def visit(expr: ConstraintBlockTripleExpr, param: Unit): Unit = {
     for (tripleExpr <- expr.body) {
       if (!tripleExpr.isConstraintTripleExpr) {
-        errorHandler.addEvent(
-          new Err(
-            tripleExpr,
-            s"$tripleExpr is not a " +
-            s"Constraint Triple Expression",
-            Err.TypeCheckingError
-          )
-        )
+        errorHandler.addEvent(new Err(
+          tripleExpr,
+          s"$tripleExpr is not a " + s"Constraint Triple Expression",
+          Err.TypeCheckingError
+        ))
       }
       tripleExpr.accept(this, param)
     }
@@ -167,38 +141,29 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
 
   override def visit(expr: ConstraintTripleExpr, param: Unit): Unit = {
     if (!expr.property.isCallPrefixExpr) {
-      errorHandler.addEvent(
-        new Err(
-          expr.property,
-          s"${expr.property} is not " +
-          s"a Call Prefix Expression",
-          Err.TypeCheckingError
-        )
-      )
+      errorHandler.addEvent(new Err(
+        expr.property,
+        s"${expr.property} is not " + s"a Call Prefix Expression",
+        Err.TypeCheckingError
+      ))
     }
     expr.property.accept(this, param)
 
     if (!expr.constraint.isExpression()) {
-      errorHandler.addEvent(
-        new Err(
-          expr.constraint,
-          s"${expr.constraint} is " +
-          s"not an Expression",
-          Err.TypeCheckingError
-        )
-      )
+      errorHandler.addEvent(new Err(
+        expr.constraint,
+        s"${expr.constraint} is " + s"not an Expression",
+        Err.TypeCheckingError
+      ))
     }
     expr.constraint.accept(this, param)
 
     if (!expr.cardinality.isCardinalityExpr) {
-      errorHandler.addEvent(
-        new Err(
-          expr.cardinality,
-          s"${expr.cardinality} " +
-          s"is not a Cardinality Expression",
-          Err.TypeCheckingError
-        )
-      )
+      errorHandler.addEvent(new Err(
+        expr.cardinality,
+        s"${expr.cardinality} " + s"is not a Cardinality Expression",
+        Err.TypeCheckingError
+      ))
     }
     expr.cardinality.accept(this, param)
   }
@@ -206,14 +171,11 @@ class TypeCheck(ccontex: CompilationContext) extends ASTDefaultVisitor[Unit] {
   override def visit(expr: ConstraintValueSetExpr, param: Unit): Unit = {
     for (value <- expr.values) {
       if (!value.isConstraintValidValueSetExpr) {
-        errorHandler.addEvent(
-          new Err(
-            value,
-            s"$value is not a Valid Value " +
-            s"Type Expression",
-            Err.TypeCheckingError
-          )
-        )
+        errorHandler.addEvent(new Err(
+          value,
+          s"$value is not a Valid Value " + s"Type Expression",
+          Err.TypeCheckingError
+        ))
       }
       value.accept(this, param)
     }

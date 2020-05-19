@@ -41,11 +41,8 @@ import org.antlr.v4.runtime.misc.Interval
   *
   * @author Guillermo Facundo Colunga
   */
-abstract class CallExpr(
-  position: Position,
-  tokenRange: Interval,
-  content: String
-) extends ConstraintNodeExpr(position, tokenRange, content)
+abstract class CallExpr(position: Position, tokenRange: Interval, content: String)
+    extends ConstraintNodeExpr(position, tokenRange, content)
     with ConstraintValidValueSetExpr {
 
   // Override default methods to indicate that this is a Call Expression.

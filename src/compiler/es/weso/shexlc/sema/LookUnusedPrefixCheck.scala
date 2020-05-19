@@ -32,8 +32,7 @@ import es.weso.shexlc.internal.symbols.SymbolTable
 import es.weso.shexlc.parse.ast.stmt._
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
-class LookUnusedPrefixCheck(ccontext: CompilationContext)
-    extends ASTDefaultVisitor[Unit] {
+class LookUnusedPrefixCheck(ccontext: CompilationContext) extends ASTDefaultVisitor[Unit] {
 
   private[this] val symbolTable: SymbolTable   = ccontext.getSymbolTable
   private[this] val errorHandler: ErrorHandler = ccontext.getErrorHandler
@@ -41,31 +40,33 @@ class LookUnusedPrefixCheck(ccontext: CompilationContext)
   override def visit(stmt: BaseDefStmt, param: Unit): Unit = {
     stmt.expression.accept(this, param)
 
-    if (symbolTable.getNumberOfCallsForBase == 0 && !stmt.expression.asLiteralIRIValueExpr
-          .equals(symbolTable.DEFAULT_BASE) && ccontext.getConfiguration.generateWarnings) {
-      errorHandler.addEvent(
-        new Warn(
-          stmt.expression,
-          s"the base `${stmt.expression.asLiteralIRIValueExpr.value}` " +
-          s"definition is set but not " +
-          s"used",
-          Warn.BaseSetButNotUsed
-        )
-      )
+    if (
+      symbolTable.find(BaseDefStmt.DEFAULT_LABEL).isDefined &&
+      symbolTable.find(BaseDefStmt.DEFAULT_LABEL).get.getStats.getNumberOfCalls == 0 &&
+      ccontext.getConfiguration.generateWarnings
+    ) {
+      errorHandler.addEvent(new Warn(
+        stmt.expression,
+        s"the base `${stmt.expression.asLiteralIRIValueExpr.value}` " +
+        s"definition is set but not " + s"used",
+        Warn.BaseSetButNotUsed
+      ))
     }
   }
 
   override def visit(stmt: PrefixDefStmt, param: Unit): Unit = {
     stmt.expression.accept(this, param)
 
-    if (symbolTable.getNumberOfCallsForPrefix(stmt.label) == 0 && ccontext.getConfiguration.generateWarnings) {
-      errorHandler.addEvent(
-        new Warn(
-          stmt.expression,
-          s"the prefix `${stmt.label}` definition is not used",
-          Warn.PrefixNotUsed
-        )
-      )
+    if (
+      symbolTable.find(stmt.label).isDefined &&
+      symbolTable.find(stmt.label).get.getStats.getNumberOfCalls == 0 &&
+      ccontext.getConfiguration.generateWarnings
+    ) {
+      errorHandler.addEvent(new Warn(
+        stmt.expression,
+        s"the prefix `${stmt.label}` definition is not used",
+        Warn.PrefixNotUsed
+      ))
     }
   }
 }

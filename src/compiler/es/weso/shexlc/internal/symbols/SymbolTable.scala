@@ -27,6 +27,9 @@
 package es.weso.shexlc.internal.symbols
 
 import es.weso.shexlc.parse.ast.stmt._
+import wvlet.log.LogSupport
+
+import scala.collection.mutable.HashMap
 
 /**
   * Represents the data structure that holds the data used by the compiler
@@ -37,135 +40,123 @@ import es.weso.shexlc.parse.ast.stmt._
   */
 trait SymbolTable {
 
-  // Default values.
-  final val DEFAULT_BASE        = "<es.weso.shexlc.internal://base>"
-  final val DEFAULT_SOURCE_FILE = "memsys.table"
+  /**
+    * Adds a new scope in the symbol table.
+    */
+  def set: Unit
 
   /**
-    * Sets the value of the base. The base is the default iri that will be
-    * referenced from the relative iris of the
-    * schema. Notice that this method should be only called once, after it
-    * should produce an error as no redefinition
-    * is allowed.
-    *
-    * @param base is the value that will be set as the base.
-    * @return either an error if the base was already set or the new base
-    *         declaration if it is the first time the method
-    *         is called.
+    * Removes tha last scope in the symbol table.
     */
-  def setBase(base: BaseDefStmt): Unit
+  def reset: Unit
 
   /**
-    * Gets the base declaration. If the base declaration does not even exists
-    * internally by some reason an error will be
-    * returned. Else the value set as the base declaration will be returned.
+    * Inserts a new symbol in the current scope.
     *
-    * @return either an error if the base does not even exists internally or
-    *         the base declaration.
+    * @param symbolLabel is the symbol identifier.
+    * @param definition is the symbol definition
+    * @return an option with the inserted symbol if success or an empty
+    *         symbol otherwise.
     */
-  def getBase: BaseDefStmt
+  def insert(symbolLabel: String, definition: DefinitionStmt): Option[Symbol]
 
   /**
-    * Gets the number of times that the base has been called. The base is
-    * called each time it is accessed in the table.
+    * Searches the symbol table for a symbol matching the specified name. The
+    * symbol table is searched backwards, that means from the deepest scope
+    * to most superficial one.
     *
-    * @return the number of times that the base has been called. The base is
-    *         called each time it is accessed in the
-    *         table.
+    * @param symbolLabel is the identifier of the symbol to look for.
+    * @return an option with the symbol if success or an empty option otherwise.
     */
-  def getNumberOfCallsForBase: Int
+  def find(symbolLabel: String): Option[Symbol]
+}
 
-  /**
-    * Sets the value for the start declaration. The start is a pointer to a
-    * shape definition that will be use at
-    * validation time. It indicates the validator which is the default shape
-    * definition to use in case no other shape
-    * reference is set in the corresponding shape-map. Notice that this
-    * method should be only called once as the
-    * redefinition is not allowed.
-    *
-    * @param start is the value that will be set as the start.
-    * @return either an error if the start parameter is not valid or is
-    *         trying to redefine the start. Or the start
-    *         declaration set as new value.
-    */
-  def setStart(start: StartDefStmt): Unit
+object SymbolTable {
 
-  /**
-    * Gets the start declaration. If no start declaration exists in the
-    * schema then will return a compiler error.
-    *
-    * @return either the start declaration or an error if no start
-    *         declaration exists in the schema.
-    */
-  def getStart: StartDefStmt
+  def empty: SymbolTable =
+    new SymbolTable with LogSupport {
 
-  /**
-    * Stores a prefix declaration in the data structure for future references
-    * . Prefix redefinition is not allowed,
-    * therefore if a prefix declaration attempts to override a previous value
-    * a compiler error will be raised. Otherwise
-    * the value stored will be returned.
-    *
-    * @param prefixDef is the prefix definition to be stored. Must be unique,
-    *                  otherwise an error will be thrown.
-    * @return if a prefix declaration attempts to override a previous value a
-    *         compiler error will be raised. Otherwise
-    *         the value stored will be returned.
-    */
-  def +=(prefixDef: PrefixDefStmt): Unit
+      // Log message indicating the new empty symbol table is being created.
+      debug("creating new empty symbol table")
 
-  /**
-    * Stores a shape declaration in the data structure for future references.
-    * Shape redefinition is not allowed,
-    * therefore if a shape declaration attempts to override a previous value
-    * a compiler error will be raised. Otherwise
-    * the value stored will be returned.
-    *
-    * @param shapeDef is the shape definition to be stored. Must be unique,
-    *                 otherwise an error will be thrown.
-    * @return if a shape declaration attempts to override a previous value a
-    *         compiler error will be raised. Otherwise
-    *         the value stored will be returned.
-    */
-  def +=(shapeDef: ShapeDefStmt): Unit
+      // Provides a mapping between a identifier name and its symbol.
+      private[this] var table = Array.empty[HashMap[String, Symbol]]
 
-  /**
-    * Gets the prefix declaration indexed by its prefix name. If no prefix is
-    * found indexed by that prefix name a
-    * compiler error will be raised.
-    *
-    * @param prefixLbl is the key that will be used to look for the prefix
-    *                  definition in the persistence.
-    * @return either the prefix declaration indexed at the prefix name key or
-    *         an error otherwise.
-    */
-  def getPrefix(prefixLbl: String): PrefixDefStmt
+      override def set: Unit = {
+        debug("adding new scope to the symbol table")
+        this.table = this.table.appended(HashMap.empty[String, Symbol])
+      }
 
-  /**
-    * Gets the number of times that the prefix has been called. The prefix is
-    * called each time it is accessed in the
-    * table.
-    *
-    * @param prefixLbl is the key that will be used to look for the prefix
-    *                  definition in the persistence.
-    * @return the number of times that the prefix has been called. The prefix
-    *         is called each time it is accessed in the
-    *         table.
-    */
-  def getNumberOfCallsForPrefix(prefixLbl: String): Int
+      override def reset: Unit = {
+        debug("removing the last scope from the symbol table")
+        this.table = this.table.dropRight(this.table.size - 1)
+      }
 
-  /**
-    * Gets the shape declaration indexed by its shape name and the prefix
-    * label. If no shape is found indexed by that
-    * shape name a compiler error will be raised.
-    *
-    * @param prefixLbl is the key that will be used to look for the prefix
-    *                  definition in the persistence.
-    * @param shapeLbl  is the key that will be used to look for the shape
-    *                  definition in the persistence.
-    * @return either the shape declaration indexed at the shape name key or
-    *         an error otherwise.
-    */
-  def getShape(prefixLbl: String, shapeLbl: String): ShapeDefStmt
+      override def insert(symbolLabel: String, definition: DefinitionStmt): Option[Symbol] = {
+
+        // Logging the action of inserting a new symbol.
+        debug(
+          s"inserting symbol `$definition` in the symbol table scope " + s"${this.table.size - 1}"
+        )
+
+        if (this.table.isEmpty) this.set
+
+        // Checking if the symbol is already defined in the scope.
+        if (this.table(this.table.size - 1).contains(symbolLabel)) {
+          debug(
+            s"the symbol table does already contain the symbol `$symbolLabel` " +
+            s"in the scope `${this.table.size - 1}`"
+          )
+          return Option.empty
+        }
+
+        // Create the symbol.
+        debug(s"creating symbol for definition `$definition`")
+        val symbol = Symbol.ofDefinition(definition)
+
+        // Add the symbol to the table corresponding scope.
+        debug(s"inserting symbol $symbol in the symbol table scope " + s"`${this.table.size - 1}`")
+        this.table(this.table.size - 1).put(symbolLabel, symbol)
+
+        // Returning the inserted symbol
+        debug("accessing symbol from the symbol table")
+        Option(symbol)
+      }
+
+      override def find(symbolLabel: String): Option[Symbol] = {
+
+        // Logging the action of finding a symbol.
+        debug(s"looking for symbol `$symbolLabel` in the symbol table")
+
+        // The search is from the last to the first table in the array.
+        var scope = this.table.size - 1
+        while (scope >= 0) {
+
+          // Log information about current search scope.
+          debug(s"looking for symbol $symbolLabel at scope `$scope`")
+
+          // Check if the table from the current iterator scope contains the
+          // symbol.
+          if (this.table(scope).contains(symbolLabel)) {
+
+            // If it does debug the success and return the value.
+            debug(s"match found for symbol `$symbolLabel` at scope `$scope`")
+            return this.table(scope).get(symbolLabel)
+
+          } else {
+
+            // If it does not then log the information and decrease the scope
+            // to look for in the upper symbol table.
+            debug(
+              s"no match found for symbol `$symbolLabel` at scope `$scope`, " + s"decreasing scope"
+            )
+            scope -= 1
+          }
+        }
+
+        // Return an empty optional as no symbol has been found.
+        debug(s"no symbol `$symbolLabel` was found in the symbol table")
+        Option.empty
+      }
+    }
 }

@@ -34,11 +34,8 @@ import org.antlr.v4.runtime.misc.Interval
   *
   * @author Guillermo Facundo Colunga
   */
-abstract class ConstraintNodeExpr(
-  position: Position,
-  tokenRange: Interval,
-  content: String
-) extends ConstraintExpr(position, tokenRange, content) {
+abstract class ConstraintNodeExpr(position: Position, tokenRange: Interval, content: String)
+    extends ConstraintExpr(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Constraint Node
   // Expression.
