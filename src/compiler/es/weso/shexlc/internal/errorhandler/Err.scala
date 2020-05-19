@@ -85,8 +85,7 @@ case class Err(node: AbstractASTNode, message: String, ttype: CompilerEventType)
     */
   override def toPrintableString: String = {
 
-    val errTitle =
-      s"${Console.RED}error[${ttype.getCode}]: ${Console.RESET}${ttype.getDescription}"
+    val errTitle = s"${Console.RED}error[${ttype.getCode}]: ${Console.RESET}${ttype.getDescription}"
 
     val errPos =
       s"--> ${node.getPosition.filename}:${node.getPosition.line}:${node.getPosition.column}"
@@ -95,11 +94,8 @@ case class Err(node: AbstractASTNode, message: String, ttype: CompilerEventType)
 
     node.getParent match {
       case Some(parent) => {
-        if (parent.isInstanceOf[Schema]) {
-          errContext = node.getContent
-        } else {
-          errContext = parent.asInstanceOf[AbstractASTNode].getContent
-        }
+        if (parent.isInstanceOf[Schema]) { errContext = node.getContent                                 }
+        else                             { errContext = parent.asInstanceOf[AbstractASTNode].getContent }
       }
       case None => errContext = node.getContent
     }
@@ -115,27 +111,19 @@ case class Err(node: AbstractASTNode, message: String, ttype: CompilerEventType)
 
     var absolute = 0
     if (node.getParent.isDefined)
-      absolute = node.getParent.get
-        .asInstanceOf[AbstractASTNode]
-        .getRange
-        .a
+      absolute = node.getParent.get.asInstanceOf[AbstractASTNode].getRange.a
 
     var spaces = node.getRange.a - absolute
 
     node.getParent match {
       case Some(parent) => {
-        if (parent.isInstanceOf[Schema]) {
-          spaces = 0
-        } else {
-          spaces = node.getRange.a - absolute
-        }
+        if (parent.isInstanceOf[Schema]) { spaces = 0                          }
+        else                             { spaces = node.getRange.a - absolute }
       }
       case None => spaces = 0
     }
 
-    for (i <- 0 to (spaces - 1)) {
-      sb.append(" ")
-    }
+    for (i <- 0 to (spaces - 1)) { sb.append(" ") }
 
     sb.append(s"^ $message")
     sb.append("\n")
@@ -154,33 +142,25 @@ object Err {
   val BaseOverride = new CompilerEventType {
     override def getCode: String = "E001"
 
-    override def getDescription: String =
-      "attempt to override a base " +
-      "directive value"
+    override def getDescription: String = "attempt to override a base " + "directive value"
   }
 
   val StartOverride = new CompilerEventType {
     override def getCode: String = "E002"
 
-    override def getDescription: String =
-      "attempt to override an start " +
-      "directive value"
+    override def getDescription: String = "attempt to override an start " + "directive value"
   }
 
   val PrefixOverride = new CompilerEventType {
     override def getCode: String = "E003"
 
-    override def getDescription: String =
-      "attempt to override an already " +
-      "defined prefix"
+    override def getDescription: String = "attempt to override an already " + "defined prefix"
   }
 
   val ShapeOverride = new CompilerEventType {
     override def getCode: String = "E004"
 
-    override def getDescription: String =
-      "attempt to override an already " +
-      "defined shape"
+    override def getDescription: String = "attempt to override an already " + "defined shape"
   }
 
   /**
@@ -228,9 +208,7 @@ object Err {
   val CouldNotCreateSchemaForSource = new CompilerEventType {
     override def getCode: String = "E011"
 
-    override def getDescription: String =
-      "couldn't create schema for source " +
-      "file"
+    override def getDescription: String = "couldn't create schema for source " + "file"
   }
 
   val TypeCheckingError = new CompilerEventType {

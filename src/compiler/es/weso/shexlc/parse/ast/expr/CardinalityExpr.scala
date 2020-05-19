@@ -105,8 +105,7 @@ class CardinalityExpr(
     * @return true if the cardinality is valid, false otherwise.
     */
   def isValid: Boolean =
-    (CardinalityExpr.MinValue <= min) && (max <=
-    CardinalityExpr.MaxValue) && (min <= max)
+    (CardinalityExpr.MinValue <= min) && (max <= CardinalityExpr.MaxValue) && (min <= max)
 
   /**
     * Counts the elements in the range, that is if the min = 0 and tha max =
@@ -126,10 +125,7 @@ class CardinalityExpr(
     * @tparam TR is the type of the return value of the visitor.
     * @return the result of the visit (of type TR).
     */
-  override def accept[TP, TR](
-    visitor: ASTGenericWalker[TP, TR],
-    param: TP
-  ): TR = {
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
 }

@@ -45,8 +45,7 @@ class PrefixDefStmt(
   tokenRange: Interval,
   content: String,
   val label: String,
-  val
-  expression: Expression
+  val expression: Expression
 ) extends DefinitionStmt(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Prefix Definition
@@ -88,10 +87,7 @@ class PrefixDefStmt(
     * @tparam TR is the type of the return value of the visitor.
     * @return the result of the visit (of type TR).
     */
-  override def accept[TP, TR](
-    visitor: ASTGenericWalker[TP, TR],
-    param: TP
-  ): TR = {
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
 }

@@ -27,7 +27,7 @@
 package es.weso.shexlc.parse.ast.stmt
 
 import es.weso.shexlc.parse.ast.Position
-import es.weso.shexlc.parse.ast.expr.Expression
+import es.weso.shexlc.parse.ast.expr.{Expression, LiteralIRIValueExpr}
 import es.weso.shexlc.parse.ast.visitor.ASTGenericWalker
 import org.antlr.v4.runtime.misc.Interval
 
@@ -52,8 +52,7 @@ class BaseDefStmt(
 
   // Override default methods to indicate that this is a Base Definition
   // Statement.
-  override def isBaseDefStmt: Boolean = true
-
+  override def isBaseDefStmt: Boolean     = true
   override def asBaseDefStmt: BaseDefStmt = this
 
   /**
@@ -89,10 +88,26 @@ class BaseDefStmt(
     * @tparam TR is the type of the return value of the visitor.
     * @return the result of the visit (of type TR).
     */
-  override def accept[TP, TR](
-    visitor: ASTGenericWalker[TP, TR],
-    param: TP
-  ): TR = {
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
+}
+
+object BaseDefStmt {
+
+  val DEFAULT_BASE = "<es.weso.shexlc.internal://base>"
+
+  val DEFAULT_LABEL = "base"
+
+  val defaultBaseDefStmt = new BaseDefStmt(
+    Position.HOME,
+    new Interval(0, 0),
+    "base = <es.weso.shexlc" + ".internal://base>",
+    new LiteralIRIValueExpr(
+      Position.HOME,
+      new Interval(0, 0),
+      "<es.weso.shexlc.internal://base>",
+      DEFAULT_BASE
+    )
+  )
 }

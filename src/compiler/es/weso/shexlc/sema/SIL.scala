@@ -71,48 +71,45 @@ object SIL {
     * @param abstractSyntaxTree for which the SIL will be generated.
     * @return the generated SIL.
     */
-  def getSIL(abstractSyntaxTree: AbstractSyntaxTree): SIL = new SIL {
+  def getSIL(abstractSyntaxTree: AbstractSyntaxTree): SIL =
+    new SIL {
 
-    val graphEntryPoint = {
-      // First the type checking of the AST
-      abstractSyntaxTree.getRoot
-        .accept(new TypeCheck(abstractSyntaxTree.getCompilationContext), ())
+      val graphEntryPoint = {
+        // First the type checking of the AST
+        abstractSyntaxTree.getRoot
+          .accept(new TypeCheck(abstractSyntaxTree.getCompilationContext), ())
 
-      // Then add definitions to the symbol table and look for duplicates.
-      abstractSyntaxTree.getRoot.accept(
-        new DefinitionCheck(abstractSyntaxTree.getCompilationContext),
-        ()
-      )
+        // Then add definitions to the symbol table and look for duplicates.
+        abstractSyntaxTree.getRoot
+          .accept(new DefinitionCheck(abstractSyntaxTree.getCompilationContext), ())
 
-      // Then check that all calls have a definition and assign it.
-      abstractSyntaxTree.getRoot
-        .accept(new CallCheck(abstractSyntaxTree.getCompilationContext), ())
+        // Then check that all calls have a definition and assign it.
+        abstractSyntaxTree.getRoot
+          .accept(new CallCheck(abstractSyntaxTree.getCompilationContext), ())
 
-      // Finally look for un-used prefixes to throw warnings.
-      abstractSyntaxTree.getRoot.accept(
-        new LookUnusedPrefixCheck(abstractSyntaxTree.getCompilationContext),
-        ()
-      )
+        // Finally look for un-used prefixes to throw warnings.
+        abstractSyntaxTree.getRoot
+          .accept(new LookUnusedPrefixCheck(abstractSyntaxTree.getCompilationContext), ())
 
-      // Return the graph entry point.
-      abstractSyntaxTree.getRoot
-    }
+        // Return the graph entry point.
+        abstractSyntaxTree.getRoot
+      }
 
-    /**
-      * Gets the compilation context.
-      *
+      /**
+        * Gets the compilation context.
+        *
       * @return the compilation context.
-      */
-    override def getCompilationContext: CompilationContext =
-      abstractSyntaxTree.getCompilationContext
+        */
+      override def getCompilationContext: CompilationContext =
+        abstractSyntaxTree.getCompilationContext
 
-    /**
-      * Gets the entry point for the graph that represents the shex-lite
-      * intermediate language.
-      *
+      /**
+        * Gets the entry point for the graph that represents the shex-lite
+        * intermediate language.
+        *
       * @return the abstract ast node that represents the entry point of the
-      *         graph. Will be an schema always.
-      */
-    override def getGraphEntryPoint: AbstractASTNode = graphEntryPoint
-  }
+        *         graph. Will be an schema always.
+        */
+      override def getGraphEntryPoint: AbstractASTNode = graphEntryPoint
+    }
 }

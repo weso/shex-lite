@@ -97,11 +97,7 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
         val ast = AbstractSyntaxTree.getAST(syntaxTree)
 
         // Print the AST.
-        println(
-          ast.getRoot
-            .asInstanceOf[Schema]
-            .accept(new ASTPrinter(), new StringBuilder())
-        )
+        println(ast.getRoot.asInstanceOf[Schema].accept(new ASTPrinter(), new StringBuilder()))
 
         // 3. Get SIL.
         val sil = SIL.getSIL(ast)
@@ -125,15 +121,8 @@ class CompilationTest extends AnyFunSuite with BeforeAndAfter {
     }
   }
 
-  private[this] def getListOfFiles(
-    dir: String,
-    startsWith: String
-  ): List[String] = {
+  private[this] def getListOfFiles(dir: String, startsWith: String): List[String] = {
     val file = new File(dir)
-    file.listFiles
-      .filter(_.isFile)
-      .filter(_.getName.startsWith(startsWith))
-      .map(_.getPath)
-      .toList
+    file.listFiles.filter(_.isFile).filter(_.getName.startsWith(startsWith)).map(_.getPath).toList
   }
 }

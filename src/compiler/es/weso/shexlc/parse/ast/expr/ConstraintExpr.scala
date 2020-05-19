@@ -41,11 +41,8 @@ import org.antlr.v4.runtime.misc.Interval
   *
   * @author Guillermo Facundo Colunga
   */
-abstract class ConstraintExpr(
-  position: Position,
-  tokenRange: Interval,
-  content: String
-) extends Expression(position, tokenRange, content) {
+abstract class ConstraintExpr(position: Position, tokenRange: Interval, content: String)
+    extends Expression(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Constraint Expression.
   override def isConstraintExpr: Boolean = true

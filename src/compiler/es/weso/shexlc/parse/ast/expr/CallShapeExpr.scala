@@ -41,8 +41,7 @@ class CallShapeExpr(
   tokenRange: Interval,
   content: String,
   val label: Expression,
-  var
-  definition: Statement = null
+  var definition: Statement = null
 ) extends CallExpr(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Call Shape Expression.
@@ -83,10 +82,7 @@ class CallShapeExpr(
     * @tparam TR is the type of the return value of the visitor.
     * @return the result of the visit (of type TR).
     */
-  override def accept[TP, TR](
-    visitor: ASTGenericWalker[TP, TR],
-    param: TP
-  ): TR = {
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
 }

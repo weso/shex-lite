@@ -39,11 +39,8 @@ import org.antlr.v4.runtime.misc.Interval
   *
   * @author Guillermo Facundo Colunga
   */
-abstract class Expression(
-  position: Position,
-  tokenRange: Interval,
-  content: String
-) extends AbstractASTNode(position, tokenRange, content) {
+abstract class Expression(position: Position, tokenRange: Interval, content: String)
+    extends AbstractASTNode(position, tokenRange, content) {
 
   // Override default values from node with position.
   override def isExpression(): Boolean = true
@@ -54,10 +51,7 @@ abstract class Expression(
   def isLiteralExpr: Boolean = false
 
   def asLiteralExpr: LiteralExpr =
-    throw new IllegalStateException(
-      s"$this is" +
-      s" not an LiteralExpr"
-    )
+    throw new IllegalStateException(s"$this is" + s" not an LiteralExpr")
 
   // Literal IRI Value Expression.
   def isLiteralIRIValueExpr: Boolean = false
@@ -87,9 +81,7 @@ abstract class Expression(
   def isConstraintBlockTripleExpr: Boolean = false
 
   def asConstraintBlockTripleExpr: ConstraintBlockTripleExpr =
-    throw new IllegalStateException(
-      s"$this is not an asConstraintBlockTripleExpr"
-    )
+    throw new IllegalStateException(s"$this is not an asConstraintBlockTripleExpr")
 
   // Constraint Triple Expression.
   def isConstraintTripleExpr: Boolean = false
@@ -113,9 +105,7 @@ abstract class Expression(
   def isConstraintNodeLiteralExpr: Boolean = false
 
   def asConstraintNodeLiteralExpr: ConstraintNodeLiteralExpr =
-    throw new IllegalStateException(
-      s"$this is not an ConstraintNodeLiteralExpr"
-    )
+    throw new IllegalStateException(s"$this is not an ConstraintNodeLiteralExpr")
 
   // Constraint Node IRI Expression.
   def isConstraintNodeIRIExpr: Boolean = false
@@ -127,9 +117,7 @@ abstract class Expression(
   def isConstraintNodeAnyTypeExpr: Boolean = false
 
   def asConstraintNodeAnyTypeExpr: ConstraintNodeAnyTypeExpr =
-    throw new IllegalStateException(
-      s"$this is not an ConstraintNodeAnyTypeExpr"
-    )
+    throw new IllegalStateException(s"$this is not an ConstraintNodeAnyTypeExpr")
 
   // Constraint Node BNode Expression.
   def isConstraintNodeBNodeExpr: Boolean = false
@@ -141,17 +129,13 @@ abstract class Expression(
   def isConstraintNodeNonLiteralExpr: Boolean = false
 
   def asConstraintNodeNonLiteralExpr: ConstraintNodeNonLiteralExpr =
-    throw new IllegalStateException(
-      s"$this is not an ConstraintNodeNonLiteralExpr"
-    )
+    throw new IllegalStateException(s"$this is not an ConstraintNodeNonLiteralExpr")
 
   // Constraint Valid Value Set Expression
   def isConstraintValidValueSetExpr: Boolean = false
 
   def asConstraintValidValueSetExpr: ConstraintValidValueSetExpr =
-    throw new IllegalStateException(
-      s"$this is not an ConstraintValidValueSetExpr"
-    )
+    throw new IllegalStateException(s"$this is not an ConstraintValidValueSetExpr")
 
   // Constraint Value Set Expression.
   def isConstraintValueSetExpr: Boolean = false
@@ -162,11 +146,7 @@ abstract class Expression(
   // Call Expression.
   def isCallExpr: Boolean = false
 
-  def asCallExpr: CallExpr =
-    throw new IllegalStateException(
-      s"$this is not " +
-      s"an CallExpr"
-    )
+  def asCallExpr: CallExpr = throw new IllegalStateException(s"$this is not " + s"an CallExpr")
 
   // Call Prefix Expression.
   def isCallPrefixExpr: Boolean = false
@@ -184,8 +164,5 @@ abstract class Expression(
   def isCallBaseExpr = false
 
   def asCallBaseExpr: CallBaseExpr =
-    throw new IllegalStateException(
-      s"$this " +
-      s"is not an CallBaseExpr"
-    )
+    throw new IllegalStateException(s"$this " + s"is not an CallBaseExpr")
 }

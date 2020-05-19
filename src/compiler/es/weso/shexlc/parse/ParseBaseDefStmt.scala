@@ -49,12 +49,11 @@ class ParseBaseDefStmt(
 ) extends HasParseResult[BaseDefStmt] {
 
   override def getParseResult: BaseDefStmt = {
-    val sourceName = ccontext.getInputContext.getSourceName
-    val line       = ctx.start.getLine
-    val column     = ctx.start.getCharPositionInLine
-    val pos        = Position.pos(sourceName, line, column)
-    val tokenRange =
-      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val sourceName      = ccontext.getInputContext.getSourceName
+    val line            = ctx.start.getLine
+    val column          = ctx.start.getCharPositionInLine
+    val pos             = Position.pos(sourceName, line, column)
+    val tokenRange      = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
     val content         = ccontext.getInputContext.getText(tokenRange)
     val iri: Expression = ctx.iri.accept(visitor).asExpression()
 

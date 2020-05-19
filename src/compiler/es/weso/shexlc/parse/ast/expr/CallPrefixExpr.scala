@@ -41,8 +41,7 @@ class CallPrefixExpr(
   tokenRange: Interval,
   content: String,
   val label: String,
-  val
-  argument: String,
+  val argument: String,
   var definition: Statement = null
 ) extends CallExpr(position, tokenRange, content) {
 
@@ -84,10 +83,7 @@ class CallPrefixExpr(
     * @tparam TR is the type of the return value of the visitor.
     * @return the result of the visit (of type TR).
     */
-  override def accept[TP, TR](
-    visitor: ASTGenericWalker[TP, TR],
-    param: TP
-  ): TR = {
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
 }

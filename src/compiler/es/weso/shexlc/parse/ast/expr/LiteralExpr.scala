@@ -41,11 +41,8 @@ import org.antlr.v4.runtime.misc.Interval
   *
   * @author Guillermo Facundo Colunga
   */
-abstract class LiteralExpr(
-  position: Position,
-  tokenRange: Interval,
-  content: String
-) extends ConstraintNodeExpr(position, tokenRange, content) {
+abstract class LiteralExpr(position: Position, tokenRange: Interval, content: String)
+    extends ConstraintNodeExpr(position, tokenRange, content) {
 
   // Override default methods to indicate that this is a Literal Expression.
   override def isLiteralExpr: Boolean = true

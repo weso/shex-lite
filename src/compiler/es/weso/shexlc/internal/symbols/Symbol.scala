@@ -26,15 +26,72 @@
 
 package es.weso.shexlc.internal.symbols
 
-trait Symbol[T] {
+import es.weso.shexlc.parse.ast.stmt.DefinitionStmt
+import wvlet.log.LogSupport
 
-  def getContent: T
+/**
+  * A symbol is a container for the definitions of the schema.
+  *
+  * @author Guillermo Facundo Colunga.
+  */
+trait Symbol {
 
-  def setContent(content: T)
+  /**
+    * Gets the content of the symbol.
+    * @return the content of the symbol.
+    */
+  def getContent: Option[DefinitionStmt]
 
-  def getNumberOfCalls: Int
+  /**
+    * Gets the symbol associated statistics.
+    *
+    * @return the symbol associated statistics.
+    */
+  def getStats: SymbolStats
+}
 
-  def addOneCall(): Unit
+/**
+  * Symbol object offers and entry-point for symbols creation.
+  *
+  * @author Guillermo Facundo Colunga
+  */
+object Symbol {
 
-  def addNCalls(n: Int): Unit
+  /**
+    * Creates a new symbol implementation for the given content.
+    *
+    * @param definition to store in the symbol. Usually the definition.
+    * @return a new Symbol implementation for the given content.
+    */
+  def ofDefinition(definition: DefinitionStmt): Symbol =
+    new Symbol with LogSupport {
+
+      // Logging message
+      debug(s"creating a new symbol for definition `$definition`")
+
+      // Private copy of the definition and private value for the stats of
+      // the symbol
+      private val _definition: DefinitionStmt = definition
+      private val _stats: SymbolStats         = SymbolStats.empty
+
+      /**
+        * Gets the content of the symbol.
+        *
+        * @return the content of the symbol.
+        */
+      override def getContent: Option[DefinitionStmt] = {
+        debug("accessing to the content of a symbol")
+        Option(this._definition)
+      }
+
+      /**
+        * Gets the number of calls that have been made to the symbol.
+        *
+        * @return the number of calls that have been made to the symbol.
+        */
+      override def getStats: SymbolStats = {
+        debug("accessing to the stats of a symbol")
+        this._stats
+      }
+    }
 }

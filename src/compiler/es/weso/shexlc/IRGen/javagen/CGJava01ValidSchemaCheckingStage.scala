@@ -38,97 +38,64 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
   private[this] val msgsHandler: ErrorHandler = ccontext.getErrorHandler
 
   override def visit(stmt: ImportStmt, param: Unit): Unit = {
-    msgsHandler.addEvent(
-      new Err(
-        stmt,
-        "import statements are not valid for " +
-        "java code generation",
-        Warn.FeatureIgnored
-      )
-    ) //stmt.expression.accept
+    msgsHandler.addEvent(new Err(
+      stmt,
+      "import statements are not valid for " + "java code generation",
+      Warn.FeatureIgnored
+    )) //stmt.expression.accept
     // (this, param)
   }
 
   override def visit(stmt: StartDefStmt, param: Unit): Unit = {
-    msgsHandler.addEvent(
-      new Err(
-        stmt,
-        "the start statement will be ignored " +
-        "for java code generation",
-        Warn.FeatureIgnored
-      )
-    ) //stmt.expression
+    msgsHandler.addEvent(new Err(
+      stmt,
+      "the start statement will be ignored " + "for java code generation",
+      Warn.FeatureIgnored
+    )) //stmt.expression
     // .accept(this, param)
   }
 
   override def visit(expr: ConstraintNodeAnyTypeExpr, param: Unit): Unit = {
-    msgsHandler.addEvent(
-      new Err(
-        expr,
-        "this constraint will be substituted " +
-        "by the Object java class",
-        Warn.FeatureIgnored
-      )
-    )
+    msgsHandler.addEvent(new Err(
+      expr,
+      "this constraint will be substituted " + "by the Object java class",
+      Warn.FeatureIgnored
+    ))
   }
 
   override def visit(expr: ConstraintNodeBNodeExpr, param: Unit): Unit = {
     msgsHandler.addEvent(
-      new Err(
-        expr,
-        "this constraint cannot be represented" +
-        " in java",
-        Err.FeatureNotAvailable
-      )
+      new Err(expr, "this constraint cannot be represented" + " in java", Err.FeatureNotAvailable)
     )
   }
 
   override def visit(expr: ConstraintNodeIRIExpr, param: Unit): Unit = {
     msgsHandler.addEvent(
-      new Err(
-        expr,
-        "this constraint cannot be represented" +
-        " in java",
-        Err.FeatureNotAvailable
-      )
+      new Err(expr, "this constraint cannot be represented" + " in java", Err.FeatureNotAvailable)
     )
   }
 
   override def visit(expr: ConstraintNodeLiteralExpr, param: Unit): Unit = {
     msgsHandler.addEvent(
-      new Err(
-        expr,
-        "this constraint cannot be represented" +
-        " in java",
-        Err.FeatureNotAvailable
-      )
+      new Err(expr, "this constraint cannot be represented" + " in java", Err.FeatureNotAvailable)
     )
   }
 
   override def visit(expr: ConstraintNodeNonLiteralExpr, param: Unit): Unit = {
     msgsHandler.addEvent(
-      new Err(
-        expr,
-        "this constraint cannot be represented" +
-        " in java",
-        Err.FeatureNotAvailable
-      )
+      new Err(expr, "this constraint cannot be represented" + " in java", Err.FeatureNotAvailable)
     )
   }
 
   override def visit(expr: ConstraintBlockTripleExpr, param: Unit): Unit = {
     for (constraint <- expr.body) {
-      if (constraint.isConstraintTripleExpr) {
-        constraint.accept(this, param)
-      } else {
-        msgsHandler.addEvent(
-          new Err(
-            constraint,
-            "this constraint cannot be " +
-            "represented in java",
-            Err.FeatureNotAvailable
-          )
-        )
+      if (constraint.isConstraintTripleExpr) { constraint.accept(this, param) }
+      else {
+        msgsHandler.addEvent(new Err(
+          constraint,
+          "this constraint cannot be " + "represented in java",
+          Err.FeatureNotAvailable
+        ))
       }
     }
   }
@@ -138,27 +105,18 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
     val cardinality = expr.cardinality
     val isCallShape = expr.constraint.isCallShapeExpr
 
-    if (constraint.isCallPrefixExpr && !constraint.asCallPrefixExpr.label
-          .equals("xsd")) {
+    if (constraint.isCallPrefixExpr && !constraint.asCallPrefixExpr.label.equals("xsd")) {
       msgsHandler.addEvent(
-        new Err(
-          constraint,
-          "this prefix has no mapping in" +
-          " java",
-          Err.FeatureNotAvailable
-        )
+        new Err(constraint, "this prefix has no mapping in" + " java", Err.FeatureNotAvailable)
       )
     }
 
     if (cardinality.asCardinalityExpr.isEmptyCardinality) {
-      msgsHandler.addEvent(
-        new Err(
-          cardinality,
-          "this cardinality has no " +
-          "mapping in java",
-          Err.FeatureNotAvailable
-        )
-      )
+      msgsHandler.addEvent(new Err(
+        cardinality,
+        "this cardinality has no " + "mapping in java",
+        Err.FeatureNotAvailable
+      ))
     }
 
     expr.property.accept(this, param)
@@ -168,12 +126,7 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
 
   override def visit(expr: ConstraintValueSetExpr, param: Unit): Unit = {
     msgsHandler.addEvent(
-      new Err(
-        expr,
-        "this constraint cannot be represented" +
-        " in java",
-        Err.FeatureNotAvailable
-      )
+      new Err(expr, "this constraint cannot be represented" + " in java", Err.FeatureNotAvailable)
     )
     expr.values.foreach(value => value.accept(this, param))
   }

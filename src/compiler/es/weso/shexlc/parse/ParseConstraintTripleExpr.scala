@@ -52,27 +52,15 @@ class ParseConstraintTripleExpr(
     val line       = ctx.start.getLine
     val column     = ctx.start.getCharPositionInLine
     val pos        = Position.pos(sourceName, line, column)
-    val tokenRange =
-      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(tokenRange)
+    val tokenRange = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content    = ccontext.getInputContext.getText(tokenRange)
 
     val property: Expression   = ctx.property.accept(visitor).asExpression()
     val constraint: Expression = ctx.constraint.accept(visitor).asExpression()
     val cardinality: Expression =
-      if (ctx.cardinality == null)
-        new CardinalityExpr(pos, tokenRange, content, 0, 1)
-      else
-        ctx.cardinality
-          .accept(visitor)
-          .asExpression()
+      if (ctx.cardinality == null) new CardinalityExpr(pos, tokenRange, content, 0, 1)
+      else ctx.cardinality.accept(visitor).asExpression()
 
-    new ConstraintTripleExpr(
-      pos,
-      tokenRange,
-      content,
-      property,
-      constraint,
-      cardinality
-    )
+    new ConstraintTripleExpr(pos, tokenRange, content, property, constraint, cardinality)
   }
 }

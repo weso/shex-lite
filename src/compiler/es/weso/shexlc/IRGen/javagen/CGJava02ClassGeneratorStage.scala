@@ -34,12 +34,10 @@ import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
 import scala.collection.mutable.ListBuffer
 
-class CGJava02ClassGeneratorStage(ccontex: CompilationContext)
-    extends ASTDefaultVisitor[String] {
+class CGJava02ClassGeneratorStage(ccontex: CompilationContext) extends ASTDefaultVisitor[String] {
 
-  private[this] val ppackage: String = ccontex.getConfiguration.getProperties
-    .get("java-package")
-    .getOrElse("generated")
+  private[this] val ppackage: String =
+    ccontex.getConfiguration.getProperties.get("java-package").getOrElse("generated")
   private[this] var stringBuilder = new StringBuilder() // This string
   // builder will contain the generated sources.
   private[shexlc] var generatedSources = ListBuffer.empty[(String, String)]
@@ -54,10 +52,9 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext)
     stmt.label.accept(this, param)
 
     // Generate the fields, the constructor and the getter and the setter.
-    val fieldsGen = new CGJava03FieldsGenerator(ccontex, stringBuilder)
-    val constructorGen =
-      new CGJava04ConstructorGenerator(ccontex, stringBuilder)
-    val getSetGen = new CGJava05GetSetGenerator(ccontex, stringBuilder)
+    val fieldsGen      = new CGJava03FieldsGenerator(ccontex, stringBuilder)
+    val constructorGen = new CGJava04ConstructorGenerator(ccontex, stringBuilder)
+    val getSetGen      = new CGJava05GetSetGenerator(ccontex, stringBuilder)
 
     // Package declaration
     stringBuilder.append(s"package $ppackage;")
@@ -85,8 +82,7 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext)
   }
 
   override def visit(expr: CallBaseExpr, param: String): Unit = {
-    className =
-      expr.argument.replace("<", "").replace(">", "").toLowerCase().capitalize
+    className = expr.argument.replace("<", "").replace(">", "").toLowerCase().capitalize
   }
 
   override def visit(expr: CallPrefixExpr, param: String): Unit = {

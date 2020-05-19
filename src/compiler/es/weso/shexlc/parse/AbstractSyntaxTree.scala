@@ -75,9 +75,7 @@ object AbstractSyntaxTree {
     new AbstractSyntaxTree {
 
       private val root = syntaxTree.getTree
-        .asInstanceOf[
-          ShexLiteParser.SchemaContext
-        ] // It must be always a SchemaContext
+        .asInstanceOf[ShexLiteParser.SchemaContext] // It must be always a SchemaContext
         .accept(new ASTBuilderParser(syntaxTree.getCompilationContext))
 
       // Execute the tree parent builder to add all corresponding parents.
@@ -95,7 +93,6 @@ object AbstractSyntaxTree {
         *
         * @return the compilation context.
         */
-      override def getCompilationContext: CompilationContext =
-        syntaxTree.getCompilationContext
+      override def getCompilationContext: CompilationContext = syntaxTree.getCompilationContext
     }
 }

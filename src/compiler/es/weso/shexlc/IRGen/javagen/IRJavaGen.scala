@@ -54,45 +54,43 @@ object IRJavaGen {
     *            generation.
     * @return an IRGenerator object.
     */
-  def getIR(sil: SIL): IRJavaGen = new IRJavaGen {
+  def getIR(sil: SIL): IRJavaGen =
+    new IRJavaGen {
 
-    // The java feature checker object.
-    private[this] val javaFeatureChecker = new CGJava01ValidSchemaCheckingStage(
-      sil.getCompilationContext
-    )
+      // The java feature checker object.
+      private[this] val javaFeatureChecker =
+        new CGJava01ValidSchemaCheckingStage(sil.getCompilationContext)
 
-    // The java class generator object.
-    private[this] val javaClassGenerator = new CGJava02ClassGeneratorStage(
-      sil.getCompilationContext
-    )
+      // The java class generator object.
+      private[this] val javaClassGenerator =
+        new CGJava02ClassGeneratorStage(sil.getCompilationContext)
 
-    /**
-      * Gets the generated sources if any. The generated sources are a list
-      * of tuples where the first element is the
-      * name of the generated source and the second value is its content.
-      *
+      /**
+        * Gets the generated sources if any. The generated sources are a list
+        * of tuples where the first element is the
+        * name of the generated source and the second value is its content.
+        *
       * @return the list of tuples that contain the name of the source and
-      *         the source content.
-      */
-    override def getGeneratedSources: List[(String, String)] = {
-      if (sil.getCompilationContext.getConfiguration.getTIR
-            .contains(TargetIR.Java)) {
-        // 1. Validate that the SIL represents a valid schema for the
-        // representation.
-        sil.getGraphEntryPoint.accept(javaFeatureChecker, ())
+        *         the source content.
+        */
+      override def getGeneratedSources: List[(String, String)] = {
+        if (sil.getCompilationContext.getConfiguration.getTIR.contains(TargetIR.Java)) {
+          // 1. Validate that the SIL represents a valid schema for the
+          // representation.
+          sil.getGraphEntryPoint.accept(javaFeatureChecker, ())
 
-        // 2. If during the validation any error was generated then generate
-        // the target code.
-        if (!sil.getCompilationContext.getErrorHandler.hasErrorMsgs) {
-          sil.getGraphEntryPoint.accept(javaClassGenerator, "")
-          javaClassGenerator.generatedSources.toList
+          // 2. If during the validation any error was generated then generate
+          // the target code.
+          if (!sil.getCompilationContext.getErrorHandler.hasErrorMsgs) {
+            sil.getGraphEntryPoint.accept(javaClassGenerator, "")
+            javaClassGenerator.generatedSources.toList
+          } else {
+            List.empty[(String, String)] // An empty list.
+          }
+
         } else {
           List.empty[(String, String)] // An empty list.
         }
-
-      } else {
-        List.empty[(String, String)] // An empty list.
       }
     }
-  }
 }

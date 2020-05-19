@@ -45,17 +45,16 @@ class SchemaTest extends AnyFunSuite {
   var ccontext = CompilationContext.withConfig(cconfig)
 
   test("positive individual file compilation") {
-    val shexl =
-      s"""prefix : <http://www.google.es>
-         |prefix xsd: <http://www.schema.org/>
-         |prefix xsd: <http://www.schema.org/>
-         |base <http://thebase.com/>
-         |start = @:User
-         |:User {
-         |  :name  xsds:string  ;
-         |  :surname . 
-         |}
-         |""".stripMargin
+    val shexl = s"""prefix : <http://www.google.es>
+                   |prefix xsd: <http://www.schema.org/>
+                   |prefix xsd: <http://www.schema.org/>
+                   |base <http://thebase.com/>
+                   |start = @:User
+                   |:User {
+                   |  :name  xsds:string  ;
+                   |  :surname . 
+                   |}
+                   |""".stripMargin
 
     ccontext = CompilationContext.withConfig(cconfig)
 
@@ -69,14 +68,10 @@ class SchemaTest extends AnyFunSuite {
     println("--- SYNTAX TREE PARSED ---")
 
     // If any error during compilation print them.
-    for (error <- ccontext.getErrorHandler.getErrors) {
-      println(error.toPrintableString)
-    }
+    for (error <- ccontext.getErrorHandler.getErrors) { println(error.toPrintableString) }
 
     // If any warning print them.
-    for (warning <- ccontext.getErrorHandler.getWarnings) {
-      println(warning.toPrintableString)
-    }
+    for (warning <- ccontext.getErrorHandler.getWarnings) { println(warning.toPrintableString) }
 
     // No errors should be generated
     assert(!ccontext.getErrorHandler.hasErrorMsgs)
@@ -87,24 +82,16 @@ class SchemaTest extends AnyFunSuite {
     println("--- ABSTRACT SYNTAX TREE PARSED ---")
 
     // If any error during compilation print them.
-    for (error <- ccontext.getErrorHandler.getErrors) {
-      println(error.toPrintableString)
-    }
+    for (error <- ccontext.getErrorHandler.getErrors) { println(error.toPrintableString) }
 
     // If any warning print them.
-    for (warning <- ccontext.getErrorHandler.getWarnings) {
-      println(warning.toPrintableString)
-    }
+    for (warning <- ccontext.getErrorHandler.getWarnings) { println(warning.toPrintableString) }
 
     // No errors should be generated
     assert(!ccontext.getErrorHandler.hasErrorMsgs)
 
     // Print the AST.
-    println(
-      ast.getRoot
-        .asInstanceOf[Schema]
-        .accept(new ASTPrinter(), new StringBuilder())
-    )
+    println(ast.getRoot.asInstanceOf[Schema].accept(new ASTPrinter(), new StringBuilder()))
 
     // 3. Get SIL.
     val sil = SIL.getSIL(ast)
@@ -112,14 +99,10 @@ class SchemaTest extends AnyFunSuite {
     println("--- SIL GENERATED ---")
 
     // If any error during compilation print them.
-    for (error <- ccontext.getErrorHandler.getErrors) {
-      println(error.toPrintableString)
-    }
+    for (error <- ccontext.getErrorHandler.getErrors) { println(error.toPrintableString) }
 
     // If any warning print them.
-    for (warning <- ccontext.getErrorHandler.getWarnings) {
-      println(warning.toPrintableString)
-    }
+    for (warning <- ccontext.getErrorHandler.getWarnings) { println(warning.toPrintableString) }
 
     // Errors should be generated
     assert(ccontext.getErrorHandler.hasErrorMsgs)
@@ -131,17 +114,13 @@ class SchemaTest extends AnyFunSuite {
     println("--- IR GENERATED ---")
 
     // If any error during compilation print them.
-    for (error <- ccontext.getErrorHandler.getErrors) {
-      println(error.toPrintableString)
-    }
+    for (error <- ccontext.getErrorHandler.getErrors) { println(error.toPrintableString) }
 
     // No errors should be generated
     assert(ccontext.getErrorHandler.hasErrorMsgs)
 
     // If any warning print them.
-    for (warning <- ccontext.getErrorHandler.getWarnings) {
-      println(warning.toPrintableString)
-    }
+    for (warning <- ccontext.getErrorHandler.getWarnings) { println(warning.toPrintableString) }
 
     // Check that no errors where generated.
     //assert(!ccontext.getErrorHandler.hasErrorMsgs)

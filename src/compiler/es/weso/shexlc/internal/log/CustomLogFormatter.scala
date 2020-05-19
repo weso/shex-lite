@@ -31,8 +31,7 @@ import wvlet.log.LogFormatter._
 
 object CustomLogFormatter extends LogFormatter {
   override def formatLog(r: LogRecord): String = {
-    val log =
-      s"[${highlightLog(r.level, r.level.name)}] ${highlightLog(r.level, r.getMessage)}"
+    val log = s"[${highlightLog(r.level, r.level.name)}] ${highlightLog(r.level, r.getMessage)}"
     appendStackTrace(log, r)
   }
 }

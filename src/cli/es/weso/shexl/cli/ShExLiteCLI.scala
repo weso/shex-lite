@@ -34,7 +34,7 @@ import es.weso.shexlc.IRGen.{IR, TargetIR}
 import es.weso.shexlc.internal.log.CustomLogFormatter
 import es.weso.shexlc.parse.{AbstractSyntaxTree, Parser}
 import org.backuity.clist.{args, opt, CliMain}
-import wvlet.log.{LogSupport, Logger}
+import wvlet.log.{LogLevel, LogSupport, Logger}
 
 import scala.collection.mutable
 
@@ -46,16 +46,13 @@ object ShExLiteCLI
     with LogSupport {
 
   Logger.setDefaultFormatter(CustomLogFormatter)
+  Logger.setDefaultLogLevel(LogLevel.ALL)
 
-  var hideWarn = opt[Boolean](
-    abbrev      = "hw",
-    description = "if present will hide the warnings"
-  )
+  var hideWarn = opt[Boolean](abbrev = "hw", description = "if present will hide the warnings")
 
   var javaPkg = opt[String](
-    default = "",
-    description = "If present will generate java domain object models with " +
-      "the given package"
+    default     = "",
+    description = "If present will generate java domain object models with " + "the given package"
   )
 
   var outDir = opt[String](
@@ -74,10 +71,7 @@ object ShExLiteCLI
 
       val prop = mutable.HashMap.empty[String, String]
 
-      override def generateIR: Boolean =
-        if (!javaPkg.isEmpty)
-          true
-        else false
+      override def generateIR: Boolean = if (!javaPkg.isEmpty) true else false
 
       override def getProperties: mutable.HashMap[String, String] = {
         prop.put("java-package", javaPkg)
@@ -87,9 +81,7 @@ object ShExLiteCLI
       override def generateWarnings: Boolean = !hideWarn
 
       override def getTIR: Set[TargetIR] =
-        if (!javaPkg.isEmpty)
-          List(TargetIR.Java).toSet
-        else Set.empty
+        if (!javaPkg.isEmpty) List(TargetIR.Java).toSet else Set.empty
     }
 
     val ccontext = CompilationContext.withConfig(cconfig)
@@ -116,32 +108,22 @@ object ShExLiteCLI
       // 5. Write the generated files.
       if (cconfig.generateIR) {
         info(s"writing generated sources for file $file")
-        ir.getSources
-          .get(TargetIR.Java)
-          .get
-          .foreach(source => {
-            val file         = new File(s"$outDir/${source._1}.java")
-            val print_Writer = new PrintWriter(file)
-            print_Writer.write(source._2)
-            print_Writer.close()
-          })
+        ir.getSources.get(TargetIR.Java).get.foreach(source => {
+          val file         = new File(s"$outDir/${source._1}.java")
+          val print_Writer = new PrintWriter(file)
+          print_Writer.write(source._2)
+          print_Writer.close()
+        })
       }
     }
 
     // If any error during compilation print them.
-    for (error <- ccontext.getErrorHandler.getErrors) {
-      println(error.toPrintableString)
-    }
+    for (error <- ccontext.getErrorHandler.getErrors) { println(error.toPrintableString) }
 
     // If any warning print them.
-    for (warning <- ccontext.getErrorHandler.getWarnings) {
-      println(warning.toPrintableString)
-    }
+    for (warning <- ccontext.getErrorHandler.getWarnings) { println(warning.toPrintableString) }
 
-    if (ccontext.getErrorHandler.hasErrorMsgs) {
-      error("compilation finished with errors")
-    } else {
-      info("compilation finished without errors")
-    }
+    if (ccontext.getErrorHandler.hasErrorMsgs) { error("compilation finished with errors")   }
+    else                                       { info("compilation finished without errors") }
   }
 }

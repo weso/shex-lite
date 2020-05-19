@@ -56,18 +56,13 @@ class ParseConstraintValueSetExpr(
     val line       = ctx.start.getLine
     val column     = ctx.start.getCharPositionInLine
     val pos        = Position.pos(sourceName, line, column)
-    val tokenRange =
-      new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
-    val content = ccontext.getInputContext.getText(tokenRange)
+    val tokenRange = new Interval(ctx.start.getStartIndex, ctx.stop.getStopIndex)
+    val content    = ccontext.getInputContext.getText(tokenRange)
 
     // Would be nice to remove the as instance of from here but as antlr
     // generates java...
-    val valueSet = ctx
-      .constraint_valid_value_set_type()
-      .asScala
-      .map(ex => ex.accept(visitor))
-      .toList
-      .asInstanceOf[List[Expression]]
+    val valueSet = ctx.constraint_valid_value_set_type().asScala.map(ex => ex.accept(visitor))
+      .toList.asInstanceOf[List[Expression]]
 
     new ConstraintValueSetExpr(pos, tokenRange, content, valueSet)
   }

@@ -35,13 +35,8 @@ import org.antlr.v4.runtime.misc.Interval
   *
   * @author Guillermo Facundo Colunga
   */
-class Schema(
-  position: Position,
-  tokenRange: Interval,
-  content: String,
-  val
-  stmts: List[Statement]
-) extends AbstractASTNode(position, tokenRange, content) {
+class Schema(position: Position, tokenRange: Interval, content: String, val stmts: List[Statement])
+    extends AbstractASTNode(position, tokenRange, content) {
 
   /**
     * Gets the position object that points to the source file.
@@ -76,10 +71,7 @@ class Schema(
     * @tparam TR is the type of the return value of the visitor.
     * @return the result of the visit (of type TR).
     */
-  override def accept[TP, TR](
-    visitor: ASTGenericWalker[TP, TR],
-    param: TP
-  ): TR = {
+  override def accept[TP, TR](visitor: ASTGenericWalker[TP, TR], param: TP): TR = {
     visitor.visit(this, param)
   }
 }
