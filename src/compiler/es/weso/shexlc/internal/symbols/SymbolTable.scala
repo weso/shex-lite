@@ -84,7 +84,7 @@ object SymbolTable {
 
       override def set: Unit = {
         debug("adding new scope to the symbol table")
-        this.table = this.table.appended(HashMap.empty[String, Symbol])
+        this.table = this.table :+ HashMap.empty[String, Symbol]
       }
 
       override def reset: Unit = {
