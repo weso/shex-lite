@@ -55,6 +55,11 @@ trait SymbolStats {
 
 object SymbolStats {
 
+  /**
+    * The default number of calls for the Symbol Stats.
+    */
+  val defaultNumberOfCalls = 0
+
   def empty: SymbolStats =
     new SymbolStats with LogSupport {
 
