@@ -28,7 +28,7 @@ import compiler.es.weso.shexlc.IRGen.pythongen.internal.PythonDatatypeMappings.h
 import compiler.es.weso.shexlc.IRGen.pythongen.internal.UriConstants.extractCompleteUriFrom
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.internal.errorhandler.{Err, ErrorHandler, Warn}
-import es.weso.shexlc.parse.ast.expr.{ConstraintBlockTripleExpr, ConstraintNodeBNodeExpr, ConstraintNodeIRIExpr, ConstraintNodeLiteralExpr, ConstraintNodeNonLiteralExpr, ConstraintTripleExpr, ConstraintValueSetExpr}
+import es.weso.shexlc.parse.ast.expr._
 import es.weso.shexlc.parse.ast.stmt.StartDefStmt
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 

@@ -25,7 +25,7 @@
 package compiler.es.weso.shexlc.IRGen.pythongen.internal
 
 import es.weso.shexlc.parse.ast.expr.{CallPrefixExpr, CallShapeExpr, Expression}
-import UriConstants.{RDF_BASE, XSD_BASE, extractCompleteUriFrom}
+import UriConstants.{RdfBase, XsdBase, extractCompleteUriFrom}
 
 /**
  * Collection of functions to map XML based datatypes
@@ -39,37 +39,37 @@ import UriConstants.{RDF_BASE, XSD_BASE, extractCompleteUriFrom}
 object PythonDatatypeMappings {
 
   // mappings of rdf datatypes to python datatypes
-  private final val XML_2_PYTHON_TYPE = Map(
-    s"${RDF_BASE}HTML" -> "DocumentFragment",
-    s"${RDF_BASE}XMLLiteral" -> "Document",
-    s"${XSD_BASE}boolean" -> "bool",
-    s"${XSD_BASE}date" -> "date",
-    s"${XSD_BASE}dateTime" -> "datetime",
-    s"${XSD_BASE}decimal" -> "float",
-    s"${XSD_BASE}double" -> "float",
-    s"${XSD_BASE}float" -> "float",
-    s"${XSD_BASE}integer" -> "int",
-    s"${XSD_BASE}long" -> "long",
-    s"${XSD_BASE}negativeInteger" -> "int",
-    s"${XSD_BASE}nonNegativeInteger" -> "int",
-    s"${XSD_BASE}nonPositiveInteger" -> "int",
-    s"${XSD_BASE}normalizedString" -> "str",
-    s"${XSD_BASE}short" -> "int",
-    s"${XSD_BASE}string" -> "str",
-    s"${XSD_BASE}time" -> "time",
-    s"${XSD_BASE}token" -> "str",
-    s"${XSD_BASE}unsignedByte" -> "int",
-    s"${XSD_BASE}unsignedInt" -> "long",
-    s"${XSD_BASE}unsignedShort" -> "int",
+  private final val XmlToPythonType = Map(
+    s"${RdfBase}HTML" -> "DocumentFragment",
+    s"${RdfBase}XMLLiteral" -> "Document",
+    s"${XsdBase}boolean" -> "bool",
+    s"${XsdBase}date" -> "date",
+    s"${XsdBase}dateTime" -> "datetime",
+    s"${XsdBase}decimal" -> "float",
+    s"${XsdBase}double" -> "float",
+    s"${XsdBase}float" -> "float",
+    s"${XsdBase}integer" -> "int",
+    s"${XsdBase}long" -> "long",
+    s"${XsdBase}negativeInteger" -> "int",
+    s"${XsdBase}nonNegativeInteger" -> "int",
+    s"${XsdBase}nonPositiveInteger" -> "int",
+    s"${XsdBase}normalizedString" -> "str",
+    s"${XsdBase}short" -> "int",
+    s"${XsdBase}string" -> "str",
+    s"${XsdBase}time" -> "time",
+    s"${XsdBase}token" -> "str",
+    s"${XsdBase}unsignedByte" -> "int",
+    s"${XsdBase}unsignedInt" -> "long",
+    s"${XsdBase}unsignedShort" -> "int",
   )
 
   // mappings of rdf datatypes to python modules to import
-  private final val XML_2_PYTHON_MODULE = Map(
-    s"${RDF_BASE}HTML" -> ("xml.dom.minidom", "DocumentFragment"),
-    s"${RDF_BASE}XMLLiteral" -> ("xml.dom.minidom", "Document"),
-    s"${XSD_BASE}date" -> ("datetime", "date"),
-    s"${XSD_BASE}dateTime" -> ("datetime", "datetime"),
-    s"${XSD_BASE}time" -> ("datetime", "time")
+  private final val XmlToPythonModule = Map(
+    s"${RdfBase}HTML" -> ("xml.dom.minidom", "DocumentFragment"),
+    s"${RdfBase}XMLLiteral" -> ("xml.dom.minidom", "Document"),
+    s"${XsdBase}date" -> ("datetime", "date"),
+    s"${XsdBase}dateTime" -> ("datetime", "datetime"),
+    s"${XsdBase}time" -> ("datetime", "time")
   )
 
   /**
@@ -79,7 +79,7 @@ object PythonDatatypeMappings {
    * @return True if the URI has a valid Python mapping, False otherwise.
    */
   def hasPythonDatatypeMapping(xmlDatatypeURI: String): Boolean = {
-    XML_2_PYTHON_TYPE.contains(xmlDatatypeURI)
+    XmlToPythonType.contains(xmlDatatypeURI)
   }
 
   /**
@@ -98,7 +98,7 @@ object PythonDatatypeMappings {
    *         the Option will have no value.
    */
   def toPythonImport(expr: CallPrefixExpr, isList: String): Option[(String, String)] = {
-    XML_2_PYTHON_MODULE.get(extractCompleteUriFrom(expr))
+    XmlToPythonModule.get(extractCompleteUriFrom(expr))
   }
 
   /**
@@ -115,7 +115,7 @@ object PythonDatatypeMappings {
   }
 
   private def generateFieldTypingFrom(expr: CallPrefixExpr): String = {
-    XML_2_PYTHON_TYPE.get(extractCompleteUriFrom(expr)) match {
+    XmlToPythonType.get(extractCompleteUriFrom(expr)) match {
       case Some(value) => value
       case None => "Any"
     }

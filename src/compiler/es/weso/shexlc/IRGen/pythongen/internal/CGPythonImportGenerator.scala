@@ -36,12 +36,12 @@ import scala.collection.mutable
 class CGPythonImportGenerator (ccontext: CompilationContext, stringBuilder: StringBuilder)
   extends ASTDefaultVisitor[String] {
 
-  private[this] var imports = mutable.Set.empty[String]
+  private[this] val imports = mutable.Set.empty[String]
 
   override def visit(schema: Schema, param: String): Unit = {
     this.imports += generateFromImport("dataclasses", "dataclass")
 
-    schema.stmts.foreach(stmt => stmt.accept(this, null))
+    schema.stmts.foreach(stmt => stmt.accept(this, ""))
 
     this.imports.toList.sorted.foreach(imp => stringBuilder.append(imp))
   }

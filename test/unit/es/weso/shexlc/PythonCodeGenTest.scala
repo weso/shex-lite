@@ -58,7 +58,7 @@ class PythonCodeGenTest extends AnyFunSuite with BeforeAndAfter {
         assert(!ccontext.getErrorHandler.hasErrorMsgs)
         assert(getFileNameFrom(ir.getSources(TargetIR.Python).head._1).equals(getFileNameFrom(expected)))
 
-        val expectedContent = Source.fromFile(new File(expected)).mkString
+        val expectedContent = Source.fromFile(new File(expected)).mkString.replaceAll("\r", "")
         assert(ir.getSources(TargetIR.Python).head._2.equals(expectedContent))
       }
     }

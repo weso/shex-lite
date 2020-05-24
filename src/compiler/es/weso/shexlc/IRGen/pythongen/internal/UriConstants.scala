@@ -34,11 +34,11 @@ import es.weso.shexlc.parse.ast.expr.CallPrefixExpr
  */
 object UriConstants {
 
-  final val GEO_BASE = "http://www.opengis.net/ont/geosparql#"
-  final val OWL_BASE = "http://www.w3.org/2002/07/owl#"
-  final val RDF_BASE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  final val RDFS_BASE = "http://www.w3.org/2000/01/rdf-schema#"
-  final val XSD_BASE = "http://www.w3.org/2001/XMLSchema#"
+  final val GeoBase = "http://www.opengis.net/ont/geosparql#"
+  final val OwlBase = "http://www.w3.org/2002/07/owl#"
+  final val RdfBase = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  final val RdfsBase = "http://www.w3.org/2000/01/rdf-schema#"
+  final val XsdBase = "http://www.w3.org/2001/XMLSchema#"
 
   def extractCompleteUriFrom(expr: CallPrefixExpr): String = {
     val baseURI = expr

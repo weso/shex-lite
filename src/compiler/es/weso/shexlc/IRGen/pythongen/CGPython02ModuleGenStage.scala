@@ -38,10 +38,10 @@ import scala.collection.mutable.ListBuffer
 
 class CGPython02ModuleGenStage(ccontex: CompilationContext) extends ASTDefaultVisitor[String] {
 
-  private[this] var currentClassName: String  = ""
+  private[this] var currentClassName: String = ""
   private[this] val stringBuilder = new StringBuilder()
 
-  var generatedSources = ListBuffer.empty[(String, String)]
+  val generatedSources = ListBuffer.empty[(String, String)]
 
 
   override def visit(expr: CallBaseExpr, param: String): Unit = {
@@ -55,9 +55,9 @@ class CGPython02ModuleGenStage(ccontex: CompilationContext) extends ASTDefaultVi
   }
 
   override def visit(schema: Schema, param: String): Unit = {
-    schema.accept(new CGPythonImportGenerator(ccontex, stringBuilder), null)
+    schema.accept(new CGPythonImportGenerator(ccontex, stringBuilder), "")
 
-    for(stmt <- schema.stmts) stmt.accept(this, null)
+    for(stmt <- schema.stmts) stmt.accept(this, "")
 
     val moduleName = new File(schema.getPosition.filename)
                            .getName.toLowerCase

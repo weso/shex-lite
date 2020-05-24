@@ -34,7 +34,7 @@ import es.weso.shexlc.sema.SIL
  *
  * @author Alejandro Gonzalez Hevia
  */
-trait IRPythonGen extends IRGenerator {}
+trait IRPythonGen extends IRGenerator
 
 object IRPythonGen {
 
