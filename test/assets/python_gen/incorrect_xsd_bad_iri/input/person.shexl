@@ -1,0 +1,6 @@
+prefix : <example.org>
+prefix xsd: <schema.org>
+
+:Person {
+    :name xsd:string
+}

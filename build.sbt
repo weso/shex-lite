@@ -6,6 +6,7 @@ lazy val scala212 = "2.12.10"
 lazy val scala213 = "2.13.1"
 scalaVersion in ThisBuild := scala213
 crossScalaVersions := Seq(scala212, scala213)
+scalacOptions ++= Seq("-encoding", "UTF-8")
 
 Compile / scalaSource := baseDirectory.value / "src/compiler"
 Compile / unmanagedSourceDirectories += baseDirectory.value / "src/lib"

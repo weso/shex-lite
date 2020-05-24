@@ -1,0 +1,10 @@
+prefix : <example.org>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+:Song {
+    :title xsd:string
+    :release_date xsd:date
+    :number_of_plays xsd:nonNegativeInteger
+    :length xsd:time
+    :genre [:Pop :K-Pop :Rock :Dance :Soul :Alternative :Rap]
+}

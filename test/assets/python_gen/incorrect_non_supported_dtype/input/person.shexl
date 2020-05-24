@@ -1,0 +1,6 @@
+prefix : <example.org>
+prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+
+:Person {
+    :born_in geo:wktLiteral
+}

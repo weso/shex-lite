@@ -27,6 +27,7 @@
 package es.weso.shexlc.IRGen
 
 import es.weso.shexlc.IRGen.javagen.IRJavaGen
+import es.weso.shexlc.IRGen.pythongen.IRPythonGen
 import es.weso.shexlc.internal.CompilationContext
 import es.weso.shexlc.sema.SIL
 
@@ -72,8 +73,14 @@ object IR {
       // Java code generation.
       val javaGen = IRJavaGen.getIR(sil)
 
+      // Python code generation
+      val pythonGen = IRPythonGen.getIR(sil)
+
       // Add the sources from the java generation to the list of sources.
       sources.put(TargetIR.Java, javaGen.getGeneratedSources)
+
+      // Add the sources from the Python generation to the list of sources
+      sources.put(TargetIR.Python, pythonGen.getGeneratedSources)
 
       /**
         * Gets all the generated sources for a target language. For example for

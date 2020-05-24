@@ -1,0 +1,16 @@
+prefix : <example.org>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+:Song {
+    :title    xsd:string  ;
+    :release_date xsd:date ;
+    :number_of_plays xsd:nonNegativeInteger ;
+    :length xsd:time
+}
+
+:Singer {
+    :name       xsd:string  ;
+    :surname    xsd:string  ;
+    :age        xsd:integer ;
+    :has_songs      @:Song *
+}
