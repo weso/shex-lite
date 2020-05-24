@@ -1,0 +1,13 @@
+prefix : <example.org>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+:Person {
+    :has_name    xsd:string  ;
+    :has_surname xsd:string ;
+    :has_addresses xsd:string *
+}
+
+:ToughPerson {
+    :has_friends @:Person *  ;
+    :has_enemies @:Person *  ;
+}
