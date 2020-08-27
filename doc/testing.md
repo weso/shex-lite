@@ -12,5 +12,5 @@ A continuación se describen los escenarios probados, utilizando el framework [C
 
 | Feature                                                     | Descripción                                                                                                                                          |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| [`domain-model-generation.feature`](../src/test/features/domain-model-generation.feature) | Caso de uso donde se comprueba que para una versión del modelo ontológico el sistema es capaz de generar un modelo de dominio en java  |
-| [`artifact-generation.feature`](../src/test/features/artifact-generation.feature) | Caso de uso donde se comprueba que para un modelo de dominio en java generado el sistema es capaz de construir un artefacto java |
+| [`domain-model-generation.feature`](../test/features/domain-model-generation.feature) | Caso de uso donde se comprueba que para una versión del modelo ontológico el sistema es capaz de generar un modelo de dominio en java  |
+| [`artifact-generation.feature`](../test/features/artifact-generation.feature) | Caso de uso donde se comprueba que para un modelo de dominio en java generado el sistema es capaz de construir un artefacto java |
