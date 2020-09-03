@@ -28,6 +28,6 @@ libraryDependencies ++= Seq(
   "org.backuity.clist" %% "clist-macros" % "3.5.1" % "provided"
 )
 
-libraryDependencies += "org.wvlet.airframe" %% "airframe-log" % "20.8.0"
+libraryDependencies += "org.wvlet.airframe" %% "airframe-log" % "20.9.0"
 
 coverageExcludedPackages := "compiler.es.weso.shexlc.parse.generated.*"
