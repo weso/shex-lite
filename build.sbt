@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "org.backuity.clist" %% "clist-macros" % "3.5.1" % "provided"
 )
 
-libraryDependencies += "org.wvlet.airframe" %% "airframe-log" % "20.9.0"
+libraryDependencies += "org.wvlet.airframe" %% "airframe-log" % "20.9.1"
 libraryDependencies += "io.cucumber" % "cucumber-core" % "2.0.0"
 libraryDependencies += "io.cucumber" %% "cucumber-scala" % "6.1.1" % Test
 libraryDependencies += "io.cucumber" % "cucumber-junit" % "6.7.0" % Test
