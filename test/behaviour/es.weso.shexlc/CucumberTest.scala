@@ -10,4 +10,4 @@ import org.junit.runner.RunWith
   plugin = Array("pretty",
     "html:target/cucumber")
 )
-class TestRunner {}
+class CucumberTest {}
