@@ -47,7 +47,7 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
   }
 
   override def visit(stmt: StartDefStmt, param: Unit): Unit = {
-    msgsHandler.addEvent(new Err(
+    msgsHandler.addEvent(new Warn(
       stmt,
       "the start statement will be ignored " + "for java code generation",
       Warn.FeatureIgnored
@@ -56,7 +56,7 @@ class CGJava01ValidSchemaCheckingStage(ccontext: CompilationContext)
   }
 
   override def visit(expr: ConstraintNodeAnyTypeExpr, param: Unit): Unit = {
-    msgsHandler.addEvent(new Err(
+    msgsHandler.addEvent(new Warn(
       expr,
       "this constraint will be substituted " + "by the Object java class",
       Warn.FeatureIgnored
