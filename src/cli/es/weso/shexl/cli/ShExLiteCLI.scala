@@ -39,12 +39,12 @@ import wvlet.log.{LogLevel, LogSupport, Logger}
 import scala.collection.mutable
 
 object ShExLiteCLI
-    extends CliMain[Unit](
+    extends /*CliMain[Unit](
       name        = "shexlc",
       description = "compile and generate target domain model objects"
     )
-    with LogSupport {
-
+    with */LogSupport {
+/*
   Logger.setDefaultFormatter(CustomLogFormatter)
   Logger.setDefaultLogLevel(LogLevel.ALL)
 
@@ -53,6 +53,11 @@ object ShExLiteCLI
   var javaPkg = opt[String](
     default     = "",
     description = "If present will generate java domain object models with " + "the given package"
+  )
+
+  var javaEmptyConstructor = opt[String](
+    default     = "",
+    description = "If present will generate an empty constructor in the java objects"
   )
 
   var outDir = opt[String](
@@ -125,5 +130,5 @@ object ShExLiteCLI
 
     if (ccontext.getErrorHandler.hasErrorMsgs) { error("compilation finished with errors")   }
     else                                       { info("compilation finished without errors") }
-  }
+  }*/
 }

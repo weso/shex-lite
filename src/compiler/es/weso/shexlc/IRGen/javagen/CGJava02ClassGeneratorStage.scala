@@ -64,7 +64,11 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext) extends ASTDefaul
     stmt.accept(new CGJava021ImportGenerator(ccontex, stringBuilder), null)
 
     // Write all the class static code.
-    stringBuilder.append(s"public class $className {")
+    if(ccontex.getConfiguration.getProperties.contains("java-interface")) {
+      stringBuilder.append(s"public class $className implements ${ccontex.getConfiguration.getProperties.contains("java-interface")} {")
+    } else {
+      stringBuilder.append(s"public class $className {")
+    }
     stringBuilder.append("\n")
     stmt.expression.accept(fieldsGen, param) // Propagate the action to
     // generate the fields.
