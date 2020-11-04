@@ -34,6 +34,13 @@ class CGJava04ConstructorGenerator(ccontext: CompilationContext, stringBuilder: 
     extends ASTDefaultVisitor[String] {
 
   override def visit(expr: ConstraintBlockTripleExpr, className: String): Unit = {
+
+    if(ccontext.getConfiguration.getProperties.contains("java-empty-constructor")) {
+      // Generate empty constructor...
+      stringBuilder.append(s"\tpublic ${className.toLowerCase.capitalize}(){}\n")
+    }
+
+    // Generate all args constructor...
     stringBuilder.append(s"\tpublic ${className.toLowerCase.capitalize}(")
 
     // Constructor parameters here.
