@@ -99,7 +99,8 @@ object JavaTranslator extends LogSupport {
         for (error <- ccontext.getErrorHandler.getErrors) { println(error.toPrintableString) }
 
         // If any warning print them.
-        for (warning <- ccontext.getErrorHandler.getWarnings) { println(warning.toPrintableString) }
+        if(!ToJava.hideWarnings)
+          for (warning <- ccontext.getErrorHandler.getWarnings) { println(warning.toPrintableString) }
 
         if (ccontext.getErrorHandler.hasErrorMsgs) { error("compilation finished with errors")   }
         else                                       { info("compilation finished without errors") }

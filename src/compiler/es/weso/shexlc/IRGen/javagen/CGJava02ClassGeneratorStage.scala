@@ -65,7 +65,7 @@ class CGJava02ClassGeneratorStage(ccontex: CompilationContext) extends ASTDefaul
 
     // Write all the class static code.
     if(ccontex.getConfiguration.getProperties.contains("java-interface")) {
-      stringBuilder.append(s"public class $className implements ${ccontex.getConfiguration.getProperties.contains("java-interface")} {")
+      stringBuilder.append(s"public class $className implements ${ccontex.getConfiguration.getProperties("java-interface")} {")
     } else {
       stringBuilder.append(s"public class $className {")
     }
