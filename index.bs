@@ -1,0 +1,23 @@
+<pre class='metadata'>
+Title: Welcome to ShEx Lite
+Shortname: ShEx Lite
+ED: https://shex-lite.org
+Level: 1
+Status: LD
+Group: Semantics Web Oviedo
+URL: https://github.com/weso/
+Markup Shorthands: markdown yes
+Max ToC Depth: 3
+Editor: Guillermo Facundo Colunga, University of Oviedo https://github.com/thewilly
+Editor: Alejandro González Hevia, University of Oviedo http://github.com/alejgh
+Editor: Jose Emilio Labra Gayo, University of Oviedo http://github.com/labra
+Editor: Daniel Fernández Álvarez, University of Oviedo http://github.com/danifdezalvarez
+
+Abstract:
+  ShEx Lite is a lightweight version of ShEx that has as an aim reduce the complexity of the syntax, improve the semactic analisis of the schemas and boost the performance of the validation process.
+
+  One of the restrictions of the language is that it represents a subset of ShEx. Therefore any source code developed in shex-lite format will be completly compatible with ShEx implementations. But although it is inspired in those ShEx implementations it is a complete independent language, it has its own syntax, semantics, features, compiler and validation process.
+</pre>
+
+<pre class=include>path: introduction.bs</pre>
+<pre class=include>path: specification.bs</pre>
