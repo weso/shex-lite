@@ -13,7 +13,7 @@ ShEx Lite is a lightweight version of [ShEx](https://github.com/weso/shex-s) tha
 
 One of the restrictions of the language is that it represents a subset of ShEx. Therefore any source code developed in shex-lite format will be completly compatible with ShEx implementations. But although it is inspired in those ShEx implementations it is a complete independent language, it has its own syntax, semantics, features, compiler and validation process.
 
-To learn more about the language, visit [www.weso.es/shex-lite/](www.weso.es/shex-lite/).
+**To learn more about ShEx-Lite, please see the [paper](http://ceur-ws.org/Vol-2721/paper536.pdf) presented at ISWC-2020 demos track.**
 
 ## Compiler Architecture
 As a whole, the ShEx-Lite compiler is principally responsible for translating Shex-Lite source code into dofferent intermediate representations like Java, Python or HTML. However, the Shex-Lite compiler front-end is ready for integration with other tools like IDE and syntax coloring thanks to its API design inspired in modern compilers like Roslyn, SwiftC or RustC.
