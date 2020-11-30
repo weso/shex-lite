@@ -2,6 +2,7 @@ package es.weso.shexl.cli
 
 import java.io.{File, PrintWriter}
 
+import es.weso.shexlc.IRGen.schemagen.IRSchemaGen
 import es.weso.shexlc.IRGen.{IR, TargetIR}
 import es.weso.shexlc.internal.{CompilationConfig, CompilationContext}
 import es.weso.shexlc.parse.{AbstractSyntaxTree, Parser}
@@ -15,8 +16,6 @@ class JavaTranslator extends Command(description = "Translates to Java domain mo
 
   var withEmptyConstructor = opt[Boolean](description = "Generates an empty constructor on each generated Java class.")
   var withCommonInterface = opt[String](default="", description = "Indicate the common interface for all the generated Java classes to implement.")
-
-
 }
 
 object JavaTranslator extends LogSupport {
@@ -31,6 +30,7 @@ object JavaTranslator extends LogSupport {
     var withPackage = opt[String](default = "", description = "Sets the package declaration of the generated Java classes.")
     var withEmptyConstuctor = opt[Boolean](description = "Adds an empty constructor to all the generated Java classes.")
     var withCommonInterface = opt[String](default = "", description = "Adds the given interface to all the generated Java classes.")
+    var withSchemaJson = opt[Boolean](description = "Generates a summary of all the generated classes as a Json.")
   }
 
   object ToPython extends Command(description = "Generates Python code.") with Common {}
@@ -78,6 +78,15 @@ object JavaTranslator extends LogSupport {
           // 3. Get SIL.
           info(s"generating sil for file $file")
           val sil = SIL.getSIL(ast)
+
+          if(ToJava.withSchemaJson) {
+            val schemaIR = IRSchemaGen.getIR(sil)
+            val sources = schemaIR.getGeneratedSources(0)
+            val file = new File(s"${ToJava.atOutputFolder}/${sources._1}")
+            val printWriter = new PrintWriter(file)
+            printWriter.write(sources._2)
+            printWriter.close()
+          }
 
           // 4. Dispatch the IRGen.
           info(s"generating ir for file $file")
