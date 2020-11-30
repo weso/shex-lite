@@ -27,7 +27,7 @@
 package es.weso.shexlc.IRGen.javagen.internal
 
 import es.weso.shexlc.internal.CompilationContext
-import es.weso.shexlc.parse.ast.expr.{CallPrefixExpr, CallShapeExpr, ConstraintBlockTripleExpr}
+import es.weso.shexlc.parse.ast.expr.{CallPrefixExpr, CallShapeExpr, ConstraintBlockTripleExpr, ConstraintNodeAnyTypeExpr}
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
 class CGJava05GetSetGenerator(ccontext: CompilationContext, stringBuilder: StringBuilder)
@@ -96,6 +96,14 @@ class CGJava05GetSetGenerator(ccontext: CompilationContext, stringBuilder: Strin
       val baseCall = expr.label.asCallBaseExpr
       if (isList > "1") stringBuilder.append(s"List<${baseCall.argument.toLowerCase.capitalize}> ")
       else stringBuilder.append(s"${baseCall.argument.toLowerCase.capitalize} ")
+    }
+  }
+
+  override def visit(expr: ConstraintNodeAnyTypeExpr, isList: String): Unit = {
+    if(isList > "1") {
+      stringBuilder.append(s"List<Object> ")
+    } else {
+      stringBuilder.append(s"Object ")
     }
   }
 }
