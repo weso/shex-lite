@@ -57,6 +57,7 @@ class CGJava03FieldsGenerator(ccontext: CompilationContext, stringBuilder: Strin
       case "date" =>
         if (isList > "1") stringBuilder.append("List<Date> ") else stringBuilder.append("Date ")
       case _ =>
+        if (isList > "1") stringBuilder.append("List<Object> ") else stringBuilder.append("Object ")
     }
   }
 
@@ -71,6 +72,14 @@ class CGJava03FieldsGenerator(ccontext: CompilationContext, stringBuilder: Strin
       if (isList > "1")
         stringBuilder.append(s"\tprivate List<${baseCall.argument.toLowerCase.capitalize}> ")
       else stringBuilder.append(s"\tprivate ${baseCall.argument.toLowerCase.capitalize} ")
+    }
+  }
+
+  override def visit(expr: ConstraintNodeAnyTypeExpr, isList: String): Unit = {
+    if(isList > "1") {
+      stringBuilder.append(s"\tprivate List<Object> ")
+    } else {
+      stringBuilder.append(s"\tprivate Object ")
     }
   }
 }

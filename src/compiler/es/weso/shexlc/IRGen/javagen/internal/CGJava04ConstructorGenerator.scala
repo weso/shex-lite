@@ -27,7 +27,7 @@
 package es.weso.shexlc.IRGen.javagen.internal
 
 import es.weso.shexlc.internal.CompilationContext
-import es.weso.shexlc.parse.ast.expr.{CallPrefixExpr, CallShapeExpr, ConstraintBlockTripleExpr}
+import es.weso.shexlc.parse.ast.expr.{CallPrefixExpr, CallShapeExpr, ConstraintBlockTripleExpr, ConstraintNodeAnyTypeExpr}
 import es.weso.shexlc.parse.ast.visitor.ASTDefaultVisitor
 
 class CGJava04ConstructorGenerator(ccontext: CompilationContext, stringBuilder: StringBuilder)
@@ -78,7 +78,7 @@ class CGJava04ConstructorGenerator(ccontext: CompilationContext, stringBuilder: 
         if (isList > "1") stringBuilder.append("List<int> ") else stringBuilder.append("int ")
       case "date" =>
         if (isList > "1") stringBuilder.append("List<Date> ") else stringBuilder.append("Date ")
-      case _ =>
+      case _ => if (isList > "1") stringBuilder.append("List<Object> ") else stringBuilder.append("Object ")
     }
   }
 
@@ -92,6 +92,14 @@ class CGJava04ConstructorGenerator(ccontext: CompilationContext, stringBuilder: 
       val baseCall = expr.label.asCallBaseExpr
       if (isList > "1") stringBuilder.append(s"List<${baseCall.argument.toLowerCase.capitalize}> ")
       else stringBuilder.append(s"${baseCall.argument.toLowerCase.capitalize} ")
+    }
+  }
+
+  override def visit(expr: ConstraintNodeAnyTypeExpr, isList: String): Unit = {
+    if(isList > "1") {
+      stringBuilder.append(s"List<Object> ")
+    } else {
+      stringBuilder.append(s"Object ")
     }
   }
 }
