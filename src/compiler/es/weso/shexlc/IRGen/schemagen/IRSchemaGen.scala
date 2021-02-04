@@ -16,6 +16,21 @@ object IRSchemaGen {
     * @return an IRGenerator object.
     */
   def getIR(sil: SIL): IRSchemaGen = {
-    null
+    new IRSchemaGen {
+
+      /**
+        * Gets the generated sources from the generator.
+        *
+        * @return a list of generated sources where the first element is the name
+        *         and the second the source itself.
+        */
+      override def getGeneratedSources: List[(String, String)] = {
+        val visitor = new CGSchemaGenerationStage(sil.getCompilationContext)
+        sil.getGraphEntryPoint.accept(visitor, "");
+
+        val generatedSchemaFile = ("schema.json", visitor.schema.toString())
+        List(generatedSchemaFile)
+      }
+    }
   }
 }
