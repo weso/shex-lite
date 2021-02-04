@@ -1484,9 +1484,9 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version b3435d8e, updated Sat Nov 28 21:26:57 2020 -0800" name="generator">
+  <meta content="Bikeshed version 06b89c98, updated Fri Jan 29 17:36:38 2021 -0800" name="generator">
   <link href="https://github.com/weso/" rel="canonical">
-  <meta content="116e524c3388377bf8d435bef8d4d6e18e2cbd6b" name="document-revision">
+  <meta content="343334512a403895ae737a3a57082e5e7d803988" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1996,7 +1996,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Welcome to ShEx Lite</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Document, <time class="dt-updated" datetime="2020-11-30">30 November 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Document, <time class="dt-updated" datetime="2021-02-04">4 February 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2014,7 +2014,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 30 November 2020,
+In addition, as of 4 February 2021,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -2087,11 +2087,11 @@ Each statement can be: a definition or an import statement. import is not a defi
 </pre>
    A base definition is the directive that defines the base IRI. It if defined as the keywork <code>base</code> and the IRI. 
    <h5 class="heading settled" data-level="1.1.1.5" id="features-rs-base①"><span class="secno">1.1.1.5. </span><span class="content">Start</span><a class="self-link" href="#features-rs-base①"></a></h5>
-<pre class="language-antlr highlight"><c- nl>start_definition</c-> <c- p>:</c-><c- o>=</c-> <c- no>START_KW</c-> <c- s>'='</c-> <c- g>shape_invocation</c->
+<pre class="language-antlr highlight"><c- nl>start_definition</c-> <c- p>:</c-><c- o>=</c-> <c- no>START_KW</c-> <c- t>'='</c-> <c- g>shape_invocation</c->
 </pre>
    The start definition defines the shape that will be used as the default one during the validation. It is defined by the <code>start</code> keyword, then an <code>=</code> symbol and the shape invocation. 
    <h5 class="heading settled" data-level="1.1.1.6" id="features-rs-prefix-definition"><span class="secno">1.1.1.6. </span><span class="content">Prefix Definition</span><a class="self-link" href="#features-rs-prefix-definition"></a></h5>
-<pre class="language-antlr highlight"><c- nl>prefix_definition</c-> <c- p>:</c-><c- o>=</c-> <c- no>PREFIX_KW</c-> <c- no>LABEL</c-><c- o>?</c-> <c- s>':'</c-> <c- no>IRI</c->
+<pre class="language-antlr highlight"><c- nl>prefix_definition</c-> <c- p>:</c-><c- o>=</c-> <c- no>PREFIX_KW</c-> <c- no>LABEL</c-><c- o>?</c-> <c- t>':'</c-> <c- no>IRI</c->
 </pre>
    A prefix definition is the association of an IRI to a label. It is defined by the <code>prefix</code> keyword, the label that is optional (can be the null prefix), the <code>:</code> symbol, and the IRI. 
    <h5 class="heading settled" data-level="1.1.1.7" id="features-rs-shape-definition"><span class="secno">1.1.1.7. </span><span class="content">Shape Definition</span><a class="self-link" href="#features-rs-shape-definition"></a></h5>
@@ -2108,14 +2108,14 @@ Each statement can be: a definition or an import statement. import is not a defi
 </pre>
    The shape name is the corresponding label associated to a shape_definition. It can be a node or an IRI. 
    <h5 class="heading settled" data-level="1.1.1.10" id="features-shape-invocation"><span class="secno">1.1.1.10. </span><span class="content">Shape Invocation</span><a class="self-link" href="#features-shape-invocation"></a></h5>
-<pre class="language-antlr highlight"><c- nl>shape_invocation</c-> <c- p>:</c-><c- o>=</c-> <c- s>'@'</c-> <c- g>shape_name</c->
+<pre class="language-antlr highlight"><c- nl>shape_invocation</c-> <c- p>:</c-><c- o>=</c-> <c- t>'@'</c-> <c- g>shape_name</c->
 </pre>
    A shape invocation is the toold used to make reference to the expression defined for that shape name. It is defined as a <code>@</code> symbol and the shape_name, it doesn’t matter if it is an IRI or a Node. 
    <h5 class="heading settled" data-level="1.1.1.11" id="features-constraint"><span class="secno">1.1.1.11. </span><span class="content">Constraint</span><a class="self-link" href="#features-constraint"></a></h5>
 <pre class="language-antlr highlight"><c- nl>constraint</c-> <c- p>:</c-><c- o>=</c-> <c- no>CLOSED_KW</c-> <c- g>constraint</c->
            <c- o>|</c-> <c- g>node_constraint</c->
-           <c- o>|</c-> <c- s>'{'</c-> <c- g>triple_constraint</c-> <c- s>'}'</c->                            <c- c>// A single triple constraint.</c->
-           <c- o>|</c-> <c- s>'{'</c-> <c- o>(</c-><c- g>triple_constraint</c-> <c- s>';'</c-><c- o>)+</c-> <c- g>triple_constraint</c-> <c- s>'}'</c->   <c- c>// Multiple triple constraints. (eachOfs)</c->
+           <c- o>|</c-> <c- t>'{'</c-> <c- g>triple_constraint</c-> <c- t>'}'</c->                            <c- c>// A single triple constraint.</c->
+           <c- o>|</c-> <c- t>'{'</c-> <c- o>(</c-><c- g>triple_constraint</c-> <c- t>';'</c-><c- o>)+</c-> <c- g>triple_constraint</c-> <c- t>'}'</c->   <c- c>// Multiple triple constraints. (eachOfs)</c->
 </pre>
    An expresion up to this point is only a triple_expression but this rule prepares the syntax for future extension. 
    <h5 class="heading settled" data-level="1.1.1.12" id="features-triple-constraint"><span class="secno">1.1.1.12. </span><span class="content">Triple Constraint</span><a class="self-link" href="#features-triple-constraint"></a></h5>
@@ -2123,14 +2123,14 @@ Each statement can be: a definition or an import statement. import is not a defi
 </pre>
    A triple constraint is the abstraction of the well known eachOf of ShEx. In our case as we don’t have the eachOneOf we don’t need to expand this rule. Therefore the triple constraint is defined as a property, a node constraint and the cardinality. If no cardilaity is pressent the default one will be the [0,n). 
    <h5 class="heading settled" data-level="1.1.1.13" id="features-node-constraint"><span class="secno">1.1.1.13. </span><span class="content">Node Constraint</span><a class="self-link" href="#features-node-constraint"></a></h5>
-<pre class="language-antlr highlight"><c- nl>node_constraint</c-> <c- p>:</c-><c- o>=</c-> <c- s>'.'</c->                 <c- c>// Anything.</c->
+<pre class="language-antlr highlight"><c- nl>node_constraint</c-> <c- p>:</c-><c- o>=</c-> <c- t>'.'</c->                 <c- c>// Anything.</c->
                 <c- o>|</c-> <c- g>shape_invocation</c->     <c- c>// Shape reference.</c->
                 <c- o>|</c-> <c- no>ID</c->                   <c- c>// Datatype.</c->
                 <c- o>|</c-> <c- no>LITERAL_KW</c->           <c- c>// Node kind.</c->
                 <c- o>|</c-> <c- no>IRI_KW</c->
                 <c- o>|</c-> <c- no>BNODE_KW</c->
                 <c- o>|</c-> <c- no>NON_LITERAL_KW</c->
-                <c- o>|</c-> <c- s>'['</c-> <c- g>value_set_type</c-><c- o>*</c-> <c- s>']'</c->  <c- c>// Value set.</c->
+                <c- o>|</c-> <c- t>'['</c-> <c- g>value_set_type</c-><c- o>*</c-> <c- t>']'</c->  <c- c>// Value set.</c->
 </pre>
    Describe the allow values of a node. It can be: Anything. A datatype. Notice that a datatype actually is a prefix invocation. A node kind. A value set. Or a shape reference. 
    <h5 class="heading settled" data-level="1.1.1.14" id="features-value-set-type"><span class="secno">1.1.1.14. </span><span class="content">Value Set Type</span><a class="self-link" href="#features-value-set-type"></a></h5>
@@ -2141,9 +2141,9 @@ Each statement can be: a definition or an import statement. import is not a defi
 </pre>
    Represents the possible values that a value set might contain. 
    <h5 class="heading settled" data-level="1.1.1.15" id="features-cardinalioty"><span class="secno">1.1.1.15. </span><span class="content">Cardinality</span><a class="self-link" href="#features-cardinalioty"></a></h5>
-<pre class="language-antlr highlight"><c- nl>cardinality</c-> <c- p>:</c-><c- o>=</c-> <c- s>'*'</c->
-            <c- o>|</c-> <c- s>'+'</c->
-            <c- o>|</c-> <c- s>'?'</c->
+<pre class="language-antlr highlight"><c- nl>cardinality</c-> <c- p>:</c-><c- o>=</c-> <c- t>'*'</c->
+            <c- o>|</c-> <c- t>'+'</c->
+            <c- o>|</c-> <c- t>'?'</c->
             <c- o>|</c-> <c- p>{</c-> min=INT_LITERAL <c- p>}</c->
             <c- o>|</c-> <c- p>{</c-> min=INT_LITERAL , max=INT_LITERAL <c- p>}</c->
             <c- o>|</c-> <c- p>{</c-> min=INT_LITERAL ,<c- p>}</c->
