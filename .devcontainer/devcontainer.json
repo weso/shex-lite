@@ -1,0 +1,35 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.155.1/containers/java
+{
+	"name": "ShEx-Lite Dev Env",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			// Sbt version to use.
+			"SBT_VERSION": "1.4.7"
+		}
+	},
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": { 
+		"terminal.integrated.shell.linux": "/bin/bash"
+		//"java.home": "/root/.sdkman/candidates/java/11.0.10.9.1-amzn/bin/java"
+	},
+	
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"vscjava.vscode-java-pack",
+		"scala-lang.scala",
+		"scalameta.metals",
+		"mike-lischke.vscode-antlr4"
+	],
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "java -version",
+
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	// "remoteUser": "vscode"
+}
