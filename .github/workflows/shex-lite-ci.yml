@@ -86,3 +86,29 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           fail_ci_if_error: true
+  
+  # Test run on linux platform
+  after-tests-message:
+
+    # Job name
+    name: Printing after tests mesagge
+    
+    # This jobs runs on linux
+    runs-on: ubuntu-latest
+    
+    timeout-minutes: 5
+    needs: [ubuntu-test, windows-test, macos-test, coverage-report]
+    
+    env:
+        COMMENTS_URL: ${{ github.event.pull_request.comments_url }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+          - name: Print message
+            run: |
+                 curl \
+                  -X POST \
+                  $COMMENTS_URL \
+                  -H "Content-Type: application/json" \
+                  -H "Authorization: token $GITHUB_TOKEN" \
+                  --data '{ "body": "Muy bien hecho"}'
+                  sleep 60
