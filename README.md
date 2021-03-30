@@ -35,11 +35,11 @@ To look deeper to the compiler the following picture illustrates perfectly the d
 <img src="/doc/assets/shex-lite-arch-full.png" alt="Shex-lite Arch">
 
 ## Contributing to ShEx Lite
-Contributions to ShEx Lite are welcomed and encouraged! Please see the [Contributing to ShEx Lite guide](https://shex-lite.org/contributing/).
+Contributions to ShEx Lite are welcomed and encouraged!
 
-To be a truly great community, [shex-lite.org](https://shex-lite.org/) needs to welcome developers from all walks of life, with different backgrounds, and with a wide range of experience. A diverse and friendly community will have more great ideas, more unique perspectives, and produce more great code. We will work diligently to make the ShEx Lite community welcoming to everyone.
+To be a truly great community, shex-lite needs to welcome developers from all walks of life, with different backgrounds, and with a wide range of experience. A diverse and friendly community will have more great ideas, more unique perspectives, and produce more great code. We will work diligently to make the ShEx Lite community welcoming to everyone.
 
-To give clarity of what is expected of our members, ShEx Lite has adopted the code of conduct defined by the Contributor Covenant. This document is used across many open source communities, and we think it articulates our values well. For more, see the [Code of Conduct](https://shex-lite.org/community/#code-of-conduct).
+To give clarity of what is expected of our members, ShEx Lite has adopted the code of conduct defined by the Contributor Covenant. This document is used across many open source communities, and we think it articulates our values well.
 
 ### Proposals
 If you want to contribute to ShEx-Lite the best and fastest way is to submit a proposal about a change that you would like to integrate with the project. For example: If you find that would be interesting to add a new SIL Generator for a language just submit a proposal with your idea and listen for the feedback of the core team and the comunity. We love to have proposals.
